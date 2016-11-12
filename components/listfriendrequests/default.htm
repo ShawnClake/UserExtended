@@ -1,0 +1,5 @@
+<ul>
+    {% for user in friendrequests.friendRequests %}
+    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">Accept</button></li>
+    {% endfor %}
+</ul>

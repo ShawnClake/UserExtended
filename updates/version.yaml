@@ -1,0 +1,9 @@
+1.0.1:
+    - Seed in basic groups.
+    - seed_basic_user_groups.php
+1.0.2:
+    - Create the table.
+    - create_friends_table.php
+1.0.3:
+    - Add Accepted to Friends table.
+    - friends_add_accepted.php
