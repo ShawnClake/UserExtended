@@ -10,7 +10,7 @@ class UserList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'UserList Component',
+            'name'        => 'User list',
             'description' => 'Provides an interface for listing users'
         ];
     }

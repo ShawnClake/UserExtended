@@ -10,7 +10,7 @@ class ListFriendRequests extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'ListFriendRequests Component',
+            'name'        => 'Friend request list',
             'description' => 'Lists a users received friend requests'
         ];
     }
