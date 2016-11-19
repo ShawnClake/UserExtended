@@ -7,3 +7,15 @@
 1.0.3:
     - Add Accepted to Friends table.
     - friends_add_accepted.php
+1.0.4:
+    - Added user searching
+1.0.5:
+    - Add Comments table
+    - create_comments_table.php
+1.0.6:
+    - Added author to comments table
+    - comments_add_author.php
+1.0.7:
+    - Added user profile pages
+1.0.8:
+    - Added delete capabilities for comments and friends

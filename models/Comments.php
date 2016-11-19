@@ -1,22 +1,28 @@
 <?php namespace Clake\Userextended\Models;
 
 use Model;
+use \October\Rain\Database\Traits\Encryptable;
+
 use \October\Rain\Database\Traits\SoftDelete;
 
 /**
- * friends Model
+ * Comments Model
  */
-class Friends extends Model
+class Comments extends Model
 {
 
+    use Encryptable;
+
     use SoftDelete;
+
+    protected $encryptable = ['content'];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'clake_userextended_friends';
-
-    protected $dates = ['deleted_at'];
+    public $table = 'clake_userextended_comments';
 
     /**
      * @var array Guarded fields
@@ -33,7 +39,10 @@ class Friends extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'user' => ['Clake\Userextended\Models\UserExtended', 'key' => 'user_id'],
+        'author' => ['Clake\Userextended\Models\UserExtended', 'key' => 'author_id'],
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];

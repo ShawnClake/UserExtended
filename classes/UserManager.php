@@ -1,6 +1,7 @@
 <?php
 
 namespace Clake\UserExtended\Classes;
+use Clake\DataStructures\Classes\Lists;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
@@ -58,4 +59,41 @@ class UserManager
         return $returner;
 
     }
+
+    public static function searchUsers($phrase)
+    {
+        $results = Lists::create();
+
+        $results->mergeList(self::searchUserByName($phrase));
+
+        $results->mergeList(self::searchUserByEmail($phrase));
+
+        $results->mergeList(self::searchUserBySurname($phrase));
+
+        $results->mergeList(self::searchUserByUsername($phrase));
+
+        return $results->allList();
+
+    }
+
+    public static function searchUserByName($phrase)
+    {
+        return User::where('name', 'like', '%' . $phrase . '%')->get();
+    }
+
+    public static function searchUserByEmail($phrase)
+    {
+        return User::where('email', 'like', '%' . $phrase . '%')->get();
+    }
+
+    public static function searchUserBySurname($phrase)
+    {
+        return User::where('surname', 'like', '%' . $phrase . '%')->get();
+    }
+
+    public static function searchUserByUsername($phrase)
+    {
+        return User::where('username', 'like', '%' . $phrase . '%')->get();
+    }
+
 }

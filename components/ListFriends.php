@@ -10,7 +10,7 @@ class ListFriends extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'Friends list',
+            'name'        => 'Friends List',
             'description' => 'List a users friends'
         ];
     }
@@ -31,7 +31,7 @@ class ListFriends extends ComponentBase
 
     /**
      * Returns a variable to the page which lists a users friends.
-     * @return static
+     *
      */
     public function friends()
     {
@@ -49,6 +49,17 @@ class ListFriends extends ComponentBase
     public function listRandomUsers()
     {
         return UserManager::getRandomUserSet(5);
+    }
+
+    /**
+     * AJAX call to delete a friend
+     */
+    public function onDelete()
+    {
+        $userid = post('id');
+
+        if($userid != null)
+            FriendsManager::deleteFriend($userid);
     }
 
 }

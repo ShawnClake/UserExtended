@@ -105,6 +105,10 @@ class UserGroupManager {
 
         }
 
+        //$user = UserUtil::getLoggedInUser();
+
+        //$groups = $user->groups()->get();
+
         self::$userGroups = $groups;
 
         return $this;

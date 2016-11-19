@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\Pusher\Classes\Pusher;
 use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Cms\Classes\ComponentBase;
@@ -51,6 +52,19 @@ class ListFriendRequests extends ComponentBase
 
         if($userid != null)
             FriendsManager::acceptRequest($userid);
+
+        //$data = UserUtil::getLoggedInUser()->toArray();
+        //Pusher::init()->trigger('private-mychannel', 'tests', $data);
+
+    }
+
+    public function onDecline()
+    {
+        $userid = post('id');
+
+        if($userid != null)
+            FriendsManager::declineRequest($userid);
+
 
     }
 

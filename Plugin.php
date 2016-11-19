@@ -60,6 +60,8 @@ class Plugin extends PluginBase
             'Clake\UserExtended\Components\ListFriends' => 'friends',
             'Clake\UserExtended\Components\UserList' => 'userlist',
             'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
+            'Clake\UserExtended\Components\UserSearch' => 'usersearch',
+            'Clake\UserExtended\Components\UserUI' => 'userui',
         ];
     }
 

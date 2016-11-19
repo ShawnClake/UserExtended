@@ -1,5 +1,7 @@
 <ul>
     {% for user in friendrequests.friendRequests %}
-    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">Accept</button></li>
+    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friendrequests::onAccept">Accept</button>
+        <a href="#" data-request-data="id: {{user.id}}" data-request="friendrequests::onDecline"><span class="glyphicon glyphicon-remove">X</span></a>
+    </li>
     {% endfor %}
 </ul>

@@ -43,6 +43,32 @@ class FriendsManager
     }
 
     /**
+     * Soft deletes a friend. To readd a friend it will create a new record in the DB
+     * This is useful to keep track of when, and how many times users deleted each other
+     *
+     * @param $friendUserID
+     */
+    public static function deleteFriend($friendUserID)
+    {
+        $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '1')->count();
+
+        $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '1')->count();
+
+        if($exists > 0)
+        {
+            $relation = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '1')->first();
+            $relation->delete();
+        }
+
+        if($exists2 > 0)
+        {
+            $relation = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '1')->first();
+            $relation->delete();
+        }
+
+    }
+
+    /**
      * Sends a friend request
      *
      * @param $friendUserID
@@ -50,14 +76,30 @@ class FriendsManager
     public static function sendFriendRequest($friendUserID)
     {
 
-        $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->count();
+        $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '<>', '2')->count();
 
-        $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->count();
+        $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '<>', '2')->count();
 
         if($exists > 0 || $exists2 > 0)
             return;
 
-        $request = new Friends;
+        $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '2')->count();
+
+        $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '2')->count();
+
+
+        if($exists > 0)
+        {
+            $request = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '2')->first();
+        }
+        else if($exists2 > 0)
+        {
+            $request = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '2')->first();
+        }
+        else
+        {
+            $request = new Friends;
+        }
 
         $request->user_that_sent_request = self::getLoggedInUser()->id;
 
@@ -71,7 +113,7 @@ class FriendsManager
 
     /**
      * Returns whether or not a user is our friend
-     *
+     * Leave the second parameter blank to user the logged in user
      * @param $userID1
      * @param null $userID2
      * @return bool
@@ -119,6 +161,24 @@ class FriendsManager
             $request->save();
 
         }
+
+    }
+
+    /**
+     * Declines a friend request from a user
+     *
+     * @param $userId1
+     * @param null $userId2
+     */
+    public static function declineRequest($userId1, $userId2 = null)
+    {
+        if($userId2 == null)
+            $userId2 = self::getLoggedInUser()->id;
+
+        $relation = Friends::where('user_that_sent_request', $userId1)->where('user_that_accepted_request', $userId2)->where('accepted', '0')->first();
+
+        $relation->accepted = 2;
+        $relation->save();
 
     }
 

@@ -1,0 +1,10 @@
+{% for user in results %}
+    <a href="#" style="text-decoration: none;" data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">
+
+        <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
+            <span>{{user.name}}</span><br>
+            <span style="margin-left:7px;">Last Online: {{user.last_seen}}</span><br>
+        </div>
+
+    </a>
+{% endfor %}
