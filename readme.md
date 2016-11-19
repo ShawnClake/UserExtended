@@ -24,6 +24,7 @@ User Extended is typically a dependency to my other plugins.
 * List, send, and accept friend requests using the ListFriendRequests component and the UserList component
 * List your friends using the ListFriends component
 * Utility user functions which can be used across other plugins and code
+
 #### As of 1.0.8
 * Adding a public profile comment system
 * Searching for users via name, email, or username
