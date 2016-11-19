@@ -18,21 +18,24 @@ User Extended is typically a dependency to my other plugins.
 * Feel free to add your own classes which extend mine
 
 ## Feature List
+#### As of 1.0.3
 * Frontend User role management in the form of Groups.
 * Restrict access to pages or parts of a page using the UserGroups component
 * List, send, and accept friend requests using the ListFriendRequests component and the UserList component
 * List your friends using the ListFriends component
 * Utility user functions which can be used across other plugins and code
+#### As of 1.0.8
+* Adding a public profile comment system
+* Searching for users via name, email, or username
+* Deleting friends
 
 ## Planned Features
-* Searching for users via name, email, or username
-* Blocking and deleting friends
+* Blocking friends
 * Adding a service provider
 * Adding an easy way to pragmatically change a users group
 * Adding a better User settings page and a brief user profile page
 * Adding a rating system for profiles
 * Adding a private messaging system
-* Adding a public profile comment system
 * Adding better email support for user functions: friend requests, accept requests, group changes, messages, comments
 
 ## Details
