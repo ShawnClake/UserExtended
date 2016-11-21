@@ -18,12 +18,13 @@ class SeedUserGroupsTable extends Seeder
             'code' => 'friend',
             'description' => 'Generalized friend group.'
         ]);
-
-        UserGroup::create([
+        
+        // Disabling due to 'code has already been taken' error
+        /*UserGroup::create([
             'name' => 'Guest',
             'code' => 'guest',
             'description' => 'Generalized guest group.'
-        ]);
+        ]);*/
 
         UserGroup::create([
             'name' => 'Tester',
