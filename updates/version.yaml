@@ -19,3 +19,5 @@
     - Added user profile pages
 1.0.8:
     - Added delete capabilities for comments and friends
+1.0.9:
+    - Fixed 'Code Has Already Been Taken' error
