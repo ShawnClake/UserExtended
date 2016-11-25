@@ -39,6 +39,7 @@ User Extended is typically a dependency to my other plugins.
 * Adding a private messaging system
 * Adding better email support for user functions: friend requests, accept requests, group changes, messages, comments
 * Adding a backend UI
+* Group Hierarchy w/ promotion/demotion system
 
 ## Details
 User Extended is not trying to be a social network plugin. We are providing functionality for more complex user functions which have use cases outside of social networks.
