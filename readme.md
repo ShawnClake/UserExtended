@@ -32,6 +32,7 @@ User Extended is typically a dependency to my other plugins.
 
 #### Coming Soon 1.0.xx
 * Added Timezones and a Twig filter 'timezonify' to adjust Timestamps to a users timezone.
+* Added the Timezonable trait which when added to a model will automatically convert model fields to the logged in users timezone.
 * Added the concept of Roles. A user can be a part of many groups, but only one role within that group.
   * Use case 1: A blogging website has a group called 'writers'. Within that group their are the roles 'Senior Writer', 'Junior Writer', 'Editor'
 * Initial work on a backend UI. Currently supports the managing of Groups and Roles.
