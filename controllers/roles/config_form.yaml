@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Role
+
+# Model Form Field configuration
+form: $/clake/userextended/models/roles/fields.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Roles
+
+# Default redirect location
+defaultRedirect: clake/userextended/roles
+
+# Create page
+create:
+    title: Create Role
+    redirect: clake/userextended/roles/update/:id
+    redirectClose: clake/userextended/roles/manage
+
+# Update page
+update:
+    title: Edit Role
+    redirect: clake/userextended/roles/manage
+    redirectClose: clake/userextended/roles/manage
+
+# Preview page
+preview:
+    title: Preview Role

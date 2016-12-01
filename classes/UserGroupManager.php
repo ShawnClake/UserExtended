@@ -6,6 +6,8 @@ use RainLab\User\Models\UserGroup;
 /**
  * Class UserGroupManager
  * @package Clake\UserExtended\Classes
+ *
+ * Handles all interactions with groups on a user level
  */
 class UserGroupManager {
 
@@ -150,8 +152,5 @@ class UserGroupManager {
         return array_key_exists(strtolower($group), $groups);
 
     }
-
-
-
 
 }

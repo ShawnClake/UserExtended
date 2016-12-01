@@ -5,6 +5,8 @@ use \October\Rain\Database\Traits\Encryptable;
 
 use \October\Rain\Database\Traits\SoftDelete;
 
+use Clake\UserExtended\Traits\Timezonable;
+
 /**
  * Comments Model
  */
@@ -15,9 +17,18 @@ class Comments extends Model
 
     use SoftDelete;
 
+    use Timezonable;
+
     protected $encryptable = ['content'];
 
     protected $dates = ['deleted_at'];
+
+    protected $timezonable = [
+
+        'created_at',
+        'updated_at'
+
+    ];
 
     /**
      * @var string The database table used by the model.

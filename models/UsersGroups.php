@@ -1,33 +1,17 @@
 <?php namespace Clake\Userextended\Models;
 
 use Model;
-use \October\Rain\Database\Traits\SoftDelete;
-
-use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * friends Model
+ * UsersGroups Model
  */
-class Friends extends Model
+class UsersGroups extends Model
 {
-
-    use SoftDelete;
-
-    use Timezonable;
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'clake_userextended_friends';
-
-    protected $dates = ['deleted_at'];
-
-    protected $timezonable = [
-
-        'created_at',
-        'updated_at'
-
-    ];
+    public $table = 'users_groups';
 
     /**
      * @var array Guarded fields
@@ -38,6 +22,8 @@ class Friends extends Model
      * @var array Fillable fields
      */
     protected $fillable = [];
+
+    public $timestamps = false;
 
     /**
      * @var array Relations

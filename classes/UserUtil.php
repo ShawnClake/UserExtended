@@ -3,6 +3,8 @@
 namespace Clake\UserExtended\Classes;
 
 use Auth;
+use Carbon\Carbon;
+use Clake\Userextended\Models\Timezone;
 use Clake\Userextended\Models\UserExtended;
 use RainLab\User\Models\User;
 use Redirect;
@@ -10,6 +12,10 @@ use Redirect;
 /**
  * Class UserUtil
  * @package Clake\UserExtended\Classes
+ *
+ * @todo: Move time related methods to a seperate trait
+ * @todo: Test casting and timezones
+ *
  */
 class UserUtil
 {
@@ -64,7 +70,8 @@ class UserUtil
     }
 
     /**
-     * Redirect a user if they aren't logged in. CURRENTLY BROKEN.
+     * Redirect a user if they aren't logged in.
+     * DO NOT USE. CURRENTLY BROKEN.
      * @param string $url
      * @return mixed
      */
@@ -73,4 +80,56 @@ class UserUtil
         if(!self::getLoggedInUser())
             return Redirect::to($url);
     }
+
+    /**
+     * Returns a Timezone model for the current logged in user
+     * @return mixed|null|string
+     */
+    public static function getLoggedInUsersTimezone()
+    {
+        $user = self::getLoggedInUser();
+        $user = self::castToUserExtendedUser($user);
+        if($user != null)
+            return $user->timezone;
+        return null;
+    }
+
+    /**
+     * Get a users current timezone.
+     * @param $value
+     * @param string $property
+     * @return null
+     */
+    public static function getUserTimezone($value, $property = "id")
+    {
+        $user = self::getUser($value, $property);
+        if($user != null)
+            return $user->timezone;
+        return null;
+    }
+
+    /**
+     * Casts the Rainlab.User model to Clake.UserExtended
+     * @param UserExtended $user
+     * @return User
+     */
+    public static function castToRainLabUser(UserExtended $user)
+    {
+        $rainlab = new User();
+        $rainlab->attributes = $user->attributes;
+        return $rainlab;
+    }
+
+    /**
+     * Casts the Clake.UserExtended model to Rainlab.User
+     * @param User $user
+     * @return UserExtended
+     */
+    public static function castToUserExtendedUser(User $user)
+    {
+        $userExtended = new UserExtended();
+        $userExtended->attributes = $user->attributes;
+        return $userExtended;
+    }
+
 }

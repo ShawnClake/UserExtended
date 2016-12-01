@@ -1,0 +1,12 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+roles:
+    label: Group Roles
+    view:
+        list: $/clake/userextended/models/roles/columns.yaml
+        toolbarButtons: create|delete|add|remove
+    manage:
+        form: $/clake/userextended/models/roles/fields.yaml
+        recordsPerPage: 10

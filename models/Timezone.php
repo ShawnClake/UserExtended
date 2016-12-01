@@ -1,33 +1,17 @@
 <?php namespace Clake\Userextended\Models;
 
 use Model;
-use \October\Rain\Database\Traits\SoftDelete;
-
-use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * friends Model
+ * Timezone Model
  */
-class Friends extends Model
+class Timezone extends Model
 {
-
-    use SoftDelete;
-
-    use Timezonable;
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'clake_userextended_friends';
-
-    protected $dates = ['deleted_at'];
-
-    protected $timezonable = [
-
-        'created_at',
-        'updated_at'
-
-    ];
+    public $table = 'clake_userextended_timezones';
 
     /**
      * @var array Guarded fields
@@ -37,15 +21,27 @@ class Friends extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'abbr',
+        'name',
+        'utc',
+        'offset',
+    ];
 
     /**
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [];
+    public $hasMany = [
+        'users' => [
+            'Clake\Userextended\Models\UserExtended',
+            'key' => 'timezone_id',
+        ],
+    ];
     public $belongsTo = [];
-    public $belongsToMany = [];
+    public $belongsToMany = [
+
+    ];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];

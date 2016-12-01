@@ -1,0 +1,33 @@
+<div data-control="toolbar">
+    <div class="row">
+
+        <div class="col-sm-12 col-md-3">
+            <span style="font-size:19px;font-style:italic;">Selected Group: <?= $group->name ?></span>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+            <a
+                    href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
+                    class="btn btn-primary oc-icon-plus"
+                    >
+                Add Roles
+            </a>
+
+            <a
+                    href="<?= Backend::url('clake/userextended/roles') ?>"
+                    class="btn btn-default oc-icon-pencil"
+            >
+                View All Roles
+            </a>
+
+            <a
+                    href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
+                    class="btn btn-default oc-icon-pencil"
+            >
+                Edit Group
+            </a>
+        </div>
+
+    </div>
+
+</div>

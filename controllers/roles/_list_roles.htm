@@ -1,0 +1,37 @@
+<div style="font-size:14px;padding-left:9px;" >
+    <table id="role_table">
+
+        <?php if($roles->count() != 0): ?>
+
+            <tr>
+                <th style="width:25px;"></th>
+                <th style="width:25px;"></th>
+                <th>Role</th>
+                <th style="padding-left:25px;">Description</th>
+                <th style="padding-left:25px;">Created</th>
+                <th style="padding-left:25px;">Updated</th>
+            </tr>
+
+        <?php foreach($roles as $index => $role): ?>
+        <tr style="height:25px;">
+            <div style="margin-top:9px;">
+                <td><span><a style=" <?php if($index == 0): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveUp" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-up"></i></a></span></td>
+                <td><span><a style=" <?php if($index == $roleCount - 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveDown" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-down"></i></a></span></td>
+                <td><span><a href="#" data-request="onManageRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><?= $role->name ?></a></span></td>
+                <td style="padding-left:25px;"><span><?= $role->description ?></span></td>
+                <td style="padding-left:25px;"><span><?= $role->created_at ?></span></td>
+                <td style="padding-left:25px;"><span><?= $role->updated_at ?></span></td>
+            </div>
+        </tr>
+        <?php endforeach; else: ?>
+        <tr>
+            <td>
+                <span>No roles currently exist in this group</span>
+            </td>
+        </tr>
+        <?php endif ?>
+
+
+
+    </table>
+</div>

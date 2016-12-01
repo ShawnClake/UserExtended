@@ -5,22 +5,22 @@ use Schema;
 use October\Rain\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
 
-class CommentsAddAuthor extends Migration
+class UserAddTimezone extends Migration
 {
 
     public function up()
     {
-        Schema::table('clake_userextended_comments', function($table)
+        Schema::table('users', function($table)
         {
-            $table->integer('author_id');
+            $table->integer('timezone_id')->default(1);
         });
     }
 
     public function down()
     {
-        Schema::table('clake_userextended_comments', function($table)
+        Schema::table('users', function($table)
         {
-            $table->dropColumn('author_id');
+            $table->dropColumn('timezone_id');
         });
     }
 

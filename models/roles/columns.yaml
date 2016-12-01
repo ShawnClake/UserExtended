@@ -1,0 +1,27 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+
+    id:
+        label: rainlab.user::lang.group.id
+        invisible: true
+
+    name:
+        label: rainlab.user::lang.group.name
+        searchable: true
+
+    code:
+        label: rainlab.user::lang.group.code
+
+    description:
+        label: Description
+        type: tinytext
+
+    sort_order:
+        label: Priority
+        type: integer
+
+    created_at:
+        label: rainlab.user::lang.group.created_at

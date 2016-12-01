@@ -34,6 +34,10 @@ class CommentManager
         $comment->save();
     }
 
+    /**
+     * Deletes a comment specified by a comment ID
+     * @param $commentid
+     */
     public static function deleteComment($commentid)
     {
         $loggedInUser = UserUtil::getLoggedInUser();

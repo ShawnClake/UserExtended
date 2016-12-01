@@ -20,4 +20,39 @@
 1.0.8:
     - Added delete capabilities for comments and friends
 1.0.9:
-    - Fixed 'Code Has Already Been Taken' error
+    - Fixed 'Code Already In use' bug
+1.0.10:
+    - Added Heirarchal Level to User Groups
+    - user_groups_add_level.php
+1.0.11:
+    - Updated User Group Seeder. You may wish to consider to rerun it.
+1.0.12:
+    - Added Timezone table
+    - create_timezones_table.php
+1.0.13:
+    - Modified Users table to add a timezone_id column
+    - user_add_timezone.php
+1.0.14:
+    - Seed timezones
+    - seed_time_zones.php
+1.0.15:
+    - Create Roles table
+    - create_roles_table.php
+1.0.16:
+    - Added Roles as a linear heirarchy under a group.
+    - Use Case 1; You own a blogging company with a group called 'writers'. The writers group can have roles 'Senior Writer', 'Junior Writer', and 'Writer Editor'
+1.0.17:
+    - Adds role to the Users Groups table
+    - user_groups_add_role.php
+1.0.18:
+    - Removes existing primary keys from Users Groups model
+    - users_groups_remove_primary_keys.php
+1.0.19:
+    - Adds a primary id key to the users_groups model
+    - users_groups_add_primary_id.php
+1.0.20:
+    - Added a controller for Roles. Check the 'User' tab in the backend.
+1.0.21:
+    - Added the Timezonable trait. Useful for automatically converting model fields to the logged in users timezone.
+1.0.22:
+    - Initial release of the Role Manager in the backend.

@@ -2,6 +2,7 @@
 
 use Clake\UserExtended\Classes\CommentManager;
 use Clake\UserExtended\Classes\FriendsManager;
+use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Comments;
 use Cms\Classes\ComponentBase;
@@ -111,6 +112,14 @@ class UserUI extends ComponentBase
     {
         $content = $this->renderPartial('userui::comments.htm', ['comments' => $comments]);
         return ['#comment_section' => $content];
+    }
+
+    public function roles()
+    {
+        //$roles = UserRoleManager::currentUser()->all()->promote('developer');
+
+
+        return json_encode(UserRoleManager::currentUser()->all()->get());
     }
 
 }

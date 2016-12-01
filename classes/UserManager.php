@@ -60,6 +60,11 @@ class UserManager
 
     }
 
+    /**
+     * Used to search for users by phrase. It will search their name, email, surname, and username
+     * @param $phrase
+     * @return Collection
+     */
     public static function searchUsers($phrase)
     {
         $results = Lists::create();
@@ -76,21 +81,41 @@ class UserManager
 
     }
 
+    /**
+     * Searches for user models with a name like phrase
+     * @param $phrase
+     * @return mixed
+     */
     public static function searchUserByName($phrase)
     {
         return User::where('name', 'like', '%' . $phrase . '%')->get();
     }
 
+    /**
+     * Searches for user models with an email like phrase
+     * @param $phrase
+     * @return mixed
+     */
     public static function searchUserByEmail($phrase)
     {
         return User::where('email', 'like', '%' . $phrase . '%')->get();
     }
 
+    /**
+     * Searches for user models with a surname like phrase
+     * @param $phrase
+     * @return mixed
+     */
     public static function searchUserBySurname($phrase)
     {
         return User::where('surname', 'like', '%' . $phrase . '%')->get();
     }
 
+    /**
+     * Searches for user models with a username like phrase
+     * @param $phrase
+     * @return mixed
+     */
     public static function searchUserByUsername($phrase)
     {
         return User::where('username', 'like', '%' . $phrase . '%')->get();
