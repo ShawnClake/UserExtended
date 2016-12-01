@@ -41,14 +41,40 @@ User Extended is typically a dependency to my other plugins.
 
 ## Planned Features
 * Blocking friends
+    * Unblock as well
 * Adding a service provider
 * Adding an easy way to pragmatically change a users group
-* Adding a better User settings page and a brief user profile page
+    * User utility functions
+* Adding a better User settings page
+    * Actually functions properly
 * Adding a rating system for profiles
+    * Thumbs ups ?
+    * Likes ?
+    * Stars ?
+    * Customizable
 * Adding a private messaging system
+    * Threaded view
+    * Inbox view
+    * Instant message view
 * Adding better email support for user functions: friend requests, accept requests, group changes, messages, comments
+    * Email templates for each
+    * Ability to change the email template name
 * Fleshing our the backend UI
+    * Individual Role Management
+    * Adding permissions to use the Role manager
+    * Removing the Group Manager and integrating it into the Role Manager
 * Fleshing out the group Hierarchy w/ promotion/demotion system
+* Component to require a role and/or group required to access a page
+    * Redirect otherwise
+* Users can have a 'library' of images uploaded
+    * Permissions to view
+    * Name, description
+    * Can be sorted into 'categories' or 'albums'
+* Support for adding a currency which users can posses. 
+    * Customizable in images, name, descriptions, amounts (More than one type of currency)
+    * Useful for forums, message boards, game websites, etc.
+* Better email confirmation support
+* Better support for using usernames to register and login out of the box
 
 ## Details
 User Extended is not trying to be a social network plugin. We are providing functionality for more complex user functions which have use cases outside of social networks.
