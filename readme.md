@@ -30,7 +30,7 @@ User Extended is typically a dependency to my other plugins.
 * Searching for users via name, email, or username
 * Deleting friends
 
-#### Coming Soon 1.0.xx
+#### As of 1.0.22
 * Added Timezones and a Twig filter 'timezonify' to adjust Timestamps to a users timezone.
 * Added the Timezonable trait which when added to a model will automatically convert model fields to the logged in users timezone.
 * Added the concept of Roles. A user can be a part of many groups, but only one role within that group.
@@ -47,9 +47,8 @@ User Extended is typically a dependency to my other plugins.
 * Adding a rating system for profiles
 * Adding a private messaging system
 * Adding better email support for user functions: friend requests, accept requests, group changes, messages, comments
-* Adding a backend UI
-* Group Hierarchy w/ promotion/demotion system
-* Adding timezones to Users
+* Fleshing our the backend UI
+* Fleshing out the group Hierarchy w/ promotion/demotion system
 
 ## Details
 User Extended is not trying to be a social network plugin. We are providing functionality for more complex user functions which have use cases outside of social networks.
