@@ -88,9 +88,13 @@ class UserUtil
     public static function getLoggedInUsersTimezone()
     {
         $user = self::getLoggedInUser();
-        $user = self::castToUserExtendedUser($user);
+
         if($user != null)
+        {
+            $user = self::castToUserExtendedUser($user);
             return $user->timezone;
+        }
+
         return null;
     }
 
@@ -104,7 +108,9 @@ class UserUtil
     {
         $user = self::getUser($value, $property);
         if($user != null)
+        {
             return $user->timezone;
+        }
         return null;
     }
 

@@ -56,3 +56,6 @@
     - Added the Timezonable trait. Useful for automatically converting model fields to the logged in users timezone.
 1.0.22:
     - Initial release of the Role Manager in the backend.
+1.0.23:
+    - Bug Fixes
+    - user_groups_change_level_to_sort_order.php
