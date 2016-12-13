@@ -59,3 +59,5 @@
 1.0.23:
     - Bug Fixes
     - user_groups_change_level_to_sort_order.php
+1.0.24:
+    - Fixed data structures bug
