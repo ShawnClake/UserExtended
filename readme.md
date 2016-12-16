@@ -76,6 +76,28 @@ User Extended is typically a dependency to my other plugins.
 * Better email confirmation support
 * Better support for using usernames to register and login out of the box
 
+## Roadmap
+### Version 1.1.00 - UserExtended Beta Release
+* Friends
+* Roles
+* Timezones
+* Settings
+* Profiles
+* Backend UI
+
+### Version 1.2.00 - UserExtended Pre-Release
+* Improved stability
+* Improved Documentation
+* Cleanup
+* Bugfixes
+* Focus on stability
+* Email templates and sending
+* Event hooks
+
+### Version 2.0.00 - UserExtended Core Stable Release
+* Stability
+* Completed UserExtended Core.
+
 ## Details
 User Extended is not trying to be a social network plugin. We are providing functionality for more complex user functions which have use cases outside of social networks.
 
