@@ -10,7 +10,7 @@ use Backend;
 class Plugin extends PluginBase
 {
 
-    public $require = ['RainLab.User'];
+    public $require = ['RainLab.User', 'Clake.Datastructures'];
     
     /**
      * Returns information about this plugin.
