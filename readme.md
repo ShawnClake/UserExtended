@@ -96,6 +96,7 @@ User Extended is typically a dependency to my other plugins.
 
 ### Version 2.0.00 - UserExtended Core Stable Release
 * Stability
+* Add lang support
 * Completed UserExtended Core.
 
 ## Details
