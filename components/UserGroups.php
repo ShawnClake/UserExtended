@@ -4,6 +4,14 @@ use Cms\Classes\ComponentBase;
 use Auth;
 use Clake\UserExtended\Classes\UserGroupManager;
 
+/**
+ *
+ */
+
+/**
+ * Class UserGroups
+ * @package Clake\UserExtended\Components
+ */
 class UserGroups extends ComponentBase
 {
 

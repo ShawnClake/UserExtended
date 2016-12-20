@@ -7,7 +7,12 @@ use October\Rain\Database\Traits\Sortable;
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * UserExtended Model
+ * TODO: Add scope functions to easily find group queries
+ */
+
+/**
+ * Class GroupsExtended
+ * @package Clake\Userextended\Models
  */
 class GroupsExtended extends UserGroup
 {
@@ -17,10 +22,8 @@ class GroupsExtended extends UserGroup
     use Timezonable;
 
     protected $timezonable = [
-
         'created_at',
         'updated_at'
-
     ];
 
     /**
@@ -35,6 +38,11 @@ class GroupsExtended extends UserGroup
         $this->hasMany = $hasMany;
 
         parent::__construct();
+    }
+
+    public function scopeCode($query, $code)
+    {
+        return $query->where('code', $code);
     }
 
 }

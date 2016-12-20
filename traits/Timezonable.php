@@ -10,6 +10,10 @@ use Clake\Userextended\Models\UserExtended;
 use Exception;
 
 /**
+ * TODO: Improve error checking and documentation
+ */
+
+/**
  * Class Timezonable
  * @package Clake\UserExtended\Traits
  *
@@ -85,7 +89,5 @@ trait Timezonable
     {
         return $this->timezonable;
     }
-
-
 
 }

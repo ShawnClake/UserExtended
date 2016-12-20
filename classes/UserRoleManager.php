@@ -8,6 +8,12 @@ use Clake\Userextended\Models\UsersGroups;
 use Clake\UserExtended\Plugin;
 
 /**
+ * TODO: Enforce SRP
+ * TODO: Ensure the class has the same function useability as the others
+ * TODO: Enforce conventions
+ */
+
+/**
  * Class UserRoleManager
  * @package Clake\UserExtended\Classes
  *

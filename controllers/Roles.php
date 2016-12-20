@@ -7,6 +7,13 @@ use Clake\UserExtended\Classes\RoleManager;
 use October\Rain\Support\Facades\Flash;
 
 /**
+ * TODO: Add better error checking
+ * TODO: Add better documentation and follow conventions
+ * TODO: Improve code and its readability.
+ * TODO: Create an array for all of the partials that can be updated and have a dynamic way to refresh them
+ */
+
+/**
  * Roles Back-end Controller
  */
 class Roles extends Controller

@@ -6,6 +6,11 @@ use Backend\Classes\Controller;
 use RainLab\User\Models\UserGroup;
 
 /**
+ * @depreciated
+ * TODO: Remove this controller
+ */
+
+/**
  * User Groups Back-end Controller
  */
 class GroupsExtended extends Controller

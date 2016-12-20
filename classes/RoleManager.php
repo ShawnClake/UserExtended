@@ -2,9 +2,14 @@
 
 namespace Clake\UserExtended\Classes;
 
-
 use Clake\Userextended\Models\GroupsExtended;
 use October\Rain\Support\Collection;
+
+/**
+ * TODO: Ensure we are following SRP
+ * TODO: Standardize what init does across all classes
+ * TODO: Improve error checking and function naming
+ */
 
 /**
  * Class RoleManager

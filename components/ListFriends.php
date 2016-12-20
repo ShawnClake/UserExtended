@@ -4,6 +4,14 @@ use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserManager;
 use Cms\Classes\ComponentBase;
 
+/**
+ * TODO: Improve error checking
+ */
+
+/**
+ * Class ListFriends
+ * @package Clake\Userextended\Components
+ */
 class ListFriends extends ComponentBase
 {
 

@@ -5,6 +5,15 @@ use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Cms\Classes\ComponentBase;
 
+/**
+ * TODO: Force conventions
+ * TODO: Improve error checking
+ */
+
+/**
+ * Class ListFriendRequests
+ * @package Clake\Userextended\Components
+ */
 class ListFriendRequests extends ComponentBase
 {
 
@@ -40,7 +49,7 @@ class ListFriendRequests extends ComponentBase
     {
         $limit = $this->property('maxItems');
 
-        return FriendsManager::listMyReceivedFriendRequests(null, $limit);
+        return FriendsManager::listReceivedFriendRequests(null, $limit);
     }
 
     /**

@@ -8,7 +8,14 @@ use \October\Rain\Database\Traits\SoftDelete;
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * Comments Model
+ * TODO: Fill out fillable
+ * TODO: Better documentation
+ * TODO: Rename the model to get rid of the pluralization.
+ */
+
+/**
+ * Class Comments
+ * @package Clake\Userextended\Models
  */
 class Comments extends Model
 {
@@ -43,7 +50,11 @@ class Comments extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'content',
+        'user_id',
+        'author_id',
+    ];
 
     /**
      * @var array Relations

@@ -8,6 +8,12 @@ use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
 /**
+ * TODO: Add a better method of testing for exists than the current methods. Follow DRY
+ *          TODO: Maybe a class which takes two column names and then check them for the same data in reverse order
+ * TODO: Add error checking in case user doesn't exist or no one is logged in
+ */
+
+/**
  * Class FriendsManager
  * @package Clake\UserExtended\Classes
  */
@@ -21,23 +27,27 @@ class FriendsManager
      * @param int $limit
      * @return Collection
      */
-    public static function listMyReceivedFriendRequests($userid = null, $limit = 5)
+    public static function listReceivedFriendRequests($userid = null, $limit = 5)
     {
 
         $users = new Collection();
 
-        if($userid == null)
-            $userid = self::getLoggedInUser()->id;
+        $limit = Helpers::unlimited($limit);
 
-        $requests = Friends::where('user_that_accepted_request', $userid)->where('accepted', 0)->take($limit)->get();
+        /*$requests = Friends::where('user_that_accepted_request', $userid)->where('accepted', 0)->take($limit)->get();
 
         foreach ($requests as $request) {
 
             $u = User::where('id', $request['user_that_sent_request'])->get();
             $users->push($u[0]);
 
-        }
+        }*/
 
+        $requests = Friends::friendRequests()->take($limit)->get();
+
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->pluckSender()));
+        }
         return $users;
 
     }
@@ -50,7 +60,7 @@ class FriendsManager
      */
     public static function deleteFriend($friendUserID)
     {
-        $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '1')->count();
+        /*$exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '1')->count();
 
         $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '1')->count();
 
@@ -64,7 +74,16 @@ class FriendsManager
         {
             $relation = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '1')->first();
             $relation->delete();
-        }
+        }*/
+
+        if(!self::isFriend($friendUserID))
+            return;
+
+        $relation = Friends::friend($friendUserID)->first();
+
+        // Soft deletes arent working for some reason
+        $relation->forceDelete();
+
 
     }
 
@@ -76,6 +95,8 @@ class FriendsManager
     public static function sendFriendRequest($friendUserID)
     {
 
+        /*
+         // Anything except declined. Sent, Accepted, Blocked is not allowed states
         $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '<>', '2')->count();
 
         $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '<>', '2')->count();
@@ -83,6 +104,7 @@ class FriendsManager
         if($exists > 0 || $exists2 > 0)
             return;
 
+        // If declined
         $exists = Friends::where('user_that_sent_request', self::getLoggedInUser()->id)->where('user_that_accepted_request', $friendUserID)->where('accepted', '2')->count();
 
         $exists2 = Friends::where('user_that_accepted_request', self::getLoggedInUser()->id)->where('user_that_sent_request', $friendUserID)->where('accepted', '2')->count();
@@ -105,7 +127,27 @@ class FriendsManager
 
         $request->user_that_accepted_request = $friendUserID;
 
-        $request->accepted = 0;
+        $request->accepted = 0;*/
+
+        if(UserUtil::idIsLoggedIn($friendUserID))
+            return;
+
+        if(self::isFriend($friendUserID))
+            return;
+
+        if(Friends::isRelationExists($friendUserID) && !Friends::isDeclined($friendUserID))
+            return;
+
+        if(Friends::isDeclined($friendUserID))
+        {
+            $request = Friends::declined($friendUserID)->first();
+        } else {
+            $request = new Friends;
+        }
+
+        $request->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserID);
+
+        $request->setStatus(0);
 
         $request->save();
 
@@ -120,34 +162,20 @@ class FriendsManager
      */
     public static function isFriend($userID1, $userID2 = null)
     {
-
-        if($userID2 == null)
-            $userID2 = self::getLoggedInUser()->id;
-
-        $friendsa = Friends::where('user_that_sent_request', $userID1)->where('user_that_accepted_request', $userID2)->where('accepted', '1')->count();
-
-        if($friendsa > 0)
-            return true;
-
-        $friendsb = Friends::where('user_that_sent_request', $userID2)->where('user_that_accepted_request', $userID1)->where('accepted', '1')->count();
-
-        if($friendsb > 0)
-            return true;
-
-        return false;
-
+        return Friends::isFriends($userID1, $userID2);
     }
 
     /**
      * Accepts a friend request from a user
-     *
+     * One user is UserID1
+     * Other user is UserID2. Logged in user by default
      * @param $userID1
      * @param null $userID2
      */
-    public static function acceptRequest($userID1, $userID2 = null)
+    public static function acceptRequest($userId1, $userId2 = null)
     {
 
-        if($userID2 == null)
+        /*if($userID2 == null)
             $userID2 = self::getLoggedInUser()->id;
 
         $friends = Friends::where('user_that_sent_request', $userID1)->where('user_that_accepted_request', $userID2)->where('accepted', '0')->count();
@@ -160,7 +188,16 @@ class FriendsManager
             $request->accepted = 1;
             $request->save();
 
-        }
+        }*/
+
+        if(!Friends::isRequested($userId1, $userId2))
+            return;
+
+        $request = Friends::request($userId1, $userId2)->first();
+
+        $request->setStatus(1);
+
+        $request->save();
 
     }
 
@@ -172,25 +209,33 @@ class FriendsManager
      */
     public static function declineRequest($userId1, $userId2 = null)
     {
-        if($userId2 == null)
+        /*if($userId2 == null)
             $userId2 = self::getLoggedInUser()->id;
 
         $relation = Friends::where('user_that_sent_request', $userId1)->where('user_that_accepted_request', $userId2)->where('accepted', '0')->first();
 
         $relation->accepted = 2;
-        $relation->save();
+        $relation->save();*/
+
+        if(!Friends::isRequested($userId1, $userId2))
+            return;
+
+        $request = Friends::request($userId1, $userId2)->first();
+
+        $request->setStatus(2);
+
+        $request->save();
 
     }
 
     /**
-     * Lists friend requests both received and sent
-     *
+     * Returns a list of both sent and received friend requests for the logged in user
      * @param int $limit
-     * @return static
+     * @return Collection|static
      */
     public static function listRequests($limit = 100)
     {
-        $userid = self::getLoggedInUser()->id;
+        /*$userid = self::getLoggedInUser()->id;
 
         $usersa = new Collection;
 
@@ -228,19 +273,40 @@ class FriendsManager
 
         $users = $users->take($limit);
 
+        return $users;*/
+
+        $users = new Collection();
+
+        $limit = Helpers::unlimited($limit);
+
+        $requests = Friends::friendRequests(null)->take($limit)->get();
+
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->id));
+        }
+
+        $requests = Friends::sentRequests(null)->take($limit)->get();
+
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->id));
+        }
+
+        $users = $users->shuffle();
+
+        $users = $users->take($limit);
+
         return $users;
     }
 
     /**
-     * Returns a list of friends with a limit
-     *
+     * Returns the list of friends for the logged in user with a limit
      * @param $limit
-     * @return static
+     * @return Collection|static
      */
-    public static function listFriends($limit)
+    public static function listFriends($limit = 0)
     {
 
-        $userid = self::getLoggedInUser()->id;
+        /*$userid = self::getLoggedInUser()->id;
 
         $usersa = new Collection;
 
@@ -278,18 +344,40 @@ class FriendsManager
 
         $users = $users->take($limit);
 
+        return $users;*/
+
+        $users = new Collection();
+
+        $limit = Helpers::unlimited($limit);
+
+        $requests = Friends::friends()->get();
+
+        if($requests->isEmpty())
+        {
+            return $users;
+        }
+
+
+        foreach ($requests as $user) {
+            $users->push(UserUtil::getUser($user->notMe()));
+        }
+
+        $users = $users->shuffle();
+
+        $users = $users->take($limit);
+
         return $users;
 
     }
 
     /**
-     * Returns all friends
+     * Returns all friends for the logged in user
      *
      * @return Collection
      */
-    public static function getAll()
+    public static function getAllFriends()
     {
-        $userid = self::getLoggedInUser()->id;
+        /*$userid = self::getLoggedInUser()->id;
 
         $usersa = new Collection;
 
@@ -323,22 +411,9 @@ class FriendsManager
 
         $users = $usersa->merge($usersb);
 
-        return $users;
+        return $users;*/
+
+        return self::listFriends();
     }
 
-    /**
-     * Returns the logged in user model
-     *
-     * @return User
-     */
-    private static function getLoggedInUser()
-    {
-        if (!$user = Auth::getUser()) {
-            return null;
-        }
-
-        $user->touchLastSeen();
-
-        return $user;
-    }
 }

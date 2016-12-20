@@ -7,6 +7,15 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Comments;
 use Cms\Classes\ComponentBase;
 
+/**
+ * TODO: Rename the component and separate out some of the modules.
+ *      TODO: Commenting should be its own set as should friending
+ */
+
+/**
+ * Class UserUI
+ * @package Clake\Userextended\Components
+ */
 class UserUI extends ComponentBase
 {
 

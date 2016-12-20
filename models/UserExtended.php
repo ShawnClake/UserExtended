@@ -4,18 +4,36 @@ use Model;
 use RainLab\User\Models\User;
 
 use Clake\UserExtended\Traits\Timezonable;
+use Clake\UserExtended\Traits\Searchable;
 
 /**
- * UserExtended Model
+ * TODO: Add searchable functions here
+ * TODO: Add searchable trait
+ * TODO: Add scope functions for better user querying
+ */
+
+/**
+ * Class UserExtended
+ * @package Clake\Userextended\Models
  */
 class UserExtended extends User
 {
 
-    protected $timezonable = [
+    use Timezonable;
 
+    use Searchable;
+
+
+    protected $timezonable = [
         'created_at',
         'updated_at'
+    ];
 
+    protected $searchable = [
+        'email',
+        'name',
+        'surname',
+        'username'
     ];
 
     /**
@@ -37,6 +55,8 @@ class UserExtended extends User
         $belongsToMany = $this->belongsToMany;
         $belongsToMany['roles'] = ['Clake\Userextended\Models\Roles', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
         $this->belongsToMany = $belongsToMany;
+
+        $this->jsonable[] = 'settings';
 
         parent::__construct();
     }

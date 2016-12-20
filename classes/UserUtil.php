@@ -10,6 +10,11 @@ use RainLab\User\Models\User;
 use Redirect;
 
 /**
+ * TODO: Improve function documentation
+ * TODO: Create a separate documentation file to document User Utility functions
+ */
+
+/**
  * Class UserUtil
  * @package Clake\UserExtended\Classes
  *
@@ -107,6 +112,7 @@ class UserUtil
     public static function getUserTimezone($value, $property = "id")
     {
         $user = self::getUser($value, $property);
+
         if($user != null)
         {
             return $user->timezone;
@@ -136,6 +142,52 @@ class UserUtil
         $userExtended = new UserExtended();
         $userExtended->attributes = $user->attributes;
         return $userExtended;
+    }
+
+    public static function searchUsers($phrase)
+    {
+        $results = new UserExtended();
+
+        return $results->search($phrase);
+    }
+
+    /**
+     * @param null $userId
+     * @return null
+     */
+    public static function getUsersIdElseLoggedInUsersId($userId = null)
+    {
+        if($userId == null)
+            $userId = UserUtil::getLoggedInUser();
+
+        if($userId == null)
+            return null;
+
+        return $userId->id;
+    }
+
+    /**
+     * Returns the UserExtended object for the user ID passed in. If the user ID passed in is null,
+     * gets logged in user.
+     * @param null $userId
+     * @return mixed|null
+     */
+    public static function getUserForUserId($userId = null)
+    {
+        $id = self::getUsersIdElseLoggedInUsersId($userId);
+
+        if($id == null)
+            return null;
+
+        return self::getUser($id);
+    }
+
+    public static function idIsLoggedIn($userId)
+    {
+        $user = self::getLoggedInUser();
+        if($user == null)
+            return;
+        return $user->id == $userId;
     }
 
 }

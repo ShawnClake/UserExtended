@@ -1,12 +1,24 @@
 <?php namespace Clake\Userextended\Models;
 
 use Model;
+use Clake\UserExtended\Traits\Searchable;
+use October\Rain\Database\Traits\SoftDelete;
+use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * Timezone Model
+ * TODO: Add scopes and accessors to allow easy drop-down menu or searching for timezones
+ */
+
+/**
+ * Class Timezone
+ * @package Clake\Userextended\Models
  */
 class Timezone extends Model
 {
+
+    use Searchable;
+    use SoftDelete;
+    use Timezonable;
 
     /**
      * @var string The database table used by the model.
@@ -28,6 +40,21 @@ class Timezone extends Model
         'offset',
     ];
 
+    protected $searchable = [
+        'name',
+        'abbr',
+        'utc',
+    ];
+
+    protected $timezonable = [
+        'updated_at',
+        'created_at'
+    ];
+
+    protected $dates = [
+        'deleted_at',
+    ];
+
     /**
      * @var array Relations
      */
@@ -47,5 +74,18 @@ class Timezone extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    public function getTimezonesList()
+    {
+        $timezones = Timezone::all();
+        $list = [];
+
+        foreach($timezones as $timezone)
+        {
+            $list[] = [$timezone->abbr => $timezone->name];
+        }
+
+        return $list;
+    }
 
 }

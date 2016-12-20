@@ -1,16 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Shawn
- * Date: 11/26/2016
- * Time: 1:04 PM
- */
 
 namespace Clake\UserExtended\Classes;
 
 
 use Clake\Userextended\Models\GroupsExtended;
 use October\Rain\Support\Collection;
+
+/**
+ * TODO: In conjunction with RoleManager, UserGroupManager, and UserRoleManager ensure we are following SRP
+ * TODO: Better error checking in case things dont exist
+ */
 
 /**
  * Class GroupManager

@@ -4,6 +4,12 @@ use Auth;
 use RainLab\User\Models\UserGroup;
 
 /**
+ * TODO: Ensure this class follows SRP
+ * TODO: Improve error checking
+ * TODO: Change function names to be lower case and enforce consistent naming and function styles
+ */
+
+/**
  * Class UserGroupManager
  * @package Clake\UserExtended\Classes
  *

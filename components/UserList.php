@@ -4,6 +4,14 @@ use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserManager;
 use Cms\Classes\ComponentBase;
 
+/**
+ * TODO: Add support for select a user by user ID
+ */
+
+/**
+ * Class UserList
+ * @package Clake\Userextended\Components
+ */
 class UserList extends ComponentBase
 {
 

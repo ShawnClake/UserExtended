@@ -1,0 +1,9 @@
+settings:
+    phone:
+        label: Phone Number
+        editable: true
+        type: text
+        createable: true
+        validation: required
+        registerable: true
+        encrypt: true
