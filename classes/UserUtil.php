@@ -144,6 +144,12 @@ class UserUtil
         return $userExtended;
     }
 
+    public static function convertToUserExtendedUser(User $user)
+    {
+        $id = $user->id;
+        return UserExtended::where('id', $id)->first();
+    }
+
     public static function searchUsers($phrase)
     {
         $results = new UserExtended();

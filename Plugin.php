@@ -72,7 +72,6 @@ class Plugin extends PluginBase
     public function boot()
     {
 
-
         /**
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
@@ -121,6 +120,8 @@ class Plugin extends PluginBase
             'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
             'Clake\UserExtended\Components\UserSearch' => 'usersearch',
             'Clake\UserExtended\Components\UserUI' => 'userui',
+            'Clake\UserExtended\Components\Settings' => 'settings',
+            'Clake\UserExtended\Components\Account' => 'account',
         ];
     }
 

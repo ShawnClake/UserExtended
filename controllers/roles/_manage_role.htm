@@ -1,8 +1,17 @@
-    <div style="font-size:14px;padding-left:9px;">
+<div style="font-size:14px;padding-left:9px;">
 
-    <?= $role->name ?>
+    Name: <?= $role->name ?> <br>
+    Description: <?= $role->description ?> <br>
+    Created: <?= $role->created_at ?> <br>
+    Last Updated: <?= $role->updated_at ?> <br>
 
+    <hr>
 
+    Users: <br>
+    <?php foreach($role->getUsersInRole() as $user): ?>
 
+        <?= $user->name ?><br>
 
-    </div>
+    <?php endforeach; ?>
+
+</div>

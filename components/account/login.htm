@@ -1,0 +1,31 @@
+{% if user %}
+
+
+{% else %}
+
+<form
+        data-request="onLogin">
+    <div class="form-group">
+        <label for="register{{account.signUp}}">{{account.signUp|capitalize}}</label>
+        <input
+                name="{{account.signUp}}"
+                type='{% if account.signUp == "email" %}email{% else %}text{% endif %}'
+                class="form-control"
+                id="register{{account.signUp}}"
+                placeholder="Enter your {{account.signUp}}" />
+    </div>
+
+    <div class="form-group">
+        <label for="userSigninPassword">Password</label>
+        <input
+                name="password"
+                type="password"
+                class="form-control"
+                id="userSigninPassword"
+                placeholder="Enter your password" />
+    </div>
+
+    <button type="submit" class="btn btn-default">Sign in</button>
+</form>
+
+{% endif %}

@@ -1,0 +1,30 @@
+<?php if(isset($group)): ?>
+
+<div style="padding:33px;padding-top:23px;">
+
+    <h4>Create Role</h4>
+    <br>
+    <form class="form-elements" role="form" data-request="onCreateRole" data-request-data="groupCode: '<?= $group->code ?>'">
+        <div class="form-group span-left">
+            <label>Name</label>
+            <input type="text" name="name" value="" class="form-control" />
+        </div>
+
+        <div class="form-group span-right">
+            <label>Code</label>
+            <input type="text" name="code" value="" class="form-control" />
+        </div>
+
+        <div class="form-group span-full">
+            <label>Description</label>
+            <textarea style="resize:none;" name="description" class="form-control"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <span style="margin-left:11px;" id="feedback_role_save"></span>
+    </form>
+
+</div>
+
+<?php endif ?>

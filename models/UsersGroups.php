@@ -56,6 +56,8 @@ class UsersGroups extends Model
     public function scopeByRole($query, $roleCode)
     {
         $role = Roles::where('code', $roleCode)->first();
+        if(!isset($role))
+            return $query;
         return $query->where('role_id', $role->id);
     }
 

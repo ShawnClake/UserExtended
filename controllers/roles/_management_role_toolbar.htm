@@ -1,3 +1,4 @@
+<?php if($role): ?>
 <div data-control="toolbar">
     <div class="row">
 
@@ -5,13 +6,13 @@
             <span style="font-size:19px;font-style:italic;">Selected Role: <?= $role->name ?></span>
         </div>
 
-        <!--<div class="col-sm-12 col-md-6">
-            <a
-                    href="javascript:;"
-                    class="btn btn-primary oc-icon-plus"
-            >
-                Save Role
-            </a>-->
+        <div class="col-sm-12 col-md-6">
+            <!-- <a
+                     href="javascript:;"
+                     class="btn btn-primary oc-icon-plus"
+             >
+                 Save Role
+             </a>-->
 
             <a
                     href="javascript:;"
@@ -37,3 +38,5 @@
 </div>
 
 <h4 style="margin-top:11px;">Role Management</h4>
+
+<?php endif ?>

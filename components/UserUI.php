@@ -126,8 +126,6 @@ class UserUI extends ComponentBase
     public function roles()
     {
         //$roles = UserRoleManager::currentUser()->all()->promote('developer');
-
-
         return json_encode(UserRoleManager::currentUser()->all()->get());
     }
 

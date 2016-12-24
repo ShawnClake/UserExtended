@@ -78,8 +78,8 @@ class Roles extends Controller
         }
         else
         {
-            $roleRender = ['#manage_role' => 'No roles currently exist in this group'];
-            $roleToolbarRender = [];
+            $roleRender = ['#manage_role' => ''];
+            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
         }
 
         return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender);
@@ -242,13 +242,94 @@ class Roles extends Controller
         }
         else
         {
-            $roleRender = ['#manage_role' => 'No roles currently exist in this group'];
-            $roleToolbarRender = [];
+            $roleRender = ['#manage_role' => ''];
+            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
         }
 
         Flash::success('Role successfully saved!');
 
         return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>']);
+
+    }
+
+    /**
+     * AJAX handler for removing a role
+     * @return array|void
+     */
+    public function onRemoveRole()
+    {
+        $groupCode = post('groupCode');
+        $roleCode = post('roleCode');
+
+        $role = RoleManager::initGroupRolesByCode($groupCode)->getRoleIfExists($roleCode);
+
+        if(!isset($role))
+            return;
+
+        $role->delete();
+
+        $roles = RoleManager::initGroupRolesByCode($groupCode)->getSorted();
+        if($roles->count() > 0)
+        {
+            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+        }
+        else
+        {
+            $roleRender = ['#manage_role' => ''];
+            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+        }
+
+        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender);
+
+    }
+
+    /**
+     * AJAX handler for opening a form for creating a new role
+     * @return mixed
+     */
+    public function onOpenAddRole()
+    {
+        $groupCode = post('groupCode');
+        $group = GroupManager::retrieve($groupCode);
+        return $this->makePartial('create_role_form', ['group' => $group]);
+    }
+
+    /**
+     * AJAX handler for creating a new role when clicking create/save on a create role form.
+     * @return array
+     */
+    public function onCreateRole()
+    {
+        $groupCode = post('groupCode');
+        $name = post('name');
+        $code = post('code');
+        $description = post('description');
+
+        $groupId = GroupManager::retrieve($groupCode)->id;
+
+        $role = new \Clake\Userextended\Models\Roles();
+        $role->group_id = $groupId;
+        $role->name = $name;
+        $role->code = $code;
+        $role->description = $description;
+        $role->save();
+
+        $roles = RoleManager::initGroupRolesByCode($groupCode)->getSorted();
+        if($roles->count() > 0)
+        {
+            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+        }
+        else
+        {
+            $roleRender = ['#manage_role' => ''];
+            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+        }
+
+        Flash::success('Role successfully created!');
+
+        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been created.</span>']);
 
     }
 }

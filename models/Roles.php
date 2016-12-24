@@ -73,6 +73,20 @@ class Roles extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function getUsersInRole()
+    {
+        $relations = UsersGroups::byRole($this->code)->get();
+
+        $users = new Collection;
+
+        foreach($relations as $relation)
+        {
+            $users[] = UserExtended::where('id', $relation->user_id)->first();
+        }
+
+        return $users;
+    }
+
     public function scopeRolesInGroup($query, $groupCode)
     {
         $group = GroupsExtended::where('code', $groupCode)->first();

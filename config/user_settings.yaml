@@ -7,3 +7,18 @@ settings:
         validation: required
         registerable: true
         encrypt: true
+    address:
+        label: Address
+        type: text
+        createable: true
+        validation:
+        registerable: true
+        encrypt: false
+    cell:
+        label: Cellphone
+        type: text
+        createable: true
+        validation: required
+        registerable: true
+        encrypt: false
+        editable: true

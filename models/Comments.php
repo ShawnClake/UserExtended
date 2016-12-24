@@ -72,4 +72,35 @@ class Comments extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    public function isAuthor($commentId, $userId)
+    {
+        $author = $this->id($commentId)->author();
+        if($author == $userId)
+            return true;
+        return false;
+    }
+
+    public function isUser($commentId, $userId)
+    {
+        $user = $this->id($commentId)->user();
+        if($user == $userId)
+            return true;
+        return false;
+    }
+
+    public function scopeId($query, $commentId)
+    {
+        return $query->where('id', $commentId);
+    }
+
+    public function scopeAuthor($query)
+    {
+        return $query->pluck('author_id');
+    }
+
+    public function scopeUser($query)
+    {
+        return $query->pluck('user_id');
+    }
+
 }

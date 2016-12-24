@@ -5,32 +5,39 @@ namespace Clake\UserExtended\Classes;
 use Clake\Userextended\Models\UserExtended;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
-use October\Rain\Parse\Yaml;
-
-/**
- * TODO: Cleanup this class
- * TODO: Finish this class
- * TODO: Enforce conventions, SRP, and function usage
- */
+use \October\Rain\Support\Facades\Yaml;
 
 /**
  * Class UserSettingsManager
  * @package Clake\UserExtended\Classes
+ *
+ * Terminology and flow:
+ *   A user has many settings.
+ *   A setting has many finite options.
+ *   Options have default values below.
+ *   A setting has a value.
+ *   An option has a state.
  */
 class UserSettingsManager
 {
 
+    // Settings config file
     protected $settingsTemplate = [];
-    protected $settings = [];
+
+    // Settings column from the user object
+    protected $settings;
+
+    // Stores the user object
     protected $user = null;
 
+    // Default options for settings
     private $defaults = [
         'label' => '',
         'type' => 'text',
         'validation' => '',
         'editable' => true,
         'createable' => true,
-        'registerable' => true,
+        'registerable' => false,
         'encrypt' => false,
     ];
 
@@ -51,13 +58,47 @@ class UserSettingsManager
             return null;
 
         if($user == null)
-            $user = UserUtil::castToUserExtendedUser(UserUtil::getLoggedInUser());
+        {
+            $user = UserUtil::getLoggedInUser();
+
+            if(!$user == null)
+                $user = UserUtil::convertToUserExtendedUser($user);
+            else
+                return $instance;
+        }
 
         $instance->user = $user;
 
         $instance->settings = $instance->user->settings;
 
         return $instance;
+    }
+
+    /**
+     * Returns the user settings on the user instance
+     * @return mixed
+     */
+    public function userSettingsCheck()
+    {
+        return $this->settings;
+    }
+
+    /**
+     * Returns the config file contents
+     * @return array
+     */
+    public function yamlCheck()
+    {
+        return $this->settingsTemplate;
+    }
+
+    /**
+     * Returns the user instance
+     * @return null
+     */
+    public function userCheck()
+    {
+        return $this->user;
     }
 
     /**
@@ -78,7 +119,7 @@ class UserSettingsManager
     public function getSettingOptions($setting)
     {
         if(!$this->isSetting($setting))
-            return;
+            return false;
 
         $options = $this->settingsTemplate[$setting];
 
@@ -138,30 +179,57 @@ class UserSettingsManager
     {
         $settings = [];
 
-        foreach($this->settingsTemplate as $setting)
+        foreach($this->settingsTemplate as $key=>$setting)
         {
-            $options = $this->getSettingOptions($setting);
+            $options = $this->getSettingOptions($key);
 
             $value = '';
 
-            if(isset($this->settings[$setting]))
-                $value = $this->settings[$setting];
+            if(isset($this->settings[$key]))
+            {
+                $value = $this->settings[$key];
+                if($this->isEncrypted($key))
+                    $value = $this->decrypt($key, $value);
+            }
 
-            $settings[$setting] = [$value, 'options' => $options];
+
+            $settings[$key] = [$value, 'options' => $options];
         }
 
         return $settings;
     }
 
     /**
-     * Returns whether or not a setting is read only or editable
+     * Returns whether or not a setting should exist on an update form page
      * @param $setting
      * @return bool
      */
     public function isEditable($setting)
     {
         $options = $this->getSettingOptions($setting);
-        return $options['editable'] && $options['editable'] != 'false';
+        return $options['editable'];
+    }
+
+    /**
+     * Returns whether or not a setting can be updated or created, Overrides both editable and registerable
+     * @param $setting
+     * @return mixed
+     */
+    public function isCreateable($setting)
+    {
+        $options = $this->getSettingOptions($setting);
+        return $options['createable'];
+    }
+
+    /**
+     * Returns whether a setting should exist on a sign up form
+     * @param $setting
+     * @return mixed
+     */
+    public function isRegisterable($setting)
+    {
+        $options = $this->getSettingOptions($setting);
+        return $options['registerable'];
     }
 
     /**
@@ -172,7 +240,7 @@ class UserSettingsManager
     public function isValidated($setting)
     {
         $options = $this->getSettingOptions($setting);
-        return $options['validation'] != '';
+        return $options['validation'] != '' && isset($options['validation']);
     }
 
     /**
@@ -183,7 +251,7 @@ class UserSettingsManager
     public function isEncrypted($setting)
     {
         $options = $this->getSettingOptions($setting);
-        return $options['encrypt'] && $options['encrypt'] != 'false';
+        return $options['encrypt'];
     }
 
     /**
@@ -229,7 +297,7 @@ class UserSettingsManager
     }
 
     /**
-     * Returns th decrypted version of the passed value
+     * Returns the decrypted version of the passed value
      * It will return the value if encryption is not required
      * @param $setting
      * @param $value
@@ -253,13 +321,19 @@ class UserSettingsManager
      */
     public function setSetting($setting, $value)
     {
-        if(!($this->isEditable($setting)))
-            return false;
-
         if(!$this->validate($setting, $value))
             return false;
 
+
         $value = $this->encrypt($setting, $value);
+
+        //dd(empty($this->settings));
+        //$test = is_null($this->settings) ? "hi" : $this->settingsTemplate;
+        //$test = array_key_exists($setting, $this->settings);
+        //dd($test);
+
+        if($this->settings == "Array" || is_null($this->settings) || empty($this->settings))
+            $this->settings = [];
 
         $this->settings[$setting] = $value;
 
@@ -272,14 +346,65 @@ class UserSettingsManager
      */
     public function save()
     {
-        $this->user->settings = $this->settings;
-        $this->user->save();
+        UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
         return $this;
     }
 
+    /**
+     * Returns an array of setting values and options for each setting marked with the option 'editable'
+     * @return array
+     */
+    public function getUpdateable()
+    {
+        $settings = [];
 
+        foreach($this->settingsTemplate as $key=>$setting)
+        {
+            if(!$this->isCreateable($key))
+                continue;
 
+            if(!$this->isEditable($key))
+                continue;
 
+            $options = $this->getSettingOptions($key);
 
+            $value = '';
+
+            if(isset($this->settings[$key]))
+            {
+                $value = $this->settings[$key];
+                if($this->isEncrypted($key))
+                    $value = $this->decrypt($key, $value);
+            }
+
+            $settings[$key] = [$value, 'options' => $options];
+        }
+
+        return $settings;
+    }
+
+    /**
+     * Returns an array of setting values and options for each setting marked with the option 'registerable'
+     * @return array
+     */
+    public function getRegisterable()
+    {
+        $settings = [];
+
+        foreach($this->settingsTemplate as $key=>$setting)
+        {
+            if(!$this->isCreateable($key))
+                continue;
+
+            if(!$this->isRegisterable($key))
+                continue;
+
+            $options = $this->getSettingOptions($key);
+
+            $settings[$key] = ['options' => $options];
+        }
+
+        return $settings;
+    }
 
 }

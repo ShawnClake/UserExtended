@@ -6,19 +6,31 @@
         </div>
 
         <div class="col-sm-12 col-md-3">
-            <a
+            <!--<a
                     href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
                     class="btn btn-primary oc-icon-plus"
                     >
                 Add Roles
-            </a>
+            </a>-->
 
             <a
+                    href="javascript:;"
+                    class="btn btn-primary oc-icon-plus"
+                    data-control="popup"
+                    data-handler="onOpenAddRole"
+                    data-size="huge"
+                    data-extra-data="groupCode: '<?= $group->code ?>'"
+
+            >
+                Add Role
+            </a>
+
+            <!--<a
                     href="<?= Backend::url('clake/userextended/roles') ?>"
                     class="btn btn-default oc-icon-pencil"
             >
                 View All Roles
-            </a>
+            </a>-->
 
             <a
                     href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
