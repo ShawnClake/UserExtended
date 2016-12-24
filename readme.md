@@ -17,6 +17,8 @@ User Extended is typically a dependency to my other plugins.
 * Just add the components you require to a page and everything should work out of the box
 * Feel free to add your own classes which extend mine
 
+[Check out the bug tracker and feature planner](https://docs.google.com/spreadsheets/d/1_-f5fTYbRb5FWZ0BI2wF9xhEJMZtzMtFxh-4T_GWdXA/edit?usp=sharing)
+
 ## Feature List
 #### As of 1.0.3
 * Frontend User role management in the form of Groups.
