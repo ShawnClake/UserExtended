@@ -58,12 +58,24 @@ abstract class UserExtended
      */
     private static $modules = [];
 
+    private static $components = [];
+
+    private static $navigation = [];
+
+    private static $lang = [];
+
     /**
      * UserExtended constructor.
      */
     public function __construct()
     {
         $this->register();
+
+        self::$components[] = $this->injectComponents();
+
+        self::$navigation[] = $this->injectNavigation();
+
+        self::$lang[] = $this->injectLang();
     }
 
     /**
@@ -101,5 +113,10 @@ abstract class UserExtended
         return $module->instance;
     }
 
+    public abstract function injectComponents();
+
+    public abstract function injectNavigation();
+
+    public abstract function injectLang();
 
 }
