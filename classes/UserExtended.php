@@ -58,10 +58,22 @@ abstract class UserExtended
      */
     private static $modules = [];
 
+    /**
+     * Component injection registry
+     * @var array
+     */
     private static $components = [];
 
+    /**
+     * Navigation injection registry
+     * @var array
+     */
     private static $navigation = [];
 
+    /**
+     * Lang injection registry
+     * @var array
+     */
     private static $lang = [];
 
     /**
@@ -113,10 +125,22 @@ abstract class UserExtended
         return $module->instance;
     }
 
+    /**
+     * Override with an array to inject components into UserExtended
+     * @return mixed
+     */
     public abstract function injectComponents();
 
+    /**
+     * Override with an array to inject navigation into UserExtended
+     * @return mixed
+     */
     public abstract function injectNavigation();
 
+    /**
+     * Override with a lang array to inject lang into UserExtended
+     * @return mixed
+     */
     public abstract function injectLang();
 
 }
