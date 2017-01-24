@@ -95,7 +95,6 @@ User Extended is typically a dependency to my other plugins.
 * Focus on stability
 * Email templates and sending
 * Event hooks
-* Logging
 
 ### Version 2.0.00 - UserExtended Core Stable Release
 * Stability

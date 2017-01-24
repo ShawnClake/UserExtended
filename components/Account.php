@@ -16,6 +16,7 @@ use October\Rain\Exception\ValidationException;
 use RainLab\User\Models\Settings;
 use Mail;
 use Event;
+use Clake\Userextended\Models\Settings as UserExtendedSettings;
 //use RainLab\User\Classes\AuthManager
 
 /**
@@ -23,7 +24,7 @@ use Event;
  * @package Clake\Userextended\Components
  *
  * Some code in this component has been copied from the RainLab.User plugin.
- * Find their original plugin here: https://github.com/rainlab/user-plugin
+ * Find the original plugin here: https://github.com/rainlab/user-plugin
  * Copied and modified functions:
  *  * onUpdate
  *  * onRegister
@@ -76,6 +77,11 @@ class Account extends ComponentBase
         $user->name = $values['name'];
         $user->email = $values['email'];
 
+        if (strlen(post('password')) && strlen(post('password_confirmation'))) {
+            $user->password = $values['password'];
+            $user->password_confirmation = $values['password_confirmation'];
+        }
+
         $user->save();
 
         $settingsManager = UserSettingsManager::init();
@@ -121,14 +127,14 @@ class Account extends ComponentBase
 
             $rules = [
                 'email'    => 'required|email|between:6,255',
-                'password' => 'required|between:4,255'
+                'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255'),
             ];
 
             /*
              * Better utilization of email vs username
              */
             if (Settings::get('login_attribute') == "username") {
-                $rules['username'] = 'required|between:2,255';
+                $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
             }
 
             /*

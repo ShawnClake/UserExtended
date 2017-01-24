@@ -15,6 +15,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class UserUI
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserUI extends ComponentBase
 {
@@ -22,7 +23,7 @@ class UserUI extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'User UI',
+            'name'        => 'DEPRECIATED. User UI',
             'description' => 'Provides generic interface implementations'
         ];
     }

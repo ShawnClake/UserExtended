@@ -1,0 +1,7 @@
+{% for comment in comments %}
+<div class="userblock">
+    {{comment.content}} <br>
+    <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="userui::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">Written at: {{comment.created_at|timezonify}} by <a href="/users/{{comment.author.id}}">{{comment.author.name}}</a></i>
+    <hr>
+</div>
+{% endfor %}

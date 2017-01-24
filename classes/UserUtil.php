@@ -188,12 +188,24 @@ class UserUtil
         return self::getUser($id);
     }
 
+    /**
+     * @param $userId
+     * @return bool|void
+     */
     public static function idIsLoggedIn($userId)
     {
         $user = self::getLoggedInUser();
         if($user == null)
             return;
         return $user->id == $userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getLoogedInUserExtendedUser()
+    {
+        return self::convertToUserExtendedUser(self::getLoggedInUser());
     }
 
 }

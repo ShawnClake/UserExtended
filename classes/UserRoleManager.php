@@ -155,7 +155,7 @@ class UserRoleManager
      */
     public function promote($groupCode)
     {
-        if(!UserGroupManager::CurrentUser()->All()->IsInGroup($groupCode))
+        if(!UserGroupManager::currentUser()->all()->isInGroup($groupCode))
             return $this;
 
         $role = $this->getRoleByGroup($groupCode);
@@ -183,7 +183,7 @@ class UserRoleManager
      */
     public function demote($groupCode)
     {
-        if(!UserGroupManager::CurrentUser()->All()->IsInGroup($groupCode))
+        if(!UserGroupManager::currentUser()->all()->isInGroup($groupCode))
             return $this;
 
         $role = $this->getRoleByGroup($groupCode);

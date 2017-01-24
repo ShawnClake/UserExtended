@@ -1,71 +1,61 @@
 <?php namespace Clake\UserExtended\Classes;
 
-use Auth;
-use RainLab\User\Models\UserGroup;
+    use Auth;
+    use RainLab\User\Models\UserGroup;
 
-/**
- * TODO: Ensure this class follows SRP
- * TODO: Improve error checking
- * TODO: Change function names to be lower case and enforce consistent naming and function styles
- */
+    /**
+     * TODO: Ensure this class follows SRP
+     * TODO: Improve error checking
+     * TODO: Change function names to be lower case and enforce consistent naming and function styles
+     */
 
-/**
- * Class UserGroupManager
- * @package Clake\UserExtended\Classes
- *
- * Handles all interactions with groups on a user level
- */
-class UserGroupManager {
+    /**
+     * Class UserGroupManager
+     * @package Clake\UserExtended\Classes
+     *
+     * Handles all interactions with groups on a user level
+     */
+class UserGroupManager extends StaticFactory {
 
     // Stores an array of UserGroups. ["GroupName" => "GroupDescriptionObject"]
-    public static $userGroups;
+    public $userGroups;
 
     // Stores the user we are getting groups for
-    private static $user;
-
-    // Stores the static instance
-    private static $_instance = null;
+    private $user;
 
     /**
      * Pass a user object to get groups for that user
      * @param null $user
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public static function Using ($user = null)
+    public function using ($user = null)
     {
-        if (self::$_instance === null) {
-            self::$_instance = new self;
-        }
+        if($user == null)
+            $user = UserUtil::getLoogedInUserExtendedUser();
 
-        if($user == null) {
-            $user = self::getLoggedInUser();
-        }
+        $this->$user = $user;
 
-        self::$user = $user;
-
-        return self::$_instance;
+        return $this;
     }
 
     /**
      * Sets the class up to use the currently logged in user
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public static function CurrentUser() {
-        if (self::$_instance === null) {
-            self::$_instance = new self;
-        }
+    public function currentUser() {
 
-        self::$user = self::getLoggedInUser();
+        $this->user = UserUtil::getLoogedInUserExtendedUser();
 
-        return self::$_instance;
+        return $this;
     }
 
     /**
      * Returns the logged in user, if available, and touches
      * the last seen timestamp.
+     * @deprecated
      * @return RainLab\User\Models\User
      */
-    private static function getLoggedInUser()
+    private function getLoggedInUser()
     {
         if (!$user = Auth::getUser()) {
             return null;
@@ -82,19 +72,17 @@ class UserGroupManager {
      * @param null $user
      * @return $this
      */
-    public function All($user = null)
+    public function all($user = null)
     {
 
         if($user == null)
-            $user = self::$user;
+            $user = $this->user;
 
         $userid = $user["id"];
 
         $usergroup = UserGroup::all();
 
         $groups = [];
-
-        //$tester = [];
 
         foreach($usergroup as $key => $value)
         {
@@ -113,21 +101,7 @@ class UserGroupManager {
 
         }
 
-        //$user = UserUtil::getLoggedInUser();
-
-        //$groups = $user->groups()->get();
-
-        self::$userGroups = $groups;
-
-        return $this;
-
-    }
-
-    /**
-     * Get the instance of this class
-     * @return $this
-     */
-    public function Instance() {
+        $this->userGroups = $groups;
 
         return $this;
 
@@ -137,9 +111,9 @@ class UserGroupManager {
      * Get the User Groups the user is in. Only returns the variable - doesn't do the logic
      * @return mixed
      */
-    public function Get() {
+    public function getUserGroups() {
 
-        return self::$userGroups;
+        return $this->userGroups;
 
     }
 
@@ -149,11 +123,11 @@ class UserGroupManager {
      * @param $groups
      * @return bool
      */
-    public function IsInGroup($group, $groups = null)
+    public function isInGroup($group, $groups = null)
     {
 
         if($groups == null)
-            $groups = self::$userGroups;
+            $groups = $this->userGroups;
 
         return array_key_exists(strtolower($group), $groups);
 

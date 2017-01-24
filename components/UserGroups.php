@@ -11,6 +11,7 @@ use Clake\UserExtended\Classes\UserGroupManager;
 /**
  * Class UserGroups
  * @package Clake\UserExtended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserGroups extends ComponentBase
 {
@@ -18,7 +19,7 @@ class UserGroups extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'User groups list',
+            'name'        => 'DEPRECIATED. User groups list',
             'description' => 'Returns a list of UserGroups'
         ];
     }
@@ -33,7 +34,7 @@ class UserGroups extends ComponentBase
      */
 	public function onRun() 
 	{
-        $this->page['groups'] = UserGroupManager::CurrentUser()->All()->Get();
+        $this->page['groups'] = UserGroupManager::currentUser()->all()->getUserGroups();
 	}
 
 }

@@ -4,6 +4,7 @@ use Backend\Classes\Controller;
 use System\Classes\PluginBase;
 use Event;
 use Backend;
+use System\Classes\SettingsManager;
 
 /**
  * TODO: Improve readability, documentation, component names and other
@@ -115,13 +116,30 @@ class Plugin extends PluginBase
 
         return [
             'Clake\UserExtended\Components\UserGroups' => 'usergroups',
-            'Clake\UserExtended\Components\ListFriends' => 'friends',
+            'Clake\UserExtended\Components\ListFriends' => 'friendslist',
             'Clake\UserExtended\Components\UserList' => 'userlist',
             'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
             'Clake\UserExtended\Components\UserSearch' => 'usersearch',
             'Clake\UserExtended\Components\UserUI' => 'userui',
-            'Clake\UserExtended\Components\Settings' => 'settings',
             'Clake\UserExtended\Components\Account' => 'account',
+            'Clake\UserExtended\Components\Friends' => 'friends',
+            'Clake\UserExtended\Components\User' => 'user',
+        ];
+    }
+
+    public function registerSettings()
+    {
+        return [
+            'settings' => [
+                'label'       => 'UserExtended Settings',
+                'description' => 'Manage user extended settings.',
+                'category'    => SettingsManager::CATEGORY_USERS,
+                'icon'        => 'icon-cog',
+                'class'       => 'Clake\Userextended\Models\Settings',
+                'order'       => 100,
+                'keywords'    => 'security user extended',
+                'permissions' => ['']
+            ]
         ];
     }
 

@@ -1,3 +1,11 @@
-<p>This is the default markup for component Friends</p>
+{% if friends.type == "list" %}
 
-<small>You can delete this file if you want</small>
+{% partial __SELF__~"::friends_list" %}
+
+{% endif %}
+
+{% if friends.type == "requests" %}
+
+{% partial __SELF__~"::friend_requests" %}
+
+{% endif %}
