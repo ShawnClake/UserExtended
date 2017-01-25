@@ -137,6 +137,7 @@ abstract class UserExtended extends Module
         $module = self::$modules[$name];
 
         if(!$module->visible)
+			return false;
 
         return $module->instance;
     }
