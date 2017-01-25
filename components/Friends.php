@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\Userextended\Models\Settings;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\FriendsManager;
 use Page;
@@ -85,6 +86,8 @@ class Friends extends ComponentBase
      */
     public function friendsList()
     {
+        if(!Settings::get('enable_friends', true))
+            return null;
 
         $limit = $this->property('maxItems');
 

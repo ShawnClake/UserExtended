@@ -6,6 +6,7 @@ use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\Settings;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
 use Illuminate\Support\Facades\Redirect;
@@ -251,6 +252,9 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null)
     {
+        if(!Settings::get('enable_profiles', true))
+            return false;
+
         $userid = post('id');
 
         if($userid != null)
