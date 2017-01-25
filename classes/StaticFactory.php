@@ -17,6 +17,12 @@ namespace Clake\UserExtended\Classes;
 class StaticFactory
 {
 
+    /**
+     * Helper function which can also be used to simply create an instance of a child class in cases where initialization
+     * functions aren't needed.
+     * Generally you will want to use the static magic method below.
+     * @return mixed
+     */
 	public static function factory()
 	{
 		$class=get_called_class();
@@ -24,6 +30,7 @@ class StaticFactory
 	}
 
     /**
+     * Main factory function which utilizes PHP's magic method to call a suffixed factory function on the child class.
      * @param $name
      * @param $arguments
      * @return mixed

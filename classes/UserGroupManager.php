@@ -1,38 +1,61 @@
 <?php namespace Clake\UserExtended\Classes;
 
-    use Auth;
-    use RainLab\User\Models\UserGroup;
+use Auth;
+use RainLab\User\Models\UserGroup;
 
-    /**
-     * TODO: Ensure this class follows SRP
-     * TODO: Improve error checking
-     * TODO: Change function names to be lower case and enforce consistent naming and function styles
-     */
+/**
+ * TODO: Ensure this class follows SRP
+ * TODO: Improve error checking
+ * TODO: Change function names to be lower case and enforce consistent naming and function styles
+ */
 
-    /**
-     * Class UserGroupManager
-     * @package Clake\UserExtended\Classes
-     *
-     * Handles all interactions with groups on a user level
-     *
-     */
+/**
+ * Class UserGroupManager
+ * @package Clake\UserExtended\Classes
+ *
+ * Handles all interactions with groups on a user level
+ *
+ */
 class UserGroupManager extends StaticFactory {
 
-    // Stores an array of UserGroups. ["GroupName" => "GroupDescriptionObject"]
-    public $userGroups;
+    /**
+     * Stores an array of UserGroups. ["GroupName" => "GroupDescriptionObject"]
+     * @var
+     */
+    private $userGroups;
 
-    // Stores the user we are getting groups for
+    //
+    /**
+     * Stores the user object for the member of the groups we are getting
+     * @var
+     */
     private $user;
 
     /**
      * Pass a user object to get groups for that user
      * @param null $user
+     * @deprecated Renamed to a better function name
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
     public function using ($user = null)
     {
         if($user == null)
-            $user = UserUtil::getLoogedInUserExtendedUser();
+            $user = UserUtil::getLoggedInUserExtendedUser();
+
+        $this->$user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Pass a user object to get groups for that user
+     * @param null $user
+     * @return $this
+     */
+    public function forFactory($user = null)
+    {
+        if($user == null)
+            $user = UserUtil::getLoggedInUserExtendedUser();
 
         $this->$user = $user;
 
@@ -43,9 +66,9 @@ class UserGroupManager extends StaticFactory {
      * Sets the class up to use the currently logged in user
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public function currentUser() {
+    public function currentUserFactory() {
 
-        $this->user = UserUtil::getLoogedInUserExtendedUser();
+        $this->user = UserUtil::getLoggedInUserExtendedUser();
 
         return $this;
     }
@@ -53,7 +76,7 @@ class UserGroupManager extends StaticFactory {
     /**
      * Returns the logged in user, if available, and touches
      * the last seen timestamp.
-     * @deprecated
+     * @deprecated Remove as this is handled in UserUtil
      * @return RainLab\User\Models\User
      */
     private function getLoggedInUser()
@@ -67,10 +90,10 @@ class UserGroupManager extends StaticFactory {
         return $user;
     }
 
-
     /**
      * Finds all the groups the user is in and stores that to the class IE $userGroups
      * @param null $user
+     * @deprecated Renamed to a better naming below.
      * @return $this
      */
     public function all($user = null)
@@ -109,6 +132,37 @@ class UserGroupManager extends StaticFactory {
     }
 
     /**
+     * Finds all the groups the user is in and stores that to the class IE $userGroups
+     * TODO: Can we not just use the 'groups' relation provided on RainLab.Users User model
+     * @return $this
+     */
+    public function allGroups()
+    {
+        $user = $this->user;
+
+        $userGroup = UserGroup::all();
+
+        $groups = [];
+
+        foreach($userGroup as $group)
+        {
+            $groupMembers = $group->users()->get();
+
+            $groupCode = $group["code"];
+
+            foreach($groupMembers as $member) {
+                if($user["id"] === $member["id"])
+                    $groups[strtolower($groupCode)]	= $group;
+            }
+
+        }
+
+        $this->userGroups = $groups;
+
+        return $this;
+    }
+
+    /**
      * Get the User Groups the user is in. Only returns the variable - doesn't do the logic
      * @return mixed
      */
@@ -126,12 +180,19 @@ class UserGroupManager extends StaticFactory {
      */
     public function isInGroup($group, $groups = null)
     {
-
         if($groups == null)
             $groups = $this->userGroups;
 
         return array_key_exists(strtolower($group), $groups);
+    }
 
+    /**
+     * Returns a collection of groups a user is in
+     * @return mixed
+     */
+    public function getUsersGroups()
+    {
+        return $this->userGroups;
     }
 
 }

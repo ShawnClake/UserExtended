@@ -203,7 +203,7 @@ class UserUtil
     /**
      * @return mixed
      */
-    public static function getLoogedInUserExtendedUser()
+    public static function getLoggedInUserExtendedUser()
     {
         return self::convertToUserExtendedUser(self::getLoggedInUser());
     }

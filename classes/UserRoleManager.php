@@ -15,24 +15,31 @@ use Clake\UserExtended\Plugin;
 
 /**
  * Class UserRoleManager
- * @package Clake\UserExtended\Classes
  *
  * Handles all interactions with roles on a user level
- *
- *
+ * @method static GroupManager allGroups()
+ * @package Clake\UserExtended\Classes
  */
 class UserRoleManager extends StaticFactory
 {
 
-    // A collection of User Roles
-    private $userRoles; // Format like "groupCode" => RoleModel
+    /**
+     * A collection of User Roles
+     * Format like "groupCode" => RoleModel
+     * @var
+     */
+    private $userRoles;
 
-    // The user instance
+    /**
+     * The user instance
+     * @var
+     */
     private $user;
 
     /**
      * Used to setup the class using a User model
      * @param null $user
+     * @deprecated Renamed below and supports factory
      * @return static
      */
     public function using($user = null)
@@ -46,7 +53,23 @@ class UserRoleManager extends StaticFactory
     }
 
     /**
+     * Sets up the class using a User model
+     * @param null $user
+     * @return $this
+     */
+    public function forFactory($user = null)
+    {
+        if($user == null)
+            $user = UserUtil::getLoggedInUser();
+
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
      * Used to setup the class using the logged in user
+     * @deprecated Renamed below and supports factory
      * @return static
      */
     public function currentUser()
@@ -56,8 +79,16 @@ class UserRoleManager extends StaticFactory
         return $this;
     }
 
+    public function currentUserFactory()
+    {
+        $this->user = UserUtil::getLoggedInUser();
+
+        return $this;
+    }
+
     /**
      * Returns the collection of user roles
+     * @deprecated Renamed
      * @return mixed
      */
     public function get()
@@ -66,10 +97,40 @@ class UserRoleManager extends StaticFactory
     }
 
     /**
+     * Returns the collection of user roles
+     * @return mixed
+     */
+    public function getUsersRoles()
+    {
+        return $this->userRoles;
+    }
+
+    /**
      * Preforms the logic for getting which roles the user is a part of
+     * @deprecated Renamed below to better suit its purpose
      * @return $this
      */
     public function all()
+    {
+        $roles = UserUtil::castToUserExtendedUser($this->user)->roles;
+        $userRoles = [];
+
+        foreach($roles as $role)
+        {
+            $userRoles[strtolower($role->group->code)] = $role;
+        }
+
+        $this->userRoles = $userRoles;
+
+        return $this;
+    }
+
+    /**
+     * Preforms the logic for getting which roles the user is a part of
+     * TODO: Just utilize the 'roles' relation on the UserExtended user model if possible
+     * @return $this
+     */
+    public function allRoles()
     {
         $roles = UserUtil::castToUserExtendedUser($this->user)->roles;
         $userRoles = [];
@@ -185,7 +246,7 @@ class UserRoleManager extends StaticFactory
 
         $role = $this->getRoleByGroup($groupCode);
 
-        if($role->sort_order > (GroupManager::all()->roleCount($groupCode) - 1))
+        if($role->sort_order > (GroupManager::allGroups()->roleCount($groupCode) - 1))
             return $this;
 
         $roleGroup = $role->group;
