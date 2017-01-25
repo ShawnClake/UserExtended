@@ -17,6 +17,7 @@ class Settings extends Model
         $this->enable_profiles = true;
         $this->enable_friends = true;
         $this->enable_groups = true;
+        $this->enable_email = true;
     }
 
 }

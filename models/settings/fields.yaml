@@ -44,3 +44,11 @@ tabs:
             comment: Enable/Disable user groups
             type: switch
             tab: Groups
+
+        # Enable Email Notification
+        enable_email:
+            span: left
+            label: Enable Email Notifications
+            comment: Enable/Disable email notifications
+            type: switch
+            tab: Notifications

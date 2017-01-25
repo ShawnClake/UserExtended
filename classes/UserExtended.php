@@ -93,6 +93,9 @@ abstract class UserExtended extends Module
      */
     public function __construct()
     {
+        if(empty($this->name) || empty($this->author) || empty($this->description) || empty($this->version))
+            return false;
+
         $this->register();
 
         self::$components[] = $this->injectComponents();
