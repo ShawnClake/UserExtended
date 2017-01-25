@@ -6,16 +6,10 @@ use Clake\Userextended\Models\GroupsExtended;
 use October\Rain\Support\Collection;
 
 /**
- * TODO: Ensure we are following SRP
- * TODO: Standardize what init does across all classes
- * TODO: Improve error checking and function naming
- */
-
-/**
  * Class RoleManager
  *
  * Handles all interactions with roles on a group level (Global level)
- *
+ * @method static RoleManager for($groupCode) RoleManager
  * @package Clake\UserExtended\Classes
  */
 class RoleManager extends StaticFactory
@@ -174,7 +168,7 @@ class RoleManager extends StaticFactory
         if($roleSortOrder < 2)
             return;
 
-        $sorted = $this->getGroupRolesByOrdering();
+        $sorted = $this->getSortedGroupRoles();
 
         $movingUp = $sorted[$roleSortOrder];
         $movingDown = $sorted[$roleSortOrder - 1];
@@ -195,7 +189,7 @@ class RoleManager extends StaticFactory
         if($roleSortOrder > $this->countRoles() - 1)
             return;
 
-        $sorted = $this->getGroupRolesByOrdering();
+        $sorted = $this->getSortedGroupRoles();
 
         $movingUp = $sorted[$roleSortOrder + 1];
         $movingDown = $sorted[$roleSortOrder];
@@ -224,7 +218,7 @@ class RoleManager extends StaticFactory
      */
     public function sort()
     {
-        $sorted = $this->getGroupRolesByOrdering();
+        $sorted = $this->getSortedGroupRoles();
 
         $roles = new Collection();
 

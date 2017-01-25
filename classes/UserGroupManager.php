@@ -4,17 +4,12 @@ use Auth;
 use RainLab\User\Models\UserGroup;
 
 /**
- * TODO: Ensure this class follows SRP
- * TODO: Improve error checking
- * TODO: Change function names to be lower case and enforce consistent naming and function styles
- */
-
-/**
  * Class UserGroupManager
  * @package Clake\UserExtended\Classes
  *
  * Handles all interactions with groups on a user level
- *
+ * @method static UserGroupManager currentUser() UserGroupManager
+ * @method static UserGroupManager for($user) UserGroupManager
  */
 class UserGroupManager extends StaticFactory {
 
@@ -164,12 +159,22 @@ class UserGroupManager extends StaticFactory {
 
     /**
      * Get the User Groups the user is in. Only returns the variable - doesn't do the logic
+     * @deprecated Renamed
      * @return mixed
      */
     public function getUserGroups() {
 
         return $this->userGroups;
 
+    }
+
+    /**
+     * Returns a collection of groups a user is in
+     * @return mixed
+     */
+    public function getUsersGroups()
+    {
+        return $this->userGroups;
     }
 
     /**
@@ -184,15 +189,6 @@ class UserGroupManager extends StaticFactory {
             $groups = $this->userGroups;
 
         return array_key_exists(strtolower($group), $groups);
-    }
-
-    /**
-     * Returns a collection of groups a user is in
-     * @return mixed
-     */
-    public function getUsersGroups()
-    {
-        return $this->userGroups;
     }
 
 }

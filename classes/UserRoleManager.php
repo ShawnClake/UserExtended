@@ -8,16 +8,12 @@ use Clake\Userextended\Models\UsersGroups;
 use Clake\UserExtended\Plugin;
 
 /**
- * TODO: Enforce SRP
- * TODO: Ensure the class has the same function useability as the others
- * TODO: Enforce conventions
- */
-
-/**
  * Class UserRoleManager
  *
  * Handles all interactions with roles on a user level
- * @method static GroupManager allGroups()
+ *
+ * @method static UserRoleManager for UserRoleManager
+ * @method static UserRoleManager currentUser UserRoleManager
  * @package Clake\UserExtended\Classes
  */
 class UserRoleManager extends StaticFactory
@@ -72,13 +68,17 @@ class UserRoleManager extends StaticFactory
      * @deprecated Renamed below and supports factory
      * @return static
      */
-    public function currentUser()
+    public function currentUserOLD()
     {
         $this->user = UserUtil::getLoggedInUser();
 
         return $this;
     }
 
+    /**
+     * Used to setup the class using the logged in user
+     * @return $this
+     */
     public function currentUserFactory()
     {
         $this->user = UserUtil::getLoggedInUser();
@@ -213,7 +213,7 @@ class UserRoleManager extends StaticFactory
      */
     public function promote($groupCode)
     {
-        if(!UserGroupManager::currentUser()->all()->isInGroup($groupCode))
+        if(!UserGroupManager::currentUser()->allGroups()->isInGroup($groupCode))
             return $this;
 
         $role = $this->getRoleByGroup($groupCode);
@@ -221,9 +221,7 @@ class UserRoleManager extends StaticFactory
         if($role->sort_order < 2)
             return $this;
 
-        $roleGroup = $role->group;
-
-        $roles = $this->getGroupRolesByOrdering($roleGroup);
+        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order - 1];
 
@@ -241,17 +239,15 @@ class UserRoleManager extends StaticFactory
      */
     public function demote($groupCode)
     {
-        if(!UserGroupManager::currentUser()->all()->isInGroup($groupCode))
+        if(!UserGroupManager::currentUser()->allGroups()->isInGroup($groupCode))
             return $this;
 
         $role = $this->getRoleByGroup($groupCode);
 
-        if($role->sort_order > (GroupManager::allGroups()->roleCount($groupCode) - 1))
+        if($role->sort_order > (GroupManager::allGroups()->countGroupRoles($groupCode) - 1))
             return $this;
 
-        $roleGroup = $role->group;
-
-        $roles = RoleManager::initGroupRolesByCode($roleGroup)->getGroupRolesByOrdering();
+        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order + 1];
 

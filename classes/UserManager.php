@@ -74,6 +74,7 @@ class UserManager extends StaticFactory
     /**
      * Used to search for users by phrase. It will search their name, email, surname, and username
      * @param $phrase
+     * @deprecated This has been moved to a trait on the UserExtended model
      * @return Collection
      */
     public static function searchUsers($phrase)
@@ -95,6 +96,7 @@ class UserManager extends StaticFactory
     /**
      * Searches for user models with a name like phrase
      * @param $phrase
+     * @deprecated This exists on a trait now
      * @return mixed
      */
     public static function searchUserByName($phrase)
@@ -105,6 +107,7 @@ class UserManager extends StaticFactory
     /**
      * Searches for user models with an email like phrase
      * @param $phrase
+     * @deprecated This exists on a trait now
      * @return mixed
      */
     public static function searchUserByEmail($phrase)
@@ -115,6 +118,7 @@ class UserManager extends StaticFactory
     /**
      * Searches for user models with a surname like phrase
      * @param $phrase
+     * @deprecated This exists on a trait now
      * @return mixed
      */
     public static function searchUserBySurname($phrase)
@@ -125,6 +129,7 @@ class UserManager extends StaticFactory
     /**
      * Searches for user models with a username like phrase
      * @param $phrase
+     * @deprecated This exists on a trait now
      * @return mixed
      */
     public static function searchUserByUsername($phrase)

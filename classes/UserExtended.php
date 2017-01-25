@@ -90,6 +90,8 @@ abstract class UserExtended extends Module
 
     /**
      * UserExtended constructor.
+     * This will return false if the child class doesn't have the required class properties
+     * This will then register the module and inject what the modules specifies to inject.
      */
     public function __construct()
     {

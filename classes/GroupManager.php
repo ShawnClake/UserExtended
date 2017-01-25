@@ -6,21 +6,19 @@ use Clake\Userextended\Models\GroupsExtended;
 use October\Rain\Support\Collection;
 
 /**
- * TODO: In conjunction with RoleManager, UserGroupManager, and UserRoleManager ensure we are following SRP
- * TODO: Better error checking in case things dont exist
- */
-
-/**
  * Class GroupManager
  *
  * Handles all interaction accross groups on a global level rather than a user level.
- *
+ * @method static GroupManager allGroups GroupManager
  * @package Clake\UserExtended\Classes
  */
 class GroupManager extends StaticFactory
 {
 
-    // A collection of groups
+    /**
+     * A collection of groups
+     * @var
+     */
     private $groups;
 
     /**
@@ -82,9 +80,19 @@ class GroupManager extends StaticFactory
 
     /**
      * Returns a count of how many groups there are
+     * @deprecated Renamed to follow RoleManager format
      * @return mixed
      */
     public function count()
+    {
+        return $this->groups->count();
+    }
+
+    /**
+     * Returns a count of how many groups there are
+     * @return mixed
+     */
+    public function countGroups()
     {
         return $this->groups->count();
     }
@@ -105,7 +113,7 @@ class GroupManager extends StaticFactory
      * @param $groupCode
      * @return bool
      */
-    public function groupRolesCount($groupCode)
+    public function countGroupRoles($groupCode)
     {
         if(empty($this->groups))
             return false;
