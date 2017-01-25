@@ -17,7 +17,7 @@ use October\Rain\Support\Collection;
  *
  * Handles all interaction accross groups on a global level rather than a user level.
  */
-class GroupManager
+class GroupManager extends StaticFactory
 {
 
     // A collection of groups
@@ -32,20 +32,18 @@ class GroupManager
      * Creates and fills the class with all of the groups that exist in the applciation
      * @return static
      */
-    public static function all()
+    public function all()
     {
-        $instance = new static;
-
-        $instance->groups = new Collection();
+        $this->groups = new Collection();
 
         $groups = GroupsExtended::all();
 
         foreach($groups as $group)
         {
-            $instance->groups->put($group->code, $group);
+            $this->groups->put($group->code, $group);
         }
 
-        return $instance;
+        return $this;
     }
 
     /**

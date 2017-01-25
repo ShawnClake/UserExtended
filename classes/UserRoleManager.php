@@ -19,7 +19,7 @@ use Clake\UserExtended\Plugin;
  *
  * Handles all interactions with roles on a user level
  */
-class UserRoleManager
+class UserRoleManager extends StaticFactory
 {
 
     // A collection of User Roles
@@ -33,30 +33,25 @@ class UserRoleManager
      * @param null $user
      * @return static
      */
-    public static function using($user = null)
+    public function using($user = null)
     {
-        $instance = new static;
-
-        if($user == null) {
+        if($user == null)
             $user = UserUtil::getLoggedInUser();
-        }
 
-        $instance->user = $user;
+        $this->user = $user;
 
-        return $instance;
+        return $this;
     }
 
     /**
      * Used to setup the class using the logged in user
      * @return static
      */
-    public static function currentUser()
+    public function currentUser()
     {
-        $instance = new static;
+        $this->user = UserUtil::getLoggedInUser();
 
-        $instance->user = UserUtil::getLoggedInUser();
-
-        return $instance;
+        return $this;
     }
 
     /**
