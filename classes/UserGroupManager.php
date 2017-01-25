@@ -14,6 +14,7 @@
      * @package Clake\UserExtended\Classes
      *
      * Handles all interactions with groups on a user level
+     *
      */
 class UserGroupManager extends StaticFactory {
 

@@ -18,6 +18,8 @@ use Clake\UserExtended\Plugin;
  * @package Clake\UserExtended\Classes
  *
  * Handles all interactions with roles on a user level
+ *
+ *
  */
 class UserRoleManager extends StaticFactory
 {

@@ -15,7 +15,7 @@ use RainLab\User\Models\User;
  * Class UserManager
  * @package Clake\UserExtended\Classes
  */
-class UserManager
+class UserManager extends StaticFactory
 {
     /**
      * Returns a random set of users. This won't return users in our friends list.

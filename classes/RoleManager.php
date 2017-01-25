@@ -17,7 +17,7 @@ use October\Rain\Support\Collection;
  *
  * Handles all interactions with roles on a group level (Global level)
  */
-class RoleManager
+class RoleManager extends StaticFactory
 {
     // The group instance
     public $group;
@@ -30,24 +30,13 @@ class RoleManager
      * @param $code
      * @return static
      */
-    public static function initGroupRolesByCode($code)
+    public function groupRolesByCode($code)
     {
-        $instance = new static;
-        $instance->group = GroupsExtended::where('code', $code)->first();
-        if($instance->group != null)
-            $instance->roles = $instance->group->roles;
+        $this->group = GroupsExtended::where('code', $code)->first();
+        if($this->group != null)
+            $this->roles = $this->group->roles;
 
-        return $instance;
-    }
-
-    /**
-     * Creating the class but not filling it
-     * @return static
-     */
-    public function init()
-    {
-        $instance = new static;
-        return $instance;
+        return $this;
     }
 
     public function getRoleIfExists($code)
