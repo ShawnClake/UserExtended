@@ -34,7 +34,7 @@ class UserGroups extends ComponentBase
      */
 	public function onRun() 
 	{
-        $this->page['groups'] = UserGroupManager::currentUser()->all()->getUserGroups();
+        $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
 	}
 
 }

@@ -86,7 +86,7 @@ class User extends ComponentBase
      */
     public function onRun()
     {
-        $this->page['groups'] = UserGroupManager::currentUser()->all()->getUserGroups();
+        $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
     }
 
     /**
@@ -243,7 +243,7 @@ class User extends ComponentBase
     public function roles()
     {
         //$roles = UserRoleManager::currentUser()->all()->promote('developer');
-        return json_encode(UserRoleManager::currentUser()->all()->get());
+        return json_encode(UserRoleManager::currentUser()->allRoles()->getUsersRoles());
     }
 
     /**

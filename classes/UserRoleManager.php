@@ -167,7 +167,7 @@ class UserRoleManager extends StaticFactory
 
     /**
      * Saves changes made to a users roles. Useful ONLY for changing existing groups and roles and
-     * not useful for creaitng or deleting them.
+     * not useful for creating or deleting them.
      * @return $this
      */
     public function saveRoles()
