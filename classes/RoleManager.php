@@ -27,15 +27,44 @@ class RoleManager extends StaticFactory
      */
     private $roles;
 
-    public static function createRole($name, $description, $code)
+    /**
+     * Creates a role and returns it after saving
+     * @param $name
+     * @param $description
+     * @param $code
+     * @param int $groupId
+     * @return Roles
+     */
+    public static function createRole($name, $description, $code, $groupId = 0)
     {
         $role = new Roles();
         $role->name = $name;
         $role->description = $description;
         $role->code = $code;
+        $role->group_id = $groupId;
         return $role;
     }
 
+    /**
+     * Deletes a role
+     * TODO: Reset the role_id in UsersGroups associations back to 0 where this role was used.
+     * @param $roleCode
+     */
+    public static function deleteRole($roleCode)
+    {
+        $role = RoleManager::findRole($roleCode);
+
+        if(!isset($role))
+            return;
+
+        $role->delete();
+    }
+
+    /**
+     * Finds and returns a role via RoleCode
+     * @param $roleCode
+     * @return mixed
+     */
     public static function findRole($roleCode)
     {
         return Roles::where('code', $roleCode)->first();

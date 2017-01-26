@@ -39,6 +39,22 @@ class GroupManager extends StaticFactory
     }
 
     /**
+     * Deletes a group
+     * TODO: Remove any UsersGroups associations with this group. The lines can be deleted entirely.
+     * TODO: Set roles which were a part of this group back to an 'unattached' state in userextended_roles table
+     * @param $groupCode
+     */
+    public static function deleteGroup($groupCode)
+    {
+        $group = GroupManager::findGroup($groupCode);
+
+        if(!isset($group))
+            return;
+
+        $group->delete();
+    }
+
+    /**
      * @param $code
      * @deprecated Renamed to a better name below.
      * @return mixed
