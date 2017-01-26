@@ -16,6 +16,15 @@ namespace Clake\UserExtended\Classes;
  */
 class StaticFactory
 {
+    use StaticFactoryTrait;
+}
+
+/**
+ * Class StaticFactoryTrait
+ * @package Clake\UserExtended\Classes
+ */
+trait StaticFactoryTrait
+{
 
     /**
      * Helper function which can also be used to simply create an instance of a child class in cases where initialization

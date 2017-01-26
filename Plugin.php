@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended;
 
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\UserExtended;
 use System\Classes\PluginBase;
 use Event;
 use Backend;
@@ -16,7 +17,6 @@ use System\Classes\SettingsManager;
  */
 class Plugin extends PluginBase
 {
-
 
     public $require = [
         'RainLab.User',
@@ -62,7 +62,10 @@ class Plugin extends PluginBase
      */
     public function register()
     {
-
+        /*
+         * Registers the UserExtended core module
+         */
+        Module::register();
     }
 
     /**
@@ -114,7 +117,22 @@ class Plugin extends PluginBase
     {
         //return []; // Remove this line to activate
 
-        return [
+        return array_merge(
+            UserExtended::getComponents(),
+            [
+                'Clake\UserExtended\Components\UserGroups' => 'usergroups',
+                'Clake\UserExtended\Components\ListFriends' => 'friendslist',
+                'Clake\UserExtended\Components\UserList' => 'userlist',
+                'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
+                'Clake\UserExtended\Components\UserSearch' => 'usersearch',
+                'Clake\UserExtended\Components\UserUI' => 'userui',
+                'Clake\UserExtended\Components\Account' => 'account',
+                'Clake\UserExtended\Components\Friends' => 'friends',
+                'Clake\UserExtended\Components\User' => 'user',
+            ]
+        );
+
+        /*return [
             'Clake\UserExtended\Components\UserGroups' => 'usergroups',
             'Clake\UserExtended\Components\ListFriends' => 'friendslist',
             'Clake\UserExtended\Components\UserList' => 'userlist',
@@ -124,7 +142,7 @@ class Plugin extends PluginBase
             'Clake\UserExtended\Components\Account' => 'account',
             'Clake\UserExtended\Components\Friends' => 'friends',
             'Clake\UserExtended\Components\User' => 'user',
-        ];
+        ];*/
     }
 
     public function registerSettings()
@@ -160,7 +178,13 @@ class Plugin extends PluginBase
      */
     public function registerNavigation()
     {
-        return []; // Remove this line to activate
+        return array_merge(
+            UserExtended::getNavigation(),
+            [
+
+
+            ]
+        );
     }
 
 }

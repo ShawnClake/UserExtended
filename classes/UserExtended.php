@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Clake\UserExtended\Classes;
 
 /**
@@ -16,6 +15,7 @@ namespace Clake\UserExtended\Classes;
  * In order to add your module to the module registry you must create an instance of your extensible class
  * on run inside of your plugin's plugin.php
  *
+ * @method static UserExtended register()
  * @package Clake\UserExtended\Classes
  */
 abstract class UserExtended extends Module
@@ -89,6 +89,11 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Allows us to use a factory pattern for registering modules. IE. syntax becomes ModuleClass::register(); instead of $module = new ModuleClass();
+     */
+    public function registerFactory() {}
+
+    /**
      * UserExtended constructor.
      * This will return false if the child class doesn't have the required class properties
      * This will then register the module and inject what the modules specifies to inject.
@@ -98,7 +103,7 @@ abstract class UserExtended extends Module
         if(empty($this->name) || empty($this->author) || empty($this->description) || empty($this->version))
             return false;
 
-        $this->register();
+        $this->registerModule();
 
         self::$components[] = $this->injectComponents();
 
@@ -112,7 +117,7 @@ abstract class UserExtended extends Module
      * The module registry has the format:
      *      [moduleName=>moduleRecord]
      */
-    public function register()
+    private function registerModule()
     {
         $module = new Module();
         $module->name = $this->name;
