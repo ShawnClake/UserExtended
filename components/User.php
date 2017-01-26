@@ -240,10 +240,55 @@ class User extends ComponentBase
         return ['#comment_section' => $content];
     }
 
+    /**
+     * Returns a collection of roles which the logged in user has
+     * @return string
+     */
     public function roles()
     {
         //$roles = UserRoleManager::currentUser()->all()->promote('developer');
-        return json_encode(UserRoleManager::currentUser()->allRoles()->getUsersRoles());
+        return UserRoleManager::currentUser()->allRoles()->getUsersRoles();
+    }
+
+    /**
+     * Returns a collection of roles which the logged in user has
+     * @return mixed
+     */
+    public function groups()
+    {
+        return UserGroupManager::currentUser()->allGroups()->getUsersGroups();
+    }
+
+    /**
+     * Returns a collection of roles which a user has
+     * @return mixed
+     */
+    public function usersRoles()
+    {
+        $code = $this->property('paramCode');
+
+        if($code != '')
+            $user = UserUtil::getUser($this->param($code));
+        else
+            $user = UserUtil::getLoggedInUser();
+
+        return UserRoleManager::for($user)->allRoles()->getUsersRoles();
+    }
+
+    /**
+     * Returns a collection of groups which a user has
+     * @return mixed
+     */
+    public function usersGroups()
+    {
+        $code = $this->property('paramCode');
+
+        if($code != '')
+            $user = UserUtil::getUser($this->param($code));
+        else
+            $user = UserUtil::getLoggedInUser();
+
+        return UserGroupManager::for($user)->allGroups()->getUsersGroups();
     }
 
     /**

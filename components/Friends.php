@@ -124,6 +124,10 @@ class Friends extends ComponentBase
             FriendsManager::blockFriend($userid);
     }
 
+    /**
+     * AJAX handler for redirecting a user to a profile page.
+     * @return mixed
+     */
     public function onVisitProfile()
     {
         $user = new User();
@@ -168,6 +172,9 @@ class Friends extends ComponentBase
             FriendsManager::declineRequest($userid);
     }
 
+    /**
+     * AJAX handler for sending a friend request
+     */
     public function onRequest()
     {
         $userId = post('id');
