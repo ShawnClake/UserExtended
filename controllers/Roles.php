@@ -54,7 +54,7 @@ class Roles extends Controller
             return;
         $this->vars['groupRoles'] = ['roles' => $roleModels, 'roleCount' => $groupRoles->countRoles()];
 
-        if($roleModels->count() > 0)
+        if(count($roleModels) > 0)
             $this->vars['role'] = $roleModels[0];
 
         //$this->vars['selectedGroup'] = $this->selectedGroupd;
@@ -329,6 +329,5 @@ class Roles extends Controller
         Flash::success('Role successfully created!');
 
         return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been created.</span>']);
-
     }
 }
