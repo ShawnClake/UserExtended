@@ -26,7 +26,6 @@ selenium.php
 composer.lock
 modules/
 bootstrap/
-config/
 /storage
 /vender
 /bootstrap
@@ -39,7 +38,6 @@ nbproject
 storage
 vender
 bootstrap
-config
 modules
 node_modules
 
