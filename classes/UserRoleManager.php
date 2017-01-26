@@ -12,7 +12,7 @@ use Clake\UserExtended\Plugin;
  *
  * Handles all interactions with roles on a user level
  *
- * @method static UserRoleManager for UserRoleManager
+ * @method static UserRoleManager for($user) UserRoleManager
  * @method static UserRoleManager currentUser UserRoleManager
  * @package Clake\UserExtended\Classes
  */

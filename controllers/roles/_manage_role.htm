@@ -37,7 +37,7 @@
         <?php foreach($role->getUsersInRole() as $index => $user): ?>
         <tr style="height:25px;">
             <div style="margin-top:9px;">
-                <td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onRemoveUserFromRole" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></td>
+                <td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onRemoveUserFromRole" data-request-data="roleId: '<?= $role->id ?>', userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></td>
                 <td><span><a style=" <?php if($role->sort_order == 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request-confirm="Are you sure you want to promote this user to the next role?" data-request="onPromote" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-up"></i></a></span></td>
                 <td><span><a style=" <?php if($role->sort_order == $roleTotal): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request-confirm="Are you sure you want to demote this user down a role?" data-request="onDemote" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-down"></i></a></span></td>
                 <td style="width:150px;overflow:hidden;white-space: nowrap;"><span><a href="<?= Backend::url('/rainlab/user/users/preview/'.$user->id) ?>"><?= $user->name ?></a></span></td>
@@ -58,15 +58,5 @@
 
     </table>
 
-
-
-
-
-
-    <?php //foreach($role->getUsersInRole() as $user): ?>
-
-        <!--<a href="<?= Backend::url('/rainlab/user/users/preview/'.$user->id) ?>"><?= $user->name ?></a><br>-->
-
-    <?php //endforeach; ?>
 
 </div>
