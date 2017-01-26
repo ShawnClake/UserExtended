@@ -1,6 +1,8 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Auth;
+use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\UsersGroups;
 use RainLab\User\Models\UserGroup;
 
 /**
@@ -175,6 +177,16 @@ class UserGroupManager extends StaticFactory {
             $groups = $this->userGroups;
 
         return array_key_exists(strtolower($group), $groups);
+    }
+
+    public function addGroup($groupCode, $userObj)
+    {
+        if($this->isInGroup($groupCode))
+            return false;
+
+        $group = GroupsExtended::where('code', $groupCode)->first();
+
+        return UsersGroups::addUser($userObj, $group->id);
     }
 
 }

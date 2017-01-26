@@ -98,6 +98,20 @@ class UsersGroups extends Model
 
     }
 
+    public static function addUser($userObj, $groupId, $roleId = 0)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() > 0)
+            return false;
+
+        $row = new UsersGroups();
+        $row->user_id = $userObj->id;
+        $row->user_group_id = $groupId;
+        $row->role_id = $roleId;
+        $row->save();
+
+        return true;
+    }
+
 
 
 }
