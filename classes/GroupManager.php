@@ -22,6 +22,23 @@ class GroupManager extends StaticFactory
     private $groups;
 
     /**
+     * Creates a new group and returns it after saved
+     * @param $name
+     * @param $description
+     * @param $code
+     * @return GroupsExtended
+     */
+    public static function createGroup($name, $description, $code)
+    {
+        $group = new GroupsExtended;
+        $group->name = $name;
+        $group->description = $description;
+        $group->code = $code;
+        $group->save();
+        return $group;
+    }
+
+    /**
      * @param $code
      * @deprecated Renamed to a better name below.
      * @return mixed

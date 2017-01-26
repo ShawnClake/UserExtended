@@ -27,6 +27,15 @@ class RoleManager extends StaticFactory
      */
     private $roles;
 
+    public static function createRole($name, $description, $code)
+    {
+        $role = new Roles();
+        $role->name = $name;
+        $role->description = $description;
+        $role->code = $code;
+        return $role;
+    }
+
     public static function findRole($roleCode)
     {
         return Roles::where('code', $roleCode)->first();
