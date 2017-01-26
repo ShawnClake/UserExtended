@@ -61,10 +61,9 @@ class UserGroupManager extends StaticFactory {
      * Sets the class up to use the currently logged in user
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public function currentUserFactory() {
-
+    public function currentUserFactory()
+    {
         $this->user = UserUtil::getLoggedInUserExtendedUser();
-
         return $this;
     }
 
@@ -134,23 +133,10 @@ class UserGroupManager extends StaticFactory {
     public function allGroups()
     {
         $user = $this->user;
-
-        $userGroup = UserGroup::all();
-
         $groups = [];
 
-        foreach($userGroup as $group)
-        {
-            $groupMembers = $group->users()->get();
-
-            $groupCode = $group["code"];
-
-            foreach($groupMembers as $member) {
-                if($user["id"] === $member["id"])
-                    $groups[strtolower($groupCode)]	= $group;
-            }
-
-        }
+        foreach($user->groups as $group)
+            $groups[strtolower($group->code)]	= $group;
 
         $this->userGroups = $groups;
 
