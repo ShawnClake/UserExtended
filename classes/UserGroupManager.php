@@ -179,14 +179,14 @@ class UserGroupManager extends StaticFactory {
         return array_key_exists(strtolower($group), $groups);
     }
 
-    public function addGroup($groupCode, $userObj)
+    public function addGroup($groupCode)
     {
         if($this->isInGroup($groupCode))
             return false;
 
-        $group = GroupsExtended::where('code', $groupCode)->first();
+        $group = GroupManager::findGroup($groupCode);
 
-        return UsersGroups::addUser($userObj, $group->id);
+        return UsersGroups::addUser($this->user, $group->id);
     }
 
 }

@@ -258,4 +258,22 @@ class UserRoleManager extends StaticFactory
         return $this;
     }
 
+    /**
+     * Gives a user a role.
+     * If they don't exist in the group required for the role yet, it will also add them to the group
+     * @param $roleCode
+     * @return bool
+     */
+    public function addRole($roleCode)
+    {
+        if($this->isInRole($roleCode))
+            return false;
+
+        $group = RoleManager::findRole($roleCode)->group;
+
+        UserGroupManager::for($this->user)->addGroup($group->code);
+
+        return Roles::addUser($this->user, $group->id);
+    }
+
 }

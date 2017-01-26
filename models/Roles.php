@@ -140,6 +140,22 @@ class Roles extends Model
 
     }
 
+    /**
+     * Adds a role to a relational entry in UsersGroups
+     * @param $userObj
+     * @param $groupId
+     * @return bool
+     */
+    public static function addUser($userObj, $groupId, $roleId = 0)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() <= 0)
+            return false;
+
+        $row = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
+        $row->role_id = $roleId;
+        $row->save();
+    }
+
 
 
 }

@@ -3,6 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\Roles;
 use October\Rain\Support\Collection;
 
 /**
@@ -25,6 +26,11 @@ class RoleManager extends StaticFactory
      * @var
      */
     private $roles;
+
+    public static function findRole($roleCode)
+    {
+        return Roles::where('code', $roleCode)->first();
+    }
 
     /**
      * Creating the class and filling it with the roles for the group specified.
