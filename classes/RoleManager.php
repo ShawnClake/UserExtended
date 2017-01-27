@@ -61,6 +61,26 @@ class RoleManager extends StaticFactory
     }
 
     /**
+     * Updates a role
+     * @param $roleCode
+     * @param null $name
+     * @param null $description
+     * @param null $code
+     * @param null $groupId
+     */
+    public static function updateRole($roleCode, $name = null, $description = null, $code = null, $groupId = null)
+    {
+        $role = RoleManager::findRole($roleCode);
+
+        if(isset($name)) $role->name = $name;
+        if(isset($description)) $role->description = $description;
+        if(isset($code)) $role->code = $code;
+        if(isset($groupId)) $role->group_id = $groupId;
+
+        $role->save();
+    }
+
+    /**
      * Finds and returns a role via RoleCode
      * @param $roleCode
      * @return mixed

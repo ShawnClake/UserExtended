@@ -55,6 +55,24 @@ class GroupManager extends StaticFactory
     }
 
     /**
+     * Updates a group
+     * @param $groupCode
+     * @param null $name
+     * @param null $description
+     * @param null $code
+     */
+    public static function updateGroup($groupCode, $name = null, $description = null, $code = null)
+    {
+        $group = GroupManager::findGroup($groupCode);
+
+        if(isset($name)) $group->name = $name;
+        if(isset($description)) $group->description = $description;
+        if(isset($code)) $group->code = $code;
+
+        $group->save();
+    }
+
+    /**
      * @param $code
      * @deprecated Renamed to a better name below.
      * @return mixed
