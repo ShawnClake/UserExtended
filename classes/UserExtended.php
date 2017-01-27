@@ -105,11 +105,13 @@ abstract class UserExtended extends Module
 
         $this->registerModule();
 
-        self::$components[] = $this->injectComponents();
+        self::$components = array_merge(self::$components, $this->injectComponents());
 
-        self::$navigation[] = $this->injectNavigation();
+        self::$navigation = array_merge(self::$navigation, $this->injectNavigation());
 
-        self::$lang[] = $this->injectLang();
+        self::$lang = array_merge(self::$lang, $this->injectLang());
+
+        $this->fixDuplicates();
     }
 
     /**
@@ -127,6 +129,42 @@ abstract class UserExtended extends Module
         $module->visible = $this->visible;
         $module->instance = $this;
         self::$modules[$this->name] = $module;
+    }
+
+    /**
+     * Renames component codes in the case that several components are injected with the same component code.
+     * This helps to avoid the 'duplicate component' error.
+     * If 4 components have the same code ( userSettings ), the 4 components, in order of registration, will have the following codes:
+     * 1) userSettings
+     * 2) userSettingsClassName   where ClassName is the class name of the component
+     * 3) userSettingsClassName1
+     * 4) userSettingsClassName2
+     * It will continue to append an increasing number for any further tie breakers.
+     */
+    private function fixDuplicates()
+    {
+        if(empty(self::$components))
+            return;
+
+        $fixed = [];
+        $dupeCount = 0;
+
+        foreach(self::$components as $className => $componentCode)
+        {
+            $finalCode = $componentCode;
+            if(in_array($componentCode, $fixed))
+                $finalCode = $componentCode . basename($className);
+
+            while(in_array($finalCode, $fixed))
+            {
+                $dupeCount++;
+                $finalCode = $componentCode . basename($className) . $dupeCount;
+            }
+
+            $fixed[$className] = $finalCode;
+        }
+
+        self::$components = $fixed;
     }
 
     /**
