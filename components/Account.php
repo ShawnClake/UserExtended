@@ -86,6 +86,8 @@ class Account extends ComponentBase
 
         $settingsManager = UserSettingsManager::init();
 
+        Event::fire('clake.ue.settings.update', [&$settingsManager]);
+
         foreach($values as $key=>$value)
         {
             if($key=="_session_key" || $key=="_token" || $key=="name" || $key=="username" || $key=="email" || $key=="password" || $key=="password_confirmation")
@@ -125,6 +127,9 @@ class Account extends ComponentBase
              */
             $data = post();
 
+            if(!Event::fire('clake.ue.preregistration', [&$data], true))
+                return false;
+
             $rules = [
                 'email'    => 'required|email|between:6,255',
                 'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255'),
@@ -152,6 +157,10 @@ class Account extends ComponentBase
             $requireActivation = Settings::get('require_activation', true);
             $automaticActivation = Settings::get('activate_mode') == Settings::ACTIVATE_AUTO;
             $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
+
+            /*
+             * Preform phase 1 User registration
+             */
             $user = $this->register($data, $automaticActivation);
 
             /*
@@ -169,7 +178,12 @@ class Account extends ComponentBase
 
             Auth::login($user);
 
+            /*
+             * Preform phase 2 User registration
+             */
             $settingsManager = UserSettingsManager::init();
+
+            Event::fire('clake.ue.settings.create', [&$settingsManager]);
 
             foreach($data as $key=>$value)
             {
@@ -183,16 +197,20 @@ class Account extends ComponentBase
             $settingsManager->save();
 
             /*
+             * Preform phase 3 User registration
              * Modified to swap to logout
              * Automatically activated or not required, log the user in
              */
             if (!$automaticActivation || $requireActivation) {
-                $user = UserUtil::getLoggedInUser();
+                $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
                 $user->last_login = null;
                 $user->last_seen = null;
+                Event::fire('clake.ue.postregistration', [&$user]);
                 $user->save();
                 Auth::logout();
             }
+
+
 
             /*
              * Redirect to the intended page after successful sign in
@@ -312,6 +330,8 @@ class Account extends ComponentBase
 
         $user = Auth::authenticate($credentials, true);
 
+        Event::fire('clake.ue.login', [$user]);
+
         /*
          * Redirect to the intended page after successful sign in
          */
@@ -337,6 +357,7 @@ class Account extends ComponentBase
 
         if ($user) {
             Event::fire('rainlab.user.logout', [$user]);
+            Event::fire('clake.ue.logout', [$user]);
         }
 
         $url = post('redirect', Request::fullUrl());
