@@ -47,6 +47,12 @@ abstract class UserExtended extends Module
     private static $lang = [];
 
     /**
+     * Called after all the modules are loaded.
+     * @return mixed
+     */
+    public abstract function initialize();
+
+    /**
      * Override with an array to inject components into UserExtended
      * @return mixed
      */
@@ -105,13 +111,11 @@ abstract class UserExtended extends Module
 
         $this->registerModule();
 
-        self::$components = array_merge(self::$components, $this->injectComponents());
-
-        self::$navigation = array_merge(self::$navigation, $this->injectNavigation());
-
-        self::$lang = array_merge(self::$lang, $this->injectLang());
+        $this->inject();
 
         $this->fixDuplicates();
+
+        $this->initializeModules();
     }
 
     /**
@@ -129,6 +133,18 @@ abstract class UserExtended extends Module
         $module->visible = $this->visible;
         $module->instance = $this;
         self::$modules[$this->name] = $module;
+    }
+
+    /**
+     * Preforms the module injection
+     */
+    private function inject()
+    {
+        self::$components = array_merge(self::$components, $this->injectComponents());
+
+        self::$navigation = array_merge(self::$navigation, $this->injectNavigation());
+
+        self::$lang = array_merge(self::$lang, $this->injectLang());
     }
 
     /**
@@ -168,6 +184,15 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Runs the initialize function on each module
+     */
+    private function initializeModules()
+    {
+        foreach(self::getModules() as $module)
+            $module->instance->initialize();
+    }
+
+    /**
      * Utilize a registered module
      * The call might look like: UserExtended::clakeForum()->getUserActivity();
      * @param $name
@@ -194,7 +219,7 @@ abstract class UserExtended extends Module
      * @param $moduleName
      * @return bool|mixed
      */
-    public function getModule($moduleName)
+    public static function getModule($moduleName)
     {
         if(!array_key_exists($moduleName, self::$modules))
             return false;
@@ -208,7 +233,7 @@ abstract class UserExtended extends Module
      * @param $moduleName
      * @return bool
      */
-    public function isModuleLoaded($moduleName)
+    public static function isModuleLoaded($moduleName)
     {
         return array_key_exists($moduleName, self::$modules);
     }
@@ -220,7 +245,7 @@ abstract class UserExtended extends Module
      * @param $moduleName
      * @return bool
      */
-    public function getModuleVersion($moduleName)
+    public static function getModuleVersion($moduleName)
     {
         if(!array_key_exists($moduleName, self::$modules))
             return false;
@@ -228,6 +253,24 @@ abstract class UserExtended extends Module
         $module = self::$modules[$moduleName];
 
         return $module->version;
+    }
+
+    /**
+     * Returns all modules
+     * @return array
+     */
+    public static function getModules()
+    {
+        return self::$modules;
+    }
+
+    /**
+     * Dumps the contents of all the registered modules.
+     * This is useful for debugging
+     */
+    public static function dumpModules()
+    {
+        var_dump(self::$modules);
     }
 
 }
