@@ -112,10 +112,18 @@ abstract class UserExtended extends Module
         $this->registerModule();
 
         $this->inject();
+    }
 
-        $this->fixDuplicates();
+    /**
+     * The boot function should be called once from the UserExtended plugin.
+     * Don't override this function and don't use it otherwise you may break
+     * the modular load.
+     */
+    public static function boot()
+    {
+        self::fixDuplicates();
 
-        $this->initializeModules();
+        self::initializeModules();
     }
 
     /**
@@ -157,7 +165,7 @@ abstract class UserExtended extends Module
      * 4) userSettingsClassName2
      * It will continue to append an increasing number for any further tie breakers.
      */
-    private function fixDuplicates()
+    private static function fixDuplicates()
     {
         if(empty(self::$components))
             return;
@@ -186,7 +194,7 @@ abstract class UserExtended extends Module
     /**
      * Runs the initialize function on each module
      */
-    private function initializeModules()
+    private static function initializeModules()
     {
         foreach(self::getModules() as $module)
             $module->instance->initialize();

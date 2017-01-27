@@ -76,6 +76,8 @@ class Plugin extends PluginBase
     public function boot()
     {
 
+        UserExtended::boot();
+
         /**
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
