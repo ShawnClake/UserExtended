@@ -76,6 +76,9 @@ class Plugin extends PluginBase
     public function boot()
     {
 
+        /*
+         * Boots the modules which were registered with UserExtended
+         */
         UserExtended::boot();
 
         /**

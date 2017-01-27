@@ -17,6 +17,8 @@ class Module extends UserExtended
 
     public $version = "1.00.00";
 
+    public function initialize() {}
+
     public function injectComponents()
     {
         return [];

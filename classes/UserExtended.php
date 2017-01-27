@@ -47,6 +47,13 @@ abstract class UserExtended extends Module
     private static $lang = [];
 
     /**
+     * Stores an array of settings from the backend module manager page.
+     * These determine whether or not modules will be loaded, and enable/disable injections
+     * @var array
+     */
+    private static $settings = [];
+
+    /**
      * Called after all the modules are loaded.
      * @return mixed
      */
@@ -95,6 +102,14 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * @return array
+     */
+    public static function getSettings()
+    {
+        return self::$settings;
+    }
+
+    /**
      * Allows us to use a factory pattern for registering modules. IE. syntax becomes ModuleClass::register(); instead of $module = new ModuleClass();
      */
     public function registerFactory() {}
@@ -106,7 +121,13 @@ abstract class UserExtended extends Module
      */
     public function __construct()
     {
+        if(empty(self::$settings))
+            $this->setup();
+
         if(empty($this->name) || empty($this->author) || empty($this->description) || empty($this->version))
+            return false;
+
+        if(!in_array($this->name, self::$settings['enabled']) && false) // Remove && false tag when we are ready to use settings.
             return false;
 
         $this->registerModule();
@@ -124,6 +145,42 @@ abstract class UserExtended extends Module
         self::fixDuplicates();
 
         self::initializeModules();
+    }
+
+    /**
+     * Sets up the class via getting settings
+     */
+    private function setup()
+    {
+        // TODO: DB Query goes here once we have the backend module manager page setup. Query for settings.
+
+        //$settings = ModuleSettings::all();
+        $modules = [
+            ['id'=>1,'name'=>'shawnPickler','version'=>'0.0.1','enabled'=>true,'inject_components'=>true],
+            ['id'=>2,'name'=>'Cheese','version'=>'0.1.2','enabled'=>true,'inject_components'=>true]
+        ];
+
+        /*$settings = [];
+        foreach($modules as $module)
+        {
+            if($module->enabled)
+                $settings['enabled'][] = $module->name;
+        }
+
+        self::$settings = $settings;
+        die(self::$settings);*/
+
+        $settings = [];
+        foreach($modules as $module)
+        {
+            if($module['enabled'])
+                $settings['enabled'][] = $module['name'];
+            if($module['inject_components'])
+                $settings['inject']['components'][] = $module['inject_components'];
+        }
+
+        self::$settings = $settings;
+        //die(json_encode(self::$settings));
     }
 
     /**
