@@ -1,11 +1,7 @@
 <div data-control="toolbar">
     <div class="row">
 
-        <div class="col-sm-12 col-md-6">
-            <span style="font-size:19px;font-style:italic;">Selected Group: <?= $group->name ?></span>
-        </div>
-
-        <div class="col-sm-12 col-md-6 text-right">
+        <div class="col-sm-12 col-md-6 text-left">
             <!--<a
                     href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
                     class="btn btn-primary oc-icon-plus"
@@ -22,7 +18,7 @@
                     data-extra-data="groupCode: '<?= $group->code ?>'"
 
             >
-                Add Role
+                Create Role
             </a>
 
             <!--<a
@@ -33,11 +29,20 @@
             </a>-->
 
             <a
-                    href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
-                    class="btn btn-default oc-icon-pencil"
+                    href="javascript:;"
+                    class="btn btn-primary oc-icon-plus"
+                    data-control="popup"
+                    data-handler="onOpenCreateGroup"
+                    data-size="huge"
+                    data-extra-data="groupCode: '<?= $group->code ?>'"
+
             >
-                Edit Group
+                Create Group
             </a>
+        </div>
+
+        <div class="col-sm-12 col-md-6 text-right">
+            <span style="font-size:19px;font-style:italic;">Selected Group: <?= $group->name ?></span>
         </div>
 
     </div>

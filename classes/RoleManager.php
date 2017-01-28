@@ -28,6 +28,15 @@ class RoleManager extends StaticFactory
     private $roles;
 
     /**
+     * Returns a list of roles not currently related to a group.
+     * @return mixed
+     */
+    public static function getUnassignedRoles()
+    {
+        return Roles::where('group_id', 0)->get();
+    }
+
+    /**
      * Creates a role and returns it after saving
      * @param $name
      * @param $description
@@ -334,5 +343,7 @@ class RoleManager extends StaticFactory
 
         return $groupRoles;
     }
+
+
 
 }

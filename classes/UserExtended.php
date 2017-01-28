@@ -1,7 +1,6 @@
 <?php
 
 namespace Clake\UserExtended\Classes;
-
 /**
  * Class UserExtended
  *

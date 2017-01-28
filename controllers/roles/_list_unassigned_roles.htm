@@ -1,0 +1,34 @@
+<div style="" class="table-responsive">
+    <table class="table table-condensed table-hover table-striped" id="role_table" style="table-layout:fixed; ">
+
+        <?php if(count($roles) != 0): ?>
+
+        <tr>
+
+            <th style="width:150px;">Role</th>
+            <th style="padding-left:25px;">Description</th>
+            <th style="padding-left:25px;">Created</th>
+            <th style="padding-left:25px;">Updated</th>
+        </tr>
+
+        <?php foreach($roles as $index => $role): ?>
+        <tr style="">
+            <div style="margin-top:9px;">
+                <td style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageRole" data-request-data="roleCode: '<?= $role->code ?>'"><?= $role->name ?></a></span></td>
+                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->description ?></span></td>
+                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->created_at ?></span></td>
+                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->updated_at ?></span></td>
+            </div>
+        </tr>
+        <?php endforeach; else: ?>
+        <tr>
+            <td>
+                <span>No roles currently exist in this group</span>
+            </td>
+        </tr>
+        <?php endif ?>
+
+
+
+    </table>
+</div>

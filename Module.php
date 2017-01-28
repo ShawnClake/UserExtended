@@ -2,7 +2,7 @@
 
 namespace Clake\UserExtended;
 
-use Clake\UserExtended\Classes\StaticFactoryTrait;
+use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
 
 class Module extends UserExtended

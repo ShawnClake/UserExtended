@@ -53,6 +53,14 @@ class Roles extends Controller
         $this->vars['selectedGroup'] = GroupManager::allGroups()->getGroups()->first();
         $groupRoles = RoleManager::for($this->vars['selectedGroup']->code);
         $roleModels = $groupRoles->getSortedGroupRoles();
+        $unassignedRoles = RoleManager::getUnassignedRoles();
+
+
+        $this->vars['unassignedRoles'] = $unassignedRoles;
+        $this->vars['unassignedRoleCount'] = $unassignedRoles->count();
+
+
+
         if(!isset($roleModels))
             return;
         $this->vars['groupRoles'] = ['roles' => $roleModels, 'roleCount' => $groupRoles->countRoles()];
@@ -85,6 +93,20 @@ class Roles extends Controller
         }
 
         return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender);
+    }
+
+    /**
+     * Returns the unassigned roles list
+     * @return array|void
+     */
+    public function renderAssignedRoles()
+    {
+        $roles = RoleManager::getUnassignedRoles();
+        if(!isset($roles))
+            return;
+        return [
+            '#unassigned_roles' => $this->makePartial('list_unassigned_roles', ['roles' => $roles, 'roleCount' => $roles->count()]),
+        ];
     }
 
     /**
