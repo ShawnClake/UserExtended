@@ -55,10 +55,11 @@ class Roles extends Controller
         $roleModels = $groupRoles->getSortedGroupRoles();
 
         $unassignedRoles = RoleManager::getUnassignedRoles();
-
         $this->vars['unassignedRoles'] = $unassignedRoles;
         $this->vars['unassignedRoleCount'] = $unassignedRoles->count();
 
+        $unassignedUsers = UsersGroups::byUsersWithoutRole($this->vars['selectedGroup']->code)->get();
+        $this->vars['unassignedUsers'] = $unassignedUsers;
 
 
         if(!isset($roleModels))
@@ -92,7 +93,19 @@ class Roles extends Controller
             $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
         }
 
-        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
+        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode), $this->renderUnassignedUsers($groupCode));
+    }
+
+    public function renderUnassignedUsers($groupCode)
+    {
+        $group = GroupManager::findGroup($groupCode);
+        $unassignedUsers = UsersGroups::byUsersWithoutRole($groupCode)->get();
+        //echo json_encode($unassignedUsers);
+        if(!isset($unassignedUsers))
+            return;
+        return [
+          '#unassigned_users' => $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $group]),
+        ];
     }
 
     /**

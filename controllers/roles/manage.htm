@@ -43,14 +43,15 @@
         <div class="col-sm-12 col-md-12 col-lg-5">
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="create__toolbar"><?= $this->makePartial('create_toolbar', ['group' => $selectedGroup]) ?> </div>
+                    <div id="create_toolbar"><?= $this->makePartial('create_toolbar', ['group' => $selectedGroup]) ?> </div>
 
                     <h4 class="text-right">Unassigned Roles (Drag onto a group to assign)</h4>
                     <div id="unassigned_roles"><?= $this->makePartial('list_unassigned_roles', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount, 'group' => $selectedGroup]) ?></div>
                 </div>
 
                 <div class="col-sm-12" style="margin-top:33px;">
-
+                    <div id="manage_group_toolbar"><?= $this->makePartial('manage_group_toolbar', ['group' => $selectedGroup]) ?></div>
+                    <div id="unassigned_users"><?= $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $selectedGroup]) ?></div>
                 </div>
 
             </div>

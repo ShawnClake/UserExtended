@@ -83,6 +83,18 @@ class UsersGroups extends Model
     }
 
     /**
+     * Scope a list of rows of users in a group but without an assigned role.
+     * @param $query
+     * @param $groupCode
+     * @return mixed
+     */
+    public function scopeByUsersWithoutRole($query, $groupCode)
+    {
+        $group = GroupsExtended::where('code', $groupCode)->first();
+        return $query->where('user_group_id', $group->id)->where('role_id', 0);
+    }
+
+    /**
      *
      */
     public static function getAssignedRoles()
