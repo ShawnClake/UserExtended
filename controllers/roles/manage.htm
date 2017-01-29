@@ -45,8 +45,8 @@
                 <div class="col-sm-12">
                     <div id="create__toolbar"><?= $this->makePartial('create_toolbar', ['group' => $selectedGroup]) ?> </div>
 
-                    <h4 class="text-right">Unassigned Roles</h4>
-                    <div id="unassigned_roles"><?= $this->makePartial('list_unassigned_roles', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount]) ?></div>
+                    <h4 class="text-right">Unassigned Roles (Drag onto a group to assign)</h4>
+                    <div id="unassigned_roles"><?= $this->makePartial('list_unassigned_roles', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount, 'group' => $selectedGroup]) ?></div>
                 </div>
 
                 <div class="col-sm-12" style="margin-top:33px;">

@@ -30,6 +30,8 @@ class Roles extends Model
 
     use SoftDelete;
 
+    public $ignoreChecks = false;
+
     /**
      * @var string The database table used by the model.
      */
@@ -107,6 +109,9 @@ class Roles extends Model
      */
     public function beforeUpdate()
     {
+        if($this->ignoreChecks)
+            return true;
+
         $total = RoleManager::for($this->group->code)->countRoles();
 
         if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
@@ -121,6 +126,9 @@ class Roles extends Model
      */
     public function beforeDelete()
     {
+        if($this->group_id == 0)
+            return true;
+
         $total = RoleManager::for($this->group->code)->countRoles();
         $myOrder = $this->sort_order;
 

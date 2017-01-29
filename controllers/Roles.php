@@ -42,8 +42,8 @@ class Roles extends Controller
     }
 
     /**
-     * Action used for managing roles such as: their order, some stats, and their properties
-     */
+        * Action used for managing roles such as: their order, some stats, and their properties
+    */
     public function manage()
     {
         $this->pageTitle = "Manage Roles";
@@ -53,8 +53,8 @@ class Roles extends Controller
         $this->vars['selectedGroup'] = GroupManager::allGroups()->getGroups()->first();
         $groupRoles = RoleManager::for($this->vars['selectedGroup']->code);
         $roleModels = $groupRoles->getSortedGroupRoles();
-        $unassignedRoles = RoleManager::getUnassignedRoles();
 
+        $unassignedRoles = RoleManager::getUnassignedRoles();
 
         $this->vars['unassignedRoles'] = $unassignedRoles;
         $this->vars['unassignedRoleCount'] = $unassignedRoles->count();
@@ -92,20 +92,21 @@ class Roles extends Controller
             $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
         }
 
-        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender);
+        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
     }
 
     /**
      * Returns the unassigned roles list
      * @return array|void
      */
-    public function renderAssignedRoles()
+    public function renderUnassignedRoles($groupCode)
     {
         $roles = RoleManager::getUnassignedRoles();
+        $group = GroupManager::findGroup($groupCode);
         if(!isset($roles))
             return;
         return [
-            '#unassigned_roles' => $this->makePartial('list_unassigned_roles', ['roles' => $roles, 'roleCount' => $roles->count()]),
+            '#unassigned_roles' => $this->makePartial('list_unassigned_roles', ['roles' => $roles, 'roleCount' => $roles->count(), 'group' => $group]),
         ];
     }
 
@@ -285,26 +286,42 @@ class Roles extends Controller
         $groupCode = post('groupCode');
         $roleCode = post('roleCode');
 
-        $role = RoleManager::for($groupCode)->getRole($roleCode);
-
-        if(!isset($role))
-            return;
-
-        $role->delete();
-
-        $roles = RoleManager::for($groupCode)->sort()->getRoles();
-        if($roles->count() > 0)
+        if(!isset($groupCode))
         {
-            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
-        }
-        else
-        {
-            $roleRender = ['#manage_role' => ''];
-            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
-        }
 
-        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender);
+            $role = RoleManager::findRole($roleCode);
+
+            if(!isset($role))
+                return;
+
+            $role->delete();
+
+            return $this->renderUnassignedRoles(post('selectedGroup'));
+
+        }  else {
+
+            $role = RoleManager::for($groupCode)->getRole($roleCode);
+
+            if(!isset($role))
+                return;
+
+            $role->delete();
+
+            $roles = RoleManager::for($groupCode)->sort()->getRoles();
+            if($roles->count() > 0)
+            {
+                $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+                $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+            }
+            else
+            {
+                $roleRender = ['#manage_role' => ''];
+                $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+            }
+
+            return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender);
+
+        }
 
     }
 
@@ -405,6 +422,75 @@ class Roles extends Controller
         UserRoleManager::for(UserUtil::getUser($userId))->allRoles()->demote($role->group->code);
 
         return $this->renderRole($role->code, $role->group->code);
+    }
+
+    /**
+     * Handles assigning a role
+     */
+    public function onAssignRole()
+    {
+        $roleCode = post('roleCode');
+        $groupCode = post('selectedGroup');
+
+        $sortOrder = RoleManager::for($groupCode)->countRoles() + 1;
+        $groupId = GroupManager::findGroup($groupCode)->id;
+
+        RoleManager::updateRole($roleCode, $sortOrder, null, null, null, $groupId, true);
+
+        $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        if($roles->count() > 0)
+        {
+            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+        }
+        else
+        {
+            $roleRender = ['#manage_role' => ''];
+            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+        }
+
+        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
+
+    }
+
+    /**
+     * Handles unassigning a role
+     * @return array
+     */
+    public function onUnassignRole()
+    {
+        $roleCode = post('roleCode');
+        $groupCode = post('groupCode');
+
+        /*
+         * Removes all user from this role
+         */
+        $rows = UsersGroups::byRole($roleCode)->get();
+        foreach($rows as $relation)
+        {
+            $relation->role_id = 0;
+            $relation->save();
+        }
+
+        RoleManager::updateRole($roleCode, 1, null, null, null, 0, true);
+
+        RoleManager::for($groupCode)->fixRoleSort();
+
+        $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        if($roles->count() > 0)
+        {
+            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
+            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+        }
+        else
+        {
+            $roleRender = ['#manage_role' => ''];
+            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+        }
+
+        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
+
+
     }
 
 }
