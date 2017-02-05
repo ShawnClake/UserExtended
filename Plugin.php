@@ -131,9 +131,6 @@ class Plugin extends PluginBase
                 'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
                 'Clake\UserExtended\Components\UserSearch' => 'usersearch',
                 'Clake\UserExtended\Components\UserUI' => 'userui',
-                'Clake\UserExtended\Components\Account' => 'account',
-                'Clake\UserExtended\Components\Friends' => 'friends',
-                'Clake\UserExtended\Components\User' => 'ueuser',
             ]
         );
 

@@ -23,7 +23,7 @@ class UserUI extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'DEPRECIATED. User UI',
+            'name'        => 'DEPRECATED. User UI',
             'description' => 'Provides generic interface implementations'
         ];
     }

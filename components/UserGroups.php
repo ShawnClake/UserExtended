@@ -19,7 +19,7 @@ class UserGroups extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'DEPRECIATED. User groups list',
+            'name'        => 'DEPRECATED. User groups list',
             'description' => 'Returns a list of UserGroups'
         ];
     }

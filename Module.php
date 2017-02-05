@@ -15,13 +15,17 @@ class Module extends UserExtended
 
     public $description = "The core module for UserExtended";
 
-    public $version = "1.00.00";
+    public $version = "1.1.00";
 
     public function initialize() {}
 
     public function injectComponents()
     {
-        return [];
+        return [
+            'Clake\UserExtended\Components\Account' => 'account',
+            'Clake\UserExtended\Components\Friends' => 'friends',
+            'Clake\UserExtended\Components\User' => 'ueuser',
+        ];
     }
 
     public function injectNavigation()

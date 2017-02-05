@@ -19,7 +19,7 @@ class UserList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'DEPRECIATED. User list',
+            'name'        => 'DEPRECATED. User list',
             'description' => 'Provides an interface for listing users'
         ];
     }

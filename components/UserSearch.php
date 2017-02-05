@@ -20,7 +20,7 @@ class UserSearch extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'DEPRECIATED. User search',
+            'name'        => 'DEPRECATED. User search',
             'description' => 'Provides an interface to search for other users'
         ];
     }

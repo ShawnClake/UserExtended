@@ -21,7 +21,7 @@ class ListFriendRequests extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'DEPRECIATED. Friend request list',
+            'name'        => 'DEPRECATED. Friend request list',
             'description' => 'Lists a users received friend requests'
         ];
     }
