@@ -51,6 +51,7 @@ class RoleManager extends StaticFactory
         $role->description = $description;
         $role->code = $code;
         $role->group_id = $groupId;
+        $role->save();
         return $role;
     }
 

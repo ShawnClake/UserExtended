@@ -68,3 +68,5 @@
     - User Extended Beta release. Check your project as many things are now Deprecated and rewritten.
 1.1.01:
     - Creating role bug fix
+1.1.02:
+    - Fixed non-property error

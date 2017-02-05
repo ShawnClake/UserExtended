@@ -100,7 +100,13 @@ class Roles extends Model
      */
     public function beforeCreate()
     {
-        $this->sort_order = RoleManager::for($this->group->code)->countRoles() + 1;
+        if($this->group_id == -1)
+        {
+            $this->sort_order = 1;
+            $this->group_id = 0;
+        }
+        else
+            $this->sort_order = RoleManager::for($this->group->code)->countRoles() + 1;
     }
 
     /**
