@@ -8,6 +8,8 @@ use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Facades\Flash;
+use Redirect;
+use Backend;
 
 /**
  * TODO: Add better error checking
@@ -502,8 +504,15 @@ class Roles extends Controller
         }
 
         return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
+    }
 
+    public function onDeleteGroup()
+    {
+        $groupCode = post('selectedGroup');
 
+        GroupManager::deleteGroup($groupCode);
+
+        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
 }

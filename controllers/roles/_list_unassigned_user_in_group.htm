@@ -6,7 +6,7 @@
         <?= $group->description ?><b> :Description</b>  <br>
         <?= $group->created_at ?><b> :Created</b>  <br>
         <?= $group->updated_at ?><b> :Last Updated</b>  <br>
-        <b> :Users Count</b>  <br>
+        <?= $group->getUsersInGroup()->count() ?><b> :Users Count</b>  <br>
         <hr>
 
         <h4>Unassigned Users (Drag onto a role to assign)</h4>

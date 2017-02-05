@@ -25,6 +25,17 @@
                 Edit Role
             </a>
 
+            <a
+                    href="javascript:;"
+                    class="btn btn-default oc-icon-pencil"
+                    data-control="popup"
+                    data-handler="onAddUser"
+                    data-size="huge"
+                    data-extra-data="groupCode: '<?= $role->group->code ?>', roleCode: '<?= $role->code ?>'"
+            >
+                Add User to Role
+            </a>
+
             <!--<a
                     href="<?= Backend::url('clake/userextended/groupsextended/update/' . $role->group->id) ?>"
                     class="btn btn-default oc-icon-pencil"

@@ -3,6 +3,8 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
 
 /**
@@ -47,11 +49,27 @@ class GroupManager extends StaticFactory
     public static function deleteGroup($groupCode)
     {
         $group = GroupManager::findGroup($groupCode);
-
+        //echo json_encode($groupCode);
         if(!isset($group))
             return;
 
+        $roles = Roles::rolesInGroup($groupCode)->get();
+
+        foreach($roles as $role)
+        {
+            RoleManager::updateRole($role->code, 1, null, null, null, 0, true);
+        }
+
+        $associations = UsersGroups::byGroup($groupCode)->get();
+
+        foreach($associations as $row)
+        {
+            $row->delete();
+        }
+
         $group->delete();
+
+        self::fixGroupSort();
     }
 
     /**
@@ -188,6 +206,43 @@ class GroupManager extends StaticFactory
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    /**
+     * Returns a set of groups sorted by sort order
+     * @return array
+     */
+    public static function getSortedGroups()
+    {
+        $groups = [];
+
+        //echo json_encode(self::allGroups()->getGroups());
+
+        foreach(self::allGroups()->getGroups() as $group)
+        {
+            //echo json_encode($group)  . '***NEXTONECOMINGUP***';
+            $groups[$group["sort_order"]] = $group;
+        }
+
+        ksort($groups);
+
+        return $groups;
+    }
+
+    /**
+     * Fixes the group sort order
+     */
+    public static function fixGroupSort()
+    {
+        $groups = GroupManager::getSortedGroups();
+
+        $count = 0;
+        foreach($groups as $group)
+        {
+            $count++;
+            $group->sort_order = $count;
+            $group->save();
+        }
     }
 
 }

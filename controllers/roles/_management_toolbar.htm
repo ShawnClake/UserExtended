@@ -17,12 +17,13 @@
                     href="javascript:;"
                     class="btn btn-primary oc-icon-plus"
                     data-control="popup"
-                    data-handler="onOpenAddRole"
+                    data-handler="onOpenStats"
                     data-size="huge"
                     data-extra-data="groupCode: '<?= $group->code ?>'"
-
+                    disabled
+                    data-toggle="tooltip" title="Coming Soon!"
             >
-                Add Role
+                Stats/Analytics
             </a>
 
             <!--<a
@@ -33,10 +34,14 @@
             </a>-->
 
             <a
-                    href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
-                    class="btn btn-default oc-icon-pencil"
+                    style=""
+                    class="btn btn-default oc-icon-close"
+                    href="#"
+                    data-request-confirm="Are you sure you want to delete this group?"
+                    data-request="onDeleteGroup"
+                    data-request-data="selectedGroup: '<?= $group->code ?>'"
             >
-                Edit Group
+                Delete Group
             </a>
         </div>
 
