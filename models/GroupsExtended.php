@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Models;
 
+use Clake\UserExtended\Classes\GroupManager;
 use Model;
 use October\Rain\Support\Collection;
 use RainLab\User\Models\UserGroup;
@@ -18,7 +19,7 @@ use Clake\UserExtended\Traits\Timezonable;
 class GroupsExtended extends UserGroup
 {
 
-    use Sortable;
+    //use Sortable;
 
     use Timezonable;
 
@@ -66,6 +67,12 @@ class GroupsExtended extends UserGroup
         }
 
         return $users;
+    }
+
+    public function beforeCreate()
+    {
+        //echo GroupManager::allGroups()->countGroups() + 1;
+        $this->sort_order = GroupManager::allGroups()->countGroups() + 1;
     }
 
 }
