@@ -380,22 +380,17 @@ class Roles extends Controller
      */
     public function onCreateRole()
     {
-        $groupCode = post('groupCode');
+        //$groupCode = post('groupCode');
         $name = post('name');
         $code = post('code');
         $description = post('description');
 
-        $groupId = GroupManager::findGroup($groupCode)->id;
+        //$groupId = GroupManager::findGroup($groupCode)->id;
 
-        $role = new \Clake\Userextended\Models\Roles();
-        $role->group_id = 0;
-        $role->name = $name;
-        $role->code = $code;
-        $role->description = $description;
-        $role->save();
+        RoleManager::createRole($name, $description, $code, -1);
 
-        $roles = RoleManager::for($groupCode)->sort()->getRoles();
-        if($roles->count() > 0)
+        //$roles = RoleManager::for($groupCode)->sort()->getRoles();
+        /*if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
             $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
@@ -409,6 +404,8 @@ class Roles extends Controller
         Flash::success('Role successfully created!');
 
         return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been created.</span>']);
+        */
+        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
     /**
