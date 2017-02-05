@@ -85,15 +85,18 @@ class Roles extends Controller
         $groupCode = post('code');
         $this->vars['selectedGroup'] = GroupManager::findGroup($groupCode);
         $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        $roleCode = '';
         if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
             $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+            $roleCode = $roles[0]->code;
         }
         else
         {
             $roleRender = ['#manage_role' => ''];
             $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+            $roleCode = null;
         }
 
         return array_merge($this->renderRoles($groupCode),
@@ -102,7 +105,7 @@ class Roles extends Controller
             $roleRender,
             $roleToolbarRender,
             $this->renderUnassignedRoles($groupCode),
-            $this->renderUnassignedUsers($groupCode, $roles[0]->code),
+            $this->renderUnassignedUsers($groupCode, $roleCode),
             $this->renderManageGroupToolbar($groupCode)
         );
     }

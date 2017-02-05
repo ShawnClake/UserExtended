@@ -70,3 +70,5 @@
     - Creating role bug fix
 1.1.02:
     - Fixed non-property error
+1.1.03:
+    - Fixed undefined offset error
