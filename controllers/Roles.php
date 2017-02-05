@@ -388,7 +388,7 @@ class Roles extends Controller
         $groupId = GroupManager::findGroup($groupCode)->id;
 
         $role = new \Clake\Userextended\Models\Roles();
-        $role->group_id = $groupId;
+        $role->group_id = 0;
         $role->name = $name;
         $role->code = $code;
         $role->description = $description;
