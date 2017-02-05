@@ -17,6 +17,7 @@ use RainLab\User\Models\Settings;
 use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
+use Cms\Classes\Page;
 //use RainLab\User\Classes\AuthManager
 
 /**
@@ -60,6 +61,15 @@ class Account extends ComponentBase
                 'default'     => 'code'
             ]
         ];
+    }
+
+    /**
+     * Used for properties dropdown menu
+     * @return mixed
+     */
+    public function getRedirectOptions()
+    {
+        return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
     /**
@@ -127,14 +137,14 @@ class Account extends ComponentBase
              */
             $data = post();
 
-            if(!Event::fire('clake.ue.preregistration', [&$data], true))
-                return false;
+            $bob = Event::fire('clake.ue.preregistration', [&$data], true);
+                //return false;
 
             $rules = [
                 'email'    => 'required|email|between:6,255',
                 'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255'),
             ];
-
+            //echo json_encode($data);
             /*
              * Better utilization of email vs username
              */

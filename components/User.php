@@ -32,7 +32,7 @@ class User extends ComponentBase
             'type' => [
                 'title'       => 'Type',
                 'type'        => 'dropdown',
-                'default'     => 'list',
+                'default'     => 'random',
                 'placeholder' => 'Select type',
             ],
             'maxItems' => [
@@ -47,7 +47,7 @@ class User extends ComponentBase
                 'title'       => 'User ID URL parameter',
                 'description' => 'Specifies a user ID to generate a list for. blank=logged in user',
                 'type'        => 'string',
-                'default'     => ':user'
+                'default'     => 'user'
             ],
             'profilePage' => [
                 'title'       => 'Profile Page',
@@ -120,8 +120,8 @@ class User extends ComponentBase
      */
     public function singleUser()
     {
-
         $code = $this->property('paramCode');
+        //echo json_encode($this->param($code));
 
         if($code != '')
             $user = UserUtil::getUser($this->param($code));
@@ -151,7 +151,7 @@ class User extends ComponentBase
      */
     private function renderResults($results)
     {
-        $content = $this->renderPartial('user::search-results.htm', ['results' => $results]);
+        $content = $this->renderPartial('ueuser::search-results.htm', ['results' => $results]);
         return ['#userSearchResults' => $content];
     }
 

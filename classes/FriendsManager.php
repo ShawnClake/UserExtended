@@ -46,7 +46,7 @@ class FriendsManager
         $requests = Friends::friendRequests()->take($limit)->get();
 
         foreach ($requests as $user) {
-            $users->push(UserUtil::getUser($user->pluckSender()));
+            $users->push(UserUtil::getUser($user->user_that_sent_request));
         }
         return $users;
 

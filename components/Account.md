@@ -19,3 +19,14 @@
 * onLogout()  Logs out a user
 
 ### Usage Examples
+To render any of the account feature you will have to manually specify the partial you wish to use.
+
+In the future, this will be integrated into the component inspector.
+
+{% partial 'account::update' %}
+
+{% partial 'account::signup' %}
+
+{% partial 'account::login' %}
+
+{% partial 'account::logout' %}

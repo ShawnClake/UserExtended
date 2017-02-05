@@ -133,7 +133,7 @@ class Plugin extends PluginBase
                 'Clake\UserExtended\Components\UserUI' => 'userui',
                 'Clake\UserExtended\Components\Account' => 'account',
                 'Clake\UserExtended\Components\Friends' => 'friends',
-                'Clake\UserExtended\Components\User' => 'user',
+                'Clake\UserExtended\Components\User' => 'ueuser',
             ]
         );
 

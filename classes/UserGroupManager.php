@@ -137,6 +137,9 @@ class UserGroupManager extends StaticFactory {
     public function allGroups()
     {
         $user = $this->user;
+        if(!isset($user))
+            return $this;
+
         $groups = [];
 
         foreach($user->groups as $group)
