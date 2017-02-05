@@ -32,6 +32,9 @@ class GroupManager extends StaticFactory
      */
     public static function createGroup($name, $description, $code)
     {
+        if(GroupsExtended::code($code)->count() > 0)
+            return false;
+
         $group = new GroupsExtended;
         $group->name = $name;
         $group->description = $description;

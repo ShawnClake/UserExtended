@@ -515,4 +515,20 @@ class Roles extends Controller
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
+    public function onOpenCreateGroup()
+    {
+        return $this->makePartial('create_group_form');
+    }
+
+    public function onCreateGroup()
+    {
+        $name = post('name');
+        $code = post('code');
+        $description = post('description');
+
+        GroupManager::createGroup($name, $description, $code);
+
+        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+    }
+
 }
