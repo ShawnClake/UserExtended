@@ -4,6 +4,7 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
+use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\UsersGroups;
@@ -101,7 +102,7 @@ class Roles extends Controller
             $roleRender,
             $roleToolbarRender,
             $this->renderUnassignedRoles($groupCode),
-            $this->renderUnassignedUsers($groupCode),
+            $this->renderUnassignedUsers($groupCode, $roles[0]->code),
             $this->renderManageGroupToolbar($groupCode)
         );
     }
@@ -115,15 +116,16 @@ class Roles extends Controller
         ];
     }
 
-    public function renderUnassignedUsers($groupCode)
+    public function renderUnassignedUsers($groupCode, $roleCode)
     {
         $group = GroupManager::findGroup($groupCode);
+        $role = RoleManager::findRole($roleCode);
         $unassignedUsers = UsersGroups::byUsersWithoutRole($groupCode)->get();
         //echo json_encode($unassignedUsers);
         if(!isset($unassignedUsers))
             return;
         return [
-          '#unassigned_users' => $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $group]),
+          '#unassigned_users' => $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $group, 'role' => $role]),
         ];
     }
 
@@ -258,7 +260,11 @@ class Roles extends Controller
     {
         $groupCode = post('groupCode');
         $roleCode = post('roleCode');
-        return array_merge($this->renderRole($roleCode, $groupCode), $this->renderManagementToolbar($roleCode, $groupCode));
+        return array_merge(
+            $this->renderRole($roleCode, $groupCode),
+            $this->renderManagementToolbar($roleCode, $groupCode),
+            $this->renderUnassignedUsers($groupCode, $roleCode)
+        );
     }
 
     /**
@@ -421,7 +427,10 @@ class Roles extends Controller
 
         $role = \Clake\Userextended\Models\Roles::where('id', $roleId)->first();
 
-        return $this->renderRole($role->code, $role->group->code);
+        return array_merge(
+            $this->renderRole($role->code, $role->group->code),
+            $this->renderUnassignedUsers($role->group->code, $role->code)
+        );
     }
 
     /**
@@ -565,6 +574,33 @@ class Roles extends Controller
         GroupManager::updateGroup($groupCode, $name, $description, $code);
 
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+    }
+
+    public function onAssignUser()
+    {
+        $groupCode = post('selectedGroup');
+        $roleCode = post('roleCode');
+        $userId = post('userId');
+
+       UserRoleManager::for(UserUtil::getUser($userId))->addRole($roleCode);
+
+        return array_merge(
+            $this->renderUnassignedUsers($groupCode, $roleCode),
+            $this->renderRole($roleCode, $groupCode)
+        );
+    }
+
+    public function onRemoveUserFromGroup()
+    {
+        $groupCode = post('selectedGroup');
+        $roleCode = post('roleCode');
+        $userId = post('userId');
+
+        UserGroupManager::for(UserUtil::getUser($userId))->removeGroup($groupCode);
+
+        return array_merge(
+            $this->renderUnassignedUsers($groupCode, $roleCode)
+        );
     }
 
 }

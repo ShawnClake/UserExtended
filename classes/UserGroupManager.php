@@ -39,7 +39,7 @@ class UserGroupManager extends StaticFactory {
         if($user == null)
             $user = UserUtil::getLoggedInUserExtendedUser();
 
-        $this->$user = $user;
+        $this->user = $user;
 
         return $this;
     }
@@ -54,7 +54,9 @@ class UserGroupManager extends StaticFactory {
         if($user == null)
             $user = UserUtil::getLoggedInUserExtendedUser();
 
-        $this->$user = $user;
+        $this->user = $user;
+
+        $this->allGroups();
 
         return $this;
     }
@@ -176,6 +178,9 @@ class UserGroupManager extends StaticFactory {
         if($groups == null)
             $groups = $this->userGroups;
 
+        if($groups == null)
+            return false;
+
         return array_key_exists(strtolower($group), $groups);
     }
 
@@ -187,6 +192,16 @@ class UserGroupManager extends StaticFactory {
         $group = GroupManager::findGroup($groupCode);
 
         return UsersGroups::addUser($this->user, $group->id);
+    }
+
+    public function removeGroup($groupCode)
+    {
+        if(!$this->isInGroup($groupCode))
+            return false;
+
+        $group = GroupManager::findGroup($groupCode);
+
+        return UsersGroups::removeUser($this->user, $group->id);
     }
 
 }

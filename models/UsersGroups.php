@@ -131,6 +131,15 @@ class UsersGroups extends Model
         return true;
     }
 
+    public static function removeUser($userObj, $groupId)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() == 0)
+            return false;
+
+        $relation = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
+        $relation->delete();
+    }
+
 
 
 }

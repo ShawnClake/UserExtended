@@ -46,7 +46,7 @@
                     <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->email ?></span></td>
                     <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->created_at ?></span></td>
                     <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->last_seen ?></span></td>
-                    <td><span><a style="padding-left:10px;" href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onRemoveUserFromRole" data-request-data="roleCode: '<?= $role->code ?>'"><i class="icon-caret-right"></i></a></span></td>
+                    <td><span><a style="padding-left:10px;" href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onRemoveUserFromRole" data-request-data="roleId: '<?= $role->id ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-right"></i></a></span></td>
                 </div>
             </tr>
             <?php endforeach; else: ?>

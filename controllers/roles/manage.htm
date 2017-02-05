@@ -51,7 +51,7 @@
 
                 <div class="col-sm-12" style="margin-top:33px;">
                     <div id="manage_group_toolbar"><?= $this->makePartial('manage_group_toolbar', ['group' => $selectedGroup]) ?></div>
-                    <div id="unassigned_users"><?= $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $selectedGroup]) ?></div>
+                    <div id="unassigned_users"><?php if(isset($role)) $currentRole = $role; else $currentRole = ''; ?><?= $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $selectedGroup, 'role' => $currentRole]) ?></div>
                 </div>
 
             </div>
