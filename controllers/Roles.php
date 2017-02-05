@@ -95,7 +95,24 @@ class Roles extends Controller
             $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
         }
 
-        return array_merge($this->renderRoles($groupCode), $this->renderToolbar($groupCode), $this->renderGroups($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode), $this->renderUnassignedUsers($groupCode));
+        return array_merge($this->renderRoles($groupCode),
+            $this->renderToolbar($groupCode),
+            $this->renderGroups($groupCode),
+            $roleRender,
+            $roleToolbarRender,
+            $this->renderUnassignedRoles($groupCode),
+            $this->renderUnassignedUsers($groupCode),
+            $this->renderManageGroupToolbar($groupCode)
+        );
+    }
+
+    public function renderManageGroupToolbar($groupCode)
+    {
+        $group = GroupManager::findGroup($groupCode);
+
+        return [
+            '#manage_group_toolbar' => $this->makePartial('manage_group_toolbar', ['group' => $group]),
+        ];
     }
 
     public function renderUnassignedUsers($groupCode)
@@ -527,6 +544,25 @@ class Roles extends Controller
         $description = post('description');
 
         GroupManager::createGroup($name, $description, $code);
+
+        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+    }
+
+    public function onOpenGroup()
+    {
+        $groupCode = post('groupCode');
+        $group = GroupManager::findGroup($groupCode);
+        return $this->makePartial('update_group_form', ['group' => $group]);
+    }
+
+    public function onSaveGroup()
+    {
+        $groupCode = post('groupCode');
+        $name = post('name');
+        $code = post('code');
+        $description = post('description');
+
+        GroupManager::updateGroup($groupCode, $name, $description, $code);
 
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
