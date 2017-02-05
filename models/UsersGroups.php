@@ -83,6 +83,18 @@ class UsersGroups extends Model
     }
 
     /**
+     * Scope a list of rows of users in a group but without an assigned role.
+     * @param $query
+     * @param $groupCode
+     * @return mixed
+     */
+    public function scopeByUsersWithoutRole($query, $groupCode)
+    {
+        $group = GroupsExtended::where('code', $groupCode)->first();
+        return $query->where('user_group_id', $group->id)->where('role_id', 0);
+    }
+
+    /**
      *
      */
     public static function getAssignedRoles()
@@ -96,6 +108,36 @@ class UsersGroups extends Model
     public static function getAssignedGroups()
     {
 
+    }
+
+    /**
+     * Adds a relation row to users groups.
+     * @param $userObj
+     * @param $groupId
+     * @param int $roleId
+     * @return bool
+     */
+    public static function addUser($userObj, $groupId, $roleId = 0)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() > 0)
+            return false;
+
+        $row = new UsersGroups();
+        $row->user_id = $userObj->id;
+        $row->user_group_id = $groupId;
+        $row->role_id = $roleId;
+        $row->save();
+
+        return true;
+    }
+
+    public static function removeUser($userObj, $groupId)
+    {
+        if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() == 0)
+            return false;
+
+        $relation = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
+        $relation->delete();
     }
 
 

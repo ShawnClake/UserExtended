@@ -1,0 +1,30 @@
+<?php if(isset($group)): ?>
+
+<div style="padding:33px;padding-top:23px;">
+
+    <h4>Update Group</h4>
+    <br>
+    <form class="form-elements" role="form" data-request="onSaveGroup" data-request-data="groupCode: '<?= $group->code ?>'">
+        <div class="form-group span-left">
+            <label>Name</label>
+            <input type="text" name="name" value="<?= $group->name ?>" class="form-control" />
+        </div>
+
+        <div class="form-group span-right">
+            <label>Code</label>
+            <input type="text" name="code" value="<?= $group->code ?>" class="form-control" />
+        </div>
+
+        <div class="form-group span-full">
+            <label>Description</label>
+            <textarea style="resize:none;" name="description" class="form-control"><?= $group->description ?></textarea>
+        </div>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <span style="margin-left:11px;" id="feedback_group_save"></span>
+    </form>
+
+</div>
+
+<?php endif ?>

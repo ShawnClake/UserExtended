@@ -12,13 +12,14 @@
 
 <div class="" style="padding-left:25px;padding-right:25px;">
 
-    <div id="management_toolbar"><?= $this->makePartial('management_toolbar', ['group' => $selectedGroup]) ?> </div>
 
     <div class="row" style="margin-top:11px;">
 
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-12 col-lg-5">
             <div class="row">
                 <div class="col-sm-12">
+                    <div id="management_toolbar"><?= $this->makePartial('management_toolbar', ['group' => $selectedGroup]) ?> </div>
+
                     <h4>Group Roles</h4>
                     <div id="roles"><?= $this->makePartial('list_roles', ['roles' => $groupRoles['roles'], 'roleCount' => $groupRoles['roleCount']]) ?></div>
                 </div>
@@ -32,17 +33,34 @@
 
         </div>
 
-        <div class="col-sm-12 col-md-5">
+        <div class="col-sm-12 col-md-12 col-lg-2 text-center">
 
-            <h4>Groups</h4>
-            <div id="groups"><?= $this->makePartial('list_groups', ['groups' => $groups, 'selectedGroup' => $selectedGroup]); ?></div>
+            <span style="font-size:19px;font-style:italic;">Groups</span>
+            <div id="groups" style="margin-top:17px;"><?= $this->makePartial('list_groups', ['groups' => $groups, 'selectedGroup' => $selectedGroup]); ?></div>
+
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-5">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="create_toolbar"><?= $this->makePartial('create_toolbar', ['group' => $selectedGroup]) ?> </div>
+
+                    <h4 class="text-right">Unassigned Roles (Drag onto a group to assign)</h4>
+                    <div id="unassigned_roles"><?= $this->makePartial('list_unassigned_roles', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount, 'group' => $selectedGroup]) ?></div>
+                </div>
+
+                <div class="col-sm-12" style="margin-top:33px;">
+                    <div id="manage_group_toolbar"><?= $this->makePartial('manage_group_toolbar', ['group' => $selectedGroup]) ?></div>
+                    <div id="unassigned_users"><?php if(isset($role)) $currentRole = $role; else $currentRole = ''; ?><?= $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $selectedGroup, 'role' => $currentRole]) ?></div>
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
 </div>
-
 
 
 

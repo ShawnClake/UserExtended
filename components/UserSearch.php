@@ -12,6 +12,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class UserSearch
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserSearch extends ComponentBase
 {
@@ -19,7 +20,7 @@ class UserSearch extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'User search',
+            'name'        => 'DEPRECATED. User search',
             'description' => 'Provides an interface to search for other users'
         ];
     }

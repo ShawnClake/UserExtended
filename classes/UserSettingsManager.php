@@ -76,6 +76,7 @@ class UserSettingsManager
 
     /**
      * Returns the user settings on the user instance
+     * Useful for debugging and tests
      * @return mixed
      */
     public function userSettingsCheck()
@@ -85,6 +86,7 @@ class UserSettingsManager
 
     /**
      * Returns the config file contents
+     * Useful for debugging and tests
      * @return array
      */
     public function yamlCheck()
@@ -94,6 +96,7 @@ class UserSettingsManager
 
     /**
      * Returns the user instance
+     * Useful for debugging and tests
      * @return null
      */
     public function userCheck()
@@ -112,7 +115,7 @@ class UserSettingsManager
     }
 
     /**
-     * Gets the settings options prioritizing config and then defaults
+     * Gets the setting's options prioritizing config and then defaults
      * @param $setting
      * @return array|void
      */

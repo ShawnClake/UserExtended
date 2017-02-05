@@ -11,6 +11,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class UserList
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.User
  */
 class UserList extends ComponentBase
 {
@@ -18,7 +19,7 @@ class UserList extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'User list',
+            'name'        => 'DEPRECATED. User list',
             'description' => 'Provides an interface for listing users'
         ];
     }
@@ -76,11 +77,8 @@ class UserList extends ComponentBase
      */
     public function onFriendUser()
     {
-
-        $userid = post('id');
-
-        FriendsManager::sendFriendRequest($userid);
-
+        $friend = new Friends();
+        $friend->onRequest();
     }
 
 }

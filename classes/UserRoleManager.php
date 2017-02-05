@@ -8,59 +8,87 @@ use Clake\Userextended\Models\UsersGroups;
 use Clake\UserExtended\Plugin;
 
 /**
- * TODO: Enforce SRP
- * TODO: Ensure the class has the same function useability as the others
- * TODO: Enforce conventions
- */
-
-/**
  * Class UserRoleManager
- * @package Clake\UserExtended\Classes
  *
  * Handles all interactions with roles on a user level
+ *
+ * @method static UserRoleManager for($user) UserRoleManager
+ * @method static UserRoleManager currentUser UserRoleManager
+ * @package Clake\UserExtended\Classes
  */
-class UserRoleManager
+class UserRoleManager extends StaticFactory
 {
 
-    // A collection of User Roles
-    private $userRoles; // Format like "groupCode" => RoleModel
+    /**
+     * A collection of User Roles
+     * Format like "groupCode" => RoleModel
+     * @var
+     */
+    private $userRoles;
 
-    // The user instance
+    /**
+     * The user instance
+     * @var
+     */
     private $user;
 
     /**
      * Used to setup the class using a User model
      * @param null $user
+     * @deprecated Renamed below and supports factory
      * @return static
      */
-    public static function using($user = null)
+    public function using($user = null)
     {
-        $instance = new static;
-
-        if($user == null) {
+        if($user == null)
             $user = UserUtil::getLoggedInUser();
-        }
 
-        $instance->user = $user;
+        $this->user = $user;
 
-        return $instance;
+        return $this;
+    }
+
+    /**
+     * Sets up the class using a User model
+     * @param null $user
+     * @return $this
+     */
+    public function forFactory($user = null)
+    {
+        if($user == null)
+            $user = UserUtil::getLoggedInUser();
+
+        $this->user = $user;
+
+        return $this;
     }
 
     /**
      * Used to setup the class using the logged in user
+     * @deprecated Renamed below and supports factory
      * @return static
      */
-    public static function currentUser()
+    public function currentUserOLD()
     {
-        $instance = new static;
+        $this->user = UserUtil::getLoggedInUser();
 
-        $instance->user = UserUtil::getLoggedInUser();
+        return $this;
+    }
 
-        return $instance;
+    /**
+     * Used to setup the class using the logged in user
+     * @return $this
+     */
+    public function currentUserFactory()
+    {
+        $this->user = UserUtil::getLoggedInUser();
+
+        return $this;
     }
 
     /**
      * Returns the collection of user roles
+     * @deprecated Renamed
      * @return mixed
      */
     public function get()
@@ -69,10 +97,40 @@ class UserRoleManager
     }
 
     /**
+     * Returns the collection of user roles
+     * @return mixed
+     */
+    public function getUsersRoles()
+    {
+        return $this->userRoles;
+    }
+
+    /**
      * Preforms the logic for getting which roles the user is a part of
+     * @deprecated Renamed below to better suit its purpose
      * @return $this
      */
     public function all()
+    {
+        $roles = UserUtil::castToUserExtendedUser($this->user)->roles;
+        $userRoles = [];
+
+        foreach($roles as $role)
+        {
+            $userRoles[strtolower($role->group->code)] = $role;
+        }
+
+        $this->userRoles = $userRoles;
+
+        return $this;
+    }
+
+    /**
+     * Preforms the logic for getting which roles the user is a part of
+     * TODO: Just utilize the 'roles' relation on the UserExtended user model if possible
+     * @return $this
+     */
+    public function allRoles()
     {
         $roles = UserUtil::castToUserExtendedUser($this->user)->roles;
         $userRoles = [];
@@ -98,6 +156,9 @@ class UserRoleManager
         if($roles == null)
             $roles = $this->userRoles;
 
+        if($roles == null)
+            return false;
+
         foreach($roles as $role)
         {
             if($roleCode == $role->code)
@@ -109,7 +170,7 @@ class UserRoleManager
 
     /**
      * Saves changes made to a users roles. Useful ONLY for changing existing groups and roles and
-     * not useful for creaitng or deleting them.
+     * not useful for creating or deleting them.
      * @return $this
      */
     public function saveRoles()
@@ -155,7 +216,7 @@ class UserRoleManager
      */
     public function promote($groupCode)
     {
-        if(!UserGroupManager::CurrentUser()->All()->IsInGroup($groupCode))
+        if(!UserGroupManager::currentUser()->allGroups()->isInGroup($groupCode))
             return $this;
 
         $role = $this->getRoleByGroup($groupCode);
@@ -163,9 +224,7 @@ class UserRoleManager
         if($role->sort_order < 2)
             return $this;
 
-        $roleGroup = $role->group;
-
-        $roles = $this->getGroupRolesByOrdering($roleGroup);
+        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order - 1];
 
@@ -183,17 +242,15 @@ class UserRoleManager
      */
     public function demote($groupCode)
     {
-        if(!UserGroupManager::CurrentUser()->All()->IsInGroup($groupCode))
+        if(!UserGroupManager::currentUser()->allGroups()->isInGroup($groupCode))
             return $this;
 
         $role = $this->getRoleByGroup($groupCode);
 
-        if($role->sort_order > (GroupManager::all()->roleCount($groupCode) - 1))
+        if($role->sort_order > (GroupManager::allGroups()->countGroupRoles($groupCode) - 1))
             return $this;
 
-        $roleGroup = $role->group;
-
-        $roles = RoleManager::initGroupRolesByCode($roleGroup)->getGroupRolesByOrdering();
+        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order + 1];
 
@@ -202,6 +259,26 @@ class UserRoleManager
         $this->saveRoles();
 
         return $this;
+    }
+
+    /**
+     * Gives a user a role.
+     * If they don't exist in the group required for the role yet, it will also add them to the group
+     * @param $roleCode
+     * @return bool
+     */
+    public function addRole($roleCode)
+    {
+        if($this->isInRole($roleCode))
+            return false;
+
+        $group = RoleManager::findRole($roleCode)->group;
+
+        UserGroupManager::for($this->user)->addGroup($group->code);
+
+        $roleId = RoleManager::findRole($roleCode)->id;
+
+        return Roles::addUser($this->user, $group->id, $roleId);
     }
 
 }

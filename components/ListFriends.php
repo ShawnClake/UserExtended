@@ -11,6 +11,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class ListFriends
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.Friends
  */
 class ListFriends extends ComponentBase
 {
@@ -18,7 +19,7 @@ class ListFriends extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'Friends List',
+            'name'        => 'DEPRECATED. Friends List',
             'description' => 'List a users friends'
         ];
     }
@@ -69,5 +70,7 @@ class ListFriends extends ComponentBase
         if($userid != null)
             FriendsManager::deleteFriend($userid);
     }
+
+
 
 }

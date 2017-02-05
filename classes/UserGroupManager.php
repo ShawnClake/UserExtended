@@ -1,71 +1,83 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Auth;
+use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\UsersGroups;
 use RainLab\User\Models\UserGroup;
-
-/**
- * TODO: Ensure this class follows SRP
- * TODO: Improve error checking
- * TODO: Change function names to be lower case and enforce consistent naming and function styles
- */
 
 /**
  * Class UserGroupManager
  * @package Clake\UserExtended\Classes
  *
  * Handles all interactions with groups on a user level
+ * @method static UserGroupManager currentUser() UserGroupManager
+ * @method static UserGroupManager for($user) UserGroupManager
  */
-class UserGroupManager {
+class UserGroupManager extends StaticFactory {
 
-    // Stores an array of UserGroups. ["GroupName" => "GroupDescriptionObject"]
-    public static $userGroups;
+    /**
+     * Stores an array of UserGroups. ["GroupName" => "GroupDescriptionObject"]
+     * @var
+     */
+    private $userGroups;
 
-    // Stores the user we are getting groups for
-    private static $user;
-
-    // Stores the static instance
-    private static $_instance = null;
+    //
+    /**
+     * Stores the user object for the member of the groups we are getting
+     * @var
+     */
+    private $user;
 
     /**
      * Pass a user object to get groups for that user
      * @param null $user
+     * @deprecated Renamed to a better function name
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public static function Using ($user = null)
+    public function using ($user = null)
     {
-        if (self::$_instance === null) {
-            self::$_instance = new self;
-        }
+        if($user == null)
+            $user = UserUtil::getLoggedInUserExtendedUser();
 
-        if($user == null) {
-            $user = self::getLoggedInUser();
-        }
+        $this->user = $user;
 
-        self::$user = $user;
+        return $this;
+    }
 
-        return self::$_instance;
+    /**
+     * Pass a user object to get groups for that user
+     * @param null $user
+     * @return $this
+     */
+    public function forFactory($user = null)
+    {
+        if($user == null)
+            $user = UserUtil::getLoggedInUserExtendedUser();
+
+        $this->user = $user;
+
+        $this->allGroups();
+
+        return $this;
     }
 
     /**
      * Sets the class up to use the currently logged in user
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public static function CurrentUser() {
-        if (self::$_instance === null) {
-            self::$_instance = new self;
-        }
-
-        self::$user = self::getLoggedInUser();
-
-        return self::$_instance;
+    public function currentUserFactory()
+    {
+        $this->user = UserUtil::getLoggedInUserExtendedUser();
+        return $this;
     }
 
     /**
      * Returns the logged in user, if available, and touches
      * the last seen timestamp.
+     * @deprecated Remove as this is handled in UserUtil
      * @return RainLab\User\Models\User
      */
-    private static function getLoggedInUser()
+    private function getLoggedInUser()
     {
         if (!$user = Auth::getUser()) {
             return null;
@@ -76,25 +88,23 @@ class UserGroupManager {
         return $user;
     }
 
-
     /**
      * Finds all the groups the user is in and stores that to the class IE $userGroups
      * @param null $user
+     * @deprecated Renamed to a better naming below.
      * @return $this
      */
-    public function All($user = null)
+    public function all($user = null)
     {
 
         if($user == null)
-            $user = self::$user;
+            $user = $this->user;
 
         $userid = $user["id"];
 
         $usergroup = UserGroup::all();
 
         $groups = [];
-
-        //$tester = [];
 
         foreach($usergroup as $key => $value)
         {
@@ -113,34 +123,51 @@ class UserGroupManager {
 
         }
 
-        //$user = UserUtil::getLoggedInUser();
-
-        //$groups = $user->groups()->get();
-
-        self::$userGroups = $groups;
+        $this->userGroups = $groups;
 
         return $this;
 
     }
 
     /**
-     * Get the instance of this class
+     * Finds all the groups the user is in and stores that to the class IE $userGroups
+     * TODO: Can we not just use the 'groups' relation provided on RainLab.Users User model
      * @return $this
      */
-    public function Instance() {
+    public function allGroups()
+    {
+        $user = $this->user;
+        if(!isset($user))
+            return $this;
+
+        $groups = [];
+
+        foreach($user->groups as $group)
+            $groups[strtolower($group->code)]	= $group;
+
+        $this->userGroups = $groups;
 
         return $this;
-
     }
 
     /**
      * Get the User Groups the user is in. Only returns the variable - doesn't do the logic
+     * @deprecated Renamed
      * @return mixed
      */
-    public function Get() {
+    public function getUserGroups() {
 
-        return self::$userGroups;
+        return $this->userGroups;
 
+    }
+
+    /**
+     * Returns a collection of groups a user is in
+     * @return mixed
+     */
+    public function getUsersGroups()
+    {
+        return $this->userGroups;
     }
 
     /**
@@ -149,14 +176,35 @@ class UserGroupManager {
      * @param $groups
      * @return bool
      */
-    public function IsInGroup($group, $groups = null)
+    public function isInGroup($group, $groups = null)
     {
+        if($groups == null)
+            $groups = $this->userGroups;
 
         if($groups == null)
-            $groups = self::$userGroups;
+            return false;
 
         return array_key_exists(strtolower($group), $groups);
+    }
 
+    public function addGroup($groupCode)
+    {
+        if($this->isInGroup($groupCode))
+            return false;
+
+        $group = GroupManager::findGroup($groupCode);
+
+        return UsersGroups::addUser($this->user, $group->id);
+    }
+
+    public function removeGroup($groupCode)
+    {
+        if(!$this->isInGroup($groupCode))
+            return false;
+
+        $group = GroupManager::findGroup($groupCode);
+
+        return UsersGroups::removeUser($this->user, $group->id);
     }
 
 }

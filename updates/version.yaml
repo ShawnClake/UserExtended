@@ -64,3 +64,5 @@
 1.0.25:
     - Add user settings
     - user_add_settings.php
+1.1.00:
+    - User Extended Beta release. Check your project as many things are now Deprecated and rewritten.

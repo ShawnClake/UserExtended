@@ -1,12 +1,10 @@
-<?php if($role): ?>
+<?php if($group): ?>
 <div data-control="toolbar">
     <div class="row">
 
-        <div class="col-sm-12 col-md-6">
-            <span style="font-size:19px;font-style:italic;">Selected Role: <?= $role->name ?></span>
-        </div>
 
-        <div class="col-sm-12 col-md-6 text-right">
+
+        <div class="text-left col-sm-12 col-md-6 ">
             <!-- <a
                      href="javascript:;"
                      class="btn btn-primary oc-icon-plus"
@@ -18,37 +16,41 @@
                     href="javascript:;"
                     class="btn btn-default oc-icon-pencil"
                     data-control="popup"
-                    data-handler="onOpenRole"
+                    data-handler="onAddUserGroup"
                     data-size="huge"
-                    data-extra-data="groupCode: '<?= $role->group->code ?>', roleCode: '<?= $role->code ?>'"
+                    data-extra-data="groupCode: '<?= $group->code ?>'"
+                    disabled
             >
-                Edit Role
+                Add User to Group
             </a>
 
             <a
                     href="javascript:;"
                     class="btn btn-default oc-icon-pencil"
                     data-control="popup"
-                    data-handler="onAddUser"
+                    data-handler="onOpenGroup"
                     data-size="huge"
-                    data-extra-data="groupCode: '<?= $role->group->code ?>', roleCode: '<?= $role->code ?>'"
-                    disabled
+                    data-extra-data="groupCode: '<?= $group->code ?>'"
             >
-                Add User to Role
+                Edit Group
             </a>
 
             <!--<a
-                    href="<?= Backend::url('clake/userextended/groupsextended/update/' . $role->group->id) ?>"
+                    href="<?= Backend::url('clake/userextended/groupsextended/update/' . $group->id) ?>"
                     class="btn btn-default oc-icon-pencil"
             >
                 Edit Group
             </a>-->
         </div>
 
+        <div class="text-right col-sm-12 col-md-6">
+            <span style="font-size:19px;font-style:italic;"><!--Selected Group: <?= $group->name ?>---></span>
+        </div>
+
     </div>
 
 </div>
 
-<h4 style="margin-top:11px;">Role Management</h4>
+<h4 class="text-right" style="margin-top:11px;">Group Management</h4>
 
 <?php endif ?>

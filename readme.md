@@ -95,7 +95,6 @@ User Extended is typically a dependency to my other plugins.
 * Focus on stability
 * Email templates and sending
 * Event hooks
-* Logging
 
 ### Version 2.0.00 - UserExtended Core Stable Release
 * Stability
@@ -106,3 +105,12 @@ User Extended is typically a dependency to my other plugins.
 User Extended is not trying to be a social network plugin. We are providing functionality for more complex user functions which have use cases outside of social networks.
 
 Websites specializing in online games, forums, blogs, news etc. can all benefit from User Extended.
+
+## Event List
+* clake.ue.preregistration(post &$data) : halted. $data contains registration form data. Returning false will cancel registration.
+* clake.ue.postregistration(UserExtended &$user). $user contains the final user object before saving it and logging out the user to finalize registration.
+* clake.ue.login(User $user). $user contains the user object after authenticating.
+* clake.ue.logout(User $user). $user contains the user object after logging out.
+* clake.ue.settings.create(UserSettingsManager &$instance). After the user settings instance object has been created
+* clake.ue.settings.update(UserSettingsManager &$instance). After the user settings instance object has been created
+

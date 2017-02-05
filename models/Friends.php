@@ -427,9 +427,9 @@ class Friends extends Model
         $this->accepted = $status;
     }
 
-    public function scopeNotMe($query)
+    public function scopeNotMe($query, $userId = null)
     {
-        $userId = UserUtil::getUsersIdElseLoggedInUsersId();
+        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
         if($userId == null)
             return $query;
 
@@ -437,12 +437,25 @@ class Friends extends Model
         $testb = $query;
 
         $sender = $testa->pluck('user_that_sent_request');
-        $receiver = $testb->pluck('user_that_accepted_request');
+        //$receiver = $testb->pluck('user_that_accepted_request');
 
         if($sender === UserUtil::getUsersIdElseLoggedInUsersId())
             return $query->pluck('user_that_accepted_request');
 
         return $query->pluck('user_that_sent_request');
+    }
+
+    public function otherUser($userId = null)
+    {
+        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
+        if($userId == null)
+            return;
+
+        if($this->user_that_sent_request == $userId)
+            return $this->user_that_accepted_request;
+        else
+            return $this->user_that_sent_request;
+
     }
 
 }

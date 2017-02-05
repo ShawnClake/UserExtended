@@ -13,6 +13,7 @@ use Cms\Classes\ComponentBase;
 /**
  * Class ListFriendRequests
  * @package Clake\Userextended\Components
+ * @deprecated Please use UserExtended.Friends
  */
 class ListFriendRequests extends ComponentBase
 {
@@ -20,7 +21,7 @@ class ListFriendRequests extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name'        => 'Friend request list',
+            'name'        => 'DEPRECATED. Friend request list',
             'description' => 'Lists a users received friend requests'
         ];
     }

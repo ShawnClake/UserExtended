@@ -137,15 +137,19 @@ class UserUtil
      * @param User $user
      * @return UserExtended
      */
-    public static function castToUserExtendedUser(User $user)
+    public static function castToUserExtendedUser($user)
     {
+        if($user == null)
+            return $user;
         $userExtended = new UserExtended();
         $userExtended->attributes = $user->attributes;
         return $userExtended;
     }
 
-    public static function convertToUserExtendedUser(User $user)
+    public static function convertToUserExtendedUser($user)
     {
+        if($user == null)
+            return $user;
         $id = $user->id;
         return UserExtended::where('id', $id)->first();
     }
@@ -188,12 +192,24 @@ class UserUtil
         return self::getUser($id);
     }
 
+    /**
+     * @param $userId
+     * @return bool|void
+     */
     public static function idIsLoggedIn($userId)
     {
         $user = self::getLoggedInUser();
         if($user == null)
             return;
         return $user->id == $userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getLoggedInUserExtendedUser()
+    {
+        return self::convertToUserExtendedUser(self::getLoggedInUser());
     }
 
 }

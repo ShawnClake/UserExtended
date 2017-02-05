@@ -1,28 +1,30 @@
-<div style="font-size:14px;padding-left:9px;" >
-    <table id="role_table" style="table-layout:fixed; width:800px;">
+<div style="" class="table-responsive">
+    <table class="table table-condensed table-hover table-striped" id="role_table" style="table-layout:fixed; ">
 
-        <?php if($roles->count() != 0): ?>
+        <?php if(count($roles) != 0): ?>
 
             <tr>
                 <th style="width:25px;"></th>
                 <th style="width:25px;"></th>
                 <th style="width:25px;"></th>
-                <th style="width:100px;">Role</th>
-                <th style="padding-left:25px;width:250px;">Description</th>
-                <th style="padding-left:25px;width:150px;">Created</th>
-                <th style="padding-left:25px;width:150px;">Updated</th>
+                <th style="width:125px;">Role</th>
+                <th style="padding-left:25px;">Description</th>
+                <th style="padding-left:25px;">Created</th>
+                <th style="padding-left:25px;">Updated</th>
+                <th style="padding-left:10px;width:25px;"></th>
             </tr>
 
         <?php foreach($roles as $index => $role): ?>
-        <tr style="height:25px;">
+        <tr style="">
             <div style="margin-top:9px;">
-                <td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this role?" data-request="onRemoveRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-times"></i></a></span></td>
+                <td><span><a style="" href="#" data-request-confirm="Are you sure you want to delete this role? This cannot be undone." data-request="onRemoveRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-times"></i></a></span></td>
                 <td><span><a style=" <?php if($index == 0): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveUp" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-up"></i></a></span></td>
                 <td><span><a style=" <?php if($index == $roleCount - 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveDown" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-down"></i></a></span></td>
-                <td style="width:150px;overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><?= $role->name ?></a></span></td>
-                <td style="padding-left:25px;width:250px;overflow:hidden;white-space: nowrap;"><span><?= $role->description ?></span></td>
-                <td style="padding-left:25px;width:150px;overflow:hidden;white-space: nowrap;"><span><?= $role->created_at ?></span></td>
-                <td style="padding-left:25px;width:150px;overflow:hidden;white-space: nowrap;"><span><?= $role->updated_at ?></span></td>
+                <td style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><?= $role->name ?></a></span></td>
+                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->description ?></span></td>
+                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->created_at ?></span></td>
+                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->updated_at ?></span></td>
+                <td><span><a style="padding-left:10px;" href="#" data-request-confirm="Are you sure you want to unassign this role form this group? All users with this role will no longer have a role." data-request="onUnassignRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-right"></i></a></span></td>
             </div>
         </tr>
         <?php endforeach; else: ?>

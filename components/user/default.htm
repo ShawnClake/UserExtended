@@ -1,3 +1,39 @@
-<p>This is the default markup for component User</p>
+{% if ueuser.type == 'random' %}
+    {% for user in ueuser.randomUsers %}
+        <a href="#" style="text-decoration: none;" data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">
 
-<small>You can delete this file if you want</small>
+            <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
+                <span>{{user.name}}</span><br>
+                <span style="margin-left:7px;">Last Online: {{user.last_seen}}</span><br>
+            </div>
+
+        </a>
+    {% endfor %}
+
+{% elseif ueuser.type == 'single' %}
+
+    <a href="#" style="text-decoration: none;" data-request-data="id: {{ueuser.singleUser.id}}" data-request="userlist::onFriendUser">
+
+        <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
+            <span>{{ueuser.singleUser.name}}</span><br>
+            <span style="margin-left:7px;">Last Online: {{ueuser.singleUser.last_seen}}</span><br>
+        </div>
+
+    </a>
+
+{% elseif ueuser.type == 'search' %}
+
+    <form data-request="ueuser::onSearch">
+        Search Phrase: <input type="text"  name="phrase" />
+        <input type="submit" value="Search" />
+    </form>
+
+    <br>
+
+    <div id="userSearchResults"></div>
+
+{% else %}
+
+    {% partial 'ueuser::profile' %}
+
+{% endif %}

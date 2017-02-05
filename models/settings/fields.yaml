@@ -1,0 +1,54 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+tabs:
+    fields:
+
+        # Username Validation
+        validation_username:
+            span: left
+            label: Username Validation
+            comment: Validation rules for usernames
+            type: text
+            tab: Validation
+
+        # Password Validation
+        validation_password:
+            span: left
+            label: Password Validation
+            comment: Validation rules for passwords
+            type: text
+            tab: Validation
+
+        # Enable Friends Feature
+        enable_friends:
+            span: left
+            label: Enable Friends
+            comment: Enable/Disable friends
+            type: switch
+            tab: Friends
+
+        # Enable Profile Feature
+        enable_profiles:
+            span: left
+            label: Enable Profiles
+            comment: Enable/Disable user profiles
+            type: switch
+            tab: Profile
+
+        # Enable Groups Feature
+        enable_groups:
+            span: left
+            label: Enable Groups
+            comment: Enable/Disable user groups
+            type: switch
+            tab: Groups
+
+        # Enable Email Notification
+        enable_email:
+            span: left
+            label: Enable Email Notifications
+            comment: Enable/Disable email notifications
+            type: switch
+            tab: Notifications
