@@ -41,6 +41,12 @@ User Extended is typically a dependency to my other plugins.
 * Initial work on group hierarchy, and promotion and demotion system.
 * Bug Fixes
 
+#### As of 1.1.00
+* Added User Extended modules
+* Improved role manager significantly
+* Consolidated components into: Friends, User, and Account
+* Rewrote much of the code
+
 ## Planned Features
 * Blocking friends
     * Unblock as well
