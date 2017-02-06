@@ -3,12 +3,19 @@
 use Clake\UserExtended\Classes\UserUtil;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
-
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
+ * User Extended by Shawn Clake
  * Class Friends
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
  * @method static Friend friend($userIdA, $userIdB = null) Query
  * @method static Friend request($userIdA, $userIdB = null) Query
  * @method static Friend declined($userIdA, $userIdB = null) Query
@@ -447,10 +454,8 @@ class Friend extends Model
             return $query;
 
         $testa = $query;
-        $testb = $query;
 
         $sender = $testa->pluck('user_that_sent_request');
-        //$receiver = $testb->pluck('user_that_accepted_request');
 
         if($sender === UserUtil::getUsersIdElseLoggedInUsersId())
             return $query->pluck('user_that_accepted_request');

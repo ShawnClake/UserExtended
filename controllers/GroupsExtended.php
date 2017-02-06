@@ -6,12 +6,17 @@ use Backend\Classes\Controller;
 use RainLab\User\Models\UserGroup;
 
 /**
- * @depreciated
- * TODO: Remove this controller
- */
-
-/**
- * User Groups Back-end Controller
+ * User Extended by Shawn Clake
+ * Class GroupsExtended
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @deprecated Remove this controller as the RoleManager does almost everything this does.
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @package Clake\UserExtended\Controllers
  */
 class GroupsExtended extends Controller
 {
@@ -27,13 +32,13 @@ class GroupsExtended extends Controller
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
 
-    //public $requiredPermissions = ['rainlab.users.access_groups'];
-
+    /**
+     * GroupsExtended constructor.
+     */
     public function __construct()
     {
         parent::__construct();
 
-        //BackendMenu::setContext('RainLab.User', 'user', 'usergroups');
         BackendMenu::setContext('RainLab.User', 'user', 'users');
     }
 }

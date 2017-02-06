@@ -8,15 +8,21 @@ use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
 
 /**
+ * User Extended by Shawn Clake
  * Class GroupManager
+ * User Extended is licensed under the MIT license.
  *
- * Handles all interaction accross groups on a global level rather than a user level.
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ *
+ * Handles all interaction across groups on a global level rather than a user level.
  * @method static GroupManager allGroups GroupManager
  * @package Clake\UserExtended\Classes
  */
 class GroupManager extends StaticFactory
 {
-
     /**
      * A collection of groups
      * @var
@@ -45,8 +51,6 @@ class GroupManager extends StaticFactory
 
     /**
      * Deletes a group
-     * TODO: Remove any UsersGroups associations with this group. The lines can be deleted entirely.
-     * TODO: Set roles which were a part of this group back to an 'unattached' state in userextended_roles table
      * @param $groupCode
      */
     public static function deleteGroup($groupCode)
@@ -219,11 +223,8 @@ class GroupManager extends StaticFactory
     {
         $groups = [];
 
-        //echo json_encode(self::allGroups()->getGroups());
-
         foreach(self::allGroups()->getGroups() as $group)
         {
-            //echo json_encode($group)  . '***NEXTONECOMINGUP***';
             $groups[$group["sort_order"]] = $group;
         }
 

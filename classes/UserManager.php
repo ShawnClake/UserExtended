@@ -1,12 +1,18 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
 use Clake\DataStructures\Classes\Lists;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  */
 class UserManager extends StaticFactory
@@ -18,7 +24,6 @@ class UserManager extends StaticFactory
      */
     public static function getRandomUserSet($limit = 5)
     {
-
         $returner = new Collection;
 
         $userCount = User::all()->count();
@@ -62,7 +67,6 @@ class UserManager extends StaticFactory
         }
 
         return $returner;
-
     }
 
     /**

@@ -6,10 +6,18 @@ use Clake\Userextended\Models\UsersGroups;
 use RainLab\User\Models\UserGroup;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserGroupManager
- * @package Clake\UserExtended\Classes
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with groups on a user level
+ * @package Clake\UserExtended\Classes
+ *
  * @method static UserGroupManager currentUser() UserGroupManager
  * @method static UserGroupManager for($user) UserGroupManager
  */
@@ -187,6 +195,11 @@ class UserGroupManager extends StaticFactory {
         return array_key_exists(strtolower($group), $groups);
     }
 
+    /**
+     * Add a group to a user
+     * @param $groupCode
+     * @return bool
+     */
     public function addGroup($groupCode)
     {
         if($this->isInGroup($groupCode))
@@ -197,6 +210,11 @@ class UserGroupManager extends StaticFactory {
         return UsersGroups::addUser($this->user, $group->id);
     }
 
+    /**
+     * Remove a group from a user
+     * @param $groupCode
+     * @return bool
+     */
     public function removeGroup($groupCode)
     {
         if(!$this->isInGroup($groupCode))

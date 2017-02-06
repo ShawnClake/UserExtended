@@ -1,6 +1,4 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\UserExtended;
 use Illuminate\Support\Facades\Crypt;
@@ -8,7 +6,14 @@ use Illuminate\Support\Facades\Validator;
 use \October\Rain\Support\Facades\Yaml;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserSettingsManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  *
  * Terminology and flow:
@@ -21,16 +26,28 @@ use \October\Rain\Support\Facades\Yaml;
 class UserSettingsManager
 {
 
-    // Settings config file
+    /**
+     * Settings config file
+     * @var array
+     */
     protected $settingsTemplate = [];
 
-    // Settings column from the user object
+    /**
+     * Settings column from the user object
+     * @var
+     */
     protected $settings;
 
-    // Stores the user object
+    /**
+     * Stores the user object
+     * @var null
+     */
     protected $user = null;
 
-    // Default options for settings
+    /**
+     * Setting option defaults
+     * @var array
+     */
     private $defaults = [
         'label' => '',
         'type' => 'text',
@@ -327,13 +344,7 @@ class UserSettingsManager
         if(!$this->validate($setting, $value))
             return false;
 
-
         $value = $this->encrypt($setting, $value);
-
-        //dd(empty($this->settings));
-        //$test = is_null($this->settings) ? "hi" : $this->settingsTemplate;
-        //$test = array_key_exists($setting, $this->settings);
-        //dd($test);
 
         if($this->settings == "Array" || is_null($this->settings) || empty($this->settings))
             $this->settings = [];

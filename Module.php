@@ -1,10 +1,19 @@
-<?php
-
-namespace Clake\UserExtended;
+<?php namespace Clake\UserExtended;
 
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
 
+/**
+ * User Extended by Shawn Clake
+ * Class Module
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @package Clake\UserExtended
+ */
 class Module extends UserExtended
 {
     use StaticFactoryTrait;

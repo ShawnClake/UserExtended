@@ -1,14 +1,17 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
-
-use Clake\UserExtended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
-use Clake\UserExtended\Plugin;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserRoleManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a user level
  *

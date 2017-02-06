@@ -18,10 +18,16 @@ use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
 use Cms\Classes\Page;
-//use RainLab\User\Classes\AuthManager
 
 /**
+ * User Extended by Shawn Clake
  * Class Account
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Components
  *
  * Some code in this component has been copied from the RainLab.User plugin.

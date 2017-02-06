@@ -1,26 +1,26 @@
 <?php namespace Clake\Userextended\Models;
 
-use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
-
 use Model;
 use October\Rain\Support\Collection;
-
 use Clake\UserExtended\Traits\Timezonable;
-
-//use October\Rain\Database\Traits\Sortable;
-//use October\Rain\Database\Traits\Encryptable
-
 use October\Rain\Database\Traits\SoftDelete;
 
 /**
+ * User Extended by Shawn Clake
  * Class Roles
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
  * @method static Role rolesInGroup($groupCode) Query
  */
 class Role extends Model
 {
-    //use Sortable;
     use Timezonable;
 
     use SoftDelete;

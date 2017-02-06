@@ -3,8 +3,16 @@
 use Model;
 
 /**
+ * User Extended by Shawn Clake
  * Class UsersGroups
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
  * @method static UsersGroups byRole($roleCode) Query
  * @method static UsersGroups byGroup($groupCode) Query
  * @method static UsersGroups byUser($userId) Query

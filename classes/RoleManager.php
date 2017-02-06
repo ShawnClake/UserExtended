@@ -7,7 +7,14 @@ use Clake\Userextended\Models\Role;
 use October\Rain\Support\Collection;
 
 /**
+ * User Extended by Shawn Clake
  * Class RoleManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a group level (Global level)
  * @method static RoleManager for($groupCode) RoleManager

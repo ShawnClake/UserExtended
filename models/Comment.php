@@ -2,14 +2,20 @@
 
 use Model;
 use \October\Rain\Database\Traits\Encryptable;
-
 use \October\Rain\Database\Traits\SoftDelete;
-
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
+ * User Extended by Shawn Clake
  * Class Comments
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
  * @method static Comment id($commentId) Query
  * @method static Comment author() Query
  * @method static Comment user() Query

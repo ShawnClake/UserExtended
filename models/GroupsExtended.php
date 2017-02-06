@@ -5,20 +5,24 @@ use Model;
 use October\Rain\Support\Collection;
 use RainLab\User\Models\UserGroup;
 use October\Rain\Database\Traits\Sortable;
-
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
+ * User Extended by Shawn Clake
  * Class GroupsExtended
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
  * @method static GroupsExtended code($code) Query
  *
  */
 class GroupsExtended extends UserGroup
 {
-
-    //use Sortable;
-
     use Timezonable;
 
     protected $timezonable = [
@@ -41,9 +45,6 @@ class GroupsExtended extends UserGroup
         $belongsToMany['users'] = ['RainLab\User\Models\User', 'table' => 'users_groups', 'key' => 'user_group_id'];
         $belongsToMany['users_count'] = ['RainLab\User\Models\User', 'table' => 'users_groups', 'key' => 'user_group_id', 'count' => true];
         $this->belongsToMany = $belongsToMany;
-
-        //'users'       => ['RainLab\User\Models\User', 'table' => 'users_groups'],
-        //'users_count' => ['RainLab\User\Models\User', 'table' => 'users_groups', 'count' => true]
 
         parent::__construct();
     }
@@ -82,7 +83,6 @@ class GroupsExtended extends UserGroup
      */
     public function beforeCreate()
     {
-        //echo GroupManager::allGroups()->countGroups() + 1;
         $this->sort_order = GroupManager::allGroups()->countGroups() + 1;
     }
 

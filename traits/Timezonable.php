@@ -1,7 +1,4 @@
-<?php
-
-namespace Clake\UserExtended\Traits;
-
+<?php namespace Clake\UserExtended\Traits;
 
 use Carbon\Carbon;
 use Clake\UserExtended\Classes\TimezoneHandler;
@@ -10,11 +7,14 @@ use Clake\Userextended\Models\UserExtended;
 use Exception;
 
 /**
- * TODO: Improve error checking and documentation
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class Timezonable
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Traits
  *
  * Adds automated Timezone adjustments to models via the class variable 'timezonable'

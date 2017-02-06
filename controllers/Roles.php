@@ -13,14 +13,15 @@ use Redirect;
 use Backend;
 
 /**
- * TODO: Add better error checking
- * TODO: Add better documentation and follow conventions
- * TODO: Improve code and its readability.
- * TODO: Create an array for all of the partials that can be updated and have a dynamic way to refresh them
- */
-
-/**
- * Roles Back-end Controller
+ * User Extended by Shawn Clake
+ * Class Roles
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @package Clake\Userextended\Controllers
  */
 class Roles extends Controller
 {
@@ -39,19 +40,17 @@ class Roles extends Controller
     {
         parent::__construct();
 
-        //BackendMenu::setContext('Clake.Userextended', 'userextended', 'roles');
         // Setting this context so that our sidebar menu works
         BackendMenu::setContext('RainLab.User', 'user', 'users');
     }
 
     /**
-        * Action used for managing roles such as: their order, some stats, and their properties
+     * Action used for managing roles such as: their order, some stats, and their properties
     */
     public function manage()
     {
         $this->pageTitle = "Manage Roles";
 
-        //dd(RoleManager::initGroupRolesByCode('developer')->get());
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
         $this->vars['selectedGroup'] = GroupManager::allGroups()->getGroups()->first();
         $groupRoles = RoleManager::for($this->vars['selectedGroup']->code);
@@ -71,9 +70,6 @@ class Roles extends Controller
 
         if(count($roleModels) > 0)
             $this->vars['role'] = $roleModels[0];
-
-        //$this->vars['selectedGroup'] = $this->selectedGroupd;
-        //return $this->renderRoles($selected);
     }
 
     /**
@@ -85,7 +81,6 @@ class Roles extends Controller
         $groupCode = post('code');
         $this->vars['selectedGroup'] = GroupManager::findGroup($groupCode);
         $roles = RoleManager::for($groupCode)->sort()->getRoles();
-        $roleCode = '';
         if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
@@ -110,6 +105,11 @@ class Roles extends Controller
         );
     }
 
+    /**
+     * Renders the toolbar for managing a group
+     * @param $groupCode
+     * @return array
+     */
     public function renderManageGroupToolbar($groupCode)
     {
         $group = GroupManager::findGroup($groupCode);
@@ -119,6 +119,12 @@ class Roles extends Controller
         ];
     }
 
+    /**
+     * Renders the table of users in a group without a role
+     * @param $groupCode
+     * @param $roleCode
+     * @return array|void
+     */
     public function renderUnassignedUsers($groupCode, $roleCode)
     {
         $group = GroupManager::findGroup($groupCode);
@@ -383,31 +389,12 @@ class Roles extends Controller
      */
     public function onCreateRole()
     {
-        //$groupCode = post('groupCode');
         $name = post('name');
         $code = post('code');
         $description = post('description');
 
-        //$groupId = GroupManager::findGroup($groupCode)->id;
-
         RoleManager::createRole($name, $description, $code, -1);
 
-        //$roles = RoleManager::for($groupCode)->sort()->getRoles();
-        /*if($roles->count() > 0)
-        {
-            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
-        }
-        else
-        {
-            $roleRender = ['#manage_role' => ''];
-            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
-        }
-
-        Flash::success('Role successfully created!');
-
-        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been created.</span>']);
-        */
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
@@ -532,6 +519,10 @@ class Roles extends Controller
         return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
     }
 
+    /**
+     * AJAX handler for deleting a group
+     * @return mixed
+     */
     public function onDeleteGroup()
     {
         $groupCode = post('selectedGroup');
@@ -541,11 +532,19 @@ class Roles extends Controller
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
+    /**
+     * AJAX handler for opening the create a group modal
+     * @return mixed
+     */
     public function onOpenCreateGroup()
     {
         return $this->makePartial('create_group_form');
     }
 
+    /**
+     * AJAX handler for creating a group when clicking 'create'
+     * @return mixed
+     */
     public function onCreateGroup()
     {
         $name = post('name');
@@ -557,6 +556,10 @@ class Roles extends Controller
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
+    /**
+     * AJAX handler to open the update group modal
+     * @return mixed
+     */
     public function onOpenGroup()
     {
         $groupCode = post('groupCode');
@@ -564,6 +567,10 @@ class Roles extends Controller
         return $this->makePartial('update_group_form', ['group' => $group]);
     }
 
+    /**
+     * AJAX handler for saving the update group modal
+     * @return mixed
+     */
     public function onSaveGroup()
     {
         $groupCode = post('groupCode');
@@ -576,6 +583,10 @@ class Roles extends Controller
         return Redirect::to(Backend::url('clake/userextended/roles/manage'));
     }
 
+    /**
+     * AJAX handler for assigning groups already in a group to a role
+     * @return array
+     */
     public function onAssignUser()
     {
         $groupCode = post('selectedGroup');
@@ -590,6 +601,10 @@ class Roles extends Controller
         );
     }
 
+    /**
+     * AJAX handler for removing a group from a user
+     * @return array
+     */
     public function onRemoveUserFromGroup()
     {
         $groupCode = post('selectedGroup');

@@ -12,7 +12,7 @@ use System\Classes\SettingsManager;
  * Class Plugin
  * User Extended is licensed under the MIT license.
  *
- * @version 1.1.00 User Extended Beta
+ * @version 1.2.00 User Extended Pre-Release
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended
  *
@@ -29,7 +29,6 @@ class Plugin extends PluginBase
 
     /**
      * Returns information about this plugin.
-     *
      * @return array
      */
     public function pluginDetails()
@@ -51,9 +50,7 @@ class Plugin extends PluginBase
         return [
 
             'filters' => [
-
                 'timezonify' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigTimezoneAdjustment'],
-
             ],
 
         ];
@@ -61,7 +58,6 @@ class Plugin extends PluginBase
 
     /**
      * Register method, called when the plugin is first registered.
-     *
      * @return void
      */
     public function register()
@@ -74,7 +70,6 @@ class Plugin extends PluginBase
 
     /**
      * Boot method, called right before the request route.
-     *
      * @return array
      */
     public function boot()
@@ -85,7 +80,7 @@ class Plugin extends PluginBase
          */
         UserExtended::boot();
 
-        /**
+        /*
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
         Event::listen('backend.menu.extendItems', function($manager) {
@@ -114,41 +109,18 @@ class Plugin extends PluginBase
         });
 
         return [];
-
     }
 
     /**
      * Registers any front-end components implemented in this plugin.
-     *
      * @return array
      */
     public function registerComponents()
     {
-        //return []; // Remove this line to activate
-
         return array_merge(
             UserExtended::getComponents(),
-            [
-                'Clake\UserExtended\Components\UserGroups' => 'usergroups',
-                'Clake\UserExtended\Components\ListFriends' => 'friendslist',
-                'Clake\UserExtended\Components\UserList' => 'userlist',
-                'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
-                'Clake\UserExtended\Components\UserSearch' => 'usersearch',
-                'Clake\UserExtended\Components\UserUI' => 'userui',
-            ]
+            []
         );
-
-        /*return [
-            'Clake\UserExtended\Components\UserGroups' => 'usergroups',
-            'Clake\UserExtended\Components\ListFriends' => 'friendslist',
-            'Clake\UserExtended\Components\UserList' => 'userlist',
-            'Clake\UserExtended\Components\ListFriendRequests' => 'friendrequests',
-            'Clake\UserExtended\Components\UserSearch' => 'usersearch',
-            'Clake\UserExtended\Components\UserUI' => 'userui',
-            'Clake\UserExtended\Components\Account' => 'account',
-            'Clake\UserExtended\Components\Friends' => 'friends',
-            'Clake\UserExtended\Components\User' => 'user',
-        ];*/
     }
 
     public function registerSettings()
@@ -169,27 +141,22 @@ class Plugin extends PluginBase
 
     /**
      * Registers any back-end permissions used by this plugin.
-     *
      * @return array
      */
     public function registerPermissions()
     {
-        return []; // Remove this line to activate
+        return [];
     }
 
     /**
      * Registers back-end navigation items for this plugin.
-     *
      * @return array
      */
     public function registerNavigation()
     {
         return array_merge(
             UserExtended::getNavigation(),
-            [
-
-
-            ]
+            []
         );
     }
 
