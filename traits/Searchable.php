@@ -6,10 +6,6 @@ use Clake\DataStructures\Classes\Lists;
 use Exception;
 
 /**
- * TODO: Improve error checking and documentation
- */
-
-/**
  * Class Searchable
  * @package Clake\UserExtended\Traits
  */

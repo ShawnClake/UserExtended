@@ -8,12 +8,16 @@ use Backend;
 use System\Classes\SettingsManager;
 
 /**
- * TODO: Improve readability, documentation, component names and other
- * TODO: Add data-structures dependency
- */
-
-/**
- * UserExtended Plugin Information File
+ * User Extended by Shawn Clake
+ * Class Plugin
+ * User Extended is licensed under the MIT license.
+ *
+ * @version 1.1.00 User Extended Beta
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @package Clake\UserExtended
  */
 class Plugin extends PluginBase
 {

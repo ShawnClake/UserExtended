@@ -2,7 +2,7 @@
 
 namespace Clake\UserExtended\Classes;
 
-use Clake\Userextended\Models\Friends;
+use Clake\Userextended\Models\Friend;
 use Auth;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
@@ -43,7 +43,7 @@ class FriendsManager
 
         }*/
 
-        $requests = Friends::friendRequests()->take($limit)->get();
+        $requests = Friend::friendRequests()->take($limit)->get();
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->user_that_sent_request));
@@ -79,7 +79,7 @@ class FriendsManager
         if(!self::isFriend($friendUserID))
             return;
 
-        $relation = Friends::friend($friendUserID)->first();
+        $relation = Friend::friend($friendUserID)->first();
 
         // Soft deletes arent working for some reason
         $relation->forceDelete();
@@ -135,14 +135,14 @@ class FriendsManager
         if(self::isFriend($friendUserID))
             return;
 
-        if(Friends::isRelationExists($friendUserID) && !Friends::isDeclined($friendUserID))
+        if(Friend::isRelationExists($friendUserID) && !Friend::isDeclined($friendUserID))
             return;
 
-        if(Friends::isDeclined($friendUserID))
+        if(Friend::isDeclined($friendUserID))
         {
-            $request = Friends::declined($friendUserID)->first();
+            $request = Friend::declined($friendUserID)->first();
         } else {
-            $request = new Friends;
+            $request = new Friend;
         }
 
         $request->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserID);
@@ -162,7 +162,7 @@ class FriendsManager
      */
     public static function isFriend($userID1, $userID2 = null)
     {
-        return Friends::isFriends($userID1, $userID2);
+        return Friend::isFriends($userID1, $userID2);
     }
 
     /**
@@ -190,10 +190,10 @@ class FriendsManager
 
         }*/
 
-        if(!Friends::isRequested($userId1, $userId2))
+        if(!Friend::isRequested($userId1, $userId2))
             return;
 
-        $request = Friends::request($userId1, $userId2)->first();
+        $request = Friend::request($userId1, $userId2)->first();
 
         $request->setStatus(1);
 
@@ -217,10 +217,10 @@ class FriendsManager
         $relation->accepted = 2;
         $relation->save();*/
 
-        if(!Friends::isRequested($userId1, $userId2))
+        if(!Friend::isRequested($userId1, $userId2))
             return;
 
-        $request = Friends::request($userId1, $userId2)->first();
+        $request = Friend::request($userId1, $userId2)->first();
 
         $request->setStatus(2);
 
@@ -234,13 +234,13 @@ class FriendsManager
      */
     public static function blockFriend($friendUserID)
     {
-        if(!Friends::isBlocked($friendUserID))
+        if(!Friend::isBlocked($friendUserID))
             return;
 
-        if(Friends::isRelationExists($friendUserID))
-            $relation = Friends::relation($friendUserID)->first();
+        if(Friend::isRelationExists($friendUserID))
+            $relation = Friend::relation($friendUserID)->first();
         else
-            $relation = new Friends();
+            $relation = new Friend();
 
         $relation->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserID);
 
@@ -300,13 +300,13 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friends::friendRequests(null)->take($limit)->get();
+        $requests = Friend::friendRequests(null)->take($limit)->get();
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->id));
         }
 
-        $requests = Friends::sentRequests(null)->take($limit)->get();
+        $requests = Friend::sentRequests(null)->take($limit)->get();
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->id));
@@ -372,7 +372,7 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friends::friends($userId)->get();
+        $requests = Friend::friends($userId)->get();
 
         if($requests->isEmpty())
         {

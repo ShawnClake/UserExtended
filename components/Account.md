@@ -23,10 +23,10 @@ To render any of the account feature you will have to manually specify the parti
 
 In the future, this will be integrated into the component inspector.
 
-{% partial 'account::update' %}
+{% partial 'account::update' %}  - User Settings
 
-{% partial 'account::signup' %}
+{% partial 'account::signup' %}  - User Registration
 
-{% partial 'account::login' %}
+{% partial 'account::login' %}   - User Login
 
-{% partial 'account::logout' %}
+{% partial 'account::logout' %}  - User Logout

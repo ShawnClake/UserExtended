@@ -2,7 +2,7 @@
 
 namespace Clake\UserExtended\Classes;
 
-use Clake\Userextended\Models\Comments;
+use Clake\Userextended\Models\Comment;
 
 /**
  * TODO: Edit a comment
@@ -32,7 +32,7 @@ class CommentManager
         if(is_null($author) || is_null($user))
             return false;
 
-        $comment = new Comments();
+        $comment = new Comment();
 
         $comment->user = $user;
         $comment->author = $author;
@@ -50,7 +50,7 @@ class CommentManager
 
         if(self::canDeleteComment($commentid))
         {
-            $comment = Comments::where('id', $commentid)->first();
+            $comment = Comment::where('id', $commentid)->first();
             $comment->delete();
         }
 
@@ -77,10 +77,10 @@ class CommentManager
 
         $accessible = false;
 
-        if(Comments::where('id', $commentid)->where('user_id', $loggedInUser->id)->count() == 1)
+        if(Comment::where('id', $commentid)->where('user_id', $loggedInUser->id)->count() == 1)
             $accessible = true;
 
-        if(Comments::where('id', $commentid)->where('author_id', $loggedInUser->id)->count() == 1)
+        if(Comment::where('id', $commentid)->where('author_id', $loggedInUser->id)->count() == 1)
             $accessible = true;
 
         return $accessible;
@@ -97,7 +97,7 @@ class CommentManager
         if(is_null($loggedInUser))
             return false;
 
-        if(Comments::where('id', $commentid)->where('author_id', $loggedInUser->id)->count() == 1)
+        if(Comment::where('id', $commentid)->where('author_id', $loggedInUser->id)->count() == 1)
             return true;
 
         return false;

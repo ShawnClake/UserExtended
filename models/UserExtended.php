@@ -7,12 +7,6 @@ use Clake\UserExtended\Traits\Timezonable;
 use Clake\UserExtended\Traits\Searchable;
 
 /**
- * TODO: Add searchable functions here
- * TODO: Add searchable trait
- * TODO: Add scope functions for better user querying
- */
-
-/**
  * Class UserExtended
  * @package Clake\Userextended\Models
  */

@@ -24,3 +24,10 @@
 * onRequest(post userId)  Sends a friend request
 
 ### Usage Examples
+* Add the component to a page and use the inspector to choose an output type.
+* You can also use the AJAX handlers directly if you would like to utilize them in your own plugin.
+
+Current output types:
+* Friends list
+* Friend requests
+

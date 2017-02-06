@@ -10,6 +10,9 @@ class Settings extends Model
     public $settingsCode = 'clake_userextended_settings';
     public $settingsFields = 'fields.yaml';
 
+    /**
+     * Sets the defaults for settings
+     */
     public function initSettingsData()
     {
         $this->validation_username = 'required|between:2,255';

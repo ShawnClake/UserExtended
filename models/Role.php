@@ -12,24 +12,23 @@ use Clake\UserExtended\Traits\Timezonable;
 //use October\Rain\Database\Traits\Encryptable
 
 use October\Rain\Database\Traits\SoftDelete;
-/**
- * TODO: Add scope functions to improve querying
- * TODO: Improve error checking for creating and updating roles
- * TODO: Add beforeDelete which ensures the other roles are fixed in case a role is removed
- * TODO: Rename to Role to fit the convention
- */
 
 /**
  * Class Roles
  * @package Clake\Userextended\Models
+ * @method static Role rolesInGroup($groupCode) Query
  */
-class Roles extends Model
+class Role extends Model
 {
     //use Sortable;
     use Timezonable;
 
     use SoftDelete;
 
+    /**
+     * Provides an override for ignoring sort_order checks for onCreate, onUpdate, and onDelete
+     * @var bool
+     */
     public $ignoreChecks = false;
 
     /**
@@ -75,6 +74,10 @@ class Roles extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * Returns a collection of users which have a role
+     * @return array|Collection
+     */
     public function getUsersInRole()
     {
         $relations = UsersGroups::byRole($this->code)->get();
@@ -89,6 +92,12 @@ class Roles extends Model
         return $users;
     }
 
+    /**
+     * Gets roles related to a group specified by the passed in parameter of groupCode
+     * @param $query
+     * @param $groupCode
+     * @return mixed
+     */
     public function scopeRolesInGroup($query, $groupCode)
     {
         $group = GroupsExtended::where('code', $groupCode)->first();

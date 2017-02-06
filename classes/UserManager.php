@@ -6,12 +6,6 @@ use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
 /**
- * TODO: Improve error checking, SRP, and algorithm designs
- * TODO: Improve the capabilities of searching
- * TODO: Move UserSearching helpers to the UserExtended model
- */
-
-/**
  * Class UserManager
  * @package Clake\UserExtended\Classes
  */

@@ -7,17 +7,24 @@ use October\Rain\Database\Traits\SoftDelete;
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * TODO: Fill out fillable
- * TODO: Add scope functions and implement a way of checking for friendship etc. easily
- * TODO: Add the ability to be blocked
- * TODO: Rename the model to UserRelationship
- */
-
-/**
  * Class Friends
  * @package Clake\Userextended\Models
+ * @method static Friend friend($userIdA, $userIdB = null) Query
+ * @method static Friend request($userIdA, $userIdB = null) Query
+ * @method static Friend declined($userIdA, $userIdB = null) Query
+ * @method static Friend blocked($userIdA, $userIdB = null) Query
+ * @method static Friend relation($userIdA, $userIdB = null) Query
+ * @method static Friend friendRequests($userId = null) Query
+ * @method static Friend sentRequests($userId = null) Query
+ * @method static Friend friends($userId = null) Query
+ * @method static Friend blocks($userId = null) Query
+ * @method static Friend pluckSender() Query
+ * @method static Friend pluckReceiver() Query
+ * @method static Friend sender($userId = null) Query
+ * @method static Friend receiver($userId = null) Query
+ * @method static Friend notMe($userId = null) Query
  */
-class Friends extends Model
+class Friend extends Model
 {
 
     use SoftDelete;
@@ -427,6 +434,12 @@ class Friends extends Model
         $this->accepted = $status;
     }
 
+    /**
+     * Returns the other user ID in a row
+     * @param $query
+     * @param null $userId
+     * @return mixed
+     */
     public function scopeNotMe($query, $userId = null)
     {
         $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
@@ -445,6 +458,10 @@ class Friends extends Model
         return $query->pluck('user_that_sent_request');
     }
 
+    /**
+     * Returns the other user ID in a row
+     * @param null $userId
+     */
     public function otherUser($userId = null)
     {
         $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);

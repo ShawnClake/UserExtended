@@ -3,13 +3,12 @@
 use Model;
 
 /**
- * TODO: Rename to UsersGroup to follow convention
- * TODO: Add scope functions to improve queryability
- */
-
-/**
  * Class UsersGroups
  * @package Clake\Userextended\Models
+ * @method static UsersGroups byRole($roleCode) Query
+ * @method static UsersGroups byGroup($groupCode) Query
+ * @method static UsersGroups byUser($userId) Query
+ * @method static UsersGroups byUserWithoutRole($groupCode) Query
  */
 class UsersGroups extends Model
 {
@@ -49,6 +48,7 @@ class UsersGroups extends Model
     public $attachMany = [];
 
     /**
+     * Returns a role based upon the passed in roleCode
      * @param $query
      * @param $roleCode
      * @return mixed
@@ -131,6 +131,12 @@ class UsersGroups extends Model
         return true;
     }
 
+    /**
+     * Remove a user from a group
+     * @param $userObj
+     * @param $groupId
+     * @return bool
+     */
     public static function removeUser($userObj, $groupId)
     {
         if(UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->count() == 0)

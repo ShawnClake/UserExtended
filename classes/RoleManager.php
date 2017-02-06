@@ -3,7 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use October\Rain\Support\Collection;
 
 /**
@@ -33,7 +33,7 @@ class RoleManager extends StaticFactory
      */
     public static function getUnassignedRoles()
     {
-        return Roles::where('group_id', 0)->get();
+        return Role::where('group_id', 0)->get();
     }
 
     /**
@@ -46,7 +46,7 @@ class RoleManager extends StaticFactory
      */
     public static function createRole($name, $description, $code, $groupId = 0)
     {
-        $role = new Roles();
+        $role = new Role();
         $role->name = $name;
         $role->description = $description;
         $role->code = $code;
@@ -101,7 +101,7 @@ class RoleManager extends StaticFactory
      */
     public static function findRole($roleCode)
     {
-        return Roles::where('code', $roleCode)->first();
+        return Role::where('code', $roleCode)->first();
     }
 
     /**

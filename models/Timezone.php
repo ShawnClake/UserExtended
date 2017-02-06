@@ -6,10 +6,6 @@ use October\Rain\Database\Traits\SoftDelete;
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * TODO: Add scopes and accessors to allow easy drop-down menu or searching for timezones
- */
-
-/**
  * Class Timezone
  * @package Clake\Userextended\Models
  */
@@ -75,6 +71,10 @@ class Timezone extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * Returns a list of timezones setup to populate dropdown menus
+     * @return array
+     */
     public function getTimezonesList()
     {
         $timezones = Timezone::all();

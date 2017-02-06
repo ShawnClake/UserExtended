@@ -10,11 +10,6 @@ use RainLab\User\Models\User;
 use Redirect;
 
 /**
- * TODO: Improve function documentation
- * TODO: Create a separate documentation file to document User Utility functions
- */
-
-/**
  * Class UserUtil
  * @package Clake\UserExtended\Classes
  *

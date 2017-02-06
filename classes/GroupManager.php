@@ -3,7 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
 
@@ -56,7 +56,7 @@ class GroupManager extends StaticFactory
         if(!isset($group))
             return;
 
-        $roles = Roles::rolesInGroup($groupCode)->get();
+        $roles = Role::rolesInGroup($groupCode)->get();
 
         foreach($roles as $role)
         {

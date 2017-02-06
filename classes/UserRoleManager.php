@@ -3,7 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\UserExtended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
 use Clake\UserExtended\Plugin;
 
@@ -278,7 +278,7 @@ class UserRoleManager extends StaticFactory
 
         $roleId = RoleManager::findRole($roleCode)->id;
 
-        return Roles::addUser($this->user, $group->id, $roleId);
+        return Role::addUser($this->user, $group->id, $roleId);
     }
 
 }

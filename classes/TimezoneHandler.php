@@ -8,11 +8,6 @@ use Clake\Userextended\Models\Timezone;
 use Clake\Userextended\Models\UserExtended;
 
 /**
- * TODO: Add alias naming functions
- * TODO: Add a documentation page for how to use Timezones
- */
-
-/**
  * Class TimezoneHandler
  * @package Clake\UserExtended\Classes
  */

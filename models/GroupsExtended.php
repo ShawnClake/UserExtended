@@ -9,12 +9,10 @@ use October\Rain\Database\Traits\Sortable;
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * TODO: Add scope functions to easily find group queries
- */
-
-/**
  * Class GroupsExtended
  * @package Clake\Userextended\Models
+ * @method static GroupsExtended code($code) Query
+ *
  */
 class GroupsExtended extends UserGroup
 {
@@ -50,11 +48,21 @@ class GroupsExtended extends UserGroup
         parent::__construct();
     }
 
+    /**
+     * Returns the group with the passed in parameter code
+     * @param $query
+     * @param $code
+     * @return mixed
+     */
     public function scopeCode($query, $code)
     {
         return $query->where('code', $code);
     }
 
+    /**
+     * Returns a collection of users in a group
+     * @return array|Collection
+     */
     public function getUsersInGroup()
     {
         $relations = UsersGroups::byGroup($this->code)->get();
@@ -69,6 +77,9 @@ class GroupsExtended extends UserGroup
         return $users;
     }
 
+    /**
+     * Override for ensuring the sort_order makes sense when creating a group
+     */
     public function beforeCreate()
     {
         //echo GroupManager::allGroups()->countGroups() + 1;
