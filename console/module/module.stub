@@ -1,0 +1,52 @@
+<?php namespace {{studly_author}}\{{studly_name}};
+
+use Clake\UserExtended\Traits\StaticFactoryTrait;
+use Clake\UserExtended\Classes\UserExtended;
+
+/**
+ * User Extended by Shawn Clake
+ * Class Module
+ * User Extended is licensed under the MIT license.
+ *
+ * Please add additional comments to this doc block as you feel necessary.
+ * However, you must keep the existing comments here.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @package Clake\UserExtended
+ */
+class Module extends UserExtended
+{
+    use StaticFactoryTrait;
+
+    public $name = '{{lower_author}}{{studly_author}}';
+
+    public $author = '{{author}}';
+
+    public $description = "";
+
+    public $version = "";
+
+    public function initialize() {}
+
+    public function injectComponents()
+    {
+        return [
+            // Insert your components here with the format shown below
+            //'Clake\UserExtended\Components\Account' => 'account',
+        ];
+    }
+
+    public function injectNavigation()
+    {
+        return [];
+    }
+
+    public function injectLang()
+    {
+        return [];
+    }
+
+}

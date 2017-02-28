@@ -61,6 +61,8 @@ class Plugin extends PluginBase
      */
     public function register()
     {
+        $this->registerConsoleCommand('create:uemodule', 'Clake\UserExtended\Console\CreateUEModule');
+
         /*
          * Registers the UserExtended core module
          */
