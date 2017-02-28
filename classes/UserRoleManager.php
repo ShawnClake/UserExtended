@@ -15,7 +15,7 @@ use Clake\Userextended\Models\UsersGroups;
  *
  * Handles all interactions with roles on a user level
  *
- * @method static UserRoleManager for($user) UserRoleManager
+ * @method static UserRoleManager with($user) UserRoleManager
  * @method static UserRoleManager currentUser UserRoleManager
  * @package Clake\UserExtended\Classes
  */
@@ -56,7 +56,7 @@ class UserRoleManager extends StaticFactory
      * @param null $user
      * @return $this
      */
-    public function forFactory($user = null)
+    public function withFactory($user = null)
     {
         if($user == null)
             $user = UserUtil::getLoggedInUser();
@@ -227,7 +227,7 @@ class UserRoleManager extends StaticFactory
         if($role->sort_order < 2)
             return $this;
 
-        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
+        $roles = RoleManager::with($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order - 1];
 
@@ -253,7 +253,7 @@ class UserRoleManager extends StaticFactory
         if($role->sort_order > (GroupManager::allGroups()->countGroupRoles($groupCode) - 1))
             return $this;
 
-        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
+        $roles = RoleManager::with($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order + 1];
 
@@ -277,7 +277,7 @@ class UserRoleManager extends StaticFactory
 
         $group = RoleManager::findRole($roleCode)->group;
 
-        UserGroupManager::for($this->user)->addGroup($group->code);
+        UserGroupManager::with($this->user)->addGroup($group->code);
 
         $roleId = RoleManager::findRole($roleCode)->id;
 

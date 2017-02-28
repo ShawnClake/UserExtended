@@ -115,7 +115,7 @@ class Role extends Model
             $this->group_id = 0;
         }
         else
-            $this->sort_order = RoleManager::for($this->group->code)->countRoles() + 1;
+            $this->sort_order = RoleManager::with($this->group->code)->countRoles() + 1;
     }
 
     /**
@@ -127,7 +127,7 @@ class Role extends Model
         if($this->ignoreChecks)
             return true;
 
-        $total = RoleManager::for($this->group->code)->countRoles();
+        $total = RoleManager::with($this->group->code)->countRoles();
 
         if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
         {
@@ -144,13 +144,13 @@ class Role extends Model
         if($this->group_id == 0)
             return true;
 
-        $total = RoleManager::for($this->group->code)->countRoles();
+        $total = RoleManager::with($this->group->code)->countRoles();
         $myOrder = $this->sort_order;
 
         if($myOrder === $total)
             return true;
 
-        $roles = RoleManager::for($this->group->code)->getSortedGroupRoles();
+        $roles = RoleManager::with($this->group->code)->getSortedGroupRoles();
 
         $difference = $total - $myOrder;
 

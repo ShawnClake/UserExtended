@@ -53,7 +53,7 @@ class Roles extends Controller
 
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
         $this->vars['selectedGroup'] = GroupManager::allGroups()->getGroups()->first();
-        $groupRoles = RoleManager::for($this->vars['selectedGroup']->code);
+        $groupRoles = RoleManager::with($this->vars['selectedGroup']->code);
         $roleModels = $groupRoles->getSortedGroupRoles();
 
         $unassignedRoles = RoleManager::getUnassignedRoles();
@@ -80,7 +80,7 @@ class Roles extends Controller
     {
         $groupCode = post('code');
         $this->vars['selectedGroup'] = GroupManager::findGroup($groupCode);
-        $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        $roles = RoleManager::with($groupCode)->sort()->getRoles();
         if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
@@ -160,7 +160,7 @@ class Roles extends Controller
      */
     public function renderRoles($groupCode)
     {
-        $roles = RoleManager::for($groupCode);
+        $roles = RoleManager::with($groupCode);
         $roleModels = $roles->sort()->getRoles();
         if(!isset($roleModels))
             return;
@@ -209,7 +209,7 @@ class Roles extends Controller
     public function renderRole($roleCode, $groupCode)
     {
 
-        $role = RoleManager::for($groupCode)->getRole($roleCode);
+        $role = RoleManager::with($groupCode)->getRole($roleCode);
 
         if(!isset($role))
             return;
@@ -227,7 +227,7 @@ class Roles extends Controller
      */
     public function renderManagementToolbar($roleCode, $groupCode)
     {
-        $role = RoleManager::for($groupCode)->getRole($roleCode);
+        $role = RoleManager::with($groupCode)->getRole($roleCode);
 
         if(!isset($role))
             return;
@@ -245,7 +245,7 @@ class Roles extends Controller
     {
         $groupCode = post('groupCode');
         $roleSortOrder = post('order');
-        RoleManager::for($groupCode)->sortUp($roleSortOrder);
+        RoleManager::with($groupCode)->sortUp($roleSortOrder);
         return $this->renderRoles($groupCode);
     }
 
@@ -257,7 +257,7 @@ class Roles extends Controller
     {
         $groupCode = post('groupCode');
         $roleSortOrder = post('order');
-        RoleManager::for($groupCode)->sortDown($roleSortOrder);
+        RoleManager::with($groupCode)->sortDown($roleSortOrder);
         return $this->renderRoles($groupCode);
     }
 
@@ -284,7 +284,7 @@ class Roles extends Controller
     {
         $groupCode = post('groupCode');
         $roleCode = post('roleCode');
-        $role = RoleManager::for($groupCode)->getRole($roleCode);
+        $role = RoleManager::with($groupCode)->getRole($roleCode);
         return $this->makePartial('update_role_form', ['role' => $role]);
     }
 
@@ -300,13 +300,13 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        $role = RoleManager::for($groupCode)->getRole($roleCode);
+        $role = RoleManager::with($groupCode)->getRole($roleCode);
         $role->name = $name;
         $role->code = $code;
         $role->description = $description;
         $role->save();
 
-        $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        $roles = RoleManager::with($groupCode)->sort()->getRoles();
         if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
@@ -347,14 +347,14 @@ class Roles extends Controller
 
         }  else {
 
-            $role = RoleManager::for($groupCode)->getRole($roleCode);
+            $role = RoleManager::with($groupCode)->getRole($roleCode);
 
             if(!isset($role))
                 return;
 
             $role->delete();
 
-            $roles = RoleManager::for($groupCode)->sort()->getRoles();
+            $roles = RoleManager::with($groupCode)->sort()->getRoles();
             if($roles->count() > 0)
             {
                 $roleRender = $this->renderRole($roles[0]->code, $groupCode);
@@ -431,7 +431,7 @@ class Roles extends Controller
 
         $role = \Clake\Userextended\Models\Roles::where('code', $roleCode)->first();
 
-        UserRoleManager::for(UserUtil::getUser($userId))->allRoles()->promote($role->group->code);
+        UserRoleManager::with(UserUtil::getUser($userId))->allRoles()->promote($role->group->code);
 
         return $this->renderRole($role->code, $role->group->code);
     }
@@ -447,7 +447,7 @@ class Roles extends Controller
 
         $role = \Clake\Userextended\Models\Roles::where('code', $roleCode)->first();
 
-        UserRoleManager::for(UserUtil::getUser($userId))->allRoles()->demote($role->group->code);
+        UserRoleManager::with(UserUtil::getUser($userId))->allRoles()->demote($role->group->code);
 
         return $this->renderRole($role->code, $role->group->code);
     }
@@ -460,12 +460,12 @@ class Roles extends Controller
         $roleCode = post('roleCode');
         $groupCode = post('selectedGroup');
 
-        $sortOrder = RoleManager::for($groupCode)->countRoles() + 1;
+        $sortOrder = RoleManager::with($groupCode)->countRoles() + 1;
         $groupId = GroupManager::findGroup($groupCode)->id;
 
         RoleManager::updateRole($roleCode, $sortOrder, null, null, null, $groupId, true);
 
-        $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        $roles = RoleManager::with($groupCode)->sort()->getRoles();
         if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
@@ -502,9 +502,9 @@ class Roles extends Controller
 
         RoleManager::updateRole($roleCode, 1, null, null, null, 0, true);
 
-        RoleManager::for($groupCode)->fixRoleSort();
+        RoleManager::with($groupCode)->fixRoleSort();
 
-        $roles = RoleManager::for($groupCode)->sort()->getRoles();
+        $roles = RoleManager::with($groupCode)->sort()->getRoles();
         if($roles->count() > 0)
         {
             $roleRender = $this->renderRole($roles[0]->code, $groupCode);
@@ -593,7 +593,7 @@ class Roles extends Controller
         $roleCode = post('roleCode');
         $userId = post('userId');
 
-       UserRoleManager::for(UserUtil::getUser($userId))->addRole($roleCode);
+       UserRoleManager::with(UserUtil::getUser($userId))->addRole($roleCode);
 
         return array_merge(
             $this->renderUnassignedUsers($groupCode, $roleCode),
@@ -611,7 +611,7 @@ class Roles extends Controller
         $roleCode = post('roleCode');
         $userId = post('userId');
 
-        UserGroupManager::for(UserUtil::getUser($userId))->removeGroup($groupCode);
+        UserGroupManager::with(UserUtil::getUser($userId))->removeGroup($groupCode);
 
         return array_merge(
             $this->renderUnassignedUsers($groupCode, $roleCode)

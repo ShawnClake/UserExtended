@@ -19,7 +19,7 @@ use RainLab\User\Models\UserGroup;
  * @package Clake\UserExtended\Classes
  *
  * @method static UserGroupManager currentUser() UserGroupManager
- * @method static UserGroupManager for($user) UserGroupManager
+ * @method static UserGroupManager with($user) UserGroupManager
  */
 class UserGroupManager extends StaticFactory {
 
@@ -57,7 +57,7 @@ class UserGroupManager extends StaticFactory {
      * @param null $user
      * @return $this
      */
-    public function forFactory($user = null)
+    public function withFactory($user = null)
     {
         if($user == null)
             $user = UserUtil::getLoggedInUserExtendedUser();

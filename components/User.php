@@ -279,7 +279,7 @@ class User extends ComponentBase
         else
             $user = UserUtil::getLoggedInUser();
 
-        return UserRoleManager::for($user)->allRoles()->getUsersRoles();
+        return UserRoleManager::with($user)->allRoles()->getUsersRoles();
     }
 
     /**
@@ -295,7 +295,7 @@ class User extends ComponentBase
         else
             $user = UserUtil::getLoggedInUser();
 
-        return UserGroupManager::for($user)->allGroups()->getUsersGroups();
+        return UserGroupManager::with($user)->allGroups()->getUsersGroups();
     }
 
     /**

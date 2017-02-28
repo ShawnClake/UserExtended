@@ -17,7 +17,7 @@ use October\Rain\Support\Collection;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a group level (Global level)
- * @method static RoleManager for($groupCode) RoleManager
+ * @method static RoleManager with($groupCode) RoleManager
  * @package Clake\UserExtended\Classes
  */
 class RoleManager extends StaticFactory
@@ -131,7 +131,7 @@ class RoleManager extends StaticFactory
      * @param $groupCode
      * @return $this
      */
-    public function forFactory($groupCode)
+    public function withFactory($groupCode)
     {
         $this->group = GroupsExtended::where('code', $groupCode)->first();
         if($this->group != null)
@@ -361,7 +361,7 @@ class RoleManager extends StaticFactory
      */
     public function fixRoleSort()
     {
-        $roles = RoleManager::for($this->group->code)->getSortedGroupRoles();
+        $roles = RoleManager::with($this->group->code)->getSortedGroupRoles();
 
         $count = 0;
         foreach($roles as $role)
