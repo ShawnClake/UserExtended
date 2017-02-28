@@ -4,7 +4,7 @@
 
             <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
                 <span>{{user.name}}</span><br>
-                <span style="margin-left:7px;">Last Online: {{user.last_seen}}</span><br>
+                <span style="margin-left:7px;">{{ "clake.userextended::lang.components.friend.lastonline"|trans }}: {{user.last_seen}}</span><br>
             </div>
 
         </a>
@@ -16,7 +16,7 @@
 
         <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
             <span>{{ueuser.singleUser.name}}</span><br>
-            <span style="margin-left:7px;">Last Online: {{ueuser.singleUser.last_seen}}</span><br>
+            <span style="margin-left:7px;">{{ "clake.userextended::lang.components.friend.lastonline"|trans }}: {{ueuser.singleUser.last_seen}}</span><br>
         </div>
 
     </a>
@@ -25,7 +25,7 @@
 
     <form data-request="ueuser::onSearch">
         Search Phrase: <input type="text"  name="phrase" />
-        <input type="submit" value="Search" />
+        <input type="submit" value="{{ 'clake.userextended::lang.components.user.search'|trans }}" />
     </form>
 
     <br>

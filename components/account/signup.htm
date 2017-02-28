@@ -5,23 +5,23 @@
 <form
         data-request="onRegister">
     <div class="form-group">
-        <label for="registerFirstName">First Name</label>
+        <label for="registerFirstName">{{ "clake.userextended::lang.components.account.firstname"|trans }}</label>
         <input
                 name="first_name"
                 type="text"
                 class="form-control"
                 id="registerFirstName"
-                placeholder="Enter your first name" />
+                placeholder='{{ "clake.userextended::lang.components.account.enterfname"|trans }}' />
     </div>
 
     <div class="form-group">
-        <label for="registerLastName">Last Name</label>
+        <label for="registerLastName">{{ "clake.userextended::lang.components.account.lastname"|trans }}</label>
         <input
                 name="last_name"
                 type="text"
                 class="form-control"
                 id="registerLastName"
-                placeholder="Enter your last name" />
+                placeholder='{{ "clake.userextended::lang.components.account.enterlname"|trans }}' />
     </div>
 
     <div class="form-group">
@@ -37,35 +37,35 @@
     {% if account.signUp == "username" %}
 
     <div class="form-group">
-        <label for="registerEmail">Email</label>
+        <label for="registerEmail">{{ "clake.userextended::lang.components.account.email"|trans }}</label>
         <input
                 name="email"
                 type="email"
                 class="form-control"
                 id="registerEmail"
-                placeholder="Enter your email" />
+                placeholder='{{ "clake.userextended::lang.components.account.enteremail"|trans }}' />
     </div>
 
     {% endif %}
 
     <div class="form-group">
-        <label for="registerPassword">Password</label>
+        <label for="registerPassword">{{ "clake.userextended::lang.components.account.password"|trans }}</label>
         <input
                 name="password"
                 type="password"
                 class="form-control"
                 id="registerPassword"
-                placeholder="Choose a password" />
+                placeholder='{{ "clake.userextended::lang.components.account.enterpassword"|trans }}' />
     </div>
 
     <div class="form-group">
-        <label for="registerConfirmPassword">Confirm Password</label>
+        <label for="registerConfirmPassword">{{ "clake.userextended::lang.components.account.confirmpassword"|trans }}</label>
         <input
                 name="password_confirmation"
                 type="password"
                 class="form-control"
                 id="registerConfirmPassword"
-                placeholder="Choose a password" />
+                placeholder='{{ "clake.userextended::lang.components.account.confirmpassword"|trans }}' />
     </div>
 
     {% for setting,attributes in account.createSettings %}
@@ -77,7 +77,7 @@
 
     {% endfor %}
 
-    <button type="submit" class="btn btn-default">Register</button>
+    <button type="submit" class="btn btn-default">{{ "clake.userextended::lang.components.account.register"|trans }}</button>
 </form>
 
 {% endif %}

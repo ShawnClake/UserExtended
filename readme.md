@@ -17,6 +17,7 @@ Install this plugin and run
 ## Usage
 * Just add the components you require to a page and everything should work out of the box
 * You can create modules to interact with User Extended and other UE modules
+* Use the command: `php artisan create:uemodule author.pluginname` in order to scaffold a module class for your own plugins.
 
 [Check out the bug tracker and feature planner](https://github.com/ShawnClake/UserExtended/issues)
 
