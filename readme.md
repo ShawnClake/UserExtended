@@ -33,6 +33,8 @@ Install this plugin and run
 * Backend user role/group management
 * Extensible modules
 
+### Please see the help directory for more information
+
 ## Planned Features
 [Check out the feature planner](https://github.com/ShawnClake/UserExtended/issues)
 
