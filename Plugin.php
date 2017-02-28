@@ -12,7 +12,7 @@ use System\Classes\SettingsManager;
  * Class Plugin
  * User Extended is licensed under the MIT license.
  *
- * @version 1.2.00 User Extended Pre-Release
+ * @version 2.0.00 User Extended Core
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended
  *

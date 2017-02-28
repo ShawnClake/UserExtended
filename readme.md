@@ -9,7 +9,6 @@ User Extended is typically a dependency to my other plugins.
 
 ## Dependencies
 * RainLab.User http://octobercms.com/plugin/rainlab-user https://github.com/rainlab/user-plugin
-* [Optional. Only required for some features] Clake.DataStructures http://octobercms.com/plugin/clake-datastructures https://github.com/ShawnClake/DataStructures-Plugin
 
 ## Installation
 Install this plugin and run
