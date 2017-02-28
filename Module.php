@@ -24,7 +24,7 @@ class Module extends UserExtended
 
     public $description = "The core module for UserExtended";
 
-    public $version = "1.1.00";
+    public $version = "2.0.00";
 
     public function initialize() {}
 

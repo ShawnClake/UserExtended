@@ -1,6 +1,5 @@
 <?php namespace Clake\UserExtended\Classes;
 
-use Clake\DataStructures\Classes\Lists;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 
@@ -77,7 +76,7 @@ class UserManager extends StaticFactory
      */
     public static function searchUsers($phrase)
     {
-        $results = Lists::create();
+        /*$results = Lists::create();
 
         $results->mergeList(self::searchUserByName($phrase));
 
@@ -87,7 +86,8 @@ class UserManager extends StaticFactory
 
         $results->mergeList(self::searchUserByUsername($phrase));
 
-        return $results->allList();
+        return $results->allList();*/
+        return null;
 
     }
 

@@ -24,7 +24,6 @@ class Plugin extends PluginBase
 
     public $require = [
         'RainLab.User',
-        'Clake.DataStructures'
     ];
 
     /**

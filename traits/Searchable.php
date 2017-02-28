@@ -1,6 +1,6 @@
 <?php namespace Clake\UserExtended\Traits;
 
-use Clake\DataStructures\Classes\Lists;
+use Clake\UserExtended\Classes\Lists;
 use Exception;
 
 /**
