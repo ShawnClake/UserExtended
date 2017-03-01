@@ -7,7 +7,7 @@
     <b>Users Count:</b> <?= $role->getUsersInRole()->count() ?> <br>
     <hr>
 
-    <?php $roleTotal = Clake\UserExtended\Classes\RoleManager::for($role->group->code)->countRoles(); ?>
+    <?php $roleTotal = Clake\UserExtended\Classes\RoleManager::with($role->group->code)->countRoles(); ?>
     <?php //echo json_encode($role); ?>
     <?php $userCount = $role->getUsersInRole()->count(); if($role->getUsersInRole()->count() > 0): ?>
     <h4>Role Users</h4>
