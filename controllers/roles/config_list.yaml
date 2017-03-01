@@ -6,7 +6,7 @@
 list: $/clake/userextended/models/roles/columns.yaml
 
 # Model Class name
-modelClass: Clake\Userextended\Models\Roles
+modelClass: Clake\Userextended\Models\Role
 
 # List Title
 title: Manage Roles

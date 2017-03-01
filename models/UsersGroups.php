@@ -44,7 +44,7 @@ class UsersGroups extends Model
     public $hasOne = [];
     public $hasMany = [];
     public $belongsTo = [
-        'role' => ['Clake\UserExtended\Models\Roles', 'key' => 'role_id'],
+        'role' => ['Clake\UserExtended\Models\Role', 'key' => 'role_id'],
         'user' => ['Clake\UserExtended\Models\UserExtended', 'key' => 'user_id'],
         'group' => ['Clake\UserExtended\Models\GroupsExtended', 'key' => 'user_group_id'],
     ];

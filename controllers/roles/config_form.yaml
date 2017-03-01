@@ -9,7 +9,7 @@ name: Role
 form: $/clake/userextended/models/roles/fields.yaml
 
 # Model Class name
-modelClass: Clake\Userextended\Models\Roles
+modelClass: Clake\Userextended\Models\Role
 
 # Default redirect location
 defaultRedirect: clake/userextended/roles
