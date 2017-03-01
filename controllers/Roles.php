@@ -69,7 +69,7 @@ class Roles extends Controller
         $this->vars['groupRoles'] = ['roles' => $roleModels, 'roleCount' => $groupRoles->countRoles()];
 
         if(count($roleModels) > 0)
-            $this->vars['role'] = $roleModels[0];
+            $this->vars['role'] = reset($roleModels);
     }
 
     /**
