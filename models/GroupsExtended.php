@@ -38,7 +38,7 @@ class GroupsExtended extends UserGroup
     {
 
         $hasMany = $this->hasMany;
-        $hasMany['roles'] = ['Clake\UserExtended\Models\Roles', 'key' => 'group_id'];
+        $hasMany['roles'] = ['Clake\UserExtended\Models\Role', 'key' => 'group_id'];
         $this->hasMany = $hasMany;
 
         $belongsToMany = $this->belongsToMany;

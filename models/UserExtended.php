@@ -51,7 +51,7 @@ class UserExtended extends User
         $this->belongsTo = $belongsTo;
 
         $belongsToMany = $this->belongsToMany;
-        $belongsToMany['roles'] = ['Clake\Userextended\Models\Roles', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
+        $belongsToMany['roles'] = ['Clake\Userextended\Models\Role', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
         $belongsToMany['groups'] = ['Clake\Userextended\Models\GroupsExtended', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'user_group_id'];
         $this->belongsToMany = $belongsToMany;
 
