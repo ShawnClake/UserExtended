@@ -49,7 +49,7 @@ class RoleManager extends StaticFactory
      * @param $description
      * @param $code
      * @param int $groupId
-     * @return Roles
+     * @return Role
      */
     public static function createRole($name, $description, $code, $groupId = 0)
     {

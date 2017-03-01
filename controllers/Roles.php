@@ -412,7 +412,7 @@ class Roles extends Controller
         $relation->role_id = 0;
         $relation->save();
 
-        $role = \Clake\Userextended\Models\Roles::where('id', $roleId)->first();
+        $role = \Clake\Userextended\Models\Role::where('id', $roleId)->first();
 
         return array_merge(
             $this->renderRole($role->code, $role->group->code),
@@ -429,7 +429,7 @@ class Roles extends Controller
         $userId = post('userId');
         $roleCode = post('roleCode');
 
-        $role = \Clake\Userextended\Models\Roles::where('code', $roleCode)->first();
+        $role = \Clake\Userextended\Models\Role::where('code', $roleCode)->first();
 
         UserRoleManager::with(UserUtil::getUser($userId))->allRoles()->promote($role->group->code);
 
@@ -445,7 +445,7 @@ class Roles extends Controller
         $userId = post('userId');
         $roleCode = post('roleCode');
 
-        $role = \Clake\Userextended\Models\Roles::where('code', $roleCode)->first();
+        $role = \Clake\Userextended\Models\Role::where('code', $roleCode)->first();
 
         UserRoleManager::with(UserUtil::getUser($userId))->allRoles()->demote($role->group->code);
 

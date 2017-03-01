@@ -2,7 +2,6 @@
 
 use Carbon\Carbon;
 use Clake\Userextended\Models\Timezone;
-use Clake\Userextended\Models\UserExtended;
 
 /**
  * User Extended by Shawn Clake
@@ -72,10 +71,10 @@ class TimezoneHandler
 
     /**
      * Gets the current time adjusted via a Users timezone
-     * @param UserExtended $user
+     * @param $user
      * @return Carbon
      */
-    public static function getUsersCurrentTimeAdjusted(UserExtended $user)
+    public static function getUsersCurrentTimeAdjusted($user)
     {
         $offset = $user->timezone->offset;
         $adjustment = self::getTimeStringAdjustments($offset);
