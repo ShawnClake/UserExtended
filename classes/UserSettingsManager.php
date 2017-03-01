@@ -1,6 +1,5 @@
 <?php namespace Clake\UserExtended\Classes;
 
-use Clake\Userextended\Models\UserExtended;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use \October\Rain\Support\Facades\Yaml;
@@ -60,10 +59,10 @@ class UserSettingsManager
 
     /**
      * Creates an instance of the UserSettingsManager
-     * @param UserExtended|null $user
+     * @param \Clake\Userextended\Models\UserExtended|null $user
      * @return null|static
      */
-    public static function init(UserExtended $user = null)
+    public static function init(\Clake\Userextended\Models\UserExtended $user = null)
     {
         $instance = new static;
         $path = plugins_path('clake/userextended/config/user_settings.yaml');
@@ -360,7 +359,7 @@ class UserSettingsManager
      */
     public function save()
     {
-        UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
+        \Clake\Userextended\Models\UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
         return $this;
     }
 

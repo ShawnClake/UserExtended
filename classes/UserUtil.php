@@ -2,7 +2,6 @@
 
 use Auth;
 use Carbon\Carbon;
-use Clake\Userextended\Models\UserExtended;
 use RainLab\User\Models\User;
 use Redirect;
 
@@ -39,7 +38,7 @@ class UserUtil
      */
     public static function getUser($value, $property = "id")
     {
-        return UserExtended::where($property, $value)->first();
+        return \Clake\Userextended\Models\UserExtended::where($property, $value)->first();
     }
 
     /**
@@ -120,7 +119,7 @@ class UserUtil
      * @param UserExtended $user
      * @return User
      */
-    public static function castToRainLabUser(UserExtended $user)
+    public static function castToRainLabUser(\Clake\Userextended\Models\UserExtended $user)
     {
         $rainlab = new User();
         $rainlab->attributes = $user->attributes;
@@ -137,7 +136,7 @@ class UserUtil
     {
         if($user == null)
             return $user;
-        $userExtended = new UserExtended();
+        $userExtended = new \Clake\Userextended\Models\UserExtended();
         $userExtended->attributes = $user->attributes;
         return $userExtended;
     }
@@ -153,7 +152,7 @@ class UserUtil
         if($user == null)
             return $user;
         $id = $user->id;
-        return UserExtended::where('id', $id)->first();
+        return \Clake\Userextended\Models\UserExtended::where('id', $id)->first();
     }
 
     /**
@@ -163,7 +162,7 @@ class UserUtil
      */
     public static function searchUsers($phrase)
     {
-        $results = new UserExtended();
+        $results = new \Clake\Userextended\Models\UserExtended();
 
         return $results->search($phrase);
     }
