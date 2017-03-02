@@ -282,9 +282,9 @@ class Roles extends Controller
      */
     public function onOpenRole()
     {
-        $groupCode = post('groupCode');
+        //$groupCode = post('groupCode');
         $roleCode = post('roleCode');
-        $role = RoleManager::with($groupCode)->getRole($roleCode);
+        $role = RoleManager::findRole($roleCode);
         return $this->makePartial('update_role_form', ['role' => $role]);
     }
 
@@ -300,11 +300,16 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        $role = RoleManager::with($groupCode)->getRole($roleCode);
+        $role = RoleManager::findRole($roleCode);
         $role->name = $name;
         $role->code = $code;
         $role->description = $description;
         $role->save();
+
+        /*if($role->group_id != 0)
+        {
+            $groupCode = $role->group()->code;
+        }*/
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
         if($roles->count() > 0)
