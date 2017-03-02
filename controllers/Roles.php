@@ -300,11 +300,12 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        $role = RoleManager::findRole($roleCode);
+        /*$role = RoleManager::findRole($roleCode);
         $role->name = $name;
         $role->code = $code;
         $role->description = $description;
-        $role->save();
+        $role->save();*/
+        $feedback = RoleManager::updateRole($roleCode, null, $name, $description, $code, null, true);
 
         /*if($role->group_id != 0)
         {

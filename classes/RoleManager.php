@@ -138,9 +138,14 @@ class RoleManager extends StaticFactory
             return $validator;
         }
 
+        if($role->group_id == 0)
+            $ignoreChecks = true;
+
         $role->ignoreChecks = $ignoreChecks;
         $role->save();
         $role->ignoreChecks = false;
+
+        return $validator;
     }
 
     /**

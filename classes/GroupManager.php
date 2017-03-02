@@ -136,6 +136,8 @@ class GroupManager extends StaticFactory
         }
 
         $group->save();
+
+        return $validator;
     }
 
     /**
