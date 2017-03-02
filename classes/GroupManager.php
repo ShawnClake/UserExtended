@@ -135,7 +135,7 @@ class GroupManager extends StaticFactory
             return $validator;
         }
 
-        if(GroupsExtended::code($code)->count() > 0)
+        if(GroupsExtended::code($group->code)->count() > 1)
             return false;
 
         $group->save();

@@ -141,7 +141,7 @@ class RoleManager extends StaticFactory
             return $validator;
         }
 
-        if(Role::code($code)->count() > 0)
+        if(Role::code($role->code)->count() > 1)
             return false;
 
         if($role->group_id == 0)
