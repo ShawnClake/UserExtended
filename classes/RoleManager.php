@@ -112,16 +112,19 @@ class RoleManager extends StaticFactory
      */
     public static function updateRole($roleCode, $sortOrder = null, $name = null, $description = null, $code = null, $groupId = null, $ignoreChecks = false)
     {
-        if(empty($code))
-            $code = $name;
+        $role = RoleManager::findRole($roleCode);
 
-        $code = str_slug($code, "-");
+        if(isset($sortOrder)) $role->sort_order = $sortOrder;
+        if(isset($name)) $role->name = $name;
+        if(isset($description)) $role->description = $description;
+        if(isset($code)) $role->code = $code;
+        if(isset($groupId)) $role->group_id = $groupId;
 
         $validator = Validator::make(
             [
-                'name' => $name,
-                'description' => $description,
-                'code' => $code,
+                'name' => $role->name,
+                'description' => $role->description,
+                'code' => $role->code,
             ],
             [
                 'name' => 'required|min:3',
@@ -134,14 +137,6 @@ class RoleManager extends StaticFactory
         {
             return $validator;
         }
-
-        $role = RoleManager::findRole($roleCode);
-
-        if(isset($sortOrder)) $role->sort_order = $sortOrder;
-        if(isset($name)) $role->name = $name;
-        if(isset($description)) $role->description = $description;
-        if(isset($code)) $role->code = $code;
-        if(isset($groupId)) $role->group_id = $groupId;
 
         $role->ignoreChecks = $ignoreChecks;
         $role->save();
