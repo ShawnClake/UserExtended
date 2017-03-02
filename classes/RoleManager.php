@@ -68,7 +68,7 @@ class RoleManager extends StaticFactory
             [
                 'name' => 'required|min:3',
                 'description' => 'required|min:8',
-                'code' => 'required|unique:clake_userextended_roles,code',
+                'code' => 'required',
             ]
         );
 
@@ -76,6 +76,9 @@ class RoleManager extends StaticFactory
         {
             return $validator;
         }
+
+        if(Role::code($code)->count() > 0)
+            return false;
 
         $role = new Role();
         $role->name = $name;
@@ -129,7 +132,7 @@ class RoleManager extends StaticFactory
             [
                 'name' => 'required|min:3',
                 'description' => 'required|min:8',
-                'code' => 'required|unique:clake_userextended_roles,code',
+                'code' => 'required',
             ]
         );
 
@@ -137,6 +140,9 @@ class RoleManager extends StaticFactory
         {
             return $validator;
         }
+
+        if(Role::code($code)->count() > 0)
+            return false;
 
         if($role->group_id == 0)
             $ignoreChecks = true;

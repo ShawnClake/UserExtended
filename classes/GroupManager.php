@@ -52,7 +52,7 @@ class GroupManager extends StaticFactory
             [
                 'name' => 'required|min:3',
                 'description' => 'required|min:8',
-                'code' => 'required|unique:user_groups,code',
+                'code' => 'required',
             ]
         );
 
@@ -126,7 +126,7 @@ class GroupManager extends StaticFactory
             [
                 'name' => 'required|min:3',
                 'description' => 'required|min:8',
-                'code' => 'required|unique:user_groups,code',
+                'code' => 'required',
             ]
         );
 
@@ -134,6 +134,9 @@ class GroupManager extends StaticFactory
         {
             return $validator;
         }
+
+        if(GroupsExtended::code($code)->count() > 0)
+            return false;
 
         $group->save();
 

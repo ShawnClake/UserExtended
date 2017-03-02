@@ -17,6 +17,7 @@ use October\Rain\Database\Traits\SoftDelete;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
  *
+ * @method static Role code($code) Query
  * @method static Role rolesInGroup($groupCode) Query
  */
 class Role extends Model
@@ -177,6 +178,17 @@ class Role extends Model
         $row = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
         $row->role_id = $roleId;
         $row->save();
+    }
+
+    /**
+     * Returns the role with the passed in parameter code
+     * @param $query
+     * @param $code
+     * @return mixed
+     */
+    public function scopeCode($query, $code)
+    {
+        return $query->where('code', $code);
     }
 
 
