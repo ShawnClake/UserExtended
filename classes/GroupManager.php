@@ -38,6 +38,29 @@ class GroupManager extends StaticFactory
      */
     public static function createGroup($name, $description, $code)
     {
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required|unique:user_groups,code',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
         if(GroupsExtended::code($code)->count() > 0)
             return false;
 
@@ -88,6 +111,29 @@ class GroupManager extends StaticFactory
      */
     public static function updateGroup($groupCode, $name = null, $description = null, $code = null)
     {
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required|unique:user_groups,code',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
         $group = GroupManager::findGroup($groupCode);
 
         if(isset($name)) $group->name = $name;
