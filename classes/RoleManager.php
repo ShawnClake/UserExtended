@@ -5,6 +5,7 @@ namespace Clake\UserExtended\Classes;
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use October\Rain\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * User Extended by Shawn Clake
@@ -53,6 +54,29 @@ class RoleManager extends StaticFactory
      */
     public static function createRole($name, $description, $code, $groupId = 0)
     {
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required|unique:clake_userextended_roles,code',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
         $role = new Role();
         $role->name = $name;
         $role->description = $description;
@@ -88,6 +112,29 @@ class RoleManager extends StaticFactory
      */
     public static function updateRole($roleCode, $sortOrder = null, $name = null, $description = null, $code = null, $groupId = null, $ignoreChecks = false)
     {
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required|unique:clake_userextended_roles,code',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
         $role = RoleManager::findRole($roleCode);
 
         if(isset($sortOrder)) $role->sort_order = $sortOrder;
