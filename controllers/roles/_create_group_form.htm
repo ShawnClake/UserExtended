@@ -1,3 +1,54 @@
+<script>
+function validate(){
+
+	var name = document.getElementById('name');
+	var code = document.getElementById('code');
+	var submit = document.getElementById("submitButton");
+	
+	var codeError = document.getElementById("CodeError");
+	var nameError = document.getElementById("NameError");
+	
+	var allValid = true;
+	
+	if(code.value == ""){
+		codeError.style.display = "block";
+		allValid = false;
+	} else {
+		codeError.style.display = "none";
+	}
+	
+	if(name.value == ""){
+		nameError.style.display = "block";
+		allValid = false;
+	} else {
+		nameError.style.display = "none";
+	}
+	
+	
+	if (allValid){
+		submit.style.display = "inline";
+	} else {
+	submit.style.display = "none";
+	}
+}
+$(function(){validate();});
+$('#name').on("change", function(){
+	validate();
+});
+
+$('#name').on("keyup", function(){
+	validate();
+});
+
+$('#code').on("change", function(){
+	validate();
+});
+
+$('#code').on("keyup", function(){
+	validate();
+});
+
+</script>
 <div style="padding:33px;padding-top:23px;">
 
     <h4>Create Group</h4>
@@ -5,25 +56,27 @@
     <form class="form-elements" role="form" data-request="onCreateGroup">
         <div class="form-group span-left">
             <label>Name</label>
-            <input type="text" name="name" value="" class="form-control" />
+            <input type="text" name="name" value="" id="name" class="form-control" />
             <p class="help-block">3 characters minimum.</p>
         </div>
 
         <div class="form-group span-right">
             <label>Code</label>
-            <input type="text" name="code" value="" class="form-control" />
+            <input type="text" name="code" value="" id="code" class="form-control"/>
             <p class="help-block">Enter a unique identifying code for this group.</p>
         </div>
 
         <div class="form-group span-full">
             <label>Description</label>
-            <textarea style="resize:none;" name="description" class="form-control"></textarea>
+            <textarea style="resize:none;" name="description" id="description" class="form-control"></textarea>
             <p class="help-block">8 characters minimum.</p>
         </div>
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Create</button>
         <span style="margin-left:11px;" id="feedback_group_save"></span>
     </form>
+	<div id="NameError">Error: You Need to enter a name for the role.</div>
+	<div id="CodeError">Error: You Need to enter a unique code.</div>
 
 </div>
