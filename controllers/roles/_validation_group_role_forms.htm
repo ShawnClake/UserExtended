@@ -1,0 +1,29 @@
+<script>
+    function disableSubmit()
+    {
+        if($('#name').val() == "" || $('#code').val() == "")
+        {
+            $('#submitButton').attr('disabled', true);
+        } else {
+            $('#submitButton').attr('disabled', false);
+        }
+    }
+
+    $('#name').on("keyup", function(){
+        if($(this).val() == ""){
+            $('#NameError').show();
+        } else {
+            $('#NameError').hide();
+        }
+        disableSubmit();
+    });
+
+    $('#code').on("keyup", function(){
+        if($(this).val() == "") {
+            $('#CodeError').show();
+        } else {
+            $('#CodeError').hide();
+        }
+        disableSubmit();
+    });
+</script>

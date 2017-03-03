@@ -78,6 +78,11 @@ class Account extends ComponentBase
         return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
+    public function onRun()
+    {
+        $this->addCss('/plugins/clake/userextended/assets/css/general.css');
+    }
+
     /**
      * Copied from the RainLab.Users Account component
      * Altered by Shawn Clake

@@ -1,56 +1,4 @@
 <?php if(isset($group)): ?>
-<script>
-function validate(){
-
-	var name = document.getElementById('name');
-	var code = document.getElementById('code');
-	var submit = document.getElementById("submitButton");
-	
-	var codeError = document.getElementById("CodeError");
-	var nameError = document.getElementById("NameError");
-	
-	var allValid = true;
-	
-	if(code.value == ""){
-		codeError.style.display = "block";
-		allValid = false;
-	} else {
-		codeError.style.display = "none";
-	}
-	
-	if(name.value == ""){
-		nameError.style.display = "block";
-		allValid = false;
-	} else {
-		nameError.style.display = "none";
-	}
-	
-	
-	if (allValid){
-		submit.style.display = "inline";
-	} else {
-	submit.style.display = "none";
-	}
-}
-$(function(){validate();}
-$('#name').on("change", function(){
-	validate();
-});
-
-$('#name').on("keydown", function(){
-	validate();
-});
-
-$('#code').on("change", function(){
-	validate();
-});
-
-$('#code').on("keydown", function(){
-	validate();
-});
-
-</script>
-
 
 <div style="padding:33px;padding-top:23px;">
 
@@ -81,5 +29,7 @@ $('#code').on("keydown", function(){
     </form>
 
 </div>
+
+<?= $this->makePartial('validation_group_role_forms') ?>
 
 <?php endif ?>
