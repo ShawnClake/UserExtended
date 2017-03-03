@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Classes\UserManager;
 use Clake\Userextended\Models\UserExtended;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\UserSettingsManager;
@@ -89,6 +90,9 @@ class Account extends ComponentBase
      */
     public function onUpdate()
     {
+        $data = post();
+        return UserManager::updateUser($data);
+        /*
         if (!$user = $this->user()) {
             return;
         }
@@ -125,6 +129,7 @@ class Account extends ComponentBase
         }
 
         Flash::success(post('flash', Lang::get('rainlab.user::lang.account.success_saved')));
+        */
 
     }
 
@@ -138,14 +143,31 @@ class Account extends ComponentBase
     public function onRegister()
     {
 
-        try {
+        $data = post();
+        if(!($user = UserManager::registerUser($data)))
+            return false;
+
+        $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
+
+        $code = implode('!', [$user->id, $user->getActivationCode()]);
+        $link = $this->currentPageUrl([
+            $this->property('paramCode') => $code
+        ]);
+
+        if ($userActivation) {
+            UserManager::sendActivationEmail($user, $link, $code);
+
+            Flash::success(Lang::get('rainlab.user::lang.account.activation_email_sent'));
+        }
+
+        /*try {
             if (!Settings::get('allow_registration', true)) {
                 throw new ApplicationException(Lang::get('rainlab.user::lang.account.registration_disabled'));
             }
 
             /*
              * Validate input
-             */
+             *
             $data = post();
 
             $bob = Event::fire('clake.ue.preregistration', [&$data], true);
@@ -158,14 +180,14 @@ class Account extends ComponentBase
             //echo json_encode($data);
             /*
              * Better utilization of email vs username
-             */
+             *
             if (Settings::get('login_attribute') == "username") {
                 $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
             }
 
             /*
              * Enforcing password confirmation instead of overriding ove rit
-             */
+             *
 
             $validation = Validator::make($data, $rules);
             if ($validation->fails()) {
@@ -174,19 +196,19 @@ class Account extends ComponentBase
 
             /*
              * Register user
-             */
+             *
             $requireActivation = Settings::get('require_activation', true);
             $automaticActivation = Settings::get('activate_mode') == Settings::ACTIVATE_AUTO;
             $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
 
             /*
              * Preform phase 1 User registration
-             */
+             *
             $user = $this->register($data, $automaticActivation);
 
             /*
              * Activation is by the user, send the email
-             */
+             *
             if ($userActivation) {
                 $this->sendActivationEmail($user);
 
@@ -195,13 +217,13 @@ class Account extends ComponentBase
 
             /*
              * Modified code below
-             */
+             *
 
             Auth::login($user);
 
             /*
              * Preform phase 2 User registration
-             */
+             *
             $settingsManager = UserSettingsManager::init();
 
             Event::fire('clake.ue.settings.create', [&$settingsManager]);
@@ -221,7 +243,7 @@ class Account extends ComponentBase
              * Preform phase 3 User registration
              * Modified to swap to logout
              * Automatically activated or not required, log the user in
-             */
+             *
             if (!$automaticActivation || $requireActivation) {
                 $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
                 $user->last_login = null;
@@ -235,7 +257,7 @@ class Account extends ComponentBase
 
             /*
              * Redirect to the intended page after successful sign in
-             */
+             *
             $redirectUrl = $this->pageUrl($this->property('redirect'))
                 ?: $this->property('redirect');
 
@@ -248,6 +270,7 @@ class Account extends ComponentBase
             if (Request::ajax()) throw $ex;
             else Flash::error($ex->getMessage());
         }
+        */
 
     }
 
@@ -318,10 +341,14 @@ class Account extends ComponentBase
      */
     public function onLogin()
     {
+        $data = post();
+        $redirectUrl = $this->pageUrl($this->property('redirect'))
+            ?: $this->property('redirect');
+        return UserManager::loginUser($data, $redirectUrl);
         /*
          * Validate input
          */
-        $data = post();
+        /*$data = post();
         $rules = [];
 
         $rules['login'] = $this->signUp()  == "username"
@@ -341,7 +368,7 @@ class Account extends ComponentBase
 
         /*
          * Authenticate user
-         */
+         *
         $credentials = [
             'login'    => array_get($data, 'login'),
             'password' => array_get($data, 'password')
@@ -355,13 +382,13 @@ class Account extends ComponentBase
 
         /*
          * Redirect to the intended page after successful sign in
-         */
+         *
         $redirectUrl = $this->pageUrl($this->property('redirect'))
             ?: $this->property('redirect');
 
         if ($redirectUrl = input('redirect', $redirectUrl)) {
             return Redirect::intended($redirectUrl);
-        }
+        }*/
     }
 
     /**
@@ -372,7 +399,8 @@ class Account extends ComponentBase
      */
     public function onLogout()
     {
-        $user = Auth::getUser();
+        return UserManager::logoutUser();
+        /*$user = Auth::getUser();
 
         Auth::logout();
 
@@ -384,7 +412,7 @@ class Account extends ComponentBase
         $url = post('redirect', Request::fullUrl());
         Flash::success(Lang::get('rainlab.user::lang.session.logout'));
 
-        return Redirect::to($url);
+        return Redirect::to($url);*/
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php namespace Clake\UserExtended;
 
+use Clake\UserExtended\Classes\UserUtil;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
 
@@ -45,6 +46,46 @@ class Module extends UserExtended
     public function injectLang()
     {
         return [];
+    }
+
+    public function getUsers($value, $property = "name")
+    {
+        return UserUtil::getUsers($value, $property);
+    }
+
+    public function getUser($value, $property = "id")
+    {
+        return UserUtil::getUser($value, $property);
+    }
+
+    public function getLoggedInUser($return_type = "ue")
+    {
+        if($return_type == "ue")
+        {
+            return UserUtil::getLoggedInUserExtendedUser();
+        } else {
+            return UserUtil::getLoggedInUser();
+        }
+    }
+
+    public function getLoggedInUsersTimezone()
+    {
+        return UserUtil::getLoggedInUsersTimezone();
+    }
+
+    public function getUserTimezone($value, $property = "id")
+    {
+        return UserUtil::getUserTimezone($value, $property);
+    }
+
+    public function searchUsers($phrase)
+    {
+        return UserUtil::searchUsers($phrase);
+    }
+
+    public function isLoggedIn($userId)
+    {
+        return UserUtil::idIsLoggedIn($userId);
     }
 
 }
