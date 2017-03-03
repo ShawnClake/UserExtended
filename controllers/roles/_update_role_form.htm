@@ -1,4 +1,54 @@
-<?php if(isset($role)): ?>
+<script>
+function validate(){
+
+	var name = document.getElementById('name');
+	var code = document.getElementById('code');
+	var submit = document.getElementById("submitButton");
+	
+	var codeError = document.getElementById("CodeError");
+	var nameError = document.getElementById("NameError");
+	
+	var allValid = true;
+	
+	if(code.value == ""){
+		codeError.style.display = "block";
+		allValid = false;
+	} else {
+		codeError.style.display = "none";
+	}
+	
+	if(name.value == ""){
+		nameError.style.display = "block";
+		allValid = false;
+	} else {
+		nameError.style.display = "none";
+	}
+	
+	
+	if (allValid){
+		submit.style.display = "inline";
+	} else {
+	submit.style.display = "none";
+	}
+}
+$(function(){validate();}
+$('#name').on("change", function(){
+	validate();
+});
+
+$('#name').on("keydown", function(){
+	validate();
+});
+
+$('#code').on("change", function(){
+	validate();
+});
+
+$('#code').on("keydown", function(){
+	validate();
+});
+
+</script>
 
 <div style="padding:33px;padding-top:23px;">
 
@@ -7,13 +57,13 @@
     <form class="form-elements" role="form" data-request="onSaveRole" data-request-data="roleCode: '<?= $role->code ?>' <?php if($role->group_id != 0): ?> , groupCode: '<?= $role->group->code ?>' <?php endif ?>">
         <div class="form-group span-left">
             <label>Name</label>
-            <input type="text" name="name" value="<?= $role->name ?>" class="form-control" />
+            <input type="text" name="name" id="name" value="<?= $role->name ?>" class="form-control" />
             <p class="help-block">3 characters minimum.</p>
         </div>
 
         <div class="form-group span-right">
             <label>Code</label>
-            <input type="text" name="code" value="<?= $role->code ?>" class="form-control" />
+            <input type="text" name="code" id="code" value="<?= $role->code ?>" class="form-control" />
             <p class="help-block">Enter a unique identifying code for this role.</p>
         </div>
 
@@ -24,10 +74,8 @@
         </div>
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Save</button>
         <span style="margin-left:11px;" id="feedback_role_save"></span>
     </form>
 
 </div>
-
-<?php endif ?>
