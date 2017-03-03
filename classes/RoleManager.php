@@ -112,6 +112,8 @@ class RoleManager extends StaticFactory
      * @param null $description
      * @param null $code
      * @param null $groupId
+     * @param bool $ignoreChecks
+     * @return bool|Validator
      */
     public static function updateRole($roleCode, $sortOrder = null, $name = null, $description = null, $code = null, $groupId = null, $ignoreChecks = false)
     {

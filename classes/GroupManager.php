@@ -108,6 +108,7 @@ class GroupManager extends StaticFactory
      * @param null $name
      * @param null $description
      * @param null $code
+     * @return bool|Validator
      */
     public static function updateGroup($groupCode, $name = null, $description = null, $code = null)
     {
