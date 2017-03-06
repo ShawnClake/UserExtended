@@ -8,7 +8,7 @@ var Validator = (function() {
             } else {
                 $('#NameError').hide();
             }
-            disableSubmit();
+            this.disableSubmit();
         });
 
         $('#code').on("keyup", function(){
@@ -17,7 +17,7 @@ var Validator = (function() {
             } else {
                 $('#CodeError').hide();
             }
-            disableSubmit();
+            this.disableSubmit();
         });
 
         this.disableSubmit = function () {
