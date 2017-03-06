@@ -278,7 +278,7 @@ class UserSettingsManager
      * Will return true if the setting does not require validation
      * @param $setting
      * @param $value
-     * @return bool
+     * @return bool|Validator\
      */
     public function validate($setting, $value)
     {
@@ -292,7 +292,7 @@ class UserSettingsManager
             );
 
             if($validator->fails())
-                return false;
+                return $validator;
         }
 
         return true;
@@ -336,12 +336,14 @@ class UserSettingsManager
      * Sets a setting by checking whether or not it can be edited, then validates it, then encrypts it if requried.
      * @param $setting
      * @param $value
-     * @return $this|bool
+     * @return bool|Validator
      */
     public function setSetting($setting, $value)
     {
-        if(!$this->validate($setting, $value))
-            return false;
+        $validator = $this->validate($setting, $value);
+
+        if($validator !== true)
+            return $validator;
 
         $value = $this->encrypt($setting, $value);
 
@@ -350,7 +352,7 @@ class UserSettingsManager
 
         $this->settings[$setting] = $value;
 
-        return $this;
+        return true;
     }
 
     /**

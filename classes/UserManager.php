@@ -1,6 +1,5 @@
 <?php namespace Clake\UserExtended\Classes;
 
-use Clake\Userextended\Models\UserExtended;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 use Flash;
@@ -268,7 +267,18 @@ class UserManager extends StaticFactory
                     continue;
 
                 if($settingsManager->isSetting($key))
-                    $settingsManager->setSetting($key, $value);
+                {
+                    /** @var $validator bool|Validator\ */
+                    $validator = $settingsManager->setSetting($key, $value);
+                    if($validator !== true)
+                    {
+                        /*
+                         * This means validation failed and the setting was NOT set.
+                         * $validator is a Validator instance
+                         */
+                    }
+                }
+
             }
 
             $settingsManager->save();
@@ -329,7 +339,7 @@ class UserManager extends StaticFactory
      */
     protected static function register(array $credentials, $activate = false)
     {
-        $user = new UserExtended();
+        $user = new \Clake\Userextended\Models\UserExtended();
         $user->name = $credentials['first_name'];
         $user->surname = $credentials['last_name'];
 
