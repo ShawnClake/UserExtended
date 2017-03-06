@@ -7,6 +7,7 @@ use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Settings;
+use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
 use Illuminate\Support\Facades\Redirect;
@@ -93,6 +94,8 @@ class User extends ComponentBase
      */
     public function onRun()
     {
+        Plugin::injectAssets($this);
+
         $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
     }
 

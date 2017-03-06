@@ -2,6 +2,7 @@
 
 use Clake\UserExtended\Classes\UserManager;
 use Clake\Userextended\Models\UserExtended;
+use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
@@ -81,7 +82,7 @@ class Account extends ComponentBase
 
     public function onRun()
     {
-        $this->addCss('/plugins/clake/userextended/assets/css/general.css');
+        Plugin::injectAssets($this);
     }
 
     /**

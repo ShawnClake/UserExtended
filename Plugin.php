@@ -33,10 +33,10 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'UserExtended',
+            'name' => 'UserExtended',
             'description' => 'Adds roles, friends, and utility functions to the Rainlab User plugin',
-            'author'      => 'clake',
-            'icon'        => 'icon-user-plus'
+            'author' => 'clake',
+            'icon' => 'icon-user-plus'
         ];
     }
 
@@ -84,26 +84,26 @@ class Plugin extends PluginBase
         /*
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
-        Event::listen('backend.menu.extendItems', function($manager) {
+        Event::listen('backend.menu.extendItems', function ($manager) {
 
             $manager->addSideMenuItems('RainLab.User', 'user', [
                 'groups' => [
                     'label' => 'Group Manager',
-                    'url'         => Backend::url('clake/userextended/groupsextended'),
-                    'icon'        => 'icon-users',
-                    'order'       => 500,
+                    'url' => Backend::url('clake/userextended/groupsextended'),
+                    'icon' => 'icon-users',
+                    'order' => 500,
                 ],
                 'roles' => [
                     'label' => 'Role Manager',
-                    'url'         => Backend::url('clake/userextended/roles/manage'),
-                    'icon'        => 'icon-pencil',
-                    'order'       => 600,
+                    'url' => Backend::url('clake/userextended/roles/manage'),
+                    'icon' => 'icon-pencil',
+                    'order' => 600,
                 ],
                 'users-side' => [
                     'label' => 'Users',
-                    'url'         => Backend::url('rainlab/user/users'),
-                    'icon'        => 'icon-user',
-                    'order'       => 100,
+                    'url' => Backend::url('rainlab/user/users'),
+                    'icon' => 'icon-user',
+                    'order' => 100,
                 ],
             ]);
 
@@ -128,13 +128,13 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-                'label'       => 'UserExtended Settings',
+                'label' => 'UserExtended Settings',
                 'description' => 'Manage user extended settings.',
-                'category'    => SettingsManager::CATEGORY_USERS,
-                'icon'        => 'icon-cog',
-                'class'       => 'Clake\Userextended\Models\Settings',
-                'order'       => 100,
-                'keywords'    => 'security user extended',
+                'category' => SettingsManager::CATEGORY_USERS,
+                'icon' => 'icon-cog',
+                'class' => 'Clake\Userextended\Models\Settings',
+                'order' => 100,
+                'keywords' => 'security user extended',
                 'permissions' => ['']
             ]
         ];
@@ -159,6 +159,13 @@ class Plugin extends PluginBase
             UserExtended::getNavigation(),
             []
         );
+    }
+
+    public static function injectAssets($component)
+    {
+        $component->addJs('https://code.jquery.com/jquery-2.1.1.min.js');
+        $component->addJs('/plugins/clake/userextended/assets/js/general.js');
+        $component->addCss('/plugins/clake/userextended/assets/css/general.css');
     }
 
 }

@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Components;
 
 use Clake\Userextended\Models\Settings;
+use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\FriendsManager;
 use Page;
@@ -77,6 +78,11 @@ class Friends extends ComponentBase
     {
         $user = new User();
         return $user->getProfilePageOptions();
+    }
+
+    public function onRun()
+    {
+        Plugin::injectAssets($this);
     }
 
     /**
