@@ -163,7 +163,7 @@ class Plugin extends PluginBase
 
     public static function injectAssets($component)
     {
-        $component->addJs('https://code.jquery.com/jquery-2.1.1.min.js');
+        //$component->addJs('https://code.jquery.com/jquery-2.1.1.min.js');
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
     }
