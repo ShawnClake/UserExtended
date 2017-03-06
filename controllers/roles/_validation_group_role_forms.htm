@@ -3,8 +3,10 @@
     {
         if($('#name').val() == "" || $('#code').val() == "")
         {
+			$('#ErrorBox').show();
             $('#submitButton').attr('disabled', true);
         } else {
+			$('#ErrorBox').hide();
             $('#submitButton').attr('disabled', false);
         }
     }
@@ -28,6 +30,6 @@
     });
 	
 	$(function(){
-	disableSubmit();
+		disableSubmit();
 	});
 </script>
