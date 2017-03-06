@@ -45,6 +45,7 @@ class Roles extends Controller
 		
 		//Add CSS for some backend menus
 		$this->addCss('/plugins/clake/userextended/assets/css/backend.css');
+		$this->addJs('/plugins/clake/userextended/assets/js/backend.js');
     }
 
     /**
