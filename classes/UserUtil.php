@@ -82,7 +82,7 @@ class UserUtil
 
     /**
      * Returns a Timezone model for the current logged in user
-     * @return mixed|null|string
+     * @return string|null
      */
     public static function getLoggedInUsersTimezone()
     {
@@ -101,7 +101,7 @@ class UserUtil
      * Get a users current timezone.
      * @param $value
      * @param string $property
-     * @return null
+     * @return null|string
      */
     public static function getUserTimezone($value, $property = "id")
     {
@@ -158,7 +158,7 @@ class UserUtil
     /**
      * Search for a user via the phrase
      * @param $phrase
-     * @return mixed
+     * @return \Clake\Userextended\Models\UserExtended
      */
     public static function searchUsers($phrase)
     {
@@ -200,13 +200,13 @@ class UserUtil
 
     /**
      * @param $userId
-     * @return bool|void
+     * @return bool
      */
     public static function idIsLoggedIn($userId)
     {
         $user = self::getLoggedInUser();
         if($user == null)
-            return;
+            return false;
         return $user->id == $userId;
     }
 

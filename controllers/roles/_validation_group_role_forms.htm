@@ -1,35 +1,6 @@
 <script>
-    function disableSubmit()
+    $(function()
     {
-        if($('#name').val() == "" || $('#code').val() == "")
-        {
-			$('#ErrorBox').show();
-            $('#submitButton').attr('disabled', true);
-        } else {
-			$('#ErrorBox').hide();
-            $('#submitButton').attr('disabled', false);
-        }
-    }
-
-    $('#name').on("keyup", function(){
-        if($(this).val() == ""){
-            $('#NameError').show();
-        } else {
-            $('#NameError').hide();
-        }
-        disableSubmit();
+        UE.Validator.disableSubmit();
     });
-
-    $('#code').on("keyup", function(){
-        if($(this).val() == "") {
-            $('#CodeError').show();
-        } else {
-            $('#CodeError').hide();
-        }
-        disableSubmit();
-    });
-	
-	$(function(){
-		disableSubmit();
-	});
 </script>
