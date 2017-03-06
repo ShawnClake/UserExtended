@@ -7,3 +7,13 @@
     border-radius: 8px;
     margin: 10px 10px;
 }
+
+.error-box{
+	padding: 10px;
+	color: red;
+	font-size: 14px;
+}
+
+span.capitalize{
+	text-transform: capitalize;
+}
