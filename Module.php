@@ -34,7 +34,7 @@ class Module extends UserExtended
         return [
             'Clake\UserExtended\Components\Account' => 'account',
             'Clake\UserExtended\Components\Friends' => 'friends',
-            'Clake\UserExtended\Components\User' => 'ueuser',
+            'Clake\UserExtended\Components\User'    => 'ueuser',
         ];
     }
 
@@ -46,6 +46,14 @@ class Module extends UserExtended
     public function injectLang()
     {
         return [];
+    }
+
+    public function injectAssets()
+    {
+        return [
+            //'ueJS'  => '/plugins/clake/userextended/assets/js/general.js',
+            //'ueCSS' => '/plugins/clake/userextended/assets/css/general.css'
+        ];
     }
 
     public function getUsers($value, $property = "name")

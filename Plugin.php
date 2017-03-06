@@ -161,11 +161,27 @@ class Plugin extends PluginBase
         );
     }
 
+    /**
+     * Injects assets from modules. Also overrides the defaults presented in general.js and general.css
+     * @param $component
+     */
     public static function injectAssets($component)
     {
-        //$component->addJs('https://code.jquery.com/jquery-2.1.1.min.js');
+        //Cant move these out because then the defaults wouldn't have top priority
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
+
+        $assets = UserExtended::getAssets();
+
+        foreach($assets as $asset)
+        {
+            $type = trim(substr($asset, strrpos($asset, '.') + 1));
+            if($type == 'js')
+                $component->addJs($asset);
+
+            if($type == 'css')
+                $component->addCss($asset);
+        }
     }
 
 }

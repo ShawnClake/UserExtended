@@ -39,6 +39,15 @@ class Module extends UserExtended
         ];
     }
 
+    public function injectAssets()
+    {
+        return [
+            // Insert your assets or asset overrides here with the format shown below
+            //'GeneralJS'      => '/plugins/clake/userextended/assets/js/general.js',
+            //'GeneralStyling' => '/plugins/clake/userextended/assets/css/general.css'
+        ];
+    }
+
     public function injectNavigation()
     {
         return [];
