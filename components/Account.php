@@ -296,7 +296,7 @@ class Account extends ComponentBase
      * @param  User $user
      * @return void
      */
-    protected function sendActivationEmail($user)
+    /*protected function sendActivationEmail($user)
     {
         $code = implode('!', [$user->id, $user->getActivationCode()]);
         $link = $this->currentPageUrl([
@@ -312,7 +312,7 @@ class Account extends ComponentBase
         Mail::send('rainlab.user::mail.activate', $data, function($message) use ($user) {
             $message->to($user->email, $user->name);
         });
-    }
+    }*/
 
     /**
      * Registers the user
@@ -322,7 +322,7 @@ class Account extends ComponentBase
      * @param bool $activate
      * @return mixed
      */
-    public function register(array $credentials, $activate = false)
+    /*public function register(array $credentials, $activate = false)
     {
         $user = new UserExtended();
         $user->name = $credentials['first_name'];
@@ -345,7 +345,7 @@ class Account extends ComponentBase
         $user->password = null;
 
         return $this->user = $user;
-    }
+    }*/
 
     /**
      * Logs in a user
