@@ -1,4 +1,5 @@
-window.UE = window.UE || {};
+/*var UE = UE || {};
+UE.Utils = UE.Utils || {};
 
 (function (Validator, $, undefined) {
 
@@ -33,9 +34,11 @@ window.UE = window.UE || {};
         }
     };
 
-} (window.UE.Validator = window.UE.Validator || {}, jQuery));
+} (UE.Utils.Validator = UE.Utils.Validator || {}, jQuery));*/
 
-/*
+var UE = UE || {};
+UE.Utils = UE.Utils || {};
+
 var Validator = (function() {
 
     var Validator = function () {
@@ -77,8 +80,8 @@ var Validator = (function() {
 
 })();
 
-UE.Validator = new Validator();
-*/
+UE.Utils.Validator = new Validator();
+
 /*
  function disableSubmit()
  {
