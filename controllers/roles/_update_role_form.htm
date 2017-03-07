@@ -28,6 +28,8 @@
         <span style="margin-left:11px;" id="feedback_role_save"></span>
     </form>
 
+	<?= $this->makePartial('validation_group_role_forms') ?>
+	
 <?php else: ?>
 	<h4>You have not selected a role!</h4>
 	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -19,7 +19,7 @@ use System\Classes\SettingsManager;
  * @link https://github.com/ShawnClake/UserExtended
  *
  *  Major Contributors:
- * @link https://
+ * @link https://github.com/QuinnBast
  *
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended
