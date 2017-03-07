@@ -190,7 +190,7 @@ class Friends extends ComponentBase
     public function onRequest()
     {
         $userId = post('id');
-
+		
         FriendsManager::sendFriendRequest($userId);
     }
 

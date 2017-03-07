@@ -38,6 +38,16 @@ class CommentManager
         $comment->user = $user;
         $comment->author = $author;
         $comment->content = $content;
+		
+		$data = [
+            'name' => $user->name,
+            'author' => $author,
+            'content' => $content
+        ];
+
+        Mail::send('clake.userextended::mail.register', $data, function($message) use ($user) {
+            $message->to($user->email, $user->name);
+        });
 
         return $comment->save();
 
@@ -63,7 +73,7 @@ class CommentManager
      */
     public static function canCreateComment()
     {
-
+		//TODO
     }
 
     /**

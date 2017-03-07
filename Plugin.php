@@ -193,8 +193,8 @@ class Plugin extends PluginBase
 {
     return [
         'clake.userextended::mail.on_group_role_changed' => 'Notify that the users group was changed',
-        'clake.userextended::mail.recieved_friend_request'  => 'Friend request',
-		'clake.userextended::mail.recieved_profile_comment'  => 'New comment on user profile',
+        'clake.userextended::mail.received_friend_request'  => 'Friend request',
+		'clake.userextended::mail.received_profile_comment'  => 'New comment on user profile',
 		'clake.userextended::mail.register'  => 'Registration confirmation email',
     ];
 }
