@@ -85,6 +85,13 @@ class FriendsManager
         $request->setStatus(0);
 
         $request->save();
+				
+		$data = ['user' => UserUtil::getLoggedInUser()->name,
+		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
+		
+		Mail::send('clake.userextended::mail.recieved_friend_request', $data, function($message) {
+            $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
+        });
 
     }
 
