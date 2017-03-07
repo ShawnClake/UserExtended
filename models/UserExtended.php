@@ -42,8 +42,8 @@ class UserExtended extends User
     {
 
         $hasMany = $this->hasMany;
-        $hasMany['comments'] = ['Clake\Userextended\Models\Comments', 'key'=>'user_id'];
-        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comments', 'key'=>'author_id'];
+        $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'user_id'];
+        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'author_id'];
         $this->hasMany = $hasMany;
 
         $belongsTo = $this->belongsTo;
