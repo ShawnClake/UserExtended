@@ -94,7 +94,7 @@ class Friend extends Model
      */
     public static function isFriends($userIdA, $userIdB = null)
     {
-        if(Friends::friend($userIdA, $userIdB)->count() > 0)
+        if(Friend::friend($userIdA, $userIdB)->count() > 0)
             return true;
         return false;
     }
@@ -107,7 +107,7 @@ class Friend extends Model
     public static function isRequested($userIdA, $userIdB = null)
     {
 
-        if(Friends::request($userIdA, $userIdB)->count() > 0)
+        if(Friend::request($userIdA, $userIdB)->count() > 0)
             return true;
         return false;
     }
@@ -119,7 +119,7 @@ class Friend extends Model
      */
     public static function isDeclined($userIdA, $userIdB = null)
     {
-        if(Friends::declined($userIdA, $userIdB)->count() > 0)
+        if(Friend::declined($userIdA, $userIdB)->count() > 0)
             return true;
         return false;
     }
@@ -131,7 +131,7 @@ class Friend extends Model
      */
     public static function isBlocked($userIdA, $userIdB = null)
     {
-        if(Friends::blocked($userIdA, $userIdB)->count() > 0)
+        if(Friend::blocked($userIdA, $userIdB)->count() > 0)
             return true;
         return false;
     }
@@ -143,7 +143,7 @@ class Friend extends Model
      */
     public static function isRelationExists($userIdA, $userIdB = null)
     {
-        if(Friends::relation($userIdA, $userIdB)->count() > 0)
+        if(Friend::relation($userIdA, $userIdB)->count() > 0)
             return true;
         return false;
     }
