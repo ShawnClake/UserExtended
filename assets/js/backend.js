@@ -1,3 +1,5 @@
+UE = UE || {};
+
 var Validator = (function() {
 
     var Validator = function () {
