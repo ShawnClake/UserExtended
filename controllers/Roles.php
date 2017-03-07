@@ -11,6 +11,7 @@ use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Facades\Flash;
 use Redirect;
 use Backend;
+use Session;
 
 /**
  * User Extended by Shawn Clake
@@ -41,6 +42,8 @@ class Roles extends Controller
     const UE_MANAGE_OVERALL_TOOLBAR = 'manage_overall_toolbar'; // _management_toolbar
     const UE_MANAGE_ROLE_UI = 'manage_role_ui'; // _manage_role
     const UE_MANAGE_USERS_UI = 'manage_users_ui'; // _list_unassigned_user_in_group
+
+    public static $queue = [];
 
     public $implement = [
         'Backend.Behaviors.FormController',
@@ -646,4 +649,157 @@ class Roles extends Controller
         );
     }
 
+    /**
+     * CODE BELOW THIS POINT IS FOR RELEASE 2.1.00 AND IS HERE IN PREPARATION
+     * THIS IS NOT PRODUCTION CODE AND IS NOT USED OR REFERENCED ELSEWHERE IN THE CODE BASE
+     * DO NOT USE THIS CODE
+     */
+
+    /**
+     * Renders each of the passed const's and returns a merged array of them
+     * $to_render is an array containing arrays of the following format [UE_CREATE_ROLE_FORM, ['group' => groupCode, 'role' => roleCode]]
+     * @param array $to_render
+     * @return array
+     */
+    protected function render(array $to_render = [])
+    {
+        if(empty($to_render))
+            $to_render = self::$queue;
+
+        if(empty($to_render))
+            return [];
+
+        $renders = [];
+
+        foreach($to_render as $renderType)
+        {
+            $partialName = reset($renderType);
+            $divId = '#' . $partialName;
+            $partial = $this->makePartial($partialName, next($renderType));
+
+            if(isset($renderType['override_key']) && $renderType['override_key'] === true)
+            {
+                array_merge($renders, [$partial]);
+            } else {
+                array_merge($renders, [$divId => $partial]);
+            }
+
+
+            // '#manage_role' => $this->makePartial('manage_role', ['role' => $role])
+        }
+
+        return $renders;
+    }
+
+    private function getCurrentGroup()
+    {
+        $group = null;
+        if(Session::has('ue.backend.role_manager.current_group'))
+            $group = Session::get('ue.backend.role_manager.current_group', null);
+        if(!empty($group))
+            return $group;
+        return false;
+    }
+
+    private function setCurrentGroup($groupCode)
+    {
+        if(Session::put('ue.backend.role_manager.current_group', $groupCode))
+            return true;
+        return false;
+    }
+    
+    private function getCurrentRole()
+    {
+        $role = null;
+        if(Session::has('ue.backend.role_manager.current_role'))
+            $role = Session::get('ue.backend.role_manager.current_role', null);
+        if(!empty($role))
+            return $role;
+        return false;
+    }
+    
+    private function setCurrentRole($roleCode)
+    {
+        if(Session::put('ue.backend.role_manager.current_role', $roleCode))
+            return true;
+        return false;
+    }
+
+    protected function queueUeCreateGroupForm()
+    {
+        self::$queue[] = [self::UE_CREATE_GROUP_FORM, [], 'override_key' => true];
+        return true;
+    }
+
+    protected function queueUeCreateRoleForm()
+    {
+        self::$queue[] = [self::UE_CREATE_ROLE_FORM, [], 'override_key' => true];
+        return true;
+    }
+
+    protected function queueUeUpdateGroupForm($groupCode = null)
+    {
+        if($groupCode == null)
+            $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
+        self::$queue[] = [self::UE_UPDATE_GROUP_FORM, ['groupCode' => $groupCode], 'override_key' => true];
+        return true;
+    }
+    
+    protected function queueUeUpdateRoleForm($roleCode = null)
+    {
+        if($roleCode == null)
+            $roleCode = $this->getCurrentRole();
+        if($roleCode === false)
+            return false;
+        self::$queue[] = [self::UE_UPDATE_ROLE_FORM, ['roleCode' => $roleCode], 'override_key' => true];
+        return true;
+    }
+
+    protected function queueUeListGroupButtons()
+    {
+        $groups = GroupManager::allGroups()->getGroups();
+        $currentGroupCode = $this->getCurrentGroup();
+        self::$queue[] = [self::UE_LIST_GROUP_BUTTONS, ['groups' => $groups, 'currentGroupCode' => $currentGroupCode]];
+    }
+
+    protected function queueUeListRolesTable()
+    {
+        $rolesUnsorted = RoleManager::with($this->getCurrentGroup());
+        $roles = $rolesUnsorted->sort()->getRoles();
+        if(!isset($rols))
+            return;
+        self::$queue[] = [self::UE_LIST_ROLES_TABLE, ['roles' => $roles]];
+    }
+
+    protected function queueUeListRolesTableUnassigned()
+    {
+        $roles = RoleManager::getUnassignedRoles();
+        $currentGroupCode = $this->getCurrentGroup();
+        if(!isset($roles))
+            return;
+        self::$queue[] = [self::UE_LIST_ROLES_TABLE_UNASSIGNED, ['roles' => $roles, 'currentGroupCode' => $currentGroupCode]];
+    }
+
+    /*
+     * These are here for now so I don't have to scroll as much
+     *
+    const UE_CREATE_GROUP_FORM = 'create_group_form'; // _create_group_form
+    const UE_CREATE_ROLE_FORM = 'create_role_form'; // _create_role_form
+
+    const UE_UPDATE_GROUP_FORM = 'update_group_form'; // _update_group_form
+    const UE_UPDATE_ROLE_FORM = 'update_role_form'; // _update_role_form
+
+    const UE_LIST_GROUP_BUTTONS = 'list_group_buttons'; // _list_groups
+    const UE_LIST_ROLES_TABLE = 'list_roles_table'; // _list_roles
+    const UE_LIST_ROLES_TABLE_UNASSIGNED = 'list_roles_table_unassigned'; // _list_unassigned_roles
+
+    const UE_MANAGE_CREATION_TOOLBAR = 'manage_creation_toolbar'; // _create_toolbar
+    const UE_MANAGE_GROUP_TOOLBAR = 'manage_group_toolbar'; // _manage_group_toolbar
+    const UE_MANAGE_ROLE_TOOLBAR = 'manage_role_toolbar'; // _management_role_toolbar
+    const UE_MANAGE_OVERALL_TOOLBAR = 'manage_overall_toolbar'; // _management_toolbar
+    const UE_MANAGE_ROLE_UI = 'manage_role_ui'; // _manage_role
+    const UE_MANAGE_USERS_UI = 'manage_users_ui'; // _list_unassigned_user_in_group
+    */
 }
