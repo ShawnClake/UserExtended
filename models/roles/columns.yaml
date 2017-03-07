@@ -17,11 +17,11 @@ columns:
 
     description:
         label: Description
-        type: tinytext
+        type: text
 
     sort_order:
         label: Priority
-        type: integer
+        type: number
 
     created_at:
         label: rainlab.user::lang.group.created_at
