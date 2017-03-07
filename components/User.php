@@ -212,7 +212,12 @@ class User extends ComponentBase
     {
         $userid = $this->property('paramCode');
 
-        return UserUtil::getUser($userid)->comments()->orderby('updated_at', 'desc')->get();
+        $user = UserUtil::getUser($userid);
+
+        if(empty($user))
+            return [];
+
+        return $user->comments()->orderby('updated_at', 'desc')->get();
     }
 
     /**
