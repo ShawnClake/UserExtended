@@ -196,7 +196,10 @@ class User extends ComponentBase
      */
     public function onFriendUser()
     {
-        $userid = $this->property('paramCode');
+        $userid = post('id');
+
+        if(empty($userid))
+            $userid = $this->property('paramCode');
 
         FriendsManager::sendFriendRequest($userid);
     }
