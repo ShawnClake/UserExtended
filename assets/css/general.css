@@ -8,12 +8,12 @@
     margin: 10px 10px;
 }
 
-.error-box{
+.error-box {
 	padding: 10px;
 	color: red;
 	font-size: 14px;
 }
 
-span.capitalize{
+span .capitalize {
 	text-transform: capitalize;
 }
