@@ -1,26 +1,28 @@
-UE = UE || {};
+var UE = UE || {};
 
 var Validator = (function() {
 
     var Validator = function () {
 
-        $('#name').on("keyup", function(){
-            if($(this).val() == ""){
-                $('#NameError').show();
-            } else {
-                $('#NameError').hide();
-            }
-            this.disableSubmit();
-        });
+        this.registerEvents = function() {
+            $('#name').on("keyup", function(){
+                if($(this).val() == ""){
+                    $('#NameError').show();
+                } else {
+                    $('#NameError').hide();
+                }
+                this.disableSubmit();
+            });
 
-        $('#code').on("keyup", function(){
-            if($(this).val() == "") {
-                $('#CodeError').show();
-            } else {
-                $('#CodeError').hide();
-            }
-            this.disableSubmit();
-        });
+            $('#code').on("keyup", function(){
+                if($(this).val() == "") {
+                    $('#CodeError').show();
+                } else {
+                    $('#CodeError').hide();
+                }
+                this.disableSubmit();
+            });
+        };
 
         this.disableSubmit = function () {
             if($('#name').val() == "" || $('#code').val() == "")
