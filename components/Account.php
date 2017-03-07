@@ -92,7 +92,15 @@ class Account extends ComponentBase
     public function onUpdate()
     {
         $data = post();
-        return UserManager::updateUser($data);
+        $response = UserManager::updateUser($data);
+
+        if($response instanceof Validator)
+        {
+            Flash::error($response->messages());
+            return false;
+        } else {
+            return $response;
+        }
         /*
         if (!$user = $this->user()) {
             return;
@@ -147,6 +155,12 @@ class Account extends ComponentBase
         $data = post();
         if(!($user = UserManager::registerUser($data)))
             return false;
+
+        if($user instanceof Validator)
+        {
+            Flash::error($user->messages());
+            return false;
+        }
 
         $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
 
@@ -345,7 +359,17 @@ class Account extends ComponentBase
         $data = post();
         $redirectUrl = $this->pageUrl($this->property('redirect'))
             ?: $this->property('redirect');
-        return UserManager::loginUser($data, $redirectUrl);
+
+        $response = UserManager::loginUser($data, $redirectUrl);
+
+        if($response instanceof Validator)
+        {
+            Flash::error($response->messages());
+            return false;
+        } else {
+            return $response;
+        }
+
         /*
          * Validate input
          */
