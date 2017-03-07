@@ -49,7 +49,7 @@ $(function(){
 						errorBox.hide();
 					}
 					validate();
-					return;
+					return true;
 				} else {
 					
 					//If the field is empty when there is a keychange, indicate there is an error.

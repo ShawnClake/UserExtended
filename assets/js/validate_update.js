@@ -48,7 +48,7 @@ $(function(){
 							$('#password_confirmation_error').hide();
 						}
 						validate();
-						return;
+						return true;
 					}
 				} else {
 					

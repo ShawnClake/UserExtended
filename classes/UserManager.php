@@ -175,7 +175,19 @@ class UserManager extends StaticFactory
                 continue;
 
             if($settingsManager->isSetting($key))
-                $settingsManager->setSetting($key, $value);
+            {
+                /** @var $validator bool|Validator\ */
+                $validator = $settingsManager->setSetting($key, $value);
+                if($validator !== true)
+                {
+                    return $validator;
+                    /*
+                     * This means validation failed and the setting was NOT set.
+                     * $validator is a Validator instance
+                     */
+                }
+            }
+
         }
 
         $settingsManager->save();
@@ -221,10 +233,10 @@ class UserManager extends StaticFactory
             /*
              * Enforcing password confirmation instead of overriding over it
              */
-
             $validation = Validator::make($data, $rules);
             if ($validation->fails()) {
-                throw new ValidationException($validation);
+                //throw new ValidationException($validation);
+                return $validation;
             }
 
             /*
@@ -272,6 +284,7 @@ class UserManager extends StaticFactory
                     $validator = $settingsManager->setSetting($key, $value);
                     if($validator !== true)
                     {
+                        return $validator;
                         /*
                          * This means validation failed and the setting was NOT set.
                          * $validator is a Validator instance
@@ -384,7 +397,8 @@ class UserManager extends StaticFactory
 
         $validation = Validator::make($data, $rules);
         if ($validation->fails()) {
-            throw new ValidationException($validation);
+            return $validation;
+            //throw new ValidationException($validation);
         }
 
         /*
