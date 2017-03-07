@@ -9,19 +9,23 @@ use System\Classes\SettingsManager;
 
 /**
  * User Extended by Shawn Clake
- *  Major Contributors: Quinn Bast
- * Class Plugin
+ * Major Contributors: Quinn Bast
+ *
  * User Extended is licensed under the MIT license.
+ * @link https://github.com/ShawnClake/UserExtended
  *
  * @version 2.0.00 User Extended Core
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
- * @link https://github.com/ShawnClake/UserExtended
+ * @link https://github.com/ShawnClake
+ * @link http://shawnclake.com
  *
  *  Major Contributors:
  * @link https://github.com/QuinnBast
  *
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ *
+ * Class Plugin
  * @package Clake\UserExtended
  */
 class Plugin extends PluginBase

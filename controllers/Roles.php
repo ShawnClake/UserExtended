@@ -25,6 +25,23 @@ use Backend;
  */
 class Roles extends Controller
 {
+    const UE_CREATE_GROUP_FORM = 'create_group_form'; // _create_group_form
+    const UE_CREATE_ROLE_FORM = 'create_role_form'; // _create_role_form
+
+    const UE_UPDATE_GROUP_FORM = 'update_group_form'; // _update_group_form
+    const UE_UPDATE_ROLE_FORM = 'update_role_form'; // _update_role_form
+
+    const UE_LIST_GROUP_BUTTONS = 'list_group_buttons'; // _list_groups
+    const UE_LIST_ROLES_TABLE = 'list_roles_table'; // _list_roles
+    const UE_LIST_ROLES_TABLE_UNASSIGNED = 'list_roles_table_unassigned'; // _list_unassigned_roles
+
+    const UE_MANAGE_CREATION_TOOLBAR = 'manage_creation_toolbar'; // _create_toolbar
+    const UE_MANAGE_GROUP_TOOLBAR = 'manage_group_toolbar'; // _manage_group_toolbar
+    const UE_MANAGE_ROLE_TOOLBAR = 'manage_role_toolbar'; // _management_role_toolbar
+    const UE_MANAGE_OVERALL_TOOLBAR = 'manage_overall_toolbar'; // _management_toolbar
+    const UE_MANAGE_ROLE_UI = 'manage_role_ui'; // _manage_role
+    const UE_MANAGE_USERS_UI = 'manage_users_ui'; // _list_unassigned_user_in_group
+
     public $implement = [
         'Backend.Behaviors.FormController',
         'Backend.Behaviors.ListController'
@@ -34,6 +51,7 @@ class Roles extends Controller
     public $listConfig = 'config_list.yaml';
 
     public $bodyClass = 'compact-container';
+
     //public $layout = 'roles';
 
     public function __construct()
