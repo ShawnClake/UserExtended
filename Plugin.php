@@ -59,6 +59,7 @@ class Plugin extends PluginBase
 
             'filters' => [
                 'timezonify' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigTimezoneAdjustment'],
+                'relative' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigRelativeTimeString'],
             ],
 
         ];

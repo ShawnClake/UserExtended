@@ -160,5 +160,10 @@ class TimezoneHandler
         return $time->diffForHumans();
     }
 
+    public static function twigRelativeTimeString($time, $locale = 'en')
+    {
+        return self::getRelativeTimeString($time, $locale);
+    }
+
 
 }
