@@ -1,7 +1,7 @@
 div.error-box{
 	padding: 10px;
     background: #ffb3b3;
-    border: 1.5px solid red;
+    border: 2px solid red;
     text-align: center;
     border-radius: 8px;
     width: 50%;

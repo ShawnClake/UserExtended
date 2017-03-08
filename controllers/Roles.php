@@ -656,6 +656,33 @@ class Roles extends Controller
      */
 
     /**
+     * Queues the partials for render.
+     * This function requires an array of partials const's to signify which partials to render.
+     * Any session data should be changed prior to calling Queue.
+     * This does not also preform the render.
+     * @param array $to_queue
+     * @return bool
+     */
+    protected function queue(array $to_queue)
+    {
+        if(empty($to_queue))
+            return false;
+
+        $prefix = 'queueUe';
+
+        $success = true;
+
+        foreach($to_queue as $queueType)
+        {
+            $function = $prefix . studly_case($queueType);
+            if(!$function())
+                $success = false;
+        }
+
+        return $success;
+    }
+
+    /**
      * Renders each of the passed const's and returns a merged array of them
      * $to_render is an array containing arrays of the following format [UE_CREATE_ROLE_FORM, ['group' => groupCode, 'role' => roleCode]]
      * @param array $to_render
@@ -688,9 +715,29 @@ class Roles extends Controller
             // '#manage_role' => $this->makePartial('manage_role', ['role' => $role])
         }
 
+        $this->flushQueue();
+
         return $renders;
     }
 
+    private function flushQueue()
+    {
+        self::$queue = [];
+    }
+
+    private function flushSession()
+    {
+        if(Session::has('ue.backend.role_manager.current_group'))
+            Session::forget('ue.backend.role_manager.current_group');
+
+        if(Session::has('ue.backend.role_manager.current_role'))
+            Session::forget('ue.backend.role_manager.current_role');
+    }
+
+    /**
+     * Retrieves the current group from the session
+     * @return bool|string
+     */
     private function getCurrentGroup()
     {
         $group = null;
@@ -701,13 +748,22 @@ class Roles extends Controller
         return false;
     }
 
+    /**
+     * Sets the current group into the session
+     * @param $groupCode
+     * @return bool
+     */
     private function setCurrentGroup($groupCode)
     {
         if(Session::put('ue.backend.role_manager.current_group', $groupCode))
             return true;
         return false;
     }
-    
+
+    /**
+     * Gets the current role from the session
+     * @return bool|string
+     */
     private function getCurrentRole()
     {
         $role = null;
@@ -717,7 +773,12 @@ class Roles extends Controller
             return $role;
         return false;
     }
-    
+
+    /**
+     * Sets the current role into the session
+     * @param $roleCode
+     * @return bool
+     */
     private function setCurrentRole($roleCode)
     {
         if(Session::put('ue.backend.role_manager.current_role', $roleCode))
@@ -725,18 +786,31 @@ class Roles extends Controller
         return false;
     }
 
+    /**
+     * Queues the create a group form modal
+     * @return bool
+     */
     protected function queueUeCreateGroupForm()
     {
         self::$queue[] = [self::UE_CREATE_GROUP_FORM, [], 'override_key' => true];
         return true;
     }
 
+    /**
+     * Queues the create a role form modal
+     * @return bool
+     */
     protected function queueUeCreateRoleForm()
     {
         self::$queue[] = [self::UE_CREATE_ROLE_FORM, [], 'override_key' => true];
         return true;
     }
 
+    /**
+     * Queues the update a group form modal
+     * @param null $groupCode
+     * @return bool
+     */
     protected function queueUeUpdateGroupForm($groupCode = null)
     {
         if($groupCode == null)
@@ -746,7 +820,12 @@ class Roles extends Controller
         self::$queue[] = [self::UE_UPDATE_GROUP_FORM, ['groupCode' => $groupCode], 'override_key' => true];
         return true;
     }
-    
+
+    /**
+     * Queues the update a role form modal
+     * @param null $roleCode
+     * @return bool
+     */
     protected function queueUeUpdateRoleForm($roleCode = null)
     {
         if($roleCode == null)
@@ -757,29 +836,141 @@ class Roles extends Controller
         return true;
     }
 
+    /**
+     * Queues the group list buttons
+     * @return bool
+     */
     protected function queueUeListGroupButtons()
     {
         $groups = GroupManager::allGroups()->getGroups();
         $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
         self::$queue[] = [self::UE_LIST_GROUP_BUTTONS, ['groups' => $groups, 'currentGroupCode' => $currentGroupCode]];
+        return true;
     }
 
+    /**
+     * Queues the role list table
+     * @return bool
+     */
     protected function queueUeListRolesTable()
     {
         $rolesUnsorted = RoleManager::with($this->getCurrentGroup());
         $roles = $rolesUnsorted->sort()->getRoles();
-        if(!isset($rols))
-            return;
+        if(!isset($roles))
+            return false;
         self::$queue[] = [self::UE_LIST_ROLES_TABLE, ['roles' => $roles]];
+        return true;
     }
 
+    /**
+     * Queues the unassigned-to-group roles table
+     * @return bool
+     */
     protected function queueUeListRolesTableUnassigned()
     {
         $roles = RoleManager::getUnassignedRoles();
         $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
         if(!isset($roles))
-            return;
+            return false;
         self::$queue[] = [self::UE_LIST_ROLES_TABLE_UNASSIGNED, ['roles' => $roles, 'currentGroupCode' => $currentGroupCode]];
+        return true;
+    }
+
+    /**
+     * Queues the create buttons toolbar
+     * @return bool
+     */
+    protected function queueUeManageCreationToolbar()
+    {
+        $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
+        self::$queue[] = [self::UE_MANAGE_CREATION_TOOLBAR, ['currentGroupCode' => $currentGroupCode]];
+        return true;
+    }
+
+    /**
+     * Queues the group management toolbar
+     * @return bool
+     */
+    protected function queueUeManageGroupToolbar()
+    {
+        $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
+        $group = GroupManager::findGroup($currentGroupCode);
+        self::$queue[] = [self::UE_MANAGE_GROUP_TOOLBAR, ['group' => $group]];
+        return true;
+    }
+
+    /**
+     * Queues the role management toolbar
+     * @return bool
+     */
+    protected function queueUeManageRoleToolbar()
+    {
+        $currentRoleCode = $this->getCurrentRole();
+        if($currentRoleCode === false)
+            return false;
+        $role = RoleManager::findRole($currentRoleCode);
+        self::$queue[] = [self::UE_MANAGE_ROLE_TOOLBAR, ['role' => $role]];
+        return true;
+    }
+
+    /**
+     * Queues the overall management toolbar. This is the one which includes stats/analytics and delete groups.
+     * @return bool
+     */
+    protected function queueUeManageOverallToolbar()
+    {
+        $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
+        $group = GroupManager::findGroup($currentGroupCode);
+        self::$queue[] = [self::UE_MANAGE_OVERALL_TOOLBAR, ['group' => $group]];
+        return true;
+    }
+
+    /**
+     * Queues the manage role UI
+     * @return bool
+     */
+    protected function queueUeManageRoleUi()
+    {
+        $currentRoleCode = $this->getCurrentRole();
+        if($currentRoleCode === false)
+            return false;
+        $role = RoleManager::findRole($currentRoleCode);
+        self::$queue[] = [self::UE_MANAGE_ROLE_UI, ['role' => $role]];
+        return true;
+    }
+
+    /**
+     * Queues the manage users UI
+     * @return bool
+     */
+    protected function queueUeManageUsersUi()
+    {
+        $currentRoleCode = $this->getCurrentRole();
+        if($currentRoleCode === false)
+            return false;
+        $role = RoleManager::findRole($currentRoleCode);
+
+        $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
+        $group = GroupManager::findGroup($currentGroupCode);
+
+        $unassignedUsers = UsersGroups::byUsersWithoutRole($currentGroupCode)->get();
+        if(!isset($unassignedUsers))
+            return false;
+
+        self::$queue[] = [self::UE_MANAGE_USERS_UI, ['role' => $role, 'group' => $group, 'users' => $unassignedUsers]];
+        return true;
     }
 
     /*

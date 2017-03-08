@@ -175,6 +175,16 @@ class Account extends ComponentBase
             Flash::success(Lang::get('rainlab.user::lang.account.activation_email_sent'));
         }
 
+        /*
+         * Redirect to the intended page after successful sign in
+         */
+        $redirectUrl = $this->pageUrl($this->property('redirect'))
+            ?: $this->property('redirect');
+
+        if ($redirectUrl = post('redirect', $redirectUrl)) {
+            return Redirect::intended($redirectUrl);
+        }
+
         /*try {
             if (!Settings::get('allow_registration', true)) {
                 throw new ApplicationException(Lang::get('rainlab.user::lang.account.registration_disabled'));
