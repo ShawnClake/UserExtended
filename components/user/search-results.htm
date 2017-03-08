@@ -10,13 +10,13 @@
 {% for user in results %}
     <a href="#" class="table-row" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
 		<div class="table-cell-20">
-			<img src="{% if ueuser.user.avatar.path %}{{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %}" width=60 height=60 /> <br>
+			<div class="circle-avatar center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})" width=60 height=60></div> <br>
 		</div>
         <div class="table-cell-30">
-		{{user.name}}
+			{{user.name}}
 		</div>
 		<div class="table-cell-30">
-		{{user.last_seen}}
+			{{user.last_seen}}
 		</div>
 		<div class="table-cell-20">
 			<button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add {{user.name}}</button>
