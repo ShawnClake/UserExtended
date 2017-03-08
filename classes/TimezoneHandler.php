@@ -17,6 +17,11 @@ use Clake\Userextended\Models\Timezone;
 class TimezoneHandler
 {
 
+    public static function getCurrentTime()
+    {
+        return Carbon::now();
+    }
+
     /**
      * Adjust the current UTC time by minutes, hours, days, and seconds
      * @param $minutes
@@ -27,7 +32,7 @@ class TimezoneHandler
      */
     public static function getCurrentTimeAdjusted($minutes, $hours = 0, $days = 0, $seconds = 0)
     {
-        $current = Carbon::now();
+        $current = self::getCurrentTime();
         $current->addHours($hours);
         $current->addMinutes($minutes);
         $current->addDays($days);
@@ -141,6 +146,18 @@ class TimezoneHandler
     public static function getUTCTimezone()
     {
         return Timezone::where('id', 1)->first();
+    }
+
+    /**
+     * @param Carbon $time
+     * @param string $locale
+     * @return mixed
+     */
+    public static function getRelativeTimeString(Carbon $time, $locale = 'en')
+    {
+        // Doesn't need to be adjusted, because otherwise the diff in time is the same
+        Carbon::setLocale($locale);
+        return $time->diffForHumans();
     }
 
 
