@@ -1,27 +1,27 @@
-.table{
+.table {
 	display: table; 
 	width: 100%;
 }
 
-.table-header{
+.table-header {
 	display: table-row; 
 	background-color: lightgrey;
 }
 
-.table-row{
+.table-row {
 	display: table-row;
 	width: 100%;
 	text-decoration: none; 
 	border-top: 1px solid black;
 }
 
-.table-cell-20{
+.table-cell-20 {
 	display: table-cell; 
 	width: 20%; 
 	text-align: center;
 }
 
-.table-cell-30{
+.table-cell-30 {
 	display: table-cell; 
 	width: 30%; 
 	text-align: center;
