@@ -20,6 +20,12 @@ use RainLab\User\Models\User;
  */
 class FriendsManager
 {
+    const UE_FRIEND_REQUESTED = 1;
+    const UE_FRIENDS = 2;
+    const UE_FOLLOWING = 4;
+    const UE_SUBSCRIBED = 8;
+    const UE_BLOCKED = 16;
+    const UE_DELETED = 32;
 
     /**
      * Returns a list of friend requests received.
@@ -89,7 +95,7 @@ class FriendsManager
 		$data = ['user' => UserUtil::getLoggedInUser()->name,
 		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
 		
-		Mail::send('clake.userextended::mail.recieved_friend_request', $data, function($message) {
+		Mail::send('clake.userextended::mail.recieved_friend_request', $data, function($message) use ($friendUserId) {
             $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
         });
 

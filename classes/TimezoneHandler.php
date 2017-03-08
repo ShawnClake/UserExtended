@@ -149,6 +149,8 @@ class TimezoneHandler
     }
 
     /**
+     * The passed in time string should be in the applications default timezone.
+     * By default this is UTC.
      * @param Carbon $time
      * @param string $locale
      * @return mixed
