@@ -20,12 +20,18 @@ use RainLab\User\Models\User;
  */
 class FriendsManager
 {
-    const UE_FRIEND_REQUESTED = 1;
-    const UE_FRIENDS = 2;
-    const UE_FOLLOWING = 4;
-    const UE_SUBSCRIBED = 8;
-    const UE_BLOCKED = 16;
-    const UE_DELETED = 32;
+    const UE_FRIEND_REQUESTED = 1; // 0 digit
+    const UE_FOLLOWING = 2; // 1 digit
+    const UE_SUBSCRIBED = 4; // 2 digit
+    const UE_FRIENDS = 8; // 3 digit
+
+    // Additional Relation States should be given here. States 0-9 are reserved for UE official
+    // States 10-19 can be used by other modules
+
+    const UE_BLOCKED = 1048576; // 20 digit
+    const UE_DELETED = 2097152; // 21 digit
+
+    // States above 21 will override UE_BLOCKED and UE_DELETED. Be extremely careful with this!!!
 
     /**
      * Returns a list of friend requests received.

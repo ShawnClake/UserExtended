@@ -150,7 +150,7 @@ class Friend extends Model
 
     /**
      * Determines whether or not two users are friends. Run count on the result. If >0 then they are.
-     * Can find sender and accepter by examining the returned object using ->get() on the result
+     * Can find sender and acceptor by examining the returned object using ->get() on the result
      * @param $query
      * @param $userIdA
      * @param $userIdB
@@ -177,7 +177,7 @@ class Friend extends Model
 
     /**
      * Checks whether or not a friend request between two users exists
-     * Can find sender and accepter by examining the returned object using ->get() on the result
+     * Can find sender and acceptor by examining the returned object using ->get() on the result
      * @param $query
      * @param $userIdA
      * @param null $userIdB
@@ -204,7 +204,7 @@ class Friend extends Model
 
     /**
      * Checks whether or not a friend request between users was declined. Run count on result, if >0 then they are.
-     * Can find sender and accepter by examining the returned object using ->get() on the result
+     * Can find sender and acceptor by examining the returned object using ->get() on the result
      * @param $query
      * @param $userIdA
      * @param null $userIdB
@@ -478,6 +478,66 @@ class Friend extends Model
         else
             return $this->user_that_sent_request;
 
+    }
+
+    /**
+     * ALL CODE BELOW THIS POINT IS FOR 2.2.00
+     */
+
+    /**
+     * @param $relation_states
+     */
+    public function setRelation($relation_states)
+    {
+        if(!is_array($relation_states))
+            $relation_states = [$relation_states];
+
+        foreach($relation_states as $state)
+        {
+            $this->relation = (int)($this->relation) | (int)($state);
+        }
+    }
+
+    /**
+     * @param $relation_state
+     * @return bool
+     */
+    public function hasRelation($relation_state)
+    {
+        if(!!((int)($this->relation) & (int)($relation_state)))
+            return true;
+        return false;
+    }
+
+    /**
+     * @param $relation_states
+     */
+    public function removeRelation($relation_states)
+    {
+        if(!is_array($relation_states))
+            $relation_states = [$relation_states];
+
+        foreach($relation_states as $state)
+        {
+            $this->relation = (int)($this->relation) & ~((int)($state));
+        }
+    }
+
+    /**
+     *
+     */
+    public function flushRelations()
+    {
+        $this->relation = 0;
+    }
+
+    /**
+     * @param $relation_states
+     */
+    public function setExclusiveRelation($relation_states)
+    {
+        $this->flushRelations();
+        $this->setRelation($relation_states);
     }
 
 }
