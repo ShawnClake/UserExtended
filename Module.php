@@ -1,5 +1,7 @@
 <?php namespace Clake\UserExtended;
 
+use Clake\UserExtended\Classes\UserManager;
+use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
@@ -23,7 +25,7 @@ class Module extends UserExtended
 
     public $author = "Shawn Clake";
 
-    public $description = "The core module for UserExtended";
+    public $description = "User Extended Core";
 
     public $version = "2.0.00";
 
@@ -131,6 +133,61 @@ class Module extends UserExtended
     public function isLoggedIn($userId)
     {
         return UserUtil::idIsLoggedIn($userId);
+    }
+
+    /**
+     * Programmatically registers a user.
+     * The $data array requires the following indices: email, password, password_confirmation
+     * The $data array can optional have the following indices: username, name
+     * The $data array also supports dynamic user settings. The index names are the same as the setting code found in user_settings.yaml
+     * @param array $data
+     * @return bool|mixed
+     */
+    public function registerUser(array $data)
+    {
+        return UserManager::registerUser($data);
+    }
+
+    /**
+     * Programmatically update a user. Defaults to logged in user if a UserExtended object isn't passed in.
+     * The $data array can contain the following indices: email, password, password_confirmation, username, name
+     * The $data array also supports dynamic user settings. The index names are the same as the setting code found in user_settings.yaml
+     * @param array $data
+     * @param UserExtended|null $user
+     * @return bool|\Illuminate\Support\Facades\Validator\
+     */
+    public function updateUser(array $data, UserExtended $user = null)
+    {
+        return UserManager::updateUser($data, $user);
+    }
+
+    /**
+     * Programmatically logs in a user
+     * The $data array requires the following indices: password, email or username (Depends on the default login field)
+     * @param array $data
+     * @return mixed
+     */
+    public function loginUser(array $data)
+    {
+        return UserManager::loginUser($data);
+    }
+
+    /**
+     * Programmatically logs out the currently logged in user
+     * @return mixed
+     */
+    public function logoutUser()
+    {
+        return UserManager::logoutUser();
+    }
+
+    /**
+     * Returns an array of UserSettings
+     * @return array
+     */
+    public function getUserSettings()
+    {
+        return UserSettingsManager::init()->all();
     }
 
 }

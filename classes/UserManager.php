@@ -149,10 +149,13 @@ class UserManager extends StaticFactory
         return User::where('username', 'like', '%' . $phrase . '%')->get();
     }
     
-    public static function updateUser(array $data)
+    public static function updateUser(array $data, UserExtended $user = null)
     {
-        if (!$user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser())) {
-            return false;
+        if(!isset($user))
+        {
+            if (!$user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser())) {
+                return false;
+            }
         }
 
         $user->name = $data['name'];
@@ -220,7 +223,7 @@ class UserManager extends StaticFactory
 
             $rules = [
                 'email'    => 'required|email|between:6,255',
-                'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255'),
+                'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
             ];
             //echo json_encode($data);
             /*
@@ -230,9 +233,6 @@ class UserManager extends StaticFactory
                 $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
             }
 
-            /*
-             * Enforcing password confirmation instead of overriding over it
-             */
             $validation = Validator::make($data, $rules);
             if ($validation->fails()) {
                 //throw new ValidationException($validation);
