@@ -24,7 +24,7 @@ class Friends extends ComponentBase
     {
         return [
             'name'        => 'Friends',
-            'description' => 'All friend related functions can be found here'
+            'description' => 'Friends list, list of friend requests'
         ];
     }
 

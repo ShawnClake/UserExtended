@@ -5,8 +5,6 @@ User Extended provides simple components and User Utility functions for complex 
 
 User Extended currently offers friends lists, role management, and User Utilities.
 
-User Extended is typically a dependency to my other plugins.
-
 ## Dependencies
 * RainLab.User http://octobercms.com/plugin/rainlab-user https://github.com/rainlab/user-plugin
 
@@ -20,6 +18,10 @@ Install this plugin and run
 * Use the command: `php artisan create:uemodule author.pluginname` in order to scaffold a module class for your own plugins.
 
 [Check out the bug tracker and feature planner](https://github.com/ShawnClake/UserExtended/issues)
+
+## Contributors
+* [Shawn Clake](http://shawnclake.com)
+* [Quinn Bast](http://www2.cs.uregina.ca/~bast200q/)
 
 ## Feature List
 * Frontend role/group management
