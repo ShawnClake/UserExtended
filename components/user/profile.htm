@@ -1,11 +1,11 @@
 <div class="row container" style="margin-top:10px;">
 
-    <div class="col s12 ">
+    <div class="col-sm-12 ">
 
         <div class="row" style="text-align: center;">
 
-            <div class="col s12 m3"></div>
-            <div class="col s12 m2">
+            <div class="col-sm-12 col-md-3"></div>
+            <div class="col-sm-12 col-md-2">
                 <div class="avatar-medium">
                     <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
 
@@ -22,7 +22,7 @@
                     </div>
 			    {% endif %}
             </div>
-            <div class="col s12 m4" style="width: 100%; background-color: lightblue;">
+            <div class="col-sm-12 col-md-4" style="width: 100%; background-color: lightblue;">
 				<div style="float: left; width: 33.33%; text-align: center;">
                 Stars: 0
 				</div>
@@ -34,7 +34,7 @@
 				</div>
 				<br class="clear" />
             </div>
-            <div class="col s12 m3">
+            <div class="col-sm-12 col-md-3">
 
                 {% if not ueuser.unrestricted %}
                     <div>See more of this persons profile by adding them as a friend</div>
@@ -43,10 +43,10 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m3">
+            <div class="col-sm-12 col-md-3">
 
             </div>
-            <div class="col s12 m6">
+            <div class="col-sm-12 col-md-6">
                 <h4>Comments</h4>
                 <div id="comment_section">
 
