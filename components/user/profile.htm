@@ -1,18 +1,3 @@
-<style>
-
-    div.userblock
-    {
-        color:#000;
-    }
-
-    /*div.userblock:hover
-    {
-
-        background-color:rgba(0,0,0,0.1);
-
-    }/*
-</style>
-
 <div class="row container" style="margin-top:10px;">
 
     <div class="col s12 ">
@@ -21,17 +6,22 @@
 
             <div class="col s12 m3"></div>
             <div class="col s12 m2">
-			<div class="circle-avatar-medium center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div>
-			<div style="width:100%;text-align:center;margin-bottom: 10px;">
-				    <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
-					<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add</button>
-			</div>
-            {% if ueuser.unrestricted %}
-			<div style="width:100%;text-align:center;">
-				  <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
-			</div>
-			{% endif %}
-			
+                <div class="avatar-medium">
+                    <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
+
+                    </div>
+                </div>
+
+                <div style="width:100%;text-align:center;margin-bottom: 10px;">
+                        <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
+                        <button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add</button>
+                </div>
+                {% if ueuser.unrestricted %}
+                    <div style="width:100%;text-align:center;">
+                          <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
+                    </div>
+			    {% endif %}
+            </div>
             <div class="col s12 m4" style="width: 100%; background-color: lightblue;">
 				<div style="float: left; width: 33.33%; text-align: center;">
                 Stars: 0
@@ -47,15 +37,15 @@
             <div class="col s12 m3">
 
                 {% if not ueuser.unrestricted %}
-                <div>See more of this persons profile by adding them as a friend</div>
+                    <div>See more of this persons profile by adding them as a friend</div>
                 {% endif %}
-
             </div>
-
         </div>
 
         <div class="row">
-            <div class="col s12 m3"></div>
+            <div class="col s12 m3">
+
+            </div>
             <div class="col s12 m6">
                 <h4>Comments</h4>
                 <div id="comment_section">
@@ -80,9 +70,5 @@
                 {% endif %}
             </div>
         </div>
-
-
     </div>
-
 </div>
-

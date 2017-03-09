@@ -28,42 +28,31 @@
 	vertical-align: middle;
 }
 
-/* Credit zds of Stackoverflow */
-div.circle-avatar-small{
+
+div.avatar-small {
 	height: 60px;
 	width: 60px;
-
-	/* make it responsive */
-	/*max-width: 100%;
-	width:100%;
-	height: auto;
-	display:block;*/
-	/* div height to be the same as width*/
-	/*padding-top:100%;*/
-
-	/* make it a circle */
-	border-radius:50%;
-
-	/* Centering on image`s center*/
-	background-position-y: center;
-	background-position-x: center;
-	background-repeat: no-repeat;
-
-	/* it makes the clue thing, takes smaller dimension to fill div */
-	background-size: cover;
 }
 
-div.circle-avatar-medium{
+div.avatar-medium {
 	height: 120px;
 	width: 120px;
+}
 
+div.avatar-large {
+	height: 180px;
+	width: 180px;
+}
+
+/* Credit zds of Stackoverflow */
+div.responsive-circle {
 	/* make it responsive */
-	/*max-width: 100%;
+	max-width: 100%;
 	width:100%;
 	height: auto;
-	display:block;*/
+	display:block;
 	/* div height to be the same as width*/
-	/*padding-top:100%;*/
+	padding-top:100%;
 
 	/* make it a circle */
 	border-radius:50%;
@@ -85,3 +74,15 @@ div.center-in-parent
 	right: 0;
 	bottom: 0;
 }
+
+div.userblock
+{
+	color:#000;
+}
+
+/*div.userblock:hover
+{
+
+    background-color:rgba(0,0,0,0.1);
+
+}/*

@@ -25,7 +25,7 @@ return [
             'lastonline' => 'Last Online',
         ],
         'user' => [
-            'writtenat' => 'Written At',
+            'writtenat' => 'Written',
             'search' => 'Search',
         ]
 
