@@ -162,6 +162,12 @@ class TimezoneHandler
         return $time->diffForHumans();
     }
 
+    /**
+     * Returns a contextual relative time string. 5 seconds ago, 5 minutes ago.
+     * @param $time
+     * @param string $locale
+     * @return mixed
+     */
     public static function twigRelativeTimeString($time, $locale = 'en')
     {
         return self::getRelativeTimeString($time, $locale);

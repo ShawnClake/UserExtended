@@ -50,23 +50,18 @@ class UserManager extends StaticFactory
 
         foreach($users as $user)
         {
-
             $userAdd = true;
 
             if(!$friends->isEmpty())
             {
-
                 foreach($friends as $friend)
                 {
-
                     if($user->id == $friend->id)
                     {
                         $userAdd = false;
                         break;
                     }
-
                 }
-
             }
 
             if($user->id == UserUtil::getLoggedInUser()->id)
@@ -76,7 +71,6 @@ class UserManager extends StaticFactory
             {
                 $returner->push($user);
             }
-
         }
 
         return $returner;
@@ -148,7 +142,13 @@ class UserManager extends StaticFactory
     {
         return User::where('username', 'like', '%' . $phrase . '%')->get();
     }
-    
+
+    /**
+     * Updates a user
+     * @param array $data
+     * @param UserExtended|null $user
+     * @return bool|Validator\
+     */
     public static function updateUser(array $data, UserExtended $user = null)
     {
         if(!isset($user))
@@ -183,14 +183,13 @@ class UserManager extends StaticFactory
                 $validator = $settingsManager->setSetting($key, $value);
                 if($validator !== true)
                 {
-                    return $validator;
                     /*
                      * This means validation failed and the setting was NOT set.
                      * $validator is a Validator instance
                      */
+                    return $validator;
                 }
             }
-
         }
 
         $settingsManager->save();
@@ -207,6 +206,12 @@ class UserManager extends StaticFactory
         return true;
     }
 
+    /**
+     * Programatically registers a user
+     * @param array $data
+     * @return bool|mixed
+     * @throws \Exception
+     */
     public static function registerUser(array $data)
     {
         try {
@@ -214,18 +219,16 @@ class UserManager extends StaticFactory
                 throw new ApplicationException(Lang::get('rainlab.user::lang.account.registration_disabled'));
             }
 
+            $eResponse = Event::fire('clake.ue.preregistration', [&$data], true);
+
             /*
              * Validate input
              */
-
-            $eResponse = Event::fire('clake.ue.preregistration', [&$data], true);
-            //return false;
-
             $rules = [
                 'email'    => 'required|email|between:6,255',
                 'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
             ];
-            //echo json_encode($data);
+
             /*
              * Better utilization of email vs username
              */
@@ -250,15 +253,6 @@ class UserManager extends StaticFactory
              * Preform phase 1 User registration
              */
             $user = self::register($data, $automaticActivation);
-
-            /*
-             * Activation is by the user, send the email
-             */
-            if ($userActivation) {
-                //self::sendActivationEmail($user, $activation_link);
-
-                //Flash::success(Lang::get('rainlab.user::lang.account.activation_email_sent'));
-            }
 
             /*
              * Modified code below
@@ -319,7 +313,6 @@ class UserManager extends StaticFactory
 
             return false;
         }
-
     }
 
     /**
@@ -426,19 +419,24 @@ class UserManager extends StaticFactory
 
     }
 
+    /**
+     * Logs out the currently logged in user
+     * @return mixed
+     */
     public static function logoutUser()
     {
         $user = Auth::getUser();
 
-        Auth::logout();
-
-        if ($user) {
-            Event::fire('rainlab.user.logout', [$user]);
-            Event::fire('clake.ue.logout', [$user]);
+        if (!isset($user)) {
+            return false;
         }
 
-        $url = post('redirect', Request::fullUrl());
+        Auth::logout();
+        Event::fire('rainlab.user.logout', [$user]);
+        Event::fire('clake.ue.logout', [$user]);
         Flash::success(Lang::get('rainlab.user::lang.session.logout'));
+
+        $url = post('redirect', Request::fullUrl());
 
         return Redirect::to($url);
     }

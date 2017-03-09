@@ -51,7 +51,6 @@ class CommentManager
         });
 
         return $comment->save();
-
     }
 
     /**
@@ -60,13 +59,26 @@ class CommentManager
      */
     public static function deleteComment($commentId)
     {
-
         if(self::canDeleteComment($commentId))
         {
             $comment = Comment::where('id', $commentId)->first();
             $comment->delete();
         }
+    }
 
+    /**
+     * Edits a comment
+     * @param $commentId
+     * @param $content
+     */
+    public static function editComment($commentId, $content)
+    {
+        if(self::canEditComment($commentId))
+        {
+            $comment = Comment::where('id', $commentId)->first();
+            $comment->content = $content;
+            $comment->save();
+        }
     }
 
     /**
@@ -116,21 +128,6 @@ class CommentManager
             return true;
 
         return false;
-    }
-
-    /**
-     * Edits a comment
-     * @param $commentId
-     * @param $content
-     */
-    public static function editComment($commentId, $content)
-    {
-        if(self::canEditComment($commentId))
-        {
-            $comment = Comment::where('id', $commentId)->first();
-            $comment->content = $content;
-            $comment->save();
-        }
     }
 
 }

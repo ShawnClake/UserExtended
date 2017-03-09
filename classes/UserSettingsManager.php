@@ -211,7 +211,6 @@ class UserSettingsManager
                     $value = $this->decrypt($key, $value);
             }
 
-
             $settings[$key] = [$value, 'options' => $options];
         }
 

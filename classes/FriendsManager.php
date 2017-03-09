@@ -6,6 +6,7 @@ use Clake\Userextended\Models\Friend;
 use Auth;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
+use Mail;
 
 /**
  * User Extended by Shawn Clake
@@ -40,7 +41,6 @@ class FriendsManager
      */
     public static function listReceivedFriendRequests($limit = 5)
     {
-
         $users = new Collection();
 
         $limit = Helpers::unlimited($limit);
@@ -51,7 +51,6 @@ class FriendsManager
             $users->push(UserUtil::getUser($user->user_that_sent_request));
         }
         return $users;
-
     }
 
     /**
@@ -104,7 +103,6 @@ class FriendsManager
 		Mail::send('clake.userextended::mail.recieved_friend_request', $data, function($message) use ($friendUserId) {
             $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
         });
-
     }
 
     /**
