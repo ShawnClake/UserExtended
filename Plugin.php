@@ -73,7 +73,7 @@ class Plugin extends PluginBase
     public function register()
     {
         /*
-         * Registers the UE scaffolding command for creaitng modules
+         * Registers the UE scaffolding command for creating modules
          */
         $this->registerConsoleCommand('create:uemodule', 'Clake\UserExtended\Console\CreateUEModule');
 

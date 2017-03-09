@@ -174,12 +174,16 @@ class UserUtil
     public static function getUsersIdElseLoggedInUsersId($userId = null)
     {
         if($userId == null)
-            $userId = UserUtil::getLoggedInUser();
+        {
+            $user = UserUtil::getLoggedInUser();
+            if(isset($user))
+                $userId = $user->id;
+        }
 
         if($userId == null)
             return null;
 
-        return $userId->id;
+        return $userId;
     }
 
     /**
