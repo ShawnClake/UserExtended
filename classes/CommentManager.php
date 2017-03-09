@@ -3,6 +3,7 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\Comment;
+use Mail;
 
 /**
  * User Extended by Shawn Clake
