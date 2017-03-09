@@ -30,18 +30,18 @@
 
 
 div.avatar-small {
-	height: 60px;
-	width: 60px;
+	height: 50%;
+	width: 50%;
 }
 
 div.avatar-medium {
-	height: 120px;
-	width: 120px;
+	height: 65%;
+	width: 65%;
 }
 
 div.avatar-large {
-	height: 180px;
-	width: 180px;
+	height: 80%;
+	width: 80%;
 }
 
 /* Credit zds of Stackoverflow */
