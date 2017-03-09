@@ -30,7 +30,7 @@ class User extends ComponentBase
     {
         return [
             'name'        => 'User',
-            'description' => 'All user related functions'
+            'description' => 'User lists, displaying a user, user search, user profiles.'
         ];
     }
 

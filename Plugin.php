@@ -43,7 +43,7 @@ class Plugin extends PluginBase
     {
         return [
             'name' => 'UserExtended',
-            'description' => 'Adds roles, friends, and utility functions to the Rainlab User plugin',
+            'description' => 'Adds roles, friends, profiles, and utility functions to the Rainlab User plugin',
             'author' => 'clake',
             'icon' => 'icon-user-plus'
         ];
@@ -71,6 +71,9 @@ class Plugin extends PluginBase
      */
     public function register()
     {
+        /*
+         * Registers the UE scaffolding command for creaitng modules
+         */
         $this->registerConsoleCommand('create:uemodule', 'Clake\UserExtended\Console\CreateUEModule');
 
         /*
@@ -181,6 +184,9 @@ class Plugin extends PluginBase
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
 
+        /*
+         * Handles injecting JS and CSS assets
+         */
         $assets = UserExtended::getAssets();
 
         foreach($assets as $asset)
@@ -193,15 +199,19 @@ class Plugin extends PluginBase
                 $component->addCss($asset);
         }
     }
-	
+
+    /**
+     * Registers mail templates
+     * @return array
+     */
 	public function registerMailTemplates()
-{
-    return [
-        'clake.userextended::mail.on_group_role_changed' => 'Notify that the users group was changed',
-        'clake.userextended::mail.received_friend_request'  => 'Friend request',
-		'clake.userextended::mail.received_profile_comment'  => 'New comment on user profile',
-		'clake.userextended::mail.register'  => 'Registration confirmation email',
-    ];
-}
+    {
+        return [
+            'clake.userextended::mail.on_group_role_changed' => 'Notify that the users group was changed',
+            'clake.userextended::mail.received_friend_request'  => 'Friend request',
+            'clake.userextended::mail.received_profile_comment'  => 'New comment on user profile',
+            'clake.userextended::mail.register'  => 'Registration confirmation email',
+        ];
+    }
 
 }

@@ -5,7 +5,14 @@
     "authors": [
         {
             "name": "Shawn Clake",
-            "email": "shawn.clake@gmail.com"
+            "email": "shawn.clake@gmail.com",
+            "homepage": "http://shawnclake.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Quinn Bast",
+            "homepage": "http://www2.cs.uregina.ca/~bast200q/",
+            "role": "Developer"
         }
     ],
     "require": {}
