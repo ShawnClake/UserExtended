@@ -26,7 +26,7 @@ class FriendsManager
     const UE_SUBSCRIBED = 4; // 2 digit
     const UE_FRIENDS = 8; // 3 digit
 
-    // Additional Relation States should be given here. States 0-9 are reserved for UE official
+    // Additional Bond States should be given here. States 0-9 are reserved for UE official
     // States 10-19 can be used by other modules
 
     const UE_BLOCKED = 1048576; // 20 digit

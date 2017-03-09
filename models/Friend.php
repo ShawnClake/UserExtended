@@ -487,7 +487,7 @@ class Friend extends Model
     /**
      * @param $relation_states
      */
-    public function setRelation($relation_states)
+    public function setBond($relation_states)
     {
         if(!is_array($relation_states))
             $relation_states = [$relation_states];
@@ -502,7 +502,7 @@ class Friend extends Model
      * @param $relation_state
      * @return bool
      */
-    public function hasRelation($relation_state)
+    public function hasBond($relation_state)
     {
         if(!!((int)($this->relation) & (int)($relation_state)))
             return true;
@@ -512,7 +512,7 @@ class Friend extends Model
     /**
      * @param $relation_states
      */
-    public function removeRelation($relation_states)
+    public function removeBond($relation_states)
     {
         if(!is_array($relation_states))
             $relation_states = [$relation_states];
@@ -526,7 +526,7 @@ class Friend extends Model
     /**
      *
      */
-    public function flushRelations()
+    public function flushBonds()
     {
         $this->relation = 0;
     }
@@ -534,7 +534,7 @@ class Friend extends Model
     /**
      * @param $relation_states
      */
-    public function setExclusiveRelation($relation_states)
+    public function setExclusiveBond($relation_states)
     {
         $this->flushRelations();
         $this->setRelation($relation_states);
