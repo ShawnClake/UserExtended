@@ -17,28 +17,37 @@
 
     <div class="col s12 ">
 
-        <div class="row">
+        <div class="row" style="text-align: center;">
 
             <div class="col s12 m3"></div>
             <div class="col s12 m2">
-                <img src="{% if ueuser.user.avatar.path %}{{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %}" width=120 height=120 /> <br>
-                <span style="font-size:19px;font-style:bold;">{{ueuser.user.name}}</span> <br>
-                {% if ueuser.unrestricted %}<span style="font-size:11px;font-style:italic;">{{ueuser.user.email}}</span>{% endif %}
-            </div>
-            <div class="col s12 m4">
+			<div class="circle-avatar-medium center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div>
+			<div style="width:100%;text-align:center;margin-bottom: 10px;">
+				    <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
+					<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add</button>
+			</div>
+            {% if ueuser.unrestricted %}
+			<div style="width:100%;text-align:center;">
+				  <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
+			</div>
+			{% endif %}
+			
+            <div class="col s12 m4" style="width: 100%; background-color: lightblue;">
+				<div style="float: left; width: 33.33%; text-align: center;">
                 Stars: 0
-                <br>
+				</div>
+				<div style="float: left; width: 33.33%; text-align: center;">
                 ThumbUps: 0
-                <br>
+				</div>
+				<div style="float: left; width: 33.33%; text-align: center;">
                 Gold: 5
+				</div>
+				<br class="clear" />
             </div>
             <div class="col s12 m3">
 
                 {% if not ueuser.unrestricted %}
-                See more of this persons profile by adding them as a friend
-                <div style="bottom:0;">
-                    {{ueuser.user.name}} <button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add</button>
-                </div>
+                <div>See more of this persons profile by adding them as a friend</div>
                 {% endif %}
 
             </div>
