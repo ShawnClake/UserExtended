@@ -10,7 +10,7 @@
 {% for user in results %}
 	<div class="table-row">
 		<a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
-			<div class="circle-avatar center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})" width=60 height=60></div> <br>
+			<div class="img-60-60"><div class="circle-avatar center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
 		</a>
 		<a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
 			{{user.name}}
