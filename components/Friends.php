@@ -86,6 +86,7 @@ class Friends extends ComponentBase
     public function onRun()
     {
         Plugin::injectAssets($this);
+        $this->addCss('/plugins/clake/userextended/assets/css/friends.css');
     }
 
     /**
