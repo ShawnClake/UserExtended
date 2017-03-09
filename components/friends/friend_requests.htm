@@ -1,7 +1,11 @@
-<ul>
-    {% for user in friends.friendRequests %}
-    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friends::onAccept">{{ "clake.userextended::lang.components.friend.accept"|trans }}</button>
-        <a href="#" data-request-data="id: {{user.id}}" data-request="friends::onDecline"><span class="glyphicon glyphicon-remove">X</span></a>
-    </li>
-    {% endfor %}
-</ul>
+{% if friends.friendRequests %}
+
+    <ul>
+        {% for user in friends.friendRequests %}
+            <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friends::onAccept">{{ "clake.userextended::lang.components.friend.accept"|trans }}</button>
+                <a href="#" data-request-data="id: {{user.id}}" data-request="friends::onDecline"><span class="glyphicon glyphicon-remove">X</span></a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endif %}
