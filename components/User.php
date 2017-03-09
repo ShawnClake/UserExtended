@@ -97,7 +97,7 @@ class User extends ComponentBase
         Plugin::injectAssets($this);
 
         $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
-		$this->addCss('/plugins/clake/userextended/assets/css/user.css');
+		//$this->addCss('/plugins/clake/userextended/assets/css/user.css');
     }
 
     /**

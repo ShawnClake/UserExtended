@@ -22,3 +22,93 @@
 span .capitalize {
 	text-transform: capitalize;
 }
+
+
+.table {
+    display: table;
+    width: 100%;
+}
+
+.table-header {
+    display: table-row;
+    background-color: lightgrey;
+}
+
+.table-row {
+    display: table-row;
+    width: 100%;
+    border-top: 1px solid black;
+}
+
+.table-cell-20 {
+    display: table-cell;
+    width: 20%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-cell-30 {
+    display: table-cell;
+    width: 30%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+div.avatar-small {
+    height: 50%;
+    width: 50%;
+}
+
+div.avatar-medium {
+    height: 65%;
+    width: 65%;
+}
+
+div.avatar-large {
+    height: 80%;
+    width: 80%;
+}
+
+/* Credit zds of Stackoverflow */
+div.responsive-circle {
+    /* make it responsive */
+    max-width: 100%;
+    width:100%;
+    height: auto;
+    display:block;
+    /* div height to be the same as width*/
+    padding-top:100%;
+
+    /* make it a circle */
+    border-radius:50%;
+
+    /* Centering on image`s center*/
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
+
+    /* it makes the clue thing, takes smaller dimension to fill div */
+    background-size: cover;
+}
+
+div.center-in-parent
+{
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+div.userblock
+{
+    color:#000;
+}
+
+/*div.userblock:hover
+{
+
+    background-color:rgba(0,0,0,0.1);
+
+}/*
