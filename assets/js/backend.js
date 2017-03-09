@@ -1,3 +1,8 @@
+/*
+ * Backend.js
+ * Javascript for UE backend pages
+ */
+
 /*var UE = UE || {};
 UE.Utils = UE.Utils || {};
 

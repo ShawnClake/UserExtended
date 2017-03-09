@@ -44,7 +44,6 @@ trait Searchable
      */
     protected static function searchUserByAttribute($field, $phrase)
     {
-
         return self::where($field, 'like', '%' . $phrase . '%')->get();
     }
 
@@ -59,7 +58,6 @@ trait Searchable
                 'You must define a $searchable property in %s to use the Searchable trait.', get_called_class()
             ));
         }
-
     }
 
     /**

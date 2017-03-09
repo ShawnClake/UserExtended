@@ -132,7 +132,6 @@ class User extends ComponentBase
     public function singleUser()
     {
         $code = $this->property('paramCode');
-        //echo json_encode($this->param($code));
 
         if($code != '')
             $user = UserUtil::getUser($this->param($code));
@@ -265,7 +264,6 @@ class User extends ComponentBase
      */
     public function roles()
     {
-        //$roles = UserRoleManager::currentUser()->all()->promote('developer');
         return UserRoleManager::currentUser()->allRoles()->getUsersRoles();
     }
 

@@ -47,11 +47,17 @@ class Role extends Model
      */
     protected $fillable = [];
 
+    /**
+     * @var array
+     */
     protected $timezonable = [
         'updated_at',
         'created_at'
     ];
 
+    /**
+     * @var array
+     */
     protected $dates = [
         'deleted_at',
     ];
@@ -161,7 +167,6 @@ class Role extends Model
             $role->sort_order = $total - $i - 1;
             $role->save();
         }
-
     }
 
     /**

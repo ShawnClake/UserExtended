@@ -48,11 +48,19 @@ class Module extends UserExtended
         ];
     }
 
+    /**
+     * Injecting Navigation isn't supported in this version of UE.
+     * This feature should be supported in a future version of UE
+     */
     public function injectNavigation()
     {
         return [];
     }
 
+    /**
+     * Injecting Lang isn't supported in this version of UE.
+     * This feature should be supported in a future version of UE
+     */
     public function injectLang()
     {
         return [];

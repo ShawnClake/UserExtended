@@ -1,3 +1,8 @@
+/*
+ * Validate_signup.js
+ * Validation for the signup partial
+ */
+
 var errors = 0;
 
 function validate(){	

@@ -80,6 +80,9 @@ class Friends extends ComponentBase
         return $user->getProfilePageOptions();
     }
 
+    /**
+     * Injects assets
+     */
     public function onRun()
     {
         Plugin::injectAssets($this);
@@ -112,7 +115,6 @@ class Friends extends ComponentBase
             $userId = $this->param($code);
 
         return FriendsManager::listFriends($limit, $userId);
-
     }
 
     /**
@@ -168,9 +170,6 @@ class Friends extends ComponentBase
 
         if($userid != null)
             FriendsManager::acceptRequest($userid);
-
-        //$data = UserUtil::getLoggedInUser()->toArray();
-        //Pusher::init()->trigger('private-mychannel', 'tests', $data);
     }
 
     /**
@@ -190,7 +189,6 @@ class Friends extends ComponentBase
     public function onRequest()
     {
         $userId = post('id');
-		
         FriendsManager::sendFriendRequest($userId);
     }
 

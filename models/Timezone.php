@@ -18,9 +18,10 @@ use Clake\UserExtended\Traits\Timezonable;
  */
 class Timezone extends Model
 {
-
     use Searchable;
+
     use SoftDelete;
+
     use Timezonable;
 
     /**
@@ -43,17 +44,26 @@ class Timezone extends Model
         'offset',
     ];
 
+    /**
+     * @var array
+     */
     protected $searchable = [
         'name',
         'abbr',
         'utc',
     ];
 
+    /**
+     * @var array
+     */
     protected $timezonable = [
         'updated_at',
         'created_at'
     ];
 
+    /**
+     * @var array
+     */
     protected $dates = [
         'deleted_at',
     ];
@@ -69,9 +79,7 @@ class Timezone extends Model
         ],
     ];
     public $belongsTo = [];
-    public $belongsToMany = [
-
-    ];
+    public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];

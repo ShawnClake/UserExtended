@@ -22,11 +22,17 @@ class UserExtended extends User
 
     use Searchable;
 
+    /**
+     * @var array
+     */
     protected $timezonable = [
         'created_at',
         'updated_at'
     ];
 
+    /**
+     * @var array
+     */
     protected $searchable = [
         'email',
         'name',
@@ -40,7 +46,6 @@ class UserExtended extends User
      */
     public function __construct()
     {
-
         $hasMany = $this->hasMany;
         $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'user_id'];
         $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'author_id'];

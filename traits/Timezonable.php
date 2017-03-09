@@ -30,7 +30,6 @@ trait Timezonable
      */
     public function getTime($timestamp, UserExtended $user = null)
     {
-
         if ($user == null)
             $timezone = UserUtil::getLoggedInUsersTimezone();
         else
@@ -42,7 +41,6 @@ trait Timezonable
         $timestamp = new Carbon($timestamp);
 
         return TimezoneHandler::getTimeAdjustedByTimezone($timestamp, $timezone);
-
     }
 
     /**

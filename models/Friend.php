@@ -33,7 +33,6 @@ use Clake\UserExtended\Traits\Timezonable;
  */
 class Friend extends Model
 {
-
     use SoftDelete;
 
     use Timezonable;
@@ -44,7 +43,6 @@ class Friend extends Model
         'declined' => 2,
         'blocked' => 3,
     ];
-
 
     /**
      * @var string The database table used by the model.
@@ -87,7 +85,6 @@ class Friend extends Model
 
     /**
      * Returns whether or not two users are friends
-     *
      * @param $userIdA
      * @param $userIdB
      * @return bool
@@ -100,6 +97,7 @@ class Friend extends Model
     }
 
     /**
+     * Returns whether or not two users have a friend request between them
      * @param $userIdA
      * @param null $userIdB
      * @return bool
@@ -113,6 +111,7 @@ class Friend extends Model
     }
 
     /**
+     * Returns whether or not two users have a declined friend request between them.
      * @param $userIdA
      * @param null $userIdB
      * @return bool
@@ -125,6 +124,7 @@ class Friend extends Model
     }
 
     /**
+     * Returns whether or not two users are blocked from each other
      * @param $userIdA
      * @param null $userIdB
      * @return bool
@@ -137,6 +137,7 @@ class Friend extends Model
     }
 
     /**
+     * Returns whether or not two users share a relation or bond
      * @param $userIdA
      * @param null $userIdB
      * @return bool
@@ -485,6 +486,7 @@ class Friend extends Model
      */
 
     /**
+     * Sets bonds between two users
      * @param $relation_states
      */
     public function setBond($relation_states)
@@ -499,6 +501,7 @@ class Friend extends Model
     }
 
     /**
+     * Determines whether a bond exists between two users
      * @param $relation_state
      * @return bool
      */
@@ -510,6 +513,7 @@ class Friend extends Model
     }
 
     /**
+     * Removes a bond between two users
      * @param $relation_states
      */
     public function removeBond($relation_states)
@@ -524,7 +528,8 @@ class Friend extends Model
     }
 
     /**
-     *
+     * Flushes all bonds
+     * Removes any relation between two users
      */
     public function flushBonds()
     {
@@ -532,6 +537,7 @@ class Friend extends Model
     }
 
     /**
+     * Flushes all bonds and then sets the bonds passed in
      * @param $relation_states
      */
     public function setExclusiveBond($relation_states)

@@ -31,6 +31,9 @@ use System\Classes\SettingsManager;
 class Plugin extends PluginBase
 {
 
+    /**
+     * @var array
+     */
     public $require = [
         'RainLab.User',
     ];
@@ -56,12 +59,10 @@ class Plugin extends PluginBase
     public function registerMarkupTags()
     {
         return [
-
             'filters' => [
                 'timezonify' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigTimezoneAdjustment'],
                 'relative' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigRelativeTimeString'],
             ],
-
         ];
     }
 
@@ -88,7 +89,6 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-
         /*
          * Boots the modules which were registered with UserExtended
          */

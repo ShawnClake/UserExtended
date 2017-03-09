@@ -1,3 +1,8 @@
+/*
+ * Validate_login.js
+ * Validation for the login partial
+ */
+
 var errors = 0;
 
 function validate(){

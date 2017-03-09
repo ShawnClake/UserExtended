@@ -80,6 +80,9 @@ class Account extends ComponentBase
         return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
+    /**
+     * Injects assets
+     */
     public function onRun()
     {
         Plugin::injectAssets($this);

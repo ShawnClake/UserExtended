@@ -22,7 +22,6 @@ use Clake\UserExtended\Traits\Timezonable;
  */
 class Comment extends Model
 {
-
     use Encryptable;
 
     use SoftDelete;
@@ -34,10 +33,8 @@ class Comment extends Model
     protected $dates = ['deleted_at'];
 
     protected $timezonable = [
-
         'created_at',
         'updated_at'
-
     ];
 
     /**

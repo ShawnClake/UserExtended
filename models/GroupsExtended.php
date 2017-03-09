@@ -36,7 +36,6 @@ class GroupsExtended extends UserGroup
      */
     public function __construct()
     {
-
         $hasMany = $this->hasMany;
         $hasMany['roles'] = ['Clake\UserExtended\Models\Role', 'key' => 'group_id'];
         $this->hasMany = $hasMany;

@@ -254,10 +254,6 @@ class UserManager extends StaticFactory
              */
             $user = self::register($data, $automaticActivation);
 
-            /*
-             * Modified code below
-             */
-
             Auth::login($user);
 
             /*
@@ -285,7 +281,6 @@ class UserManager extends StaticFactory
                          */
                     }
                 }
-
             }
 
             $settingsManager->save();
@@ -305,9 +300,7 @@ class UserManager extends StaticFactory
             }
 
             return $user;
-
-        }
-        catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             if (Request::ajax()) throw $ex;
             else Flash::error($ex->getMessage());
 
@@ -368,6 +361,12 @@ class UserManager extends StaticFactory
         return $user;
     }
 
+    /**
+     * Logs in a user
+     * @param array $data
+     * @param string $redirect_link
+     * @return mixed
+     */
     public static function loginUser(array $data, $redirect_link = "")
     {
         /*

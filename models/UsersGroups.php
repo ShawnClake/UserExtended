@@ -36,6 +36,9 @@ class UsersGroups extends Model
      */
     protected $fillable = [];
 
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 
     /**
@@ -70,6 +73,7 @@ class UsersGroups extends Model
     }
 
     /**
+     * Returns a group based upon the passed in groupCode
      * @param $query
      * @param $groupCode
      * @return mixed
@@ -81,6 +85,7 @@ class UsersGroups extends Model
     }
 
     /**
+     * Returns a user based upon the passed in userId
      * @param $query
      * @param $userId
      * @return mixed
@@ -103,7 +108,7 @@ class UsersGroups extends Model
     }
 
     /**
-     *
+     * Returns a list of roles with users attached to them
      */
     public static function getAssignedRoles()
     {
@@ -111,7 +116,7 @@ class UsersGroups extends Model
     }
 
     /**
-     *
+     * Returns a list of groups with users attached to them
      */
     public static function getAssignedGroups()
     {

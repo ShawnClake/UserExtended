@@ -70,9 +70,9 @@ class CreateUEModule extends GeneratorCommand
             'author' => $authorName,
         ];
     }
+
     /**
      * Get the console command arguments.
-     *
      * @return array
      */
     protected function getArguments()
@@ -81,9 +81,9 @@ class CreateUEModule extends GeneratorCommand
             ['module', InputArgument::REQUIRED, 'The name of the plugin to create a module for. Eg: RainLab.Blog'],
         ];
     }
+
     /**
      * Get the console command options.
-     *
      * @return array
      */
     protected function getOptions()

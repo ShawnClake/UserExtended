@@ -325,17 +325,7 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        /*$role = RoleManager::findRole($roleCode);
-        $role->name = $name;
-        $role->code = $code;
-        $role->description = $description;
-        $role->save();*/
         $feedback = RoleManager::updateRole($roleCode, null, $name, $description, $code, null, true);
-
-        /*if($role->group_id != 0)
-        {
-            $groupCode = $role->group()->code;
-        }*/
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
         if($roles->count() > 0)
@@ -720,11 +710,19 @@ class Roles extends Controller
         return $renders;
     }
 
+    /**
+     * Flushes the queue
+     * Remove all renders in queue
+     */
     private function flushQueue()
     {
         self::$queue = [];
     }
 
+    /**
+     * Flushes the Session
+     * Removes session keys used by RoleManager
+     */
     private function flushSession()
     {
         if(Session::has('ue.backend.role_manager.current_group'))

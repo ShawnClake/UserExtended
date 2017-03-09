@@ -1,3 +1,8 @@
+/*
+ * Validate_update.js
+ * Validation for the update partial
+ */
+
 var errors = 0;
 
 function validate(){	

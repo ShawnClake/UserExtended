@@ -30,7 +30,7 @@ Install this plugin and run
 * User Utility functions which can be used accross your own plugins
 * User profiles and a profile comment system
 * User search. Search for users by name, email or username
-* Timezone support! Use the '|timezonify' twig filter
+* Timezone support! Use the '|timezonify' twig filter. Use the '|relative' twig filter to get a textual relative time stamp (5 seconds ago, 2 months ago)
 * Timezonable trait which can be added to models to automagically convert times
 * Backend user role/group management
 * Extensible modules
