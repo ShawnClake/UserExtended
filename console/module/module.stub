@@ -21,7 +21,7 @@ class Module extends UserExtended
 {
     use StaticFactoryTrait;
 
-    public $name = '{{lower_author}}{{studly_author}}';
+    public $name = '{{lower_author}}{{studly_name}}';
 
     public $author = '{{author}}';
 
