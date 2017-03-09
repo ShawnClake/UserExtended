@@ -1,4 +1,4 @@
-{% if friends.friendRequests %}
+{% if friends.friendRequests is not empty %}
 
     <ul>
         {% for user in friends.friendRequests %}

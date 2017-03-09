@@ -1,28 +1,38 @@
-<div class="table">
-<div class="table-header">
-	<div class="table-cell-20">Picture</div>
-	<div class="table-cell-30">Username</div>
-	<div class="table-cell-30">Last Online</div>
-	<div class="table-cell-20">Add Friend</div>
-</div>
+{% if results is not empty %}
 
+	<div class="table">
 
-{% for user in results %}
-	<div class="table-row">
-		<a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
-			<div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
-		</a>
-		<a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
-			{{user.name}}
-		</a>
-		<a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
-			{{user.last_seen}}
-		</a>
-		<div class="table-cell-20">
-			<button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+		<div class="table-header">
+			<div class="table-cell-20">Picture</div>
+			<div class="table-cell-30">Username</div>
+			<div class="table-cell-30">Last Online</div>
+			<div class="table-cell-20">Add Friend</div>
 		</div>
-	</div>
-	 
-{% endfor %}
 
-</div>
+		{% for user in results %}
+			<div class="table-row">
+				<a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+					<div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+				</a>
+				<a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+					{{user.name}}
+				</a>
+				<a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+					{{user.last_seen}}
+				</a>
+				<div class="table-cell-20">
+					<button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+				</div>
+			</div>
+
+		{% endfor %}
+
+	</div>
+
+{% else %}
+
+	<div>
+		No users found
+	</div>
+
+{% endif %}
