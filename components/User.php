@@ -183,11 +183,10 @@ class User extends ComponentBase
      */
     public function locked()
     {
-        $userid = $this->property('paramCode');
-
+		$userid = $this->property('paramCode');
+		
         if(!UserUtil::getLoggedInUser())
             return null;
-
         return (FriendsManager::isFriend($userid)) || (UserUtil::getLoggedInUser()->id == $userid);
     }
 
@@ -333,4 +332,14 @@ class User extends ComponentBase
         return $account->user();
     }
 
+	public function isFriend($friendId){
+	     $userid = $this->loggedIn()->id;
+
+		//if there is not a current user logged in, exit.
+        if(!UserUtil::getLoggedInUser())
+            return null;
+		$value = (FriendsManager::isFriend($friendId) ? true : false);
+
+        return $value;
+	}
 }

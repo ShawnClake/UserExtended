@@ -125,8 +125,12 @@ class Friends extends ComponentBase
     {
         $userid = post('id');
 
-        if($userid != null)
+        if($userid != null){
             FriendsManager::deleteFriend($userid);
+			return [
+				'#list-wrap' => $this->renderPartial('friends::friends_list.htm', ['friendRequests' => $this->friendRequests()])
+				];
+			}
     }
 
     /**
@@ -136,8 +140,12 @@ class Friends extends ComponentBase
     {
         $userid = post('id');
 
-        if($userid != null)
+        if($userid != null){
+		
             FriendsManager::blockFriend($userid);
+
+		}
+			
     }
 
     /**
@@ -169,8 +177,13 @@ class Friends extends ComponentBase
     {
         $userid = post('id');
 
-        if($userid != null)
+        if($userid != null){
             FriendsManager::acceptRequest($userid);
+			//Refresh the page so you know it did something
+			return [
+				'#request-wrap' => $this->renderPartial('friends::friend_requests.htm', ['friendRequests' => $this->friendRequests()])
+				];
+			}
     }
 
     /**
@@ -184,8 +197,9 @@ class Friends extends ComponentBase
 			{
             FriendsManager::declineRequest($userid);
 			//Refresh the page so you know it did something
-			//This could very likely be replaced by some ajax or jQuery
-			header("Refresh:0"); 
+			return [
+				'#request-wrap' => $this->renderPartial('friends::friend_requests.htm', ['friendRequests' => $this->friendRequests()])
+				];
 			}
     }
 
@@ -196,6 +210,8 @@ class Friends extends ComponentBase
     {
         $userId = post('id');
         FriendsManager::sendFriendRequest($userId);
+		return [
+			'#list-wrap' => $this->renderPartial('friends::friends_list.htm', ['friendRequests' => $this->friendRequests()])
+			];
     }
-
 }

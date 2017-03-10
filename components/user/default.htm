@@ -21,9 +21,13 @@
         <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
             {{user.last_seen}}
         </a>
-        <div class="table-cell-20">
-            <button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
-        </div>
+		<div class="table-cell-20">
+			{% if ueuser.isFriend(user.id) %}
+				<p>Friends!</p>
+			{% else %}
+				<button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+			{% endif %}
+		</div>
     </div>
 
     {% endfor %}
