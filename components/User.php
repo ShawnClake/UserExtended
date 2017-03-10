@@ -327,4 +327,10 @@ class User extends ComponentBase
         }
     }
 
+    public function loggedIn()
+    {
+        $account = new Account();
+        return $account->user();
+    }
+
 }
