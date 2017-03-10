@@ -159,7 +159,7 @@ class Friends extends ComponentBase
     {
         $limit = $this->property('maxItems');
 
-        return FriendsManager::listReceivedFriendRequests(null, $limit);
+        return FriendsManager::listReceivedFriendRequests($limit);
     }
 
     /**
@@ -181,7 +181,12 @@ class Friends extends ComponentBase
         $userid = post('id');
 
         if($userid != null)
+			{
             FriendsManager::declineRequest($userid);
+			//Refresh the page so you know it did something
+			//This could very likely be replaced by some ajax or jQuery
+			header("Refresh:0"); 
+			}
     }
 
     /**

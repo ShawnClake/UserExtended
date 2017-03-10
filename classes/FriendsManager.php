@@ -42,11 +42,11 @@ class FriendsManager
     public static function listReceivedFriendRequests($limit = 5)
     {
         $users = new Collection();
-
-        $limit = Helpers::unlimited($limit);
-
+		
+		$limit = Helpers::unlimited($limit);
+		
         $requests = Friend::friendRequests()->take($limit)->get();
-
+		
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->user_that_sent_request));
         }
