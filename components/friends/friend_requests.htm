@@ -1,4 +1,6 @@
- <div style="width: 100%; text-align: center;">Your Friend Requests</div>
+<div style="width: 100%; text-align: center;">Your Friend Requests</div>
+
+{% if friends.friendRequests is not empty %}
 
     <div class="table">
         <div class="table-header">
@@ -7,9 +9,9 @@
             <div class="table-cell-30">Last Online</div>
             <div class="table-cell-20">Accept Request?</div>
         </div>
-	
+
         {% for user in friends.friendRequests %}
-		    <div class="table-row">
+            <div class="table-row">
                 <a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
                     <div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if user.avatar.path %} {{user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
                 </a>
@@ -21,9 +23,15 @@
                 </a>
                 <div class="table-cell-20">
                     <button data-request-data="id: {{user.id}}" data-request="friends::onAccept">Accept</button>
-					<button data-request-data="id: {{user.id}}" data-request="friends::onDecline">Decline</button>
-					<!--<a href="#" data-request-data="id: {{user.id}}" data-request="friends::onDecline"><span class="glyphicon glyphicon-remove">Decline</span></a>-->
+                    <button data-request-data="id: {{user.id}}" data-request="friends::onDecline">Decline</button>
+                    <!--<a href="#" data-request-data="id: {{user.id}}" data-request="friends::onDecline"><span class="glyphicon glyphicon-remove">Decline</span></a>-->
                 </div>
             </div>
         {% endfor %}
     </div>
+
+{% else %}
+
+<div style="width: 100%; text-align: center;">You have no friend requests</div>
+
+{% endif %}
