@@ -56,7 +56,7 @@ class CreateUEModule extends GeneratorCommand
         /*
          * Extract the author and name from the plugin code
          */
-        $pluginCode = $this->argument('module');
+        $pluginCode = $this->argument('plugin');
         $parts = explode('.', $pluginCode);
         if (count($parts) != 2) {
             $this->error('Invalid plugin name, either too many dots or not enough.');
@@ -66,7 +66,7 @@ class CreateUEModule extends GeneratorCommand
         $pluginName = array_pop($parts);
         $authorName = array_pop($parts);
         return [
-            'name'   => $pluginName,
+            'plugin'   => $pluginName,
             'author' => $authorName,
         ];
     }
@@ -78,7 +78,7 @@ class CreateUEModule extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['module', InputArgument::REQUIRED, 'The name of the plugin to create a module for. Eg: RainLab.Blog'],
+            ['plugin', InputArgument::REQUIRED, 'The name of the plugin to create a module for. Eg: RainLab.Blog'],
         ];
     }
 

@@ -312,16 +312,17 @@ class User extends ComponentBase
      * AJAX handler to visit profiles
      * @return mixed
      */
-    public function onVisitProfile($property = null)
+    public function onVisitProfile($property = null, $userid = null)
     {
         if(!Settings::get('enable_profiles', true))
             return false;
 
-        $userid = post('id');
+        if(!isset($userid))
+            $userid = post('id');
 
         if($userid != null)
         {
-            $url = $property == null ? $this->property('profilePage') . "/" . $userid : $property;
+            $url = $property == null ? $this->property('profilePage') . "/" . $userid : $property . "/" . $userid;
             return Redirect::intended($url);
         }
     }

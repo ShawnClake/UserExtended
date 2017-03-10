@@ -1,4 +1,4 @@
-<?php namespace {{studly_author}}\{{studly_name}};
+<?php namespace {{studly_author}}\{{studly_plugin}};
 
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
@@ -21,7 +21,7 @@ class Module extends UserExtended
 {
     use StaticFactoryTrait;
 
-    public $name = '{{lower_author}}{{studly_name}}';
+    public $name = '{{lower_author}}{{studly_plugin}}';
 
     public $author = '{{author}}';
 
