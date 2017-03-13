@@ -55,7 +55,7 @@ var Validator = (function() {
                 } else {
                     $('#NameError').hide();
                 }
-                this.disableSubmit();
+                disableSubmit();
             });
 
             $('#code').on("keyup", function(){
@@ -64,11 +64,11 @@ var Validator = (function() {
                 } else {
                     $('#CodeError').hide();
                 }
-                this.disableSubmit();
+                disableSubmit();
             });
         };
 
-        this.disableSubmit = function () {
+        disableSubmit = function () {
             if($('#name').val() == "" || $('#code').val() == "")
             {
                 $('#ErrorBox').show();
