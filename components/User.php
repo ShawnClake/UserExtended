@@ -341,20 +341,20 @@ class User extends ComponentBase
         }
     }
 
-	/*
-	* Returns the user that is currently logged in.
-	* @return user
-	*/
+	/**
+	 * Returns the user that is currently logged in.
+	 * @return user
+	 */
     public function loggedIn()
     {
         $account = new Account();
         return $account->user();
     }
 
-	/*
-	* Returns if the passed in user id is a friend of the current user.
-	* @return bool
-	*/
+	/**
+	 * Returns if the passed in user id is a friend of the current user.
+	 * @return bool
+	 */
 	public function isFriend($friendId){
 	     $userid = $this->loggedIn()->id;
 
@@ -366,10 +366,10 @@ class User extends ComponentBase
         return $value;
 	}
 	
-	/*
-	* Returns if the current user has a pending friend request from the current user.
-	* @return bool
-	*/
+	/**
+	 * Returns if the current user has a pending friend request from the current user.
+	 * @return bool
+	 */
 	public function isRequested($friendId){
 	     $userid = $this->loggedIn()->id;
 
@@ -381,10 +381,10 @@ class User extends ComponentBase
         return $value;
 	}
 
-	/*
-	* Gets the url of the current user's profile page
-	* @return string
-	*/
+	/**
+	 * Gets the url of the current user's profile page
+	 * @return string
+	 */
 	public function profilePage($param = '')
     {
         $url = url($this->property('profilePage'));
