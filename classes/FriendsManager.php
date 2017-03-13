@@ -48,7 +48,7 @@ class FriendsManager
         $requests = Friend::friendRequests()->take($limit)->get();
 		
         foreach ($requests as $user) {
-            $users->push(UserUtil::getUser($user->user_that_sent_request));
+            $users->push(UserUtil::getRainlabUser($user->user_that_sent_request));
         }
         return $users;
     }
