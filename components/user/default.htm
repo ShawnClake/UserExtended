@@ -24,6 +24,8 @@
 		<div class="table-cell-20">
 			{% if ueuser.isFriend(user.id) %}
 				<p>Friends!</p>
+			{% elseif ueuser.isRequested(user.id) %}
+				<p>Request pending.</p>
 			{% else %}
 				<button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
 			{% endif %}
