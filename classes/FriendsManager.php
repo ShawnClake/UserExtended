@@ -78,6 +78,10 @@ class FriendsManager
         if(UserUtil::idIsLoggedIn($friendUserId))
             return;
 
+        $user = UserUtil::getLoggedInUser();
+        if(!isset($user))
+            return;
+
         if(self::isFriend($friendUserId))
             return;
 

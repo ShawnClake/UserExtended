@@ -640,6 +640,18 @@ class Roles extends Controller
     }
 
     /**
+     * AJAX handler for redirecting when clicking on a users name
+     */
+    public function onManageUser()
+    {
+        $userid = post('userId');
+        if(!isset($userid))
+            return;
+
+        return Redirect::to(Backend::url('rainlab/user/users/preview/' . $userid));
+    }
+
+    /**
      * CODE BELOW THIS POINT IS FOR RELEASE 2.1.00 AND IS HERE IN PREPARATION
      * THIS IS NOT PRODUCTION CODE AND IS NOT USED OR REFERENCED ELSEWHERE IN THE CODE BASE
      * DO NOT USE THIS CODE

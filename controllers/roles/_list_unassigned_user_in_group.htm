@@ -18,7 +18,7 @@
             <?php if(count($users) != 0): ?>
 
             <tr>
-                <?php if(isset($role)): ?><th style="width:25px;"></th><?php endif; ?>
+                <?php if(!empty($role)): ?><th style="width:25px;"></th><?php endif; ?>
                 <th style="width:25px;"></th>
                 <th style="width:150px;">Name</th>
                 <th style="padding-left:25px;">Email</th>
@@ -29,10 +29,10 @@
             <?php foreach($users as $user): $user = $user->user; ?>
             <tr style="">
                 <div style="margin-top:9px;">
-                    <?php if(isset($role)): ?><td><span><a style="" href="#" data-request-confirm="Are you sure you want to assign this user to the selected role?" data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', selectedGroup: '<?= $group->code ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></td><?php endif; ?>
-                    <?php if(isset($role)): ?><td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', selectedGroup: '<?= $group->code ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></td>
+                    <?php if(!empty($role)): ?><td><span><a style="" href="#" data-request-confirm='Are you sure you want to assign this user to the selected role?' data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', selectedGroup: '<?= $group->code ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></td><?php endif; ?>
+                    <?php if(!empty($role)): ?><td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', selectedGroup: '<?= $group->code ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></td>
                     <?php else: ?><td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', selectedGroup: '<?= $group->code ?>'"><i class="icon-times"></i></a></span></td><?php endif; ?>
-                    <td style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageRole" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></td>
+                    <td style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageUser" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></td>
                     <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->email ?></span></td>
                     <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->created_at ?></span></td>
                     <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->last_seen ?></span></td>
