@@ -203,7 +203,7 @@ class UserManager extends StaticFactory
         else
             Flash::success(Lang::get('rainlab.user::lang.account.success_saved'));
 
-        return true;
+        return $user;
     }
 
     /**
@@ -304,7 +304,7 @@ class UserManager extends StaticFactory
             if (Request::ajax()) throw $ex;
             else Flash::error($ex->getMessage());
 
-            return false;
+            return $validation;
         }
     }
 

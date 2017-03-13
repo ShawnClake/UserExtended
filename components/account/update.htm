@@ -1,6 +1,6 @@
 {% if user %}
 
-{{ form_ajax('onUpdate', { model: user }) }}
+{{ form_ajax('onUpdate', { model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
 
 <div id="signupForm">
 
@@ -13,8 +13,8 @@
 			id="accountName" 
 			required="{{attributes.options.validation}}"
 			value="{{ form_value('name') }}">
-		<p class="error-box" id="name_error"> You need to enter a name.</p>
 	</div>
+	<span data-validate-for="name"></span><br>
 
 	<div class="form-group">
 		<label for="accountEmail">{{ "clake.userextended::lang.components.account.email"|trans }}</label>
@@ -25,8 +25,8 @@
 			id="accountEmail" 
 			required="{{attributes.options.validation}}"
 			value="{{ form_value('email') }}">
-		<p class="error-box" id="email_error"> You need to enter an email.</p>
 	</div>
+	<span data-validate-for="email"></span><br>
 
 	<div class="form-group">
 		<label for="accountPassword">{{ "clake.userextended::lang.components.account.newpassword"|trans }}</label>
@@ -34,10 +34,9 @@
 			name="password" 
 			type="password" 
 			class="form-control" 
-			id="accountPassword"
-			required="{{attributes.options.validation}}">
-		<p class="error-box" id="password_error"> You need to enter a password.</p>
+			id="accountPassword">
 	</div>
+	<span data-validate-for="password"></span><br>
 
 	<div class="form-group">
 		<label for="accountPasswordConfirm">{{ "clake.userextended::lang.components.account.confirmnewpassword"|trans }}</label>
@@ -45,10 +44,9 @@
 			name="password_confirmation" 
 			type="password" 
 			class="form-control" 
-			id="accountPasswordConfirm"
-			required="{{attributes.options.validation}}">
-		<p class="error-box" id="password_confirmation_error"> Your passwords do not match.</p>
+			id="accountPasswordConfirm">
 	</div>
+	<span data-validate-for="password_confirmation"></span><br>
 
 	{% for setting,attributes in account.updateSettings %}
 
@@ -58,16 +56,20 @@
 			name="{{setting}}" 
 			type="{{ attributes.options.type }}" 
 			class="form-control" 
-			id="accountSettings{{setting}} 
-			required="{{attributes.options.validation}}""
+			id="accountSettings{{setting}}"
+			required="{{attributes.options.validation}}"
 			value="{{ attributes.0 }}"/>
-		<p class="error-box" id="{{setting}}_error"><span class="capitalize">{{setting}}</span> is a required field.</p>
 	</div>
+	<span data-validate-for="{{setting}}"></span>
 
 	{% endfor %}
 
-	<button type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button>
+	<button data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
 
+</div>
+
+<div class="alert alert-danger" data-validate-error>
+	<p data-message></p>
 </div>
 
 {{ form_close() }}
@@ -77,7 +79,3 @@
 <div class="message-box">You are not logged in.</div>
 
 {% endif %}
-
-{% put scripts %}
-    <script type="text/javascript" src="plugins/clake/userextended/assets/js/validate_update.js"></script>
-{% endput %}

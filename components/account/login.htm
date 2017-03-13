@@ -5,6 +5,8 @@
 {% else %}
 <div class="container">
 	<form
+			data-request-validate
+			data-request-flash
 			data-request="onLogin"
 			id="signupForm">
 		<div class="form-group">
@@ -16,8 +18,9 @@
 					id="register{{account.signUp}}"
 					value = ""
 					placeholder="Enter your {{account.signUp}}" />
-		<p class="error-box" id="{{account.signUp}}_error"> You need to enter a {{account.signUp}}.</p>
+		<!--<p class="error-box" id="{{account.signUp}}_error"> You need to enter a {{account.signUp}}.</p>-->
 		</div>
+		<span data-validate-for="{{account.signUp}}"></span><br>
 
 		<div class="form-group">
 			<label for="userSigninPassword">{{ "clake.userextended::lang.components.account.password"|trans }}</label>
@@ -28,15 +31,15 @@
 					id="userSigninPassword"
 					value = "";
 					placeholder="Enter your password" />
-			<p class="error-box" id="password_error"> You need to enter a password.</p>
+			<!--<p class="error-box" id="password_error"> You need to enter a password.</p>-->
 		</div>
+			<span data-validate-for="password"></span><br><br>
 
-		<button type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.signin"|trans }}</button>
-	</form>	
+		<button data-attach-loading type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.signin"|trans }}</button><br><br>
+		<div class="alert alert-danger" data-validate-error>
+			<p data-message></p>
+		</div>
+	</form>
 </div>
 
 {% endif %}
-
-{% put scripts %}
-    <script type="text/javascript" src="plugins/clake/userextended/assets/js/validate_login.js"></script>
-{% endput %}

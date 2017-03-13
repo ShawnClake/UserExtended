@@ -4,21 +4,21 @@ settings:
         editable: true
         type: text
         createable: true
-        validation: required
-        registerable: true
+        validation: required|alpha_dash
+        registerable: false
         encrypt: true
     address:
         label: Address
         type: text
-        createable: true
+        createable: false
         validation:
-        registerable: true
+        registerable: false
         encrypt: false
     cell:
         label: Cellphone
         type: text
-        createable: true
+        createable: false
         validation: required
-        registerable: true
+        registerable: false
         encrypt: false
-        editable: true
+        editable: false

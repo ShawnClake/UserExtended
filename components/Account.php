@@ -97,10 +97,13 @@ class Account extends ComponentBase
         $data = post();
         $response = UserManager::updateUser($data);
 
-        if($response instanceof Validator)
+        $reflection = new \ReflectionClass($response);
+
+        if($reflection->getShortName() == 'Validator')
         {
-            Flash::error($response->messages());
-            return false;
+            throw new ValidationException($response);
+            //Flash::error($response->messages());
+            //return false;
         } else {
             return $response;
         }
@@ -126,10 +129,13 @@ class Account extends ComponentBase
         /*
          * Checks for passed validation or failed
          */
-        if($user instanceof Validator)
+        $reflection = new \ReflectionClass($user);
+
+        if($reflection->getShortName() == 'Validator')
         {
-            Flash::error($user->messages());
-            return false;
+            throw new ValidationException($user);
+            //Flash::error($user->messages());
+            //return false;
         }
 
         /*
@@ -176,11 +182,15 @@ class Account extends ComponentBase
 
         $response = UserManager::loginUser($data, $redirectUrl);
 
-        if($response instanceof Validator)
+        $reflection = new \ReflectionClass($response);
+
+        if($reflection->getShortName() == 'Validator')
         {
-            Flash::error($response->messages());
-            return false;
+            throw new ValidationException($response);
+            //Flash::error(json_encode($response->messages()));
+            //return false;
         } else {
+            Flash::success('Logged in!');
             return $response;
         }
     }
