@@ -81,7 +81,7 @@ class FriendsManager
         if(self::isFriend($friendUserId))
             return;
 
-        if(Friend::isRelationExists($friendUserId) && !Friend::isDeclined($friendUserId))
+        if(Friend::isRelationExists($friendUserId))
             return;
 
         if(Friend::isDeclined($friendUserId))
