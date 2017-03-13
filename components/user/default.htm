@@ -45,10 +45,12 @@
 
 {% elseif ueuser.type == 'search' %}
 
-    <form data-request="ueuser::onSearch">
-        Search Phrase: <input type="text"  name="phrase" />
-        <input type="submit" value="{{ 'clake.userextended::lang.components.user.search'|trans }}" />
-    </form>
+    <div style="padding:15px;">
+        <form data-request="ueuser::onSearch">
+            Search Phrase: <input type="text"  name="phrase" />
+            <input type="submit" value="{{ 'clake.userextended::lang.components.user.search'|trans }}" />
+        </form>
+    </div>
 
     <br>
 

@@ -6,13 +6,13 @@
 			<div class="table-cell-20">Picture</div>
 			<div class="table-cell-30">Username</div>
 			<div class="table-cell-30">Last Online</div>
-			<div class="table-cell-20">Add Friend</div>
+			{% if ueuser.loggedIn %}<div class="table-cell-20">Add Friend</div>{% endif %}
 		</div>
 
 		{% for profile in results %}
 		<div class="table-row">
 				<a href="#" class="table-cell-20" data-request-data="id: {{profile.id}}" data-request="ueuser::onVisitProfile">
-					<div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if profile.avatar.path %} {{profile.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+					<div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if profile.avatar.path %} {{profile.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
 				</a>
 				<a href="#" class="table-cell-30" data-request-data="id: {{profile.id}}" data-request="ueuser::onVisitProfile">
 					{{profile.name}}
@@ -24,13 +24,15 @@
 						Never
 					{% endif %}
 				</a>
-				<div class="table-cell-20">
-					{% if ueuser.isFriend(profile.id) %}
-						<p>Friends!</p>
-					{% else %}
-						<button data-request-data="id: {{profile.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
-					{% endif %}
-				</div>
+				{% if ueuser.loggedIn %}
+					<div class="table-cell-20">
+						{% if ueuser.isFriend(profile.id) %}
+							<p>Friends!</p>
+						{% else %}
+							<button data-request-data="id: {{profile.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+						{% endif %}
+					</div>
+				{% endif %}
 			</div>
 
 		{% endfor %}
