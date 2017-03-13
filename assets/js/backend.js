@@ -66,6 +66,7 @@ var Validator = (function() {
                 }
                 disableSubmit();
             });
+			disableSubmit();
         };
 
         disableSubmit = function () {
