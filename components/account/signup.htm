@@ -4,6 +4,8 @@
 
 {% else %}
 <form
+        data-request-validate
+        data-request-flash
         data-request="onRegister"
 		id ="signupForm">
     <div class="form-group">
@@ -15,8 +17,8 @@
                 id="registerFirstName"
 				required="{{attributes.options.validation}}"
                 placeholder='{{ "clake.userextended::lang.components.account.enterfname"|trans }}' />
-		<p class="error-box" id="first_name_error"> Your first name is required.</p>
     </div>
+    <span data-validate-for="first_name"></span><br>
 
     <div class="form-group">
         <label for="registerLastName">{{ "clake.userextended::lang.components.account.lastname"|trans }}</label>
@@ -27,8 +29,8 @@
                 id="registerLastName"
 				required="{{attributes.options.validation}}"
                 placeholder='{{ "clake.userextended::lang.components.account.enterlname"|trans }}' />
-		<p class="error-box" id="last_name_error"> Your last name is required.</p>
     </div>
+    <span data-validate-for="last_name"></span><br>
 
     <div class="form-group">
         <label for="register{{account.signUp}}">{{account.signUp|capitalize}}</label>
@@ -39,8 +41,8 @@
                 id="register{{account.signUp}}"
 				required="{{attributes.options.validation}}"
                 placeholder="Enter your {{account.signUp}}" />
-		<p class="error-box" id="{{account.signUp}}_error"> <span class="capitalize">{{account.signUp}}</span> is required to signup.</p>
     </div>
+    <span data-validate-for="{{account.signUp}}"></span><br>
 
     {% if account.signUp == "username" %}
 
@@ -53,8 +55,9 @@
                 id="registerEmail"
 				required="{{attributes.options.validation}}"
                 placeholder='{{ "clake.userextended::lang.components.account.enteremail"|trans }}' />
-		<p class="error-box" id="email_error"> An email is required to login.</p>
+
     </div>
+    <span data-validate-for="email"></span><br>
 
     {% endif %}
 
@@ -67,8 +70,8 @@
                 id="registerPassword"
 				required="{{attributes.options.validation}}"
                 placeholder='{{ "clake.userextended::lang.components.account.enterpassword"|trans }}' />
-		<p class="error-box" id="password_error"> You must enter a password. </p>
 	</div>
+    <span data-validate-for="password"></span><br>
 
     <div class="form-group">
         <label for="registerConfirmPassword">{{ "clake.userextended::lang.components.account.confirmpassword"|trans }}</label>
@@ -79,8 +82,8 @@
                 id="registerConfirmPassword"
 				required="{{attributes.options.validation}}"
                 placeholder='{{ "clake.userextended::lang.components.account.confirmpassword"|trans }}' />
-		<p class="error-box" id="password_confirmation_error"> Your passwords do not match.</p>
     </div>
+    <span data-validate-for="password_confirmation"></span><br>
 
     {% for setting,attributes in account.createSettings %}
 
@@ -90,18 +93,17 @@
 			name="{{setting}}" 
 			type="{{ attributes.options.type }}" 
 			class="form-control" 
-			id="accountSettings{{setting}} 
-			required="{{attributes.options.validation}}"">
-		<p class="error-box" id="{{setting}}_error"> <span class="capitalize">{{setting}}</span> is required</p>
+			id="accountSettings{{setting}}"
+			required="{{attributes.options.validation}}">
     </div>
+    <span data-validate-for="{{setting}}"></span><br>
 
     {% endfor %}
 
-    <button type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.register"|trans }}</button>
+    <button data-attach-loading type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.register"|trans }}</button>
+    <div class="alert alert-danger" data-validate-error>
+        <p data-message></p>
+    </div>
 </form>
-
-{% put scripts %}
-    <script type="text/javascript" src="plugins/clake/userextended/assets/js/validate_signup.js"></script>
-{% endput %}
 
 {% endif %}
