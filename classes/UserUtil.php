@@ -155,6 +155,14 @@ class UserUtil
         return \Clake\Userextended\Models\UserExtended::where('id', $id)->first();
     }
 
+    public static function convertToRainlabUser($user)
+    {
+        if($user == null)
+            return $user;
+        $id = $user->id;
+        return User::where('id', $id)->first();
+    }
+
     /**
      * Search for a user via the phrase
      * @param $phrase

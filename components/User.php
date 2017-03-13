@@ -151,6 +151,11 @@ class User extends ComponentBase
 
         $results = UserUtil::searchUsers($phrase);
 
+        foreach($results as $key=>$value)
+        {
+            $results[$key] = UserUtil::convertToRainlabUser($value);
+        }
+
         return $this->renderResults($results);
     }
 
@@ -174,6 +179,16 @@ class User extends ComponentBase
         $userid = $this->property('paramCode');
 
         return UserUtil::convertToUserExtendedUser(UserUtil::getUser($userid));
+    }
+
+    public function userAvatar()
+    {
+        $userid = $this->property('paramCode');
+
+        if(!$user = UserUtil::getRainlabUser($userid))
+            return;
+
+        return $user->avatar;
     }
 
     /**

@@ -10,9 +10,9 @@
 		</div>
 
 		{% for profile in results %}
-			<div class="table-row">
+		<div class="table-row">
 				<a href="#" class="table-cell-20" data-request-data="id: {{profile.id}}" data-request="ueuser::onVisitProfile">
-					<div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+					<div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if profile.avatar.path %} {{profile.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
 				</a>
 				<a href="#" class="table-cell-30" data-request-data="id: {{profile.id}}" data-request="ueuser::onVisitProfile">
 					{{profile.name}}

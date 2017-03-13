@@ -1,3 +1,5 @@
+{% if ueuser.user %}
+
 <div class="row container" style="margin-top:10px;">
 
     <div class="col-sm-12 ">
@@ -7,8 +9,7 @@
             <div class="col-sm-12 col-md-3"></div>
             <div class="col-sm-12 col-md-2">
                 <div class="avatar-medium">
-                    <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.user.avatar.path %} {{ueuser.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
-
+                    <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.userAvatar.path %} {{ueuser.userAvatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
                     </div>
                 </div>
 
@@ -72,3 +73,17 @@
         </div>
     </div>
 </div>
+
+{% else %}
+
+<div class="row container" style="margin-top:10px;">
+    <div class="col-sm-12 ">
+        <div class="row" style="text-align: center;">
+            <div class="col-sm-12 col-md-12">
+                <h3>It appears this user doesn't exist.</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
