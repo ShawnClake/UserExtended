@@ -6,6 +6,7 @@ use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * User Extended by Shawn Clake

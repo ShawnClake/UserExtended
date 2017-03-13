@@ -16,10 +16,10 @@
 
                 <div style="width:100%;text-align:center;margin-bottom: 10px;margin-top:10px;">
                     <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
-                    {% if ueuser.loggedIn %}<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>{% endif %}
+                    {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id %}<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>{% endif %}
                 </div>
 
-                {% if ueuser.unrestricted %}
+                {% if ueuser.locked %}
                     <div style="width:100%;text-align:center;">
                           <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
                     </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="col-sm-12 col-md-12">
 
-                {% if not ueuser.unrestricted and ueuser.loggedIn %}
+                {% if not ueuser.locked and ueuser.loggedIn %}
                     <div>See more of this persons profile by adding them as a friend</div>
                 {% endif %}
             </div>
@@ -56,16 +56,16 @@
                     {% for comment in ueuser.comments %}
                     <div class="userblock">
                         {{comment.content}} <br>
-                        <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="ueuser::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">{{ "clake.userextended::lang.components.user.writtenat"|trans }}: {{comment.created_at}} by <a href="/users/{{comment.author.id}}">{{comment.author.name}}</a></i>
+                        <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="ueuser::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">{{ "clake.userextended::lang.components.user.writtenat"|trans }} {{comment.created_at|relative}} by <a href="{{ueuser.profilePage(comment.author.id)}}">{{comment.author.name}}</a></i>
                         <hr>
                     </div>
                     {% endfor %}
 
                 </div>
                 {% if ueuser.loggedIn %}<h5>Write a comment</h5>{% endif %}
-                {% if ueuser.unrestricted %}
+                {% if ueuser.locked %}
                 <form data-request="ueuser::onComment">
-                    <textarea rows="2" name="comment"></textarea>
+                    <textarea rows="2" name="comment"></textarea> <br>
                     <input type="submit" value="Comment" />
                 </form>
                 {% else %}

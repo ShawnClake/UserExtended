@@ -268,7 +268,7 @@ class User extends ComponentBase
      */
     private function renderComments($comments)
     {
-        $content = $this->renderPartial('user::comments.htm', ['comments' => $comments]);
+        $content = $this->renderPartial('ueuser::comments.htm', ['comments' => $comments]);
         return ['#comment_section' => $content];
     }
 
@@ -357,4 +357,12 @@ class User extends ComponentBase
 
         return $value;
 	}
+
+	public function profilePage($param = '')
+    {
+        $url = url($this->property('profilePage'));
+        if(!empty($param))
+            $url .= '/' . $param;
+        return $url;
+    }
 }
