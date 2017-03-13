@@ -228,7 +228,7 @@ class FriendsManager
         }
 
         foreach ($requests as $user) {
-            $users->push(UserUtil::getUser($user->otherUser($userId)));
+            $users->push(UserUtil::getRainlabUser($user->otherUser($userId)));
         }
 
         $users = $users->shuffle();

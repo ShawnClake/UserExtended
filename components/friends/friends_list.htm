@@ -1,6 +1,6 @@
 <div class="list-wrap" id="list-wrap">
 {% if friends.friendsList is not empty %}
-<div style="width: 100%; text-align: center;">Your Friends</div>
+    <h4><div style="width: 100%; text-align: center;">Your Friends</div></h4>
     <div class="table">
         <div class="table-header">
             <div class="table-cell-20">Picture</div>
@@ -12,12 +12,12 @@
         {% for friend in friends.friendsList %}
             <div class="table-row">
                 <a href="#" class="table-cell-20" data-request-data="id: {{friend.id}}" data-request="ueuser::onVisitProfile">
-                    <div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.friend.avatar.path %} {{ueuser.friend.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+                    <div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if friend.avatar.path %} {{friend.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
                 </a>
-                <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="ueuser::onVisitProfile">
                     {{friend.name}} {{friend.surname}}
                 </a>
-                <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="ueuser::onVisitProfile">
                     {{friend.last_seen}}
                 </a>
                 <div class="table-cell-20">
