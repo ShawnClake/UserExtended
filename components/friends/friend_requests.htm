@@ -1,5 +1,5 @@
 <div class="request-wrap" id="request-wrap">
-<div style="width: 100%; text-align: center;">Your Friend Requests</div>
+<h4><div style="width: 100%; text-align: center;">Your Friend Requests</div></h4>
 
 {% if friends.friendRequests is not empty %}
 
@@ -14,7 +14,7 @@
         {% for user in friends.friendRequests %}
             <div class="table-row">
                 <a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
-                    <div class="avatar-small"><div class="responsive-circle center-in-parent" style="background-image:url({% if user.avatar.path %} {{user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+                    <div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if user.avatar.path %} {{user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
                 </a>
                 <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
                     {{user.name}} {{user.surname}}

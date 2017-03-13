@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Settings;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
@@ -114,6 +115,12 @@ class Friends extends ComponentBase
 
         if($code != '')
             $userId = $this->param($code);
+
+        if(empty($userId))
+            $userId = UserUtil::getLoggedInUser();
+
+        if(isset($userId))
+            $userId = $userId->id;
 
         return FriendsManager::listFriends($limit, $userId);
     }
