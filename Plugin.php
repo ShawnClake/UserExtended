@@ -100,12 +100,12 @@ class Plugin extends PluginBase
         Event::listen('backend.menu.extendItems', function ($manager) {
 
             $manager->addSideMenuItems('RainLab.User', 'user', [
-                'groups' => [
+                /*'groups' => [
                     'label' => 'Group Manager',
                     'url' => Backend::url('clake/userextended/groupsextended'),
                     'icon' => 'icon-users',
                     'order' => 500,
-                ],
+                ],*/
                 'roles' => [
                     'label' => 'Role Manager',
                     'url' => Backend::url('clake/userextended/roles/manage'),
