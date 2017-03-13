@@ -120,6 +120,17 @@ class FriendsManager
     {
         return Friend::isFriends($userID1, $userID2);
     }
+	
+	 /**
+     * Returns whether or not the two users have a friend request between them. 
+     * Leave the second parameter blank to user the logged in user
+     * @param $userID1
+     * @param null $userID2
+     * @return bool
+     */
+	public static function isRequested($userID1, $userID2 = null){
+		return Friend::isRequested($userID1, $userID2);
+	}
 
     /**
      * Accepts a friend request from a user
