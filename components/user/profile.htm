@@ -16,7 +16,13 @@
 
                 <div style="width:100%;text-align:center;margin-bottom: 10px;margin-top:10px;">
                     <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
-                    {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id %}<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>{% endif %}
+                    {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id %}
+						{% if ueuser.isRequested(ueuser.user.id) %}
+							<p>Request pending!</p>
+						{% else %}
+							<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+						{% endif %}
+					{% endif %}
                 </div>
 
                 {% if ueuser.locked %}
