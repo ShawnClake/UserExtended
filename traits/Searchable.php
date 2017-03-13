@@ -26,14 +26,29 @@ trait Searchable
     {
         $searchable = $this->getSearchableAttributes();
 
-        $results = Lists::create();
+        $results = [];
+
+        foreach($searchable as $field)
+        {
+            $set = self::searchUserByAttribute($field, $phrase);
+            foreach($set as $result)
+            {
+                $results[$result->id] = $result;
+            }
+            //echo json_encode($results);
+        }
+
+        return $results;
+
+        /*$results = Lists::create();
 
         foreach($searchable as $field)
         {
             $results->mergeList(self::searchUserByAttribute($field, $phrase));
+            //echo json_encode($results);
         }
 
-        return $results->allList();
+        return $results->allList();*/
     }
 
     /**

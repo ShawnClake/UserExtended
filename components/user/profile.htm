@@ -7,47 +7,49 @@
         <div class="row" style="text-align: center;">
 
             <div class="col-sm-12 col-md-3"></div>
-            <div class="col-sm-12 col-md-2">
-                <div class="avatar-medium">
+            <div class="col-sm-12 col-md-6" style=" padding:7px;">
+                <div class="avatar-small center-in-parent">
                     <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.userAvatar.path %} {{ueuser.userAvatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
                     </div>
                 </div>
 
-                <div style="width:100%;text-align:center;margin-bottom: 10px;">
-                        <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
-                        <button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add</button>
+
+                <div style="width:100%;text-align:center;margin-bottom: 10px;margin-top:10px;">
+                    <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
+                    {% if ueuser.loggedIn %}<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>{% endif %}
                 </div>
+
                 {% if ueuser.unrestricted %}
                     <div style="width:100%;text-align:center;">
                           <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
                     </div>
 			    {% endif %}
             </div>
-            <div class="col-sm-12 col-md-4" style="width: 100%; background-color: lightblue;">
-				<div style="float: left; width: 33.33%; text-align: center;">
-                Stars: 0
-				</div>
-				<div style="float: left; width: 33.33%; text-align: center;">
-                ThumbUps: 0
-				</div>
-				<div style="float: left; width: 33.33%; text-align: center;">
-                Gold: 5
-				</div>
-				<br class="clear" />
+        </div>
+        <div class="row" style="text-align: center;">
+            <div class="col-sm-12 col-md-12" style="width: 100%; background-color: lightblue; padding:5px;">
+                <div class ="row">
+                    <div class="col-sm-4" style="text-align: center;">
+                        Stars: 0
+                    </div>
+                    <div class="col-sm-4" style="text-align: center;">
+                        ThumbUps: 0
+                    </div>
+                    <div class="col-sm-4" style="text-align: center;">
+                        Gold: 5
+                    </div>
+                </div>
             </div>
-            <div class="col-sm-12 col-md-3">
+            <div class="col-sm-12 col-md-12">
 
-                {% if not ueuser.unrestricted %}
+                {% if not ueuser.unrestricted and ueuser.loggedIn %}
                     <div>See more of this persons profile by adding them as a friend</div>
                 {% endif %}
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12 col-md-3">
-
-            </div>
-            <div class="col-sm-12 col-md-6">
+        <div class="row" style="margin-top:9px;">
+            <div class="col-sm-12 col-md-12">
                 <h4>Comments</h4>
                 <div id="comment_section">
 
@@ -60,14 +62,14 @@
                     {% endfor %}
 
                 </div>
-                <h5>Write a comment</h5>
+                {% if ueuser.loggedIn %}<h5>Write a comment</h5>{% endif %}
                 {% if ueuser.unrestricted %}
                 <form data-request="ueuser::onComment">
                     <textarea rows="2" name="comment"></textarea>
                     <input type="submit" value="Comment" />
                 </form>
                 {% else %}
-                Leave a comment for {{ueuser.user.name}} by {% if not user %} signing in and {% endif %} friending them.
+                Leave a comment by {% if not user %} signing in and {% endif %} friending them.
                 {% endif %}
             </div>
         </div>
