@@ -141,13 +141,13 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-			    'label'       => 'Locations',
-				'description' => 'Manage available user countries and states.',
+			    'label'       => 'User Extended',
+				'description' => 'Manage User Extended Options and Settings.',
 				'category'    => SettingsManager::CATEGORY_USERS,
 				'icon'        => 'icon-globe',
 				'url'         => Backend::url('clake/userextended/Settings/start'),
 				'order'       => 500,
-				'keywords'    => 'geography place placement'
+				'keywords'    => 'user extended register signup'
 /*              'label' => 'UserExtended Settings',
                 'description' => 'Manage user extended settings.',
                 'category' => SettingsManager::CATEGORY_USERS,
