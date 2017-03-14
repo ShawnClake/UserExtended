@@ -339,9 +339,31 @@ class Roles extends Controller
             $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
         }
 
-        Flash::success('Role successfully saved!');
+        if($feedback === false || $feedback->fails())
+        {
+            Flash::error('Role was not saved!');
 
-        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>']);
+            if($feedback === false)
+                $uiFeedback = ['#feedback_role_save' => '<span class="text-danger">That code already exists.</span>'];
+            else
+            {
+                $errorString = '<span class="text-danger">';
+                $errors = json_decode($feedback->messages());
+                foreach($errors as $error)
+                {
+                    $errorString .= implode(' ', $error) . ' ';
+                }
+
+                $errorString .= '</span>';
+
+                $uiFeedback = ['#feedback_role_save' => $errorString];
+            }
+        } else {
+            Flash::success('Role successfully saved!');
+            $uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
+        }
+
+        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $uiFeedback);
 
     }
 

@@ -143,7 +143,7 @@ class RoleManager extends StaticFactory
             return $validator;
         }
 
-        if(Role::code($role->code)->count() > 1)
+        if(Role::code($role->code)->where('id', '<>', $role->id)->count() > 0)
             return false;
 
         if($role->group_id == 0)
@@ -400,6 +400,9 @@ class RoleManager extends StaticFactory
     public function getSortedGroupRoles()
     {
         $groupRoles = [];
+
+        if(empty($this->roles))
+            return [];
 
         foreach($this->roles as $role)
         {
