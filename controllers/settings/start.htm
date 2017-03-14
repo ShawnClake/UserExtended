@@ -1,0 +1,21 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('rainlab/user/users') ?>"><?= e(trans('rainlab.user::lang.users.menu_label')) ?></a></li>
+        <li><?= e(trans($this->pageTitle)) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<!-- Primary content -->
+<?php Block::put('body') ?>
+
+<div class="" style="padding-left:25px;padding-right:25px;">
+
+    <div class="row" style="margin-top:11px;">
+
+       <p>Hey! Listen!</p>
+
+    </div>
+
+</div>
+
+<?php Block::endPut() ?>
