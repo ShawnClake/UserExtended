@@ -1,21 +1,43 @@
-<?php Block::put('breadcrumb') ?>
-    <ul>
-        <li><a href="<?= Backend::url('rainlab/user/users') ?>"><?= e(trans('rainlab.user::lang.users.menu_label')) ?></a></li>
-        <li><?= e(trans($this->pageTitle)) ?></li>
-    </ul>
-<?php Block::endPut() ?>
-
-<!-- Primary content -->
-<?php Block::put('body') ?>
+<?php 
+use Clake\UserExtended\Controllers\Settings;
+Block::put('body') 
+?>
 
 <div class="" style="padding-left:25px;padding-right:25px;">
 
     <div class="row" style="margin-top:11px;">
+	
+	<p>Custom Fields</p>
+	
+	<table style="width: 80%;">
+	<tr>
+		<td>Name:</td>
+		<td>Required:</td>
+		<td>Min Length:</td>
+		<td>Max Length:</td>
+		<td>Validation:</td>
+		<td>Remove?</td>
+	</tr>
+	<?php
+	foreach (Settings::getSettings() as $settings){
+	?>
+	<tr>
+		<td><?=$settings->name?></td>
+		<td><?=$settings->required?></td>
+		<td><?=$settings->min?></td>
+		<td><?=$settings->max?></td>
+		<td><?=$settings->validation?></td>
+		<td><button>Remove</button></td>
+	</tr>
+	<?php } ?>
+	</table>
+	
+	<div style="margin-top: 20px;">
+	<button>+ Create Field</button>
+	</div>
 
-       <p>Hey! Listen!</p>
-
-    </div>
-
+</div>
+	
 </div>
 
 <?php Block::endPut() ?>
