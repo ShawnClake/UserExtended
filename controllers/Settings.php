@@ -110,4 +110,18 @@ class Settings extends Controller
 	public function getSettings(){
 		return Db::table($this->table)->select('*')->get();
 	}
+	
+	public function onCreateField(){
+	
+	}
+	
+	public function onAddField(){
+		return $this->makePartial('create_new_field');
+	}
+	
+	public function onEditField(){
+		$name = post('name');
+		$selection = Db::table($this->table)->where('name', $name)->get();
+		return $this->makePartial('edit_field', ['selection' => $selection[0]]);
+	}
 }

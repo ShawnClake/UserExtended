@@ -1,0 +1,44 @@
+<div style="padding:33px;padding-top:23px;">
+
+    <h4>Create Field</h4>
+    <br>
+    <form class="form-elements" role="form" data-request="onCreateField">
+        <div class="form-group span-left">
+            <label>Name</label>
+            <input type="text" name="name" value="" id="name" class="form-control" />
+        </div>
+
+        <div class="form-group span-right">
+            <label>Required?</label>
+            <input type="text" name="required" value="" id="required" class="form-control"/>
+        </div>
+
+        <div class="form-group span-full">
+            <label>Min Length</label>
+            <input style="resize:none;" name="min" id="min" class="form-control"/>
+            <p class="help-block">Default 0</p>
+        </div>
+
+		<div class="form-group span-full">
+            <label>Max Length</label>
+            <input style="resize:none;" name="max" id="max" class="form-control"/>
+            <p class="help-block">Default 255</p>
+        </div>
+		
+		<div class="form-group span-full">
+            <label>Max Length</label>
+            <input style="resize:none;" name="max" id="max" class="form-control"/>
+            <p class="help-block">Enter 0 for no maximum.</p>
+        </div>
+		
+		<!-- This will eventually be a drop-down once we have a few validation methods -->
+		<div class="form-group span-full">
+            <label>Validation</label>
+            <input style="resize:none;" name="max" id="max" class="form-control"/>
+        </div>
+		
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Create</button>
+        <span style="margin-left:11px;" id="feedback_group_save"></span>
+    </form>
+</div>
