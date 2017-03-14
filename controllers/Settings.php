@@ -112,7 +112,20 @@ class Settings extends Controller
 	}
 	
 	public function onCreateField(){
-	
+		$name = post('name') ;
+		$required = post('required');
+		$min = null !== post('min') ? post('min') : 0;
+		$max = null !== post('max') ? post('max') : 255;
+		$validation = post('validation');
+		
+		Db::table($this->table)->insert(
+		['name' => $name,
+		'required' => $required,
+		'min' => $min,
+		'max' => $max,
+		'validation' => $validation]);
+		
+		return Redirect::to(Backend::url('clake/userextended/Settings/start'));
 	}
 	
 	public function onAddField(){
@@ -123,5 +136,9 @@ class Settings extends Controller
 		$name = post('name');
 		$selection = Db::table($this->table)->where('name', $name)->get();
 		return $this->makePartial('edit_field', ['selection' => $selection[0]]);
+	}
+	
+	public function onDeleteField(){
+		//TODO
 	}
 }

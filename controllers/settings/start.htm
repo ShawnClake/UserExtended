@@ -17,6 +17,7 @@ Block::put('body')
 		<td>Max Length:</td>
 		<td>Validation:</td>
 		<td></td>
+		<td></td>
 	</tr>
 	<?php
 	foreach (Settings::getSettings() as $settings){
@@ -37,6 +38,18 @@ Block::put('body')
             >
                 Edit
             </a></td>
+		<td>
+			<a
+                    href="javascript:;"
+                    class="btn btn-danger oc-icon-x"
+                    data-control="popup"
+                    data-handler="onDeleteField"
+                    data-size="huge"
+					data-extra-data="name: '<?=$settings->name?>'"
+            >
+                Delete
+            </a>
+		</td>
 	</tr>
 	<?php } ?>
 	</table>
