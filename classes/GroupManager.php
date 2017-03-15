@@ -150,10 +150,10 @@ class GroupManager extends StaticFactory
      * @deprecated Renamed to a better name below.
      * @return mixed
      */
-    public static function retrieve($code)
+    /*public static function retrieve($code)
     {
         return GroupsExtended::where('code', $code)->first();
-    }
+    }*/
 
     /**
      * Returns a group model where the group code is: code=$code
@@ -170,7 +170,7 @@ class GroupManager extends StaticFactory
      * @deprecated Renamed below and adds factory support
      * @return static
      */
-    public function all()
+    /*public function all()
     {
         $this->groups = new Collection();
 
@@ -182,7 +182,7 @@ class GroupManager extends StaticFactory
         }
 
         return $this;
-    }
+    }*/
 
     /**
      * Creates and fills the class with all of the groups that exist in the applciation
@@ -207,10 +207,10 @@ class GroupManager extends StaticFactory
      * @deprecated Renamed to follow RoleManager format
      * @return mixed
      */
-    public function count()
+    /*public function count()
     {
         return $this->groups->count();
-    }
+    }*/
 
     /**
      * Returns a count of how many groups there are
@@ -227,10 +227,10 @@ class GroupManager extends StaticFactory
      * @deprecated Renamed below and added better error checking
      * @return mixed
      */
-    public function roleCount($groupCode)
+    /*public function roleCount($groupCode)
     {
         return $this->groups->get($groupCode)->roles()->count();
-    }
+    }*/
 
     /**
      * Returns a count of how many roles there are in a specific group.
@@ -249,10 +249,10 @@ class GroupManager extends StaticFactory
      * @deprecated Renamed below to a better name
      * @return mixed
      */
-    public function get()
+    /*public function get()
     {
         return $this->groups;
-    }
+    }*/
 
     /**
      * Returns the collection of groups.

@@ -42,7 +42,7 @@ class UserGroupManager extends StaticFactory {
      * @deprecated Renamed to a better function name
      * @return \Clake\UserExtended\Classes\UserGroupManager|null
      */
-    public function using ($user = null)
+    /*public function using ($user = null)
     {
         if($user == null)
             $user = UserUtil::getLoggedInUserExtendedUser();
@@ -50,7 +50,7 @@ class UserGroupManager extends StaticFactory {
         $this->user = $user;
 
         return $this;
-    }
+    }*/
 
     /**
      * Pass a user object to get groups for that user
@@ -85,7 +85,7 @@ class UserGroupManager extends StaticFactory {
      * @deprecated Remove as this is handled in UserUtil
      * @return RainLab\User\Models\User
      */
-    private function getLoggedInUser()
+    /*private function getLoggedInUser()
     {
         if (!$user = Auth::getUser()) {
             return null;
@@ -94,7 +94,7 @@ class UserGroupManager extends StaticFactory {
         $user->touchLastSeen();
 
         return $user;
-    }
+    }*/
 
     /**
      * Finds all the groups the user is in and stores that to the class IE $userGroups
@@ -102,7 +102,7 @@ class UserGroupManager extends StaticFactory {
      * @deprecated Renamed to a better naming below.
      * @return $this
      */
-    public function all($user = null)
+    /*public function all($user = null)
     {
 
         if($user == null)
@@ -135,7 +135,7 @@ class UserGroupManager extends StaticFactory {
 
         return $this;
 
-    }
+    }*/
 
     /**
      * Finds all the groups the user is in and stores that to the class IE $userGroups
@@ -163,11 +163,11 @@ class UserGroupManager extends StaticFactory {
      * @deprecated Renamed
      * @return mixed
      */
-    public function getUserGroups() {
+    /*public function getUserGroups() {
 
         return $this->userGroups;
 
-    }
+    }*/
 
     /**
      * Returns a collection of groups a user is in
