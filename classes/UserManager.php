@@ -41,13 +41,15 @@ class UserManager extends StaticFactory
 
         $userCount = User::all()->count();
 
-		if ($userCount == 0){
-			return false;
-		} else if($userCount < $limit){
+		if($userCount < $limit)
             $limit = $userCount;
-		}
 
-        $users = User::all()->random($limit);
+        $users = User::all();
+
+		if(empty($users))
+		    return $returner;
+
+        $users->random($limit);
 
         $friends = FriendsManager::getAllFriends();
 
