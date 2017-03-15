@@ -11,13 +11,13 @@
 
         {% for friend in friends.friendsList %}
             <div class="table-row">
-                <a href="#" class="table-cell-20" data-request-data="id: {{friend.id}}" data-request="ueuser::onVisitProfile">
+                <a href="#" class="table-cell-20" data-request-data="id: {{friend.id}}" data-request="friends::onVisitProfile">
                     <div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if friend.avatar.path %} {{friend.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
                 </a>
-                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="ueuser::onVisitProfile">
+                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="friends::onVisitProfile">
                     {{friend.name}} {{friend.surname}}
                 </a>
-                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="ueuser::onVisitProfile">
+                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="friends::onVisitProfile">
                     {{friend.last_seen}}
                 </a>
                 <div class="table-cell-20">

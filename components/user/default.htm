@@ -20,7 +20,11 @@
             {{user.name}}
         </a>
         <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
-            {{user.last_seen}}
+			{% if user.last_seen %}
+				{{user.last_seen}}
+			{% else %}
+				Never
+			{% endif %}
         </a>
 		<div class="table-cell-20">
 			{% if ueuser.isFriend(user.id) %}
