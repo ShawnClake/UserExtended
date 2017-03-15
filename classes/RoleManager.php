@@ -3,14 +3,22 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use October\Rain\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 /**
+ * User Extended by Shawn Clake
  * Class RoleManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a group level (Global level)
- * @method static RoleManager for($groupCode) RoleManager
+ * @method static RoleManager with($groupCode) RoleManager
  * @package Clake\UserExtended\Classes
  */
 class RoleManager extends StaticFactory
@@ -33,7 +41,7 @@ class RoleManager extends StaticFactory
      */
     public static function getUnassignedRoles()
     {
-        return Roles::where('group_id', 0)->get();
+        return Role::where('group_id', 0)->get();
     }
 
     /**
@@ -42,11 +50,37 @@ class RoleManager extends StaticFactory
      * @param $description
      * @param $code
      * @param int $groupId
-     * @return Roles
+     * @return Role
      */
     public static function createRole($name, $description, $code, $groupId = 0)
     {
-        $role = new Roles();
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
+        if(Role::code($code)->count() > 0)
+            return false;
+
+        $role = new Role();
         $role->name = $name;
         $role->description = $description;
         $role->code = $code;
@@ -78,6 +112,8 @@ class RoleManager extends StaticFactory
      * @param null $description
      * @param null $code
      * @param null $groupId
+     * @param bool $ignoreChecks
+     * @return bool|Validator
      */
     public static function updateRole($roleCode, $sortOrder = null, $name = null, $description = null, $code = null, $groupId = null, $ignoreChecks = false)
     {
@@ -89,9 +125,35 @@ class RoleManager extends StaticFactory
         if(isset($code)) $role->code = $code;
         if(isset($groupId)) $role->group_id = $groupId;
 
+        $validator = Validator::make(
+            [
+                'name' => $role->name,
+                'description' => $role->description,
+                'code' => $role->code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
+        if(Role::code($role->code)->where('id', '<>', $role->id)->count() > 0)
+            return false;
+
+        if($role->group_id == 0)
+            $ignoreChecks = true;
+
         $role->ignoreChecks = $ignoreChecks;
         $role->save();
         $role->ignoreChecks = false;
+
+        return $validator;
     }
 
     /**
@@ -101,7 +163,7 @@ class RoleManager extends StaticFactory
      */
     public static function findRole($roleCode)
     {
-        return Roles::where('code', $roleCode)->first();
+        return Role::where('code', $roleCode)->first();
     }
 
     /**
@@ -124,7 +186,7 @@ class RoleManager extends StaticFactory
      * @param $groupCode
      * @return $this
      */
-    public function forFactory($groupCode)
+    public function withFactory($groupCode)
     {
         $this->group = GroupsExtended::where('code', $groupCode)->first();
         if($this->group != null)
@@ -339,6 +401,9 @@ class RoleManager extends StaticFactory
     {
         $groupRoles = [];
 
+        if(empty($this->roles))
+            return [];
+
         foreach($this->roles as $role)
         {
             $groupRoles[$role["sort_order"]] = $role;
@@ -354,7 +419,7 @@ class RoleManager extends StaticFactory
      */
     public function fixRoleSort()
     {
-        $roles = RoleManager::for($this->group->code)->getSortedGroupRoles();
+        $roles = RoleManager::with($this->group->code)->getSortedGroupRoles();
 
         $count = 0;
         foreach($roles as $role)

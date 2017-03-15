@@ -1,38 +1,64 @@
-<?php
+<?php namespace Clake\UserExtended\Traits;
 
-namespace Clake\UserExtended\Traits;
-
-use Clake\DataStructures\Classes\Lists;
+use Clake\UserExtended\Classes\Lists;
 use Exception;
 
 /**
- * TODO: Improve error checking and documentation
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class Searchable
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Traits
  */
 trait Searchable
 {
 
+    /**
+     * Loops through all the different fields to search by
+     * @param $phrase
+     * @return mixed
+     */
     public function search($phrase)
     {
         $searchable = $this->getSearchableAttributes();
 
-        $results = Lists::create();
+        $results = [];
+
+        foreach($searchable as $field)
+        {
+            $set = self::searchUserByAttribute($field, $phrase);
+            foreach($set as $result)
+            {
+                $results[$result->id] = $result;
+            }
+            //echo json_encode($results);
+        }
+
+        return $results;
+
+        /*$results = Lists::create();
 
         foreach($searchable as $field)
         {
             $results->mergeList(self::searchUserByAttribute($field, $phrase));
+            //echo json_encode($results);
         }
 
-        return $results->allList();
+        return $results->allList();*/
     }
 
+    /**
+     * Preforms the actual search
+     * @param $field
+     * @param $phrase
+     * @return mixed
+     */
     protected static function searchUserByAttribute($field, $phrase)
     {
-
         return self::where($field, 'like', '%' . $phrase . '%')->get();
     }
 
@@ -47,7 +73,6 @@ trait Searchable
                 'You must define a $searchable property in %s to use the Searchable trait.', get_called_class()
             ));
         }
-
     }
 
     /**

@@ -1,7 +1,40 @@
-<ul>
-    {% for user in friends.friendRequests %}
-    <li>{{user.name}} - <button data-request-data="id: {{user.id}}" data-request="friends::onAccept">Accept</button>
-        <a href="#" data-request-data="id: {{user.id}}" data-request="friends::onDecline"><span class="glyphicon glyphicon-remove">X</span></a>
-    </li>
-    {% endfor %}
-</ul>
+<div class="request-wrap" id="request-wrap">
+<h4><div style="width: 100%; text-align: center;">Your Friend Requests</div></h4>
+
+{% if friends.friendRequests is not empty %}
+
+    <div class="table">
+        <div class="table-header">
+            <div class="table-cell-20">Picture</div>
+            <div class="table-cell-30">Username</div>
+            <div class="table-cell-30">Last Online</div>
+            <div class="table-cell-20">Accept Request?</div>
+        </div>
+
+        {% for user in friends.friendRequests %}
+            <div class="table-row">
+                <a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
+                    <div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if user.avatar.path %} {{user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+                </a>
+                <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
+                    {{user.name}} {{user.surname}}
+                </a>
+                <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
+                    {{user.last_seen|relative}}
+                </a>
+                <div class="table-cell-20">
+                    <button data-request-data="id: {{user.id}}" data-request="friends::onAccept">Accept</button>
+                    <button data-request-data="id: {{user.id}}" data-request="friends::onDecline">Decline</button>
+                    <!--<a href="#" data-request-data="id: {{user.id}}" data-request="friends::onDecline"><span class="glyphicon glyphicon-remove">Decline</span></a>-->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+
+<div style="width: 100%; text-align: center;">You have no friend requests</div>
+
+{% endif %}
+
+</div>

@@ -2,33 +2,37 @@
 
 use Model;
 use RainLab\User\Models\User;
-
 use Clake\UserExtended\Traits\Timezonable;
 use Clake\UserExtended\Traits\Searchable;
 
 /**
- * TODO: Add searchable functions here
- * TODO: Add searchable trait
- * TODO: Add scope functions for better user querying
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class UserExtended
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
  */
 class UserExtended extends User
 {
-
     use Timezonable;
 
     use Searchable;
 
-
+    /**
+     * @var array
+     */
     protected $timezonable = [
         'created_at',
         'updated_at'
     ];
 
+    /**
+     * @var array
+     */
     protected $searchable = [
         'email',
         'name',
@@ -42,10 +46,9 @@ class UserExtended extends User
      */
     public function __construct()
     {
-
         $hasMany = $this->hasMany;
-        $hasMany['comments'] = ['Clake\Userextended\Models\Comments', 'key'=>'user_id'];
-        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comments', 'key'=>'author_id'];
+        $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'user_id'];
+        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'author_id'];
         $this->hasMany = $hasMany;
 
         $belongsTo = $this->belongsTo;
@@ -53,7 +56,7 @@ class UserExtended extends User
         $this->belongsTo = $belongsTo;
 
         $belongsToMany = $this->belongsToMany;
-        $belongsToMany['roles'] = ['Clake\Userextended\Models\Roles', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
+        $belongsToMany['roles'] = ['Clake\Userextended\Models\Role', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
         $belongsToMany['groups'] = ['Clake\Userextended\Models\GroupsExtended', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'user_group_id'];
         $this->belongsToMany = $belongsToMany;
 

@@ -2,7 +2,14 @@
 
 namespace Clake\UserExtended\Classes;
 /**
+ * User Extended by Shawn Clake
  * Class UserExtended
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * UserExtended Modular Control
  *
@@ -46,6 +53,12 @@ abstract class UserExtended extends Module
     private static $lang = [];
 
     /**
+     * Asset injection registry
+     * @var array
+     */
+    private static $assets = [];
+
+    /**
      * Stores an array of settings from the backend module manager page.
      * These determine whether or not modules will be loaded, and enable/disable injections
      * @var array
@@ -77,6 +90,12 @@ abstract class UserExtended extends Module
     public abstract function injectLang();
 
     /**
+     * Override with an assets array to inject assets into UserExtended
+     * @return mixed
+     */
+    public abstract function injectAssets();
+
+    /**
      * @return array
      */
     public static function getComponents()
@@ -106,6 +125,14 @@ abstract class UserExtended extends Module
     public static function getSettings()
     {
         return self::$settings;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getAssets()
+    {
+        return self::$assets;
     }
 
     /**
@@ -209,6 +236,8 @@ abstract class UserExtended extends Module
         self::$navigation = array_merge(self::$navigation, $this->injectNavigation());
 
         self::$lang = array_merge(self::$lang, $this->injectLang());
+
+        self::$assets = array_merge(self::$assets, $this->injectAssets());
     }
 
     /**

@@ -1,14 +1,18 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
-
-use Clake\Userextended\Models\UserExtended;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use \October\Rain\Support\Facades\Yaml;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserSettingsManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  *
  * Terminology and flow:
@@ -21,16 +25,28 @@ use \October\Rain\Support\Facades\Yaml;
 class UserSettingsManager
 {
 
-    // Settings config file
+    /**
+     * Settings config file
+     * @var array
+     */
     protected $settingsTemplate = [];
 
-    // Settings column from the user object
+    /**
+     * Settings column from the user object
+     * @var
+     */
     protected $settings;
 
-    // Stores the user object
+    /**
+     * Stores the user object
+     * @var null
+     */
     protected $user = null;
 
-    // Default options for settings
+    /**
+     * Setting option defaults
+     * @var array
+     */
     private $defaults = [
         'label' => '',
         'type' => 'text',
@@ -43,10 +59,10 @@ class UserSettingsManager
 
     /**
      * Creates an instance of the UserSettingsManager
-     * @param UserExtended|null $user
+     * @param \Clake\Userextended\Models\UserExtended|null $user
      * @return null|static
      */
-    public static function init(UserExtended $user = null)
+    public static function init(\Clake\Userextended\Models\UserExtended $user = null)
     {
         $instance = new static;
         $path = plugins_path('clake/userextended/config/user_settings.yaml');
@@ -195,7 +211,6 @@ class UserSettingsManager
                     $value = $this->decrypt($key, $value);
             }
 
-
             $settings[$key] = [$value, 'options' => $options];
         }
 
@@ -262,7 +277,7 @@ class UserSettingsManager
      * Will return true if the setting does not require validation
      * @param $setting
      * @param $value
-     * @return bool
+     * @return bool|Validator\
      */
     public function validate($setting, $value)
     {
@@ -276,7 +291,7 @@ class UserSettingsManager
             );
 
             if($validator->fails())
-                return false;
+                return $validator;
         }
 
         return true;
@@ -320,27 +335,23 @@ class UserSettingsManager
      * Sets a setting by checking whether or not it can be edited, then validates it, then encrypts it if requried.
      * @param $setting
      * @param $value
-     * @return $this|bool
+     * @return bool|Validator
      */
     public function setSetting($setting, $value)
     {
-        if(!$this->validate($setting, $value))
-            return false;
+        $validator = $this->validate($setting, $value);
 
+        if($validator !== true)
+            return $validator;
 
         $value = $this->encrypt($setting, $value);
-
-        //dd(empty($this->settings));
-        //$test = is_null($this->settings) ? "hi" : $this->settingsTemplate;
-        //$test = array_key_exists($setting, $this->settings);
-        //dd($test);
 
         if($this->settings == "Array" || is_null($this->settings) || empty($this->settings))
             $this->settings = [];
 
         $this->settings[$setting] = $value;
 
-        return $this;
+        return true;
     }
 
     /**
@@ -349,7 +360,7 @@ class UserSettingsManager
      */
     public function save()
     {
-        UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
+        \Clake\Userextended\Models\UserExtended::where('id', $this->user->id)->update(['settings'=>json_encode($this->settings)]);
         return $this;
     }
 

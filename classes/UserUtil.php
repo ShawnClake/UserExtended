@@ -1,26 +1,20 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Auth;
 use Carbon\Carbon;
-use Clake\Userextended\Models\Timezone;
-use Clake\Userextended\Models\UserExtended;
 use RainLab\User\Models\User;
 use Redirect;
 
 /**
- * TODO: Improve function documentation
- * TODO: Create a separate documentation file to document User Utility functions
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class UserUtil
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
- *
- * @todo: Move time related methods to a seperate trait
- * @todo: Test casting and timezones
- *
  */
 class UserUtil
 {
@@ -44,7 +38,7 @@ class UserUtil
      */
     public static function getUser($value, $property = "id")
     {
-        return UserExtended::where($property, $value)->first();
+        return \Clake\Userextended\Models\UserExtended::where($property, $value)->first();
     }
 
     /**
@@ -88,7 +82,7 @@ class UserUtil
 
     /**
      * Returns a Timezone model for the current logged in user
-     * @return mixed|null|string
+     * @return string|null
      */
     public static function getLoggedInUsersTimezone()
     {
@@ -107,7 +101,7 @@ class UserUtil
      * Get a users current timezone.
      * @param $value
      * @param string $property
-     * @return null
+     * @return null|string
      */
     public static function getUserTimezone($value, $property = "id")
     {
@@ -125,7 +119,7 @@ class UserUtil
      * @param UserExtended $user
      * @return User
      */
-    public static function castToRainLabUser(UserExtended $user)
+    public static function castToRainLabUser(\Clake\Userextended\Models\UserExtended $user)
     {
         $rainlab = new User();
         $rainlab->attributes = $user->attributes;
@@ -134,6 +128,7 @@ class UserUtil
 
     /**
      * Casts the Clake.UserExtended model to Rainlab.User
+     * Faster than converting, but less thorough
      * @param User $user
      * @return UserExtended
      */
@@ -141,22 +136,41 @@ class UserUtil
     {
         if($user == null)
             return $user;
-        $userExtended = new UserExtended();
+        $userExtended = new \Clake\Userextended\Models\UserExtended();
         $userExtended->attributes = $user->attributes;
         return $userExtended;
     }
 
+    /**
+     * Convert a RainLab.User object to a UserExtended User object
+     * Slower than casting, but more thorough
+     * @param $user
+     * @return mixed
+     */
     public static function convertToUserExtendedUser($user)
     {
         if($user == null)
             return $user;
         $id = $user->id;
-        return UserExtended::where('id', $id)->first();
+        return \Clake\Userextended\Models\UserExtended::where('id', $id)->first();
     }
 
+    public static function convertToRainlabUser($user)
+    {
+        if($user == null)
+            return $user;
+        $id = $user->id;
+        return User::where('id', $id)->first();
+    }
+
+    /**
+     * Search for a user via the phrase
+     * @param $phrase
+     * @return \Clake\Userextended\Models\UserExtended
+     */
     public static function searchUsers($phrase)
     {
-        $results = new UserExtended();
+        $results = new \Clake\Userextended\Models\UserExtended();
 
         return $results->search($phrase);
     }
@@ -168,12 +182,16 @@ class UserUtil
     public static function getUsersIdElseLoggedInUsersId($userId = null)
     {
         if($userId == null)
-            $userId = UserUtil::getLoggedInUser();
+        {
+            $user = UserUtil::getLoggedInUser();
+            if(isset($user))
+                $userId = $user->id;
+        }
 
         if($userId == null)
             return null;
 
-        return $userId->id;
+        return $userId;
     }
 
     /**
@@ -194,17 +212,18 @@ class UserUtil
 
     /**
      * @param $userId
-     * @return bool|void
+     * @return bool
      */
     public static function idIsLoggedIn($userId)
     {
         $user = self::getLoggedInUser();
         if($user == null)
-            return;
+            return false;
         return $user->id == $userId;
     }
 
     /**
+     * Gets the logged in user object and converts it to an UserExtended user object before returning it
      * @return mixed
      */
     public static function getLoggedInUserExtendedUser()

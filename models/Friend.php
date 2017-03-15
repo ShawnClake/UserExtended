@@ -3,23 +3,36 @@
 use Clake\UserExtended\Classes\UserUtil;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
-
 use Clake\UserExtended\Traits\Timezonable;
 
 /**
- * TODO: Fill out fillable
- * TODO: Add scope functions and implement a way of checking for friendship etc. easily
- * TODO: Add the ability to be blocked
- * TODO: Rename the model to UserRelationship
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class Friends
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
+ * @method static Friend friend($userIdA, $userIdB = null) Query
+ * @method static Friend request($userIdA, $userIdB = null) Query
+ * @method static Friend declined($userIdA, $userIdB = null) Query
+ * @method static Friend blocked($userIdA, $userIdB = null) Query
+ * @method static Friend relation($userIdA, $userIdB = null) Query
+ * @method static Friend friendRequests($userId = null) Query
+ * @method static Friend sentRequests($userId = null) Query
+ * @method static Friend friends($userId = null) Query
+ * @method static Friend blocks($userId = null) Query
+ * @method static Friend pluckSender() Query
+ * @method static Friend pluckReceiver() Query
+ * @method static Friend sender($userId = null) Query
+ * @method static Friend receiver($userId = null) Query
+ * @method static Friend notMe($userId = null) Query
  */
-class Friends extends Model
+class Friend extends Model
 {
-
     use SoftDelete;
 
     use Timezonable;
@@ -30,7 +43,6 @@ class Friends extends Model
         'declined' => 2,
         'blocked' => 3,
     ];
-
 
     /**
      * @var string The database table used by the model.
@@ -73,70 +85,62 @@ class Friends extends Model
 
     /**
      * Returns whether or not two users are friends
-     *
      * @param $userIdA
      * @param $userIdB
      * @return bool
      */
     public static function isFriends($userIdA, $userIdB = null)
     {
-        if(Friends::friend($userIdA, $userIdB)->count() > 0)
-            return true;
-        return false;
+        return Friend::friend($userIdA, $userIdB)->count() > 0;
     }
 
     /**
+     * Returns whether or not two users have a friend request between them
      * @param $userIdA
      * @param null $userIdB
      * @return bool
      */
     public static function isRequested($userIdA, $userIdB = null)
     {
-
-        if(Friends::request($userIdA, $userIdB)->count() > 0)
-            return true;
-        return false;
+        return Friend::request($userIdA, $userIdB)->count() > 0;
     }
 
     /**
+     * Returns whether or not two users have a declined friend request between them.
      * @param $userIdA
      * @param null $userIdB
      * @return bool
      */
     public static function isDeclined($userIdA, $userIdB = null)
     {
-        if(Friends::declined($userIdA, $userIdB)->count() > 0)
-            return true;
-        return false;
+        return Friend::declined($userIdA, $userIdB)->count() > 0;
     }
 
     /**
+     * Returns whether or not two users are blocked from each other
      * @param $userIdA
      * @param null $userIdB
      * @return bool
      */
     public static function isBlocked($userIdA, $userIdB = null)
     {
-        if(Friends::blocked($userIdA, $userIdB)->count() > 0)
-            return true;
-        return false;
+        return Friend::blocked($userIdA, $userIdB)->count() > 0;
     }
 
     /**
+     * Returns whether or not two users share a relation or bond
      * @param $userIdA
      * @param null $userIdB
      * @return bool
      */
     public static function isRelationExists($userIdA, $userIdB = null)
     {
-        if(Friends::relation($userIdA, $userIdB)->count() > 0)
-            return true;
-        return false;
+        return Friend::relation($userIdA, $userIdB)->count() > 0;
     }
 
     /**
      * Determines whether or not two users are friends. Run count on the result. If >0 then they are.
-     * Can find sender and accepter by examining the returned object using ->get() on the result
+     * Can find sender and acceptor by examining the returned object using ->get() on the result
      * @param $query
      * @param $userIdA
      * @param $userIdB
@@ -163,7 +167,7 @@ class Friends extends Model
 
     /**
      * Checks whether or not a friend request between two users exists
-     * Can find sender and accepter by examining the returned object using ->get() on the result
+     * Can find sender and acceptor by examining the returned object using ->get() on the result
      * @param $query
      * @param $userIdA
      * @param null $userIdB
@@ -190,7 +194,7 @@ class Friends extends Model
 
     /**
      * Checks whether or not a friend request between users was declined. Run count on result, if >0 then they are.
-     * Can find sender and accepter by examining the returned object using ->get() on the result
+     * Can find sender and acceptor by examining the returned object using ->get() on the result
      * @param $query
      * @param $userIdA
      * @param null $userIdB
@@ -427,6 +431,12 @@ class Friends extends Model
         $this->accepted = $status;
     }
 
+    /**
+     * Returns the other user ID in a row
+     * @param $query
+     * @param null $userId
+     * @return mixed
+     */
     public function scopeNotMe($query, $userId = null)
     {
         $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
@@ -434,10 +444,8 @@ class Friends extends Model
             return $query;
 
         $testa = $query;
-        $testb = $query;
 
         $sender = $testa->pluck('user_that_sent_request');
-        //$receiver = $testb->pluck('user_that_accepted_request');
 
         if($sender === UserUtil::getUsersIdElseLoggedInUsersId())
             return $query->pluck('user_that_accepted_request');
@@ -445,6 +453,10 @@ class Friends extends Model
         return $query->pluck('user_that_sent_request');
     }
 
+    /**
+     * Returns the other user ID in a row
+     * @param null $userId
+     */
     public function otherUser($userId = null)
     {
         $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
@@ -456,6 +468,71 @@ class Friends extends Model
         else
             return $this->user_that_sent_request;
 
+    }
+
+    /**
+     * ALL CODE BELOW THIS POINT IS FOR 2.2.00
+     */
+
+    /**
+     * Sets bonds between two users
+     * @param $relation_states
+     */
+    public function setBond($relation_states)
+    {
+        if(!is_array($relation_states))
+            $relation_states = [$relation_states];
+
+        foreach($relation_states as $state)
+        {
+            $this->relation = (int)($this->relation) | (int)($state);
+        }
+    }
+
+    /**
+     * Determines whether a bond exists between two users
+     * @param $relation_state
+     * @return bool
+     */
+    public function hasBond($relation_state)
+    {
+        if(!!((int)($this->relation) & (int)($relation_state)))
+            return true;
+        return false;
+    }
+
+    /**
+     * Removes a bond between two users
+     * @param $relation_states
+     */
+    public function removeBond($relation_states)
+    {
+        if(!is_array($relation_states))
+            $relation_states = [$relation_states];
+
+        foreach($relation_states as $state)
+        {
+            $this->relation = (int)($this->relation) & ~((int)($state));
+        }
+    }
+
+    /**
+     * Flushes all bonds
+     * Removes any relation between two users
+     */
+    public function flushBonds()
+    {
+        $this->relation = 0;
+    }
+
+    /**
+     * Flushes all bonds and then sets the bonds passed in
+     * @param $relation_states
+     */
+    public function setExclusiveBond($relation_states)
+    {
+        $this->flushRelations();
+        $this->setRelation($relation_states);
     }
 
 }

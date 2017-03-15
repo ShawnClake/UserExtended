@@ -1,28 +1,36 @@
 {% if user %}
 
+<div class="message-box">You cannot register for an account while logged in.</div>
 
 {% else %}
 <form
-        data-request="onRegister">
+        data-request-validate
+        data-request-flash
+        data-request="onRegister"
+		id ="signupForm">
     <div class="form-group">
-        <label for="registerFirstName">First Name</label>
+        <label for="registerFirstName">{{ "clake.userextended::lang.components.account.firstname"|trans }}</label>
         <input
                 name="first_name"
                 type="text"
                 class="form-control"
                 id="registerFirstName"
-                placeholder="Enter your first name" />
+				required="{{attributes.options.validation}}"
+                placeholder='{{ "clake.userextended::lang.components.account.enterfname"|trans }}' />
     </div>
+    <span data-validate-for="first_name"></span><br>
 
     <div class="form-group">
-        <label for="registerLastName">Last Name</label>
+        <label for="registerLastName">{{ "clake.userextended::lang.components.account.lastname"|trans }}</label>
         <input
                 name="last_name"
                 type="text"
                 class="form-control"
                 id="registerLastName"
-                placeholder="Enter your last name" />
+				required="{{attributes.options.validation}}"
+                placeholder='{{ "clake.userextended::lang.components.account.enterlname"|trans }}' />
     </div>
+    <span data-validate-for="last_name"></span><br>
 
     <div class="form-group">
         <label for="register{{account.signUp}}">{{account.signUp|capitalize}}</label>
@@ -31,53 +39,71 @@
                 type='{% if account.signUp == "email" %}email{% else %}text{% endif %}'
                 class="form-control"
                 id="register{{account.signUp}}"
+				required="{{attributes.options.validation}}"
                 placeholder="Enter your {{account.signUp}}" />
     </div>
+    <span data-validate-for="{{account.signUp}}"></span><br>
 
     {% if account.signUp == "username" %}
 
     <div class="form-group">
-        <label for="registerEmail">Email</label>
+        <label for="registerEmail">{{ "clake.userextended::lang.components.account.email"|trans }}</label>
         <input
                 name="email"
                 type="email"
                 class="form-control"
                 id="registerEmail"
-                placeholder="Enter your email" />
+				required="{{attributes.options.validation}}"
+                placeholder='{{ "clake.userextended::lang.components.account.enteremail"|trans }}' />
+
     </div>
+    <span data-validate-for="email"></span><br>
 
     {% endif %}
 
     <div class="form-group">
-        <label for="registerPassword">Password</label>
+        <label for="registerPassword">{{ "clake.userextended::lang.components.account.password"|trans }}</label>
         <input
                 name="password"
                 type="password"
                 class="form-control"
                 id="registerPassword"
-                placeholder="Choose a password" />
-    </div>
+				required="{{attributes.options.validation}}"
+                placeholder='{{ "clake.userextended::lang.components.account.enterpassword"|trans }}' />
+	</div>
+    <span data-validate-for="password"></span><br>
 
     <div class="form-group">
-        <label for="registerConfirmPassword">Confirm Password</label>
+        <label for="registerConfirmPassword">{{ "clake.userextended::lang.components.account.confirmpassword"|trans }}</label>
         <input
                 name="password_confirmation"
                 type="password"
                 class="form-control"
                 id="registerConfirmPassword"
-                placeholder="Choose a password" />
+				required="{{attributes.options.validation}}"
+                placeholder='{{ "clake.userextended::lang.components.account.confirmpassword"|trans }}' />
     </div>
+    <span data-validate-for="password_confirmation"></span><br>
 
     {% for setting,attributes in account.createSettings %}
 
     <div class="form-group">
         <label for="accountSettings{{setting}}">{{attributes.options.label}}</label>
-        <input name="{{setting}}" type="{{ attributes.options.type }}" class="form-control" id="accountSettings{{setting}}">
+        <input 
+			name="{{setting}}" 
+			type="{{ attributes.options.type }}" 
+			class="form-control" 
+			id="accountSettings{{setting}}"
+			required="{{attributes.options.validation}}">
     </div>
+    <span data-validate-for="{{setting}}"></span><br>
 
     {% endfor %}
 
-    <button type="submit" class="btn btn-default">Register</button>
+    <button data-attach-loading type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.register"|trans }}</button>
+    <div class="alert alert-danger" data-validate-error>
+        <p data-message></p>
+    </div>
 </form>
 
 {% endif %}

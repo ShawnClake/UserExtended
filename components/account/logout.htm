@@ -1,1 +1,7 @@
-{% if user %}<a data-request="onLogout" data-request-data="redirect: '/'">Logout</a>{% endif %}
+{% if user %}
+<a style="padding-top: 10px;" data-request="onLogout" data-request-data="redirect: '/'">{{ "clake.userextended::lang.components.account.logout"|trans }}</a>
+{% else %}
+
+<div class="message-box">You are not logged in.</div>
+
+{% endif %}

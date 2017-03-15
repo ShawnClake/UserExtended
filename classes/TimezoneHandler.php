@@ -1,23 +1,26 @@
-<?php
-
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Carbon\Carbon;
 use Clake\Userextended\Models\Timezone;
-use Clake\Userextended\Models\UserExtended;
 
 /**
- * TODO: Add alias naming functions
- * TODO: Add a documentation page for how to use Timezones
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class TimezoneHandler
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  */
 class TimezoneHandler
 {
+
+    public static function getCurrentTime()
+    {
+        return Carbon::now();
+    }
 
     /**
      * Adjust the current UTC time by minutes, hours, days, and seconds
@@ -29,7 +32,7 @@ class TimezoneHandler
      */
     public static function getCurrentTimeAdjusted($minutes, $hours = 0, $days = 0, $seconds = 0)
     {
-        $current = Carbon::now();
+        $current = self::getCurrentTime();
         $current->addHours($hours);
         $current->addMinutes($minutes);
         $current->addDays($days);
@@ -73,10 +76,10 @@ class TimezoneHandler
 
     /**
      * Gets the current time adjusted via a Users timezone
-     * @param UserExtended $user
+     * @param $user
      * @return Carbon
      */
-    public static function getUsersCurrentTimeAdjusted(UserExtended $user)
+    public static function getUsersCurrentTimeAdjusted($user)
     {
         $offset = $user->timezone->offset;
         $adjustment = self::getTimeStringAdjustments($offset);
@@ -143,6 +146,31 @@ class TimezoneHandler
     public static function getUTCTimezone()
     {
         return Timezone::where('id', 1)->first();
+    }
+
+    /**
+     * The passed in time string should be in the applications default timezone.
+     * By default this is UTC.
+     * @param Carbon $time
+     * @param string $locale
+     * @return mixed
+     */
+    public static function getRelativeTimeString(Carbon $time, $locale = 'en')
+    {
+        // Doesn't need to be adjusted, because otherwise the diff in time is the same
+        Carbon::setLocale($locale);
+        return $time->diffForHumans();
+    }
+
+    /**
+     * Returns a contextual relative time string. 5 seconds ago, 5 minutes ago.
+     * @param $time
+     * @param string $locale
+     * @return mixed
+     */
+    public static function twigRelativeTimeString($time, $locale = 'en')
+    {
+        return self::getRelativeTimeString($time, $locale);
     }
 
 

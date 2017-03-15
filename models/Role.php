@@ -1,35 +1,35 @@
 <?php namespace Clake\Userextended\Models;
 
-use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
-
 use Model;
 use October\Rain\Support\Collection;
-
 use Clake\UserExtended\Traits\Timezonable;
-
-//use October\Rain\Database\Traits\Sortable;
-//use October\Rain\Database\Traits\Encryptable
-
 use October\Rain\Database\Traits\SoftDelete;
-/**
- * TODO: Add scope functions to improve querying
- * TODO: Improve error checking for creating and updating roles
- * TODO: Add beforeDelete which ensures the other roles are fixed in case a role is removed
- * TODO: Rename to Role to fit the convention
- */
 
 /**
+ * User Extended by Shawn Clake
  * Class Roles
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
+ *
+ * @method static Role code($code) Query
+ * @method static Role rolesInGroup($groupCode) Query
  */
-class Roles extends Model
+class Role extends Model
 {
-    //use Sortable;
     use Timezonable;
 
     use SoftDelete;
 
+    /**
+     * Provides an override for ignoring sort_order checks for onCreate, onUpdate, and onDelete
+     * @var bool
+     */
     public $ignoreChecks = false;
 
     /**
@@ -47,11 +47,17 @@ class Roles extends Model
      */
     protected $fillable = [];
 
+    /**
+     * @var array
+     */
     protected $timezonable = [
         'updated_at',
         'created_at'
     ];
 
+    /**
+     * @var array
+     */
     protected $dates = [
         'deleted_at',
     ];
@@ -75,6 +81,10 @@ class Roles extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * Returns a collection of users which have a role
+     * @return array|Collection
+     */
     public function getUsersInRole()
     {
         $relations = UsersGroups::byRole($this->code)->get();
@@ -89,6 +99,12 @@ class Roles extends Model
         return $users;
     }
 
+    /**
+     * Gets roles related to a group specified by the passed in parameter of groupCode
+     * @param $query
+     * @param $groupCode
+     * @return mixed
+     */
     public function scopeRolesInGroup($query, $groupCode)
     {
         $group = GroupsExtended::where('code', $groupCode)->first();
@@ -106,7 +122,7 @@ class Roles extends Model
             $this->group_id = 0;
         }
         else
-            $this->sort_order = RoleManager::for($this->group->code)->countRoles() + 1;
+            $this->sort_order = RoleManager::with($this->group->code)->countRoles() + 1;
     }
 
     /**
@@ -118,7 +134,7 @@ class Roles extends Model
         if($this->ignoreChecks)
             return true;
 
-        $total = RoleManager::for($this->group->code)->countRoles();
+        $total = RoleManager::with($this->group->code)->countRoles();
 
         if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
         {
@@ -135,13 +151,13 @@ class Roles extends Model
         if($this->group_id == 0)
             return true;
 
-        $total = RoleManager::for($this->group->code)->countRoles();
+        $total = RoleManager::with($this->group->code)->countRoles();
         $myOrder = $this->sort_order;
 
         if($myOrder === $total)
             return true;
 
-        $roles = RoleManager::for($this->group->code)->getSortedGroupRoles();
+        $roles = RoleManager::with($this->group->code)->getSortedGroupRoles();
 
         $difference = $total - $myOrder;
 
@@ -151,7 +167,6 @@ class Roles extends Model
             $role->sort_order = $total - $i - 1;
             $role->save();
         }
-
     }
 
     /**
@@ -168,6 +183,17 @@ class Roles extends Model
         $row = UsersGroups::where('user_id', $userObj->id)->where('user_group_id', $groupId)->first();
         $row->role_id = $roleId;
         $row->save();
+    }
+
+    /**
+     * Returns the role with the passed in parameter code
+     * @param $query
+     * @param $code
+     * @return mixed
+     */
+    public function scopeCode($query, $code)
+    {
+        return $query->where('code', $code);
     }
 
 

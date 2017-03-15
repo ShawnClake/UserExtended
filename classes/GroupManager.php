@@ -3,20 +3,27 @@
 namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 /**
+ * User Extended by Shawn Clake
  * Class GroupManager
+ * User Extended is licensed under the MIT license.
  *
- * Handles all interaction accross groups on a global level rather than a user level.
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ *
+ * Handles all interaction across groups on a global level rather than a user level.
  * @method static GroupManager allGroups GroupManager
  * @package Clake\UserExtended\Classes
  */
 class GroupManager extends StaticFactory
 {
-
     /**
      * A collection of groups
      * @var
@@ -32,6 +39,29 @@ class GroupManager extends StaticFactory
      */
     public static function createGroup($name, $description, $code)
     {
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
         if(GroupsExtended::code($code)->count() > 0)
             return false;
 
@@ -45,8 +75,6 @@ class GroupManager extends StaticFactory
 
     /**
      * Deletes a group
-     * TODO: Remove any UsersGroups associations with this group. The lines can be deleted entirely.
-     * TODO: Set roles which were a part of this group back to an 'unattached' state in userextended_roles table
      * @param $groupCode
      */
     public static function deleteGroup($groupCode)
@@ -56,7 +84,7 @@ class GroupManager extends StaticFactory
         if(!isset($group))
             return;
 
-        $roles = Roles::rolesInGroup($groupCode)->get();
+        $roles = Role::rolesInGroup($groupCode)->get();
 
         foreach($roles as $role)
         {
@@ -81,6 +109,7 @@ class GroupManager extends StaticFactory
      * @param null $name
      * @param null $description
      * @param null $code
+     * @return bool|Validator
      */
     public static function updateGroup($groupCode, $name = null, $description = null, $code = null)
     {
@@ -90,7 +119,30 @@ class GroupManager extends StaticFactory
         if(isset($description)) $group->description = $description;
         if(isset($code)) $group->code = $code;
 
+        $validator = Validator::make(
+            [
+                'name' => $group->name,
+                'description' => $group->description,
+                'code' => $group->code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
+        if(GroupsExtended::code($group->code)->count() > 1)
+            return false;
+
         $group->save();
+
+        return $validator;
     }
 
     /**
@@ -219,11 +271,8 @@ class GroupManager extends StaticFactory
     {
         $groups = [];
 
-        //echo json_encode(self::allGroups()->getGroups());
-
         foreach(self::allGroups()->getGroups() as $group)
         {
-            //echo json_encode($group)  . '***NEXTONECOMINGUP***';
             $groups[$group["sort_order"]] = $group;
         }
 

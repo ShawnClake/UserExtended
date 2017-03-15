@@ -2,16 +2,18 @@
 
 namespace Clake\UserExtended\Classes;
 
-use Clake\Userextended\Models\Comments;
+use Clake\Userextended\Models\Comment;
+use Mail;
 
 /**
- * TODO: Edit a comment
- * TODO: Get comments to follow SRP
- * TODO: Verify logged in user should have access to the comment
- */
-
-/**
+ * User Extended by Shawn Clake
  * Class CommentManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  */
 class CommentManager
@@ -19,56 +21,80 @@ class CommentManager
 
     /**
      * Creates a comment for a user
-     *
-     * @param $userid
+     * @param $userId
      * @param $content
+     * @return bool
      */
-    public static function createComment($userid, $content)
+    public static function createComment($userId, $content)
     {
-        $user = UserUtil::getUser($userid);
+        $user = UserUtil::getUser($userId);
 
         $author = UserUtil::getLoggedInUser();
 
         if(is_null($author) || is_null($user))
             return false;
 
-        $comment = new Comments();
+        $comment = new Comment();
 
         $comment->user = $user;
         $comment->author = $author;
         $comment->content = $content;
+		
+		$data = [
+            'name' => $user->name,
+            'author' => $author,
+            'content' => $content
+        ];
 
-        $comment->save();
+        Mail::send('clake.userextended::mail.register', $data, function($message) use ($user) {
+            $message->to($user->email, $user->name);
+        });
+
+        return $comment->save();
     }
 
     /**
      * Deletes a comment specified by a comment ID
-     * @param $commentid
+     * @param $commentId
      */
-    public static function deleteComment($commentid)
+    public static function deleteComment($commentId)
     {
-
-        if(self::canDeleteComment($commentid))
+        if(self::canDeleteComment($commentId))
         {
-            $comment = Comments::where('id', $commentid)->first();
+            $comment = Comment::where('id', $commentId)->first();
             $comment->delete();
         }
-
     }
 
     /**
-     *
+     * Edits a comment
+     * @param $commentId
+     * @param $content
+     */
+    public static function editComment($commentId, $content)
+    {
+        if(self::canEditComment($commentId))
+        {
+            $comment = Comment::where('id', $commentId)->first();
+            $comment->content = $content;
+            $comment->save();
+        }
+    }
+
+    /**
+     * Returns whether or not a user is allowed to create a comment
      */
     public static function canCreateComment()
     {
-
+		//TODO
     }
 
     /**
-     * @param $commentid
+     * Returns whether or not a user is allowed to delete a comment
+     * @param $commentId
      * @return bool
      */
-    public static function canDeleteComment($commentid)
+    public static function canDeleteComment($commentId)
     {
         $loggedInUser = UserUtil::getLoggedInUser();
 
@@ -77,44 +103,31 @@ class CommentManager
 
         $accessible = false;
 
-        if(Comments::where('id', $commentid)->where('user_id', $loggedInUser->id)->count() == 1)
+        if(Comment::where('id', $commentId)->where('user_id', $loggedInUser->id)->count() == 1)
             $accessible = true;
 
-        if(Comments::where('id', $commentid)->where('author_id', $loggedInUser->id)->count() == 1)
+        if(Comment::where('id', $commentId)->where('author_id', $loggedInUser->id)->count() == 1)
             $accessible = true;
 
         return $accessible;
     }
 
     /**
-     * @param $commentid
+     * Returns whether or not a user can edit a comment
+     * @param $commentId
      * @return bool
      */
-    public static function canEditComment($commentid)
+    public static function canEditComment($commentId)
     {
         $loggedInUser = UserUtil::getLoggedInUser();
 
         if(is_null($loggedInUser))
             return false;
 
-        if(Comments::where('id', $commentid)->where('author_id', $loggedInUser->id)->count() == 1)
+        if(Comment::where('id', $commentId)->where('author_id', $loggedInUser->id)->count() == 1)
             return true;
 
         return false;
-    }
-
-    /**
-     * @param $commentid
-     * @param $content
-     */
-    public static function editComment($commentid, $content)
-    {
-        if(self::canEditComment($commentid))
-        {
-            $comment = Comments::where('id', $commentid)->first();
-            $comment->content = $content;
-            $comment->save();
-        }
     }
 
 }

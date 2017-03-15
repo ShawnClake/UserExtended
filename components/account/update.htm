@@ -1,38 +1,80 @@
 {% if user %}
 
-{{ form_ajax('onUpdate', { model: user }) }}
+{{ form_ajax('onUpdate', { model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
 
-<div class="form-group">
-    <label for="accountName">Full Name</label>
-    <input name="name" type="text" class="form-control" id="accountName" value="{{ form_value('name') }}">
+<div id="signupForm">
+
+	<div class="form-group">
+		<label for="accountName">{{ "clake.userextended::lang.components.account.fullname"|trans }}</label>
+		<input 
+			name="name" 
+			type="text" 
+			class="form-control" 
+			id="accountName" 
+			required="{{attributes.options.validation}}"
+			value="{{ form_value('name') }}">
+	</div>
+	<span data-validate-for="name"></span><br>
+
+	<div class="form-group">
+		<label for="accountEmail">{{ "clake.userextended::lang.components.account.email"|trans }}</label>
+		<input 
+			name="email" 
+			type="email" 
+			class="form-control" 
+			id="accountEmail" 
+			required="{{attributes.options.validation}}"
+			value="{{ form_value('email') }}">
+	</div>
+	<span data-validate-for="email"></span><br>
+
+	<div class="form-group">
+		<label for="accountPassword">{{ "clake.userextended::lang.components.account.newpassword"|trans }}</label>
+		<input 
+			name="password" 
+			type="password" 
+			class="form-control" 
+			id="accountPassword">
+	</div>
+	<span data-validate-for="password"></span><br>
+
+	<div class="form-group">
+		<label for="accountPasswordConfirm">{{ "clake.userextended::lang.components.account.confirmnewpassword"|trans }}</label>
+		<input 
+			name="password_confirmation" 
+			type="password" 
+			class="form-control" 
+			id="accountPasswordConfirm">
+	</div>
+	<span data-validate-for="password_confirmation"></span><br>
+
+	{% for setting,attributes in account.updateSettings %}
+
+	<div class="form-group">
+		<label for="accountSettings{{setting}}">{{attributes.options.label}}</label>
+		<input 
+			name="{{setting}}" 
+			type="{{ attributes.options.type }}" 
+			class="form-control" 
+			id="accountSettings{{setting}}"
+			value="{{ attributes.0 }}"/>
+	</div>
+	<span data-validate-for="{{setting}}"></span>
+
+	{% endfor %}
+
+	<button data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
+
 </div>
 
-<div class="form-group">
-    <label for="accountEmail">Email</label>
-    <input name="email" type="email" class="form-control" id="accountEmail" value="{{ form_value('email') }}">
+<div class="alert alert-danger" data-validate-error>
+	<p data-message></p>
 </div>
-
-<div class="form-group">
-    <label for="accountPassword">New Password</label>
-    <input name="password" type="password" class="form-control" id="accountPassword">
-</div>
-
-<div class="form-group">
-    <label for="accountPasswordConfirm">Confirm New Password</label>
-    <input name="password_confirmation" type="password" class="form-control" id="accountPasswordConfirm">
-</div>
-
-{% for setting,attributes in account.updateSettings %}
-
-<div class="form-group">
-    <label for="accountSettings{{setting}}">{{attributes.options.label}}</label>
-    <input name="{{setting}}" type="{{ attributes.options.type }}" class="form-control" id="accountSettings{{setting}}" value="{{ attributes.0 }}">
-</div>
-
-{% endfor %}
-
-<button type="submit" class="btn btn-default">Save</button>
 
 {{ form_close() }}
+
+{% else %}
+
+<div class="message-box">You are not logged in.</div>
 
 {% endif %}

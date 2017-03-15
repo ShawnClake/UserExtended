@@ -1,18 +1,21 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
-
-use Clake\UserExtended\Models\GroupsExtended;
-use Clake\Userextended\Models\Roles;
+use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
-use Clake\UserExtended\Plugin;
 
 /**
+ * User Extended by Shawn Clake
  * Class UserRoleManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Handles all interactions with roles on a user level
  *
- * @method static UserRoleManager for($user) UserRoleManager
+ * @method static UserRoleManager with($user) UserRoleManager
  * @method static UserRoleManager currentUser UserRoleManager
  * @package Clake\UserExtended\Classes
  */
@@ -53,7 +56,7 @@ class UserRoleManager extends StaticFactory
      * @param null $user
      * @return $this
      */
-    public function forFactory($user = null)
+    public function withFactory($user = null)
     {
         if($user == null)
             $user = UserUtil::getLoggedInUser();
@@ -224,7 +227,7 @@ class UserRoleManager extends StaticFactory
         if($role->sort_order < 2)
             return $this;
 
-        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
+        $roles = RoleManager::with($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order - 1];
 
@@ -250,7 +253,7 @@ class UserRoleManager extends StaticFactory
         if($role->sort_order > (GroupManager::allGroups()->countGroupRoles($groupCode) - 1))
             return $this;
 
-        $roles = RoleManager::for($groupCode)->getSortedGroupRoles();
+        $roles = RoleManager::with($groupCode)->getSortedGroupRoles();
 
         $newRole = $roles[$role->sort_order + 1];
 
@@ -274,11 +277,11 @@ class UserRoleManager extends StaticFactory
 
         $group = RoleManager::findRole($roleCode)->group;
 
-        UserGroupManager::for($this->user)->addGroup($group->code);
+        UserGroupManager::with($this->user)->addGroup($group->code);
 
         $roleId = RoleManager::findRole($roleCode)->id;
 
-        return Roles::addUser($this->user, $group->id, $roleId);
+        return Role::addUser($this->user, $group->id, $roleId);
     }
 
 }

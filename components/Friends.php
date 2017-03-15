@@ -1,12 +1,21 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Settings;
+use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\FriendsManager;
 use Page;
 
 /**
+ * User Extended by Shawn Clake
  * Class Friends
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Components
  */
 class Friends extends ComponentBase
@@ -16,7 +25,7 @@ class Friends extends ComponentBase
     {
         return [
             'name'        => 'Friends',
-            'description' => 'All friend related functions can be found here'
+            'description' => 'Friends list, list of friend requests'
         ];
     }
 
@@ -73,6 +82,15 @@ class Friends extends ComponentBase
     }
 
     /**
+     * Injects assets
+     */
+    public function onRun()
+    {
+        Plugin::injectAssets($this);
+        //$this->addCss('/plugins/clake/userextended/assets/css/friends.css');
+    }
+
+    /**
      * Returns the list/component type
      */
     public function type()
@@ -98,8 +116,13 @@ class Friends extends ComponentBase
         if($code != '')
             $userId = $this->param($code);
 
-        return FriendsManager::listFriends($limit, $userId);
+        if(empty($userId))
+            $userId = UserUtil::getLoggedInUser();
 
+        if(isset($userId))
+            $userId = $userId->id;
+
+        return FriendsManager::listFriends($limit, $userId);
     }
 
     /**
@@ -110,7 +133,12 @@ class Friends extends ComponentBase
         $userid = post('id');
 
         if($userid != null)
+        {
             FriendsManager::deleteFriend($userid);
+			return [
+				'#list-wrap' => $this->renderPartial('friends::friends_list.htm', ['friendRequests' => $this->friendRequests()])
+            ];
+        }
     }
 
     /**
@@ -121,7 +149,9 @@ class Friends extends ComponentBase
         $userid = post('id');
 
         if($userid != null)
+        {
             FriendsManager::blockFriend($userid);
+        }
     }
 
     /**
@@ -143,7 +173,7 @@ class Friends extends ComponentBase
     {
         $limit = $this->property('maxItems');
 
-        return FriendsManager::listReceivedFriendRequests(null, $limit);
+        return FriendsManager::listReceivedFriendRequests($limit);
     }
 
     /**
@@ -154,11 +184,13 @@ class Friends extends ComponentBase
         $userid = post('id');
 
         if($userid != null)
+        {
             FriendsManager::acceptRequest($userid);
-
-        //$data = UserUtil::getLoggedInUser()->toArray();
-        //Pusher::init()->trigger('private-mychannel', 'tests', $data);
-
+			//Refresh the page so you know it did something
+			return [
+				'#request-wrap' => $this->renderPartial('friends::friend_requests.htm', ['friendRequests' => $this->friendRequests()])
+            ];
+        }
     }
 
     /**
@@ -169,7 +201,13 @@ class Friends extends ComponentBase
         $userid = post('id');
 
         if($userid != null)
+        {
             FriendsManager::declineRequest($userid);
+            //Refresh the page so you know it did something
+            return [
+                '#request-wrap' => $this->renderPartial('friends::friend_requests.htm', ['friendRequests' => $this->friendRequests()])
+                ];
+        }
     }
 
     /**
@@ -178,8 +216,9 @@ class Friends extends ComponentBase
     public function onRequest()
     {
         $userId = post('id');
-
         FriendsManager::sendFriendRequest($userId);
+		return [
+			'#list-wrap' => $this->renderPartial('friends::friends_list.htm', ['friendRequests' => $this->friendRequests()])
+        ];
     }
-
 }

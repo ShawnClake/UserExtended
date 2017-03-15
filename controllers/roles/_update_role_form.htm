@@ -1,30 +1,38 @@
-<?php if(isset($role)): ?>
-
 <div style="padding:33px;padding-top:23px;">
+
+<?php if($role): ?>
 
     <h4>Update Role</h4>
     <br>
-    <form class="form-elements" role="form" data-request="onSaveRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'">
+    <form class="form-elements" role="form" data-request="onSaveRole" data-request-data="roleCode: '<?= $role->code ?>' <?php if($role->group_id != 0): ?> , groupCode: '<?= $role->group->code ?>' <?php endif ?>">
         <div class="form-group span-left">
             <label>Name</label>
-            <input type="text" name="name" value="<?= $role->name ?>" class="form-control" />
+            <input type="text" name="name" id="name" value="<?= $role->name ?>" class="form-control" />
+            <p class="help-block">3 characters minimum.</p>
         </div>
 
         <div class="form-group span-right">
             <label>Code</label>
-            <input type="text" name="code" value="<?= $role->code ?>" class="form-control" />
+            <input type="text" name="code" id="code" value="<?= $role->code ?>" class="form-control" />
+            <p class="help-block">Enter a unique identifying code for this role.</p>
         </div>
 
         <div class="form-group span-full">
             <label>Description</label>
             <textarea style="resize:none;" name="description" class="form-control"><?= $role->description ?></textarea>
+            <p class="help-block">8 characters minimum.</p>
         </div>
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Save</button>
         <span style="margin-left:11px;" id="feedback_role_save"></span>
     </form>
 
-</div>
+	<?= $this->makePartial('validation_group_role_forms') ?>
+	
+<?php else: ?>
+	<h4>You have not selected a role!</h4>
+	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<?php endif; ?>
 
-<?php endif ?>
+</div>

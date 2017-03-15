@@ -1,5 +1,6 @@
 1.0.1:
     - Seed in basic groups.
+    - users_groups_refactor.php
     - seed_basic_user_groups.php
 1.0.2:
     - Create the table.
@@ -45,11 +46,9 @@
     - Adds role to the Users Groups table
     - user_groups_add_role.php
 1.0.18:
-    - Removes existing primary keys from Users Groups model
-    - users_groups_remove_primary_keys.php
+    - Removes existing primary keys from Users Groups model. Removed script as it was breaking.
 1.0.19:
-    - Adds a primary id key to the users_groups model
-    - users_groups_add_primary_id.php
+    - Adds a primary id key to the users_groups model. Removed script as it was breaking.
 1.0.20:
     - Added a controller for Roles. Check the 'User' tab in the backend.
 1.0.21:
@@ -72,3 +71,5 @@
     - Fixed non-property error
 1.1.03:
     - Fixed undefined offset error
+2.0.00:
+    - User Extended Core Stable Release. Check your project as many things are now Deprecated and rewritten and will be removed in version 3.0.00

@@ -1,10 +1,37 @@
-{% for friend in friends.friendsList %}
+<div class="list-wrap" id="list-wrap">
+{% if friends.friendsList is not empty %}
+    <h4><div style="width: 100%; text-align: center;">Your Friends</div></h4>
+    <div class="table">
+        <div class="table-header">
+            <div class="table-cell-20">Picture</div>
+            <div class="table-cell-30">Username</div>
+            <div class="table-cell-30">Last Online</div>
+            <div class="table-cell-20">Add Friend</div>
+        </div>
 
-<div style="width:100%;min-height:50px;padding:5px;">
-    <span><a href="#" data-request-data="id: {{friend.id}}" data-request="friends::onDelete"><span class="glyphicon glyphicon-remove">X</span></a></span>
-    <span>{{friend.name}} {{friend.surname}}</span><br>
-    <span style="margin-left:7px;">Last Online: {{friend.last_seen}}</span><br>
-    <span style="margin-left:7px;font-style: italic;">{{friend.email}}</span><br>
+        {% for friend in friends.friendsList %}
+            <div class="table-row">
+                <a href="#" class="table-cell-20" data-request-data="id: {{friend.id}}" data-request="friends::onVisitProfile">
+                    <div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if friend.avatar.path %} {{friend.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
+                </a>
+                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="friends::onVisitProfile">
+                    {{friend.name}} {{friend.surname}}
+                </a>
+                <a href="#" class="table-cell-30" data-request-data="id: {{friend.id}}" data-request="friends::onVisitProfile">
+                    {{friend.last_seen|relative}}
+                </a>
+                <div class="table-cell-20">
+                    <button data-request-data="id: {{friend.id}}" data-request="friends::onDelete">Delete Friend</button>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+<div style="width: 100%; text-align: center;">Your Friends List Is Empty</div>
+
+{% endif %}
 </div>
-
-{% endfor %}

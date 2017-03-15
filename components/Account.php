@@ -1,6 +1,8 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Classes\UserManager;
 use Clake\Userextended\Models\UserExtended;
+use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
@@ -18,10 +20,16 @@ use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
 use Cms\Classes\Page;
-//use RainLab\User\Classes\AuthManager
 
 /**
+ * User Extended by Shawn Clake
  * Class Account
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Components
  *
  * Some code in this component has been copied from the RainLab.User plugin.
@@ -73,48 +81,32 @@ class Account extends ComponentBase
     }
 
     /**
+     * Injects assets
+     */
+    public function onRun()
+    {
+        Plugin::injectAssets($this);
+    }
+
+    /**
      * Copied from the RainLab.Users Account component
      * Altered by Shawn Clake
      */
     public function onUpdate()
     {
-        if (!$user = $this->user()) {
-            return;
-        }
+        $data = post();
+        $response = UserManager::updateUser($data);
 
-        $values = post();
+        $reflection = new \ReflectionClass($response);
 
-        $user->name = $values['name'];
-        $user->email = $values['email'];
-
-        if (strlen(post('password')) && strlen(post('password_confirmation'))) {
-            $user->password = $values['password'];
-            $user->password_confirmation = $values['password_confirmation'];
-        }
-
-        $user->save();
-
-        $settingsManager = UserSettingsManager::init();
-
-        Event::fire('clake.ue.settings.update', [&$settingsManager]);
-
-        foreach($values as $key=>$value)
+        if($reflection->getShortName() == 'Validator')
         {
-            if($key=="_session_key" || $key=="_token" || $key=="name" || $key=="username" || $key=="email" || $key=="password" || $key=="password_confirmation")
-                continue;
-
-            if($settingsManager->isSetting($key))
-                $settingsManager->setSetting($key, $value);
+            throw new ValidationException($response);
+            //Flash::error($response->messages());
+            //return false;
+        } else {
+            return $response;
         }
-
-        $settingsManager->save();
-
-        if (strlen(post('password'))) {
-            Auth::login($user->reload(), true);
-        }
-
-        Flash::success(post('flash', Lang::get('rainlab.user::lang.account.success_saved')));
-
     }
 
     /**
@@ -126,176 +118,53 @@ class Account extends ComponentBase
      */
     public function onRegister()
     {
+        $data = post();
 
-        try {
-            if (!Settings::get('allow_registration', true)) {
-                throw new ApplicationException(Lang::get('rainlab.user::lang.account.registration_disabled'));
-            }
+        /*
+         * Preforms user registration
+         */
+        if(!($user = UserManager::registerUser($data)))
+            return false;
 
-            /*
-             * Validate input
-             */
-            $data = post();
+        /*
+         * Checks for passed validation or failed
+         */
+        $reflection = new \ReflectionClass($user);
 
-            $bob = Event::fire('clake.ue.preregistration', [&$data], true);
-                //return false;
-
-            $rules = [
-                'email'    => 'required|email|between:6,255',
-                'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255'),
-            ];
-            //echo json_encode($data);
-            /*
-             * Better utilization of email vs username
-             */
-            if (Settings::get('login_attribute') == "username") {
-                $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
-            }
-
-            /*
-             * Enforcing password confirmation instead of overriding ove rit
-             */
-
-            $validation = Validator::make($data, $rules);
-            if ($validation->fails()) {
-                throw new ValidationException($validation);
-            }
-
-            /*
-             * Register user
-             */
-            $requireActivation = Settings::get('require_activation', true);
-            $automaticActivation = Settings::get('activate_mode') == Settings::ACTIVATE_AUTO;
-            $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
-
-            /*
-             * Preform phase 1 User registration
-             */
-            $user = $this->register($data, $automaticActivation);
-
-            /*
-             * Activation is by the user, send the email
-             */
-            if ($userActivation) {
-                $this->sendActivationEmail($user);
-
-                Flash::success(Lang::get('rainlab.user::lang.account.activation_email_sent'));
-            }
-
-            /*
-             * Modified code below
-             */
-
-            Auth::login($user);
-
-            /*
-             * Preform phase 2 User registration
-             */
-            $settingsManager = UserSettingsManager::init();
-
-            Event::fire('clake.ue.settings.create', [&$settingsManager]);
-
-            foreach($data as $key=>$value)
-            {
-                if($key=="_session_key" || $key=="_token" || $key=="name" || $key=="email" || $key=="username" || $key=="password" || $key=="password_confirmation")
-                    continue;
-
-                if($settingsManager->isSetting($key))
-                    $settingsManager->setSetting($key, $value);
-            }
-
-            $settingsManager->save();
-
-            /*
-             * Preform phase 3 User registration
-             * Modified to swap to logout
-             * Automatically activated or not required, log the user in
-             */
-            if (!$automaticActivation || $requireActivation) {
-                $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
-                $user->last_login = null;
-                $user->last_seen = null;
-                Event::fire('clake.ue.postregistration', [&$user]);
-                $user->save();
-                Auth::logout();
-            }
-
-
-
-            /*
-             * Redirect to the intended page after successful sign in
-             */
-            $redirectUrl = $this->pageUrl($this->property('redirect'))
-                ?: $this->property('redirect');
-
-            if ($redirectUrl = post('redirect', $redirectUrl)) {
-                return Redirect::intended($redirectUrl);
-            }
-
-        }
-        catch (\Exception $ex) {
-            if (Request::ajax()) throw $ex;
-            else Flash::error($ex->getMessage());
+        if($reflection->getShortName() == 'Validator')
+        {
+            throw new ValidationException($user);
+            //Flash::error($user->messages());
+            //return false;
         }
 
-    }
+        /*
+         * Sends an activation email if required
+         */
+        $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
 
-    /**
-     * Sends the activation email to a user
-     * Copied from the RainLab.Users Account component
-     * Altered by Shawn Clake
-     * @param  User $user
-     * @return void
-     */
-    protected function sendActivationEmail($user)
-    {
-        $code = implode('!', [$user->id, $user->getActivationCode()]);
-        $link = $this->currentPageUrl([
-            $this->property('paramCode') => $code
-        ]);
+        if ($userActivation)
+        {
+            $code = implode('!', [$user->id, $user->getActivationCode()]);
+            $link = $this->currentPageUrl([
+                $this->property('paramCode') => $code
+            ]);
 
-        $data = [
-            'name' => $user->name,
-            'link' => $link,
-            'code' => $code
-        ];
+            UserManager::sendActivationEmail($user, $link, $code);
 
-        Mail::send('rainlab.user::mail.activate', $data, function($message) use ($user) {
-            $message->to($user->email, $user->name);
-        });
-    }
-
-    /**
-     * Registers the user
-     * Copied from the RainLab.Users Account component
-     * Altered by Shawn Clake
-     * @param array $credentials
-     * @param bool $activate
-     * @return mixed
-     */
-    public function register(array $credentials, $activate = false)
-    {
-        $user = new UserExtended();
-        $user->name = $credentials['first_name'];
-        $user->surname = $credentials['last_name'];
-
-        if(isset($credentials['username']))
-            $user->username = $credentials['username'];
-
-        $user->email = $credentials['email'];
-        $user->password = $credentials['password'];
-        $user->password_confirmation = $credentials['password_confirmation'];
-        $user->save();
-
-        if ($activate) {
-            $user->attemptActivation($user->getActivationCode());
+            Flash::success(Lang::get('rainlab.user::lang.account.activation_email_sent'));
         }
 
-        // Prevents revalidation of the password field
-        // on subsequent saves to this model object
-        $user->password = null;
+        /*
+         * Redirect to the intended page after successful sign in
+         */
+        $redirectUrl = $this->pageUrl($this->property('redirect'))
+            ?: $this->property('redirect');
 
-        return $this->user = $user;
+        if ($redirectUrl = post('redirect', $redirectUrl)) {
+            return Redirect::intended($redirectUrl);
+        }
+
     }
 
     /**
@@ -307,49 +176,22 @@ class Account extends ComponentBase
      */
     public function onLogin()
     {
-        /*
-         * Validate input
-         */
         $data = post();
-        $rules = [];
-
-        $rules['login'] = $this->signUp()  == "username"
-            ? 'required|between:2,255'
-            : 'required|email|between:6,255';
-
-        $rules['password'] = 'required|between:4,255';
-
-        if (!array_key_exists('login', $data)) {
-            $data['login'] = post('username', post('email'));
-        }
-
-        $validation = Validator::make($data, $rules);
-        if ($validation->fails()) {
-            throw new ValidationException($validation);
-        }
-
-        /*
-         * Authenticate user
-         */
-        $credentials = [
-            'login'    => array_get($data, 'login'),
-            'password' => array_get($data, 'password')
-        ];
-
-        Event::fire('rainlab.user.beforeAuthenticate', [$this, $credentials]);
-
-        $user = Auth::authenticate($credentials, true);
-
-        Event::fire('clake.ue.login', [$user]);
-
-        /*
-         * Redirect to the intended page after successful sign in
-         */
         $redirectUrl = $this->pageUrl($this->property('redirect'))
             ?: $this->property('redirect');
 
-        if ($redirectUrl = input('redirect', $redirectUrl)) {
-            return Redirect::intended($redirectUrl);
+        $response = UserManager::loginUser($data, $redirectUrl);
+
+        $reflection = new \ReflectionClass($response);
+
+        if($reflection->getShortName() == 'Validator')
+        {
+            throw new ValidationException($response);
+            //Flash::error(json_encode($response->messages()));
+            //return false;
+        } else {
+            Flash::success('Logged in!');
+            return $response;
         }
     }
 
@@ -361,19 +203,7 @@ class Account extends ComponentBase
      */
     public function onLogout()
     {
-        $user = Auth::getUser();
-
-        Auth::logout();
-
-        if ($user) {
-            Event::fire('rainlab.user.logout', [$user]);
-            Event::fire('clake.ue.logout', [$user]);
-        }
-
-        $url = post('redirect', Request::fullUrl());
-        Flash::success(Lang::get('rainlab.user::lang.session.logout'));
-
-        return Redirect::to($url);
+        return UserManager::logoutUser();
     }
 
     /**

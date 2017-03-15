@@ -1,14 +1,47 @@
 {% if ueuser.type == 'random' %}
+<h4><div style="width: 100%; text-align: center">Here are some random users:</div></h4>
+<div class="table">
+
+    <div class="table-header">
+        <div class="table-cell-20">Picture</div>
+        <div class="table-cell-30">Username</div>
+        <div class="table-cell-30">Last Online</div>
+        <div class="table-cell-20">Add Friend</div>
+    </div>
+
+	{% if ueuser.randomUsers %}
     {% for user in ueuser.randomUsers %}
-        <a href="#" style="text-decoration: none;" data-request-data="id: {{user.id}}" data-request="userlist::onFriendUser">
 
-            <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
-                <span>{{user.name}}</span><br>
-                <span style="margin-left:7px;">Last Online: {{user.last_seen}}</span><br>
-            </div>
-
+    <div class="table-row">
+        <a href="#" class="table-cell-20" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+            <div class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="background-image:url({% if user.avatar.path %} {{user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})"></div></div> <br>
         </a>
+        <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+            {{user.name}}
+        </a>
+        <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+			{% if user.last_seen %}
+				{{user.last_seen|relative}}
+			{% else %}
+				Never
+			{% endif %}
+        </a>
+		<div class="table-cell-20">
+			{% if ueuser.isFriend(user.id) %}
+				<p>Friends!</p>
+			{% elseif ueuser.isRequested(user.id) %}
+				<p>Request pending.</p>
+			{% else %}
+				<button data-request-data="id: {{user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+			{% endif %}
+		</div>
+    </div>
+
     {% endfor %}
+</div>
+	{% else %}
+	<p>No Search Results.</p>
+	{% endif %}
 
 {% elseif ueuser.type == 'single' %}
 
@@ -16,17 +49,19 @@
 
         <div class="userblock" style="width:100%;min-height:50px;padding:5px;">
             <span>{{ueuser.singleUser.name}}</span><br>
-            <span style="margin-left:7px;">Last Online: {{ueuser.singleUser.last_seen}}</span><br>
+            <span style="margin-left:7px;">{{ "clake.userextended::lang.components.friend.lastonline"|trans }}: {{ueuser.singleUser.last_seen}}</span><br>
         </div>
 
     </a>
 
 {% elseif ueuser.type == 'search' %}
 
-    <form data-request="ueuser::onSearch">
-        Search Phrase: <input type="text"  name="phrase" />
-        <input type="submit" value="Search" />
-    </form>
+    <div style="padding:15px;">
+        <form data-request="ueuser::onSearch">
+            Search Phrase: <input type="text"  name="phrase" />
+            <input type="submit" value="{{ 'clake.userextended::lang.components.user.search'|trans }}" />
+        </form>
+    </div>
 
     <br>
 

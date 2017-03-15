@@ -1,0 +1,69 @@
+<?php namespace {{studly_author}}\{{studly_plugin}};
+
+use Clake\UserExtended\Traits\StaticFactoryTrait;
+use Clake\UserExtended\Classes\UserExtended;
+
+/**
+ * User Extended by Shawn Clake
+ * Class Module
+ * User Extended is licensed under the MIT license.
+ *
+ * Please add additional comments to this doc block as you feel necessary.
+ * However, you must keep the existing comments here.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @package Clake\UserExtended
+ */
+class Module extends UserExtended
+{
+    use StaticFactoryTrait;
+
+    public $name = '{{lower_author}}{{studly_plugin}}';
+
+    public $author = '{{author}}';
+
+    public $description = "";
+
+    public $version = "";
+
+    public function initialize() {}
+
+    public function injectComponents()
+    {
+        return [
+            // Insert your components here with the format shown below
+            //'Clake\UserExtended\Components\Account' => 'account',
+        ];
+    }
+
+    public function injectAssets()
+    {
+        return [
+            // Insert your assets or asset overrides here with the format shown below
+            //'GeneralJS'      => '/plugins/clake/userextended/assets/js/general.js',
+            //'GeneralStyling' => '/plugins/clake/userextended/assets/css/general.css'
+        ];
+    }
+
+    /**
+     * Injecting Navigation isn't supported in this version of UE.
+     * This feature should be supported in a future version of UE
+     */
+    public function injectNavigation()
+    {
+        return [];
+    }
+
+    /**
+     * Injecting Lang isn't supported in this version of UE.
+     * This feature should be supported in a future version of UE
+     */
+    public function injectLang()
+    {
+        return [];
+    }
+
+}

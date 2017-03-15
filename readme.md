@@ -5,101 +5,43 @@ User Extended provides simple components and User Utility functions for complex 
 
 User Extended currently offers friends lists, role management, and User Utilities.
 
-User Extended is typically a dependency to my other plugins.
+## Dependencies
+* RainLab.User http://octobercms.com/plugin/rainlab-user https://github.com/rainlab/user-plugin
 
 ## Installation
-1. Ensure you install the RainLab.User plugin for OctoberCMS first
-2. Install this plugin and run
-        php artisan october:up
-3. You're done :)
+Install this plugin and run
+      php artisan october:up
 
 ## Usage
 * Just add the components you require to a page and everything should work out of the box
-* Feel free to add your own classes which extend mine
+* You can create modules to interact with User Extended and other UE modules
+* Use the command: `php artisan create:uemodule author.pluginname` in order to scaffold a module class for your own plugins.
 
-[Check out the bug tracker and feature planner](https://docs.google.com/spreadsheets/d/1_-f5fTYbRb5FWZ0BI2wF9xhEJMZtzMtFxh-4T_GWdXA/edit?usp=sharing)
+[Check out the bug tracker and feature planner](https://github.com/ShawnClake/UserExtended/issues)
+
+## Contributors
+* [Shawn Clake](http://shawnclake.com)
+* [Quinn Bast](http://www2.cs.uregina.ca/~bast200q/)
 
 ## Feature List
-#### As of 1.0.3
-* Frontend User role management in the form of Groups.
-* Restrict access to pages or parts of a page using the UserGroups component
-* List, send, and accept friend requests using the ListFriendRequests component and the UserList component
-* List your friends using the ListFriends component
-* Utility user functions which can be used across other plugins and code
+* Frontend role/group management
+* Advanced page restriction using groups
+* Friends lists. You can send friend requests, and block/delete/accept friends
+* User Utility functions which can be used accross your own plugins
+* User profiles and a profile comment system
+* User search. Search for users by name, email or username
+* Timezone support! Use the '|timezonify' twig filter. Use the '|relative' twig filter to get a textual relative time stamp (5 seconds ago, 2 months ago)
+* Timezonable trait which can be added to models to automagically convert times
+* Backend user role/group management
+* Extensible modules
 
-#### As of 1.0.8
-* Adding a public profile comment system
-* Searching for users via name, email, or username
-* Deleting friends
-
-#### As of 1.0.22
-* Added Timezones and a Twig filter 'timezonify' to adjust Timestamps to a users timezone.
-* Added the Timezonable trait which when added to a model will automatically convert model fields to the logged in users timezone.
-* Added the concept of Roles. A user can be a part of many groups, but only one role within that group.
-  * Use case 1: A blogging website has a group called 'writers'. Within that group their are the roles 'Senior Writer', 'Junior Writer', 'Editor'
-* Initial work on a backend UI. Currently supports the managing of Groups and Roles.
-* Initial work on group hierarchy, and promotion and demotion system.
-* Bug Fixes
+### Please see the help directory for more information
 
 ## Planned Features
-* Blocking friends
-    * Unblock as well
-* Adding a service provider
-* Adding an easy way to pragmatically change a users group
-    * User utility functions
-* Adding a better User settings page
-    * Actually functions properly
-* Adding a rating system for profiles
-    * Thumbs ups ?
-    * Likes ?
-    * Stars ?
-    * Customizable
-* Adding a private messaging system
-    * Threaded view
-    * Inbox view
-    * Instant message view
-* Adding better email support for user functions: friend requests, accept requests, group changes, messages, comments
-    * Email templates for each
-    * Ability to change the email template name
-* Fleshing our the backend UI
-    * Individual Role Management
-    * Adding permissions to use the Role manager
-    * Removing the Group Manager and integrating it into the Role Manager
-* Fleshing out the group Hierarchy w/ promotion/demotion system
-* Component to require a role and/or group required to access a page
-    * Redirect otherwise
-* Users can have a 'library' of images uploaded
-    * Permissions to view
-    * Name, description
-    * Can be sorted into 'categories' or 'albums'
-* Support for adding a currency which users can posses. 
-    * Customizable in images, name, descriptions, amounts (More than one type of currency)
-    * Useful for forums, message boards, game websites, etc.
-* Better email confirmation support
-* Better support for using usernames to register and login out of the box
+[Check out the feature planner](https://github.com/ShawnClake/UserExtended/issues)
 
 ## Roadmap
-### Version 1.1.00 - UserExtended Beta Release
-* Friends
-* Roles
-* Timezones
-* Settings
-* Profiles
-* Backend UI
-
-### Version 1.2.00 - UserExtended Pre-Release
-* Improved stability
-* Improved Documentation
-* Cleanup
-* Bugfixes
-* Focus on stability
-* Email templates and sending
-* Event hooks
-
-### Version 2.0.00 - UserExtended Core Stable Release
-* Stability
-* Add lang support
-* Completed UserExtended Core.
+[View our road map](https://github.com/ShawnClake/UserExtended/projects)
 
 ## Details
 User Extended is not trying to be a social network plugin. We are providing functionality for more complex user functions which have use cases outside of social networks.

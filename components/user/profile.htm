@@ -1,79 +1,97 @@
-<style>
+{% if ueuser.user %}
 
-    div.userblock
-    {
-        color:#000;
-    }
+<div class="row container" style="margin-top:10px;">
 
-    /*div.userblock:hover
-    {
+    <div class="col-sm-12 ">
 
-        background-color:rgba(0,0,0,0.1);
+        <div class="row" style="text-align: center;">
 
-    }/*
-</style>
-
-<div class="row container" style="min-height:800px;margin-top:100px;">
-
-    <div class="col s12 ">
-
-        <div class="row">
-
-            <div class="col s12 m3"></div>
-            <div class="col s12 m2">
-                <img src="{% if userui.user.avatar.path %}{{userui.user.avatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %}" width=120 height=120 /> <br>
-                <span style="font-size:19px;font-style:bold;">{{userui.user.name}}</span> <br>
-                {% if userui.unrestricted %}<span style="font-size:11px;font-style:italic;">{{userui.user.email}}</span>{% endif %}
-            </div>
-            <div class="col s12 m4">
-                Stars: 0
-                <br>
-                ThumbUps: 0
-                <br>
-                Gold: 5
-            </div>
-            <div class="col s12 m3">
-
-                {% if not userui.unrestricted %}
-                See more of this persons profile by adding them as a friend
-                <div style="bottom:0;">
-                    {{userui.user.name}} <button data-request-data="id: {{userui.user.id}}" data-request="userui::onFriendUser">Add</button>
+            <div class="col-sm-12 col-md-3"></div>
+            <div class="col-sm-12 col-md-6" style=" padding:7px;">
+                <div class="avatar-small center-in-parent">
+                    <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.userAvatar.path %} {{ueuser.userAvatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
+                    </div>
                 </div>
-                {% endif %}
 
+
+                <div style="width:100%;text-align:center;margin-bottom: 10px;margin-top:10px;">
+                    <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
+                    {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id and not ueuser.isFriend(ueuser.user.id) %}
+						{% if ueuser.isRequested(ueuser.user.id) %}
+							<p>Friend request pending!</p>
+						{% else %}
+							<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
+						{% endif %}
+					{% endif %}
+                </div>
+
+                {% if ueuser.locked %}
+                    <div style="width:100%;text-align:center;">
+                          <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
+                    </div>
+			    {% endif %}
             </div>
+        </div>
+        <div class="row" style="text-align: center;">
+            <div class="col-sm-12 col-md-12" style="width: 100%; background-color: lightblue; padding:5px;">
+                <div class ="row">
+                    <div class="col-sm-4" style="text-align: center;">
+                        Stars: 0
+                    </div>
+                    <div class="col-sm-4" style="text-align: center;">
+                        ThumbUps: 0
+                    </div>
+                    <div class="col-sm-4" style="text-align: center;">
+                        Gold: 5
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12">
 
+                {% if not ueuser.locked and ueuser.loggedIn %}
+                    <div>See more of this persons profile by adding them as a friend</div>
+                {% endif %}
+            </div>
         </div>
 
-        <div class="row">
-            <div class="col s12 m3"></div>
-            <div class="col s12 m6">
+        <div class="row" style="margin-top:9px;">
+            <div class="col-sm-12 col-md-12">
                 <h4>Comments</h4>
                 <div id="comment_section">
 
-                    {% for comment in userui.comments %}
+                    {% for comment in ueuser.comments %}
                     <div class="userblock">
                         {{comment.content}} <br>
-                        <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="userui::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">Written at: {{comment.created_at}} by <a href="/users/{{comment.author.id}}">{{comment.author.name}}</a></i>
+                        <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="ueuser::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">{{ "clake.userextended::lang.components.user.writtenat"|trans }} {{comment.created_at|relative}} by <a href="{{ueuser.profilePage(comment.author.id)}}">{{comment.author.name}}</a></i>
                         <hr>
                     </div>
                     {% endfor %}
 
                 </div>
-                <h5>Write a comment</h5>
-                {% if userui.unrestricted %}
-                <form data-request="userui::onComment">
-                    <textarea rows="2" name="comment"></textarea>
+                {% if ueuser.loggedIn %}<h5>Write a comment</h5>{% endif %}
+                {% if ueuser.locked %}
+                <form data-request="ueuser::onComment">
+                    <textarea rows="2" name="comment"></textarea> <br>
                     <input type="submit" value="Comment" />
                 </form>
                 {% else %}
-                Leave a comment for {{userui.user.name}} by {% if not user %} signing in and {% endif %} friending them.
+                Leave a comment by {% if not user %} signing in and {% endif %} friending them.
                 {% endif %}
             </div>
         </div>
-
-
     </div>
-
 </div>
 
+{% else %}
+
+<div class="row container" style="margin-top:10px;">
+    <div class="col-sm-12 ">
+        <div class="row" style="text-align: center;">
+            <div class="col-sm-12 col-md-12">
+                <h3>It appears this user doesn't exist.</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
