@@ -73,3 +73,5 @@
     - Fixed undefined offset error
 2.0.00:
     - User Extended Core Stable Release. Check your project as many things are now Deprecated and rewritten and will be removed in version 3.0.00
+2.1.00:
+    - UE Core Release 2.1.00
