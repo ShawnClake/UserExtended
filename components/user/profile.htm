@@ -18,7 +18,7 @@
                     <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
                     {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id and not ueuser.isFriend(ueuser.user.id) %}
 						{% if ueuser.isRequested(ueuser.user.id) %}
-							<p>Request pending!</p>
+							<p>Friend request pending!</p>
 						{% else %}
 							<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button>
 						{% endif %}
