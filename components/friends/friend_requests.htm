@@ -20,7 +20,7 @@
                     {{user.name}} {{user.surname}}
                 </a>
                 <a href="#" class="table-cell-30" data-request-data="id: {{user.id}}" data-request="friends::onVisitProfile">
-                    {{user.last_seen}}
+                    {{user.last_seen|relative}}
                 </a>
                 <div class="table-cell-20">
                     <button data-request-data="id: {{user.id}}" data-request="friends::onAccept">Accept</button>

@@ -20,7 +20,7 @@
 				</a>
 				<a href="#" class="table-cell-30" data-request-data="id: {{profile.id}}" data-request="ueuser::onVisitProfile">
 					{% if profile.last_seen %}
-						{{profile.last_seen}}
+						{{profile.last_seen|relative}}
 					{% else %}
 						Never
 					{% endif %}
