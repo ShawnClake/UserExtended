@@ -9,7 +9,7 @@ Block::put('body')
 	
 	<p>Custom Fields</p>
 	
-	<table style="width: 80%;">
+	<table style="width: 90%; margin-left: 5%;">
 	<tr>
 		<td>Name:</td>
 		<td>Required:</td>
@@ -41,9 +41,9 @@ Block::put('body')
 		<td>
 			<a
                     href="javascript:;"
-                    class="btn btn-danger oc-icon-x"
+                    class="btn btn-danger"
                     data-control="popup"
-                    data-handler="onDeleteField"
+                    data-handler="onConfirmDelete"
                     data-size="huge"
 					data-extra-data="name: '<?=$settings->name?>'"
             >

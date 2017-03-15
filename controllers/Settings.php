@@ -138,7 +138,16 @@ class Settings extends Controller
 		return $this->makePartial('edit_field', ['selection' => $selection[0]]);
 	}
 	
+	public function onConfirmDelete(){
+		$name = post('name');
+		$selection = Db::table($this->table)->where('name', $name)->get();
+		return $this->makePartial('confirm_delete', ['selection' => $selection[0]]);
+	}
+	
 	public function onDeleteField(){
 		//TODO
+		$name = post('name');
+		DB::table($this->table)->where('name', $name)->delete();
+		return Redirect::to(Backend::url('clake/userextended/Settings/start'));
 	}
 }
