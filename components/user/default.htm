@@ -9,6 +9,7 @@
         <div class="table-cell-20">Add Friend</div>
     </div>
 
+	{% if ueuser.randomUsers %}
     {% for user in ueuser.randomUsers %}
 
     <div class="table-row">
@@ -33,6 +34,10 @@
     </div>
 
     {% endfor %}
+</div>
+	{% else %}
+	<p>No Search Results.</p>
+	{% endif %}
 
 {% elseif ueuser.type == 'single' %}
 
