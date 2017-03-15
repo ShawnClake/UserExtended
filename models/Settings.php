@@ -21,11 +21,6 @@ class Settings extends Model
     public $settingsCode = 'clake_userextended_settings';
 
     public $settingsFields = 'fields.yaml';
-	
-	 /**
-     * @var string The database table used by the model.
-     */
-    public $table = 'clake_userextended_settings';
 
     /**
      * Sets the defaults for settings

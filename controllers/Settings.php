@@ -2,13 +2,8 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
-use Clake\UserExtended\Classes\GroupManager;
-use Clake\UserExtended\Classes\RoleManager;
+use Clake\UserExtended\Classes\UserSettingsManager;
 use System\Classes\SettingsManager;
-use Clake\UserExtended\Classes\UserGroupManager;
-use Clake\UserExtended\Classes\UserRoleManager;
-use Clake\UserExtended\Classes\UserUtil;
-use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Facades\Flash;
 use Redirect;
 use Backend;
@@ -18,7 +13,7 @@ use Db;
 
 /**
  * User Extended by Shawn Clake
- * Class Roles
+ * Class Controller
  * User Extended is licensed under the MIT license.
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
@@ -38,8 +33,8 @@ class Settings extends Controller
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
-	
-	private $table = 'clake_userextended_settings';
+
+    //public $bodyClass = 'compact-container';
 
     public function __construct()
     {
@@ -54,31 +49,13 @@ class Settings extends Controller
 		$this->addJs('/plugins/clake/userextended/assets/js/backend.js');
     }
 	
-	public function start(){
-		$this->pageTitle = "Manage locations";
-		$this->checkTable();
-		//die("Hey! Listen!");
-		//$this->makePartial('init');
+	public function manage()
+    {
+		$this->pageTitle = "Manage Fields";
+		$this->vars['settings'] = UserSettingsManager::init()->getSettingsTemplate();
 	}
-	
-	public function checkTable(){
-		if(Schema::hasTable($this->table)){
-			return;
-		} else {
-			Schema::create($this->table, function ($table) {
-				$table->increments('id');
-				$table->text('name');
-				$table->boolean('required');
-				$table->integer('min');
-				$table->integer('max');
-				$table->text('validation');
-				});
-			$this->populateTable();
-		}
-	}
-	
-	public function populateTable(){
-	$table = $this->table;
+
+	/*$table = $this->table;
 		Db::table($table)->insert(
 		['name' => 'first_name',
 		'required' => true,
@@ -104,15 +81,14 @@ class Settings extends Controller
 		['name' => 'password',
 		'required' => true,
 		'min' => 8,
-		'max' => 255]);
-	}
+		'max' => 255]);*/
 	
 	public function getSettings(){
-		return Db::table($this->table)->select('*')->get();
+		//return Db::table($this->table)->select('*')->get();
 	}
 	
 	public function onCreateField(){
-		$name = post('name') ;
+		/*$name = post('name') ;
 		$required = post('required');
 		$min = null !== post('min') ? post('min') : 0;
 		$max = null !== post('max') ? post('max') : 255;
@@ -123,31 +99,37 @@ class Settings extends Controller
 		'required' => $required,
 		'min' => $min,
 		'max' => $max,
-		'validation' => $validation]);
+		'validation' => $validation]);*/
 		
 		return Redirect::to(Backend::url('clake/userextended/Settings/start'));
 	}
 	
 	public function onAddField(){
+	    // TODO: You haven't specified where this is drawn to
 		return $this->makePartial('create_new_field');
 	}
 	
 	public function onEditField(){
-		$name = post('name');
-		$selection = Db::table($this->table)->where('name', $name)->get();
-		return $this->makePartial('edit_field', ['selection' => $selection[0]]);
+		//$name = post('name');
+		//$selection = Db::table($this->table)->where('name', $name)->get();
+		//return $this->makePartial('edit_field', ['selection' => $selection[0]]);
 	}
 	
 	public function onConfirmDelete(){
-		$name = post('name');
-		$selection = Db::table($this->table)->where('name', $name)->get();
-		return $this->makePartial('confirm_delete', ['selection' => $selection[0]]);
+
+	    // This isn't needed. A confirmation can easily be brought up via October's data attributes API:
+        // http://octobercms.com/docs/ajax/attributes-api
+        // data-request-confirm
+
+		//$name = post('name');
+		//$selection = Db::table($this->table)->where('name', $name)->get();
+		//return $this->makePartial('confirm_delete', ['selection' => $selection[0]]);
 	}
 	
 	public function onDeleteField(){
 		//TODO
-		$name = post('name');
-		DB::table($this->table)->where('name', $name)->delete();
-		return Redirect::to(Backend::url('clake/userextended/Settings/start'));
+		//$name = post('name');
+		//DB::table($this->table)->where('name', $name)->delete();
+		//return Redirect::to(Backend::url('clake/userextended/Settings/start'));
 	}
 }

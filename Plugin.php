@@ -118,6 +118,12 @@ class Plugin extends PluginBase
                     'icon' => 'icon-user',
                     'order' => 100,
                 ],
+                'fields' => [
+                    'label' => 'Fields',
+                    'url' => Backend::url('clake/userextended/settings/manage'),
+                    'icon' => 'icon-globe',
+                    'order' => 700,
+                ],
             ]);
 
         });
@@ -141,21 +147,14 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-			    'label'       => 'User Extended',
-				'description' => 'Manage User Extended Options and Settings.',
-				'category'    => SettingsManager::CATEGORY_USERS,
-				'icon'        => 'icon-globe',
-				'url'         => Backend::url('clake/userextended/Settings/start'),
-				'order'       => 500,
-				'keywords'    => 'user extended register signup'
-/*              'label' => 'UserExtended Settings',
+                'label' => 'UserExtended Settings',
                 'description' => 'Manage user extended settings.',
                 'category' => SettingsManager::CATEGORY_USERS,
                 'icon' => 'icon-cog',
                 'class' => 'Clake\Userextended\Models\Settings',
                 'order' => 100,
                 'keywords' => 'security user extended',
-                'permissions' => [''] */
+                'permissions' => ['']
             ]
         ];
     }
