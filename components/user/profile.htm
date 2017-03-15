@@ -16,7 +16,7 @@
 
                 <div style="width:100%;text-align:center;margin-bottom: 10px;margin-top:10px;">
                     <span style="font-size:40px;font-style:bold;">{{ueuser.user.name}}</span> <br>
-                    {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id %}
+                    {% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id and not ueuser.isFriend(ueuser.user.id) %}
 						{% if ueuser.isRequested(ueuser.user.id) %}
 							<p>Request pending!</p>
 						{% else %}

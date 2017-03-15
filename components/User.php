@@ -355,30 +355,26 @@ class User extends ComponentBase
 	 * Returns if the passed in user id is a friend of the current user.
 	 * @return bool
 	 */
-	public function isFriend($friendId){
-	     $userid = $this->loggedIn()->id;
-
+	public function isFriend($friendId)
+    {
 		//if there is not a current user logged in, exit.
         if(!UserUtil::getLoggedInUser())
             return null;
-		$value = (FriendsManager::isFriend($friendId) ? true : false);
 
-        return $value;
+        return FriendsManager::isFriend($friendId);
 	}
 	
 	/**
 	 * Returns if the current user has a pending friend request from the current user.
 	 * @return bool
 	 */
-	public function isRequested($friendId){
-	     $userid = $this->loggedIn()->id;
-
+	public function isRequested($friendId)
+    {
 		//if there is not a current user logged in, exit.
         if(!UserUtil::getLoggedInUser())
             return null;
-		$value = (FriendsManager::isRequested($friendId) ? true : false);
 
-        return $value;
+        return FriendsManager::isRequested($friendId);
 	}
 
 	/**
