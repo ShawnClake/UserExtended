@@ -1,4 +1,4 @@
-#User Extended
+# User Extended
 
 ## Overview
 User Extended provides simple components and User Utility functions for complex interactions with users.
@@ -10,6 +10,7 @@ User Extended currently offers friends lists, role management, and User Utilitie
 
 ## Installation
 Install this plugin and run
+      
       php artisan october:up
 
 ## Usage

@@ -41,7 +41,7 @@ class UserRoleManager extends StaticFactory
      * @deprecated Renamed below and supports factory
      * @return static
      */
-    public function using($user = null)
+    /*public function using($user = null)
     {
         if($user == null)
             $user = UserUtil::getLoggedInUser();
@@ -49,7 +49,7 @@ class UserRoleManager extends StaticFactory
         $this->user = $user;
 
         return $this;
-    }
+    }*/
 
     /**
      * Sets up the class using a User model
@@ -71,12 +71,12 @@ class UserRoleManager extends StaticFactory
      * @deprecated Renamed below and supports factory
      * @return static
      */
-    public function currentUserOLD()
+    /*public function currentUserOLD()
     {
         $this->user = UserUtil::getLoggedInUser();
 
         return $this;
-    }
+    }*/
 
     /**
      * Used to setup the class using the logged in user
@@ -94,10 +94,10 @@ class UserRoleManager extends StaticFactory
      * @deprecated Renamed
      * @return mixed
      */
-    public function get()
+    /*public function get()
     {
         return $this->userRoles;
-    }
+    }*/
 
     /**
      * Returns the collection of user roles
@@ -113,7 +113,7 @@ class UserRoleManager extends StaticFactory
      * @deprecated Renamed below to better suit its purpose
      * @return $this
      */
-    public function all()
+    /*public function all()
     {
         $roles = UserUtil::castToUserExtendedUser($this->user)->roles;
         $userRoles = [];
@@ -126,7 +126,7 @@ class UserRoleManager extends StaticFactory
         $this->userRoles = $userRoles;
 
         return $this;
-    }
+    }*/
 
     /**
      * Preforms the logic for getting which roles the user is a part of

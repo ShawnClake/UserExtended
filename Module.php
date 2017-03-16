@@ -7,7 +7,7 @@ use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
 
 /**
- * User Extended by Shawn Clake
+ * User Extended Core by Shawn Clake
  * Class Module
  * User Extended is licensed under the MIT license.
  *
@@ -27,7 +27,7 @@ class Module extends UserExtended
 
     public $description = "User Extended Core";
 
-    public $version = "2.0.00";
+    public $version = "2.1.00";
 
     public function initialize() {}
 

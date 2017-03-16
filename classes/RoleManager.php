@@ -172,14 +172,14 @@ class RoleManager extends StaticFactory
      * @deprecated Renamed and supports factory
      * @return static
      */
-    public function groupRolesByCode($code)
+    /*public function groupRolesByCode($code)
     {
         $this->group = GroupsExtended::where('code', $code)->first();
         if($this->group != null)
             $this->roles = $this->group->roles;
 
         return $this;
-    }
+    }*/
 
     /**
      * Fills the class with a group model and role models for the group code passed in.
@@ -200,7 +200,7 @@ class RoleManager extends StaticFactory
      * @param $code
      * @return bool
      */
-    public function getRoleIfExists($code)
+    /*public function getRoleIfExists($code)
     {
         foreach($this->roles as $role)
         {
@@ -208,7 +208,7 @@ class RoleManager extends StaticFactory
                 return $role;
         }
         return false;
-    }
+    }*/
 
     /**
      * Returns a role model by passing a role code in.
@@ -244,10 +244,10 @@ class RoleManager extends StaticFactory
      * @deprecated Renamed
      * @return array
      */
-    public function get()
+    /*public function get()
     {
         return $this->roles;
-    }
+    }*/
 
     /**
      * Returns all the roles inside of a group
@@ -262,13 +262,13 @@ class RoleManager extends StaticFactory
      * Goes through the roles attached to this instance and runs ->save() on each
      * @deprecated Renamed
      */
-    public function save()
+    /*public function save()
     {
         foreach($this->roles as $role)
         {
             $role->save();
         }
-    }
+    }*/
 
     /**
      * Goes through the roles attached to this instance and runs ->save() on each
@@ -285,10 +285,10 @@ class RoleManager extends StaticFactory
      * @deprecated Renamed
      * @return mixed
      */
-    public function count()
+    /*public function count()
     {
         return $this->roles->count();
-    }
+    }*/
 
     /**
      * Returns a count of roles in the selected group
@@ -346,11 +346,11 @@ class RoleManager extends StaticFactory
      * @deprecated Remove this entirely. Switch usage to be like Class->sort()->getRoles();
      * @return mixed
      */
-    public function getSorted()
+    /*public function getSorted()
     {
         $this->sort();
         return $this->roles;
-    }
+    }*/
 
     /**
      * Sorts the Collection of Roles by sort_order
@@ -378,7 +378,7 @@ class RoleManager extends StaticFactory
      * @deprecated Renamed
      * @return array
      */
-    public function getGroupRolesByOrdering()
+    /*public function getGroupRolesByOrdering()
     {
         $groupRoles = [];
 
@@ -390,7 +390,7 @@ class RoleManager extends StaticFactory
         ksort($groupRoles);
 
         return $groupRoles;
-    }
+    }*/
 
     /**
      * Gets a list of roles in a group and sorts it by sort_order

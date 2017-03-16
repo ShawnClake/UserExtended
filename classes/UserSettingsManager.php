@@ -421,4 +421,9 @@ class UserSettingsManager
         return $settings;
     }
 
+    public function getSettingsTemplate()
+    {
+        return $this->settingsTemplate;
+    }
+
 }

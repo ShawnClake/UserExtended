@@ -1,0 +1,79 @@
+<?php Block::put('breadcrumb') ?>
+<ul>
+	<li><a href="<?= Backend::url('clake/userextended/settings') ?>">Settings</a></li>
+	<li><?= $this->pageTitle ?></li>
+</ul>
+<?php Block::endPut() ?>
+
+<?php
+Block::put('body') 
+?>
+
+<div class="" style="padding-left:25px;padding-right:25px;">
+
+    <div class="row" style="margin-top:11px;">
+	
+	<p>Custom Fields</p>
+	
+	<table style="width: 90%; margin-left: 5%;">
+	<tr>
+		<td>Name:</td>
+		<td>Validation:</td>
+		<td>Editable:</td>
+		<td>Type:</td>
+		<td>Createable:</td>
+		<td>Registerable</td>
+		<td>Encryptable</td>
+	</tr>
+	<?php foreach ($settings as $setting): ?>
+	<tr>
+		<td><?= $setting['label'] ?></td>
+		<td><?= $setting['validation'] ?></td>
+		<td><?php if(isset($setting['editable'])): ?> <?= $setting['editable'] ?> <?php endif; ?></td>
+		<td><?= $setting['type'] ?></td>
+		<td><?php if(isset($setting['createable'])): ?> <?= $setting['createable'] ?> <?php endif; ?></td>
+		<td><?php if(isset($setting['registerable'])): ?> <?= $setting['registerable'] ?> <?php endif; ?></td>
+		<td><?php if(isset($setting['encrypt'])): ?> <?= $setting['encrypt'] ?> <?php endif; ?></td>
+		<td>	<a
+                    href="javascript:;"
+                    class="btn btn-default oc-icon-pencil"
+                    data-control="popup"
+                    data-handler="onEditField"
+                    data-size="huge"
+					data-extra-data="name: '<?=$setting['label'] ?>'"
+            >
+                Edit
+            </a></td>
+		<td>
+			<a
+                    href="javascript:;"
+                    class="btn btn-danger"
+                    data-control="popup"
+                    data-handler="onConfirmDelete"
+                    data-size="huge"
+					data-extra-data="name: '<?=$setting['label'] ?>'"
+            >
+                Delete
+            </a>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	
+	<div style="margin-top: 20px;">
+	<a
+                    href="javascript:;"
+                    class="btn btn-default oc-icon-plus"
+                    data-control="popup"
+                    data-handler="onAddField"
+                    data-size="huge"
+            >
+                Add Field
+            </a>
+	</div>
+
+</div>
+	
+</div>
+
+<?php Block::endPut() ?>

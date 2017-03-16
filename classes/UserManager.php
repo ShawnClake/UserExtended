@@ -87,7 +87,7 @@ class UserManager extends StaticFactory
      * @deprecated This has been moved to a trait on the UserExtended model
      * @return Collection
      */
-    public static function searchUsers($phrase)
+    /*public static function searchUsers($phrase)
     {
         /*$results = Lists::create();
 
@@ -99,10 +99,10 @@ class UserManager extends StaticFactory
 
         $results->mergeList(self::searchUserByUsername($phrase));
 
-        return $results->allList();*/
+        return $results->allList();*
         return null;
 
-    }
+    }*/
 
     /**
      * Searches for user models with a name like phrase
@@ -110,10 +110,10 @@ class UserManager extends StaticFactory
      * @deprecated This exists on a trait now
      * @return mixed
      */
-    public static function searchUserByName($phrase)
+    /*public static function searchUserByName($phrase)
     {
         return User::where('name', 'like', '%' . $phrase . '%')->get();
-    }
+    }*/
 
     /**
      * Searches for user models with an email like phrase
@@ -121,10 +121,10 @@ class UserManager extends StaticFactory
      * @deprecated This exists on a trait now
      * @return mixed
      */
-    public static function searchUserByEmail($phrase)
+    /*public static function searchUserByEmail($phrase)
     {
         return User::where('email', 'like', '%' . $phrase . '%')->get();
-    }
+    }*/
 
     /**
      * Searches for user models with a surname like phrase
@@ -132,10 +132,10 @@ class UserManager extends StaticFactory
      * @deprecated This exists on a trait now
      * @return mixed
      */
-    public static function searchUserBySurname($phrase)
+    /*public static function searchUserBySurname($phrase)
     {
         return User::where('surname', 'like', '%' . $phrase . '%')->get();
-    }
+    }*/
 
     /**
      * Searches for user models with a username like phrase
@@ -143,10 +143,10 @@ class UserManager extends StaticFactory
      * @deprecated This exists on a trait now
      * @return mixed
      */
-    public static function searchUserByUsername($phrase)
+    /*public static function searchUserByUsername($phrase)
     {
         return User::where('username', 'like', '%' . $phrase . '%')->get();
-    }
+    }*/
 
     /**
      * Updates a user
