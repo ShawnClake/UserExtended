@@ -53,6 +53,11 @@ class Field extends Model
         'deleted_at',
     ];
 
+    protected $jsonable = [
+        'data',
+        'flags'
+    ];
+
     /**
      * @var array Relations
      */
@@ -66,11 +71,24 @@ class Field extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /*
+     *         $field = new Field();
+        $field->data = ['test' => 'hi', 'new' => ['hi' => 'bye', 'no' => 'yes']];
+        $field->name = 'yoyobob';
+        $field->code = 'yoyo-bobbyorr';
+        $field->description = 'hiya';
+        $field->validation = '';
+        $field->flags = ['enabled' => true];
+        $field->save();
+     *
+     */
+
     /**
      * Handles the automated settings of the sort order for roles.
      */
     public function beforeCreate()
     {
+        $this->checkFlags();
         //$this->sort_order = RoleManager::with($this->group->code)->countRoles() + 1;
     }
 
@@ -80,6 +98,8 @@ class Field extends Model
      */
     public function beforeUpdate()
     {
+        $this->checkFlags();
+
         /*$total = RoleManager::with($this->group->code)->countRoles();
 
         if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
@@ -121,6 +141,21 @@ class Field extends Model
     public function scopeCode($query, $code)
     {
         return $query->where('code', $code);
+    }
+
+    public function checkFlags()
+    {
+        $flags = [];
+
+        $flags['enabled'] = isset($this->flags['enabled']) ? $this->flags['enabled'] : false;
+        
+        $flags['registerable'] = isset($this->flags['registerable']) ? $this->flags['registerable'] : true;
+        
+        $flags['editable'] = isset($this->flags['editable']) ? $this->flags['editable'] : true;
+        
+        $flags['encrypt'] = isset($this->flags['encrypt']) ? $this->flags['encrypt'] : false;
+
+        $this->flags = $flags;
     }
 
 }

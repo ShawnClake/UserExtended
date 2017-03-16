@@ -24,6 +24,20 @@ use \October\Rain\Support\Facades\Yaml;
  */
 class UserSettingsManager
 {
+    const UE_FORM_TEXT = 'text';
+    const UE_FORM_CHECKBOX = 'checkbox';
+    const UE_FORM_COLOR = 'color';
+    const UE_FORM_DATE = 'date';
+    const UE_FORM_EMAIL = 'email';
+    const UE_FORM_FILE = 'file';
+    const UE_FORM_NUMBER = 'number';
+    const UE_FORM_PASSWORD = 'password';
+    const UE_FORM_RADIO = 'radio';
+    const UE_FORM_RANGE = 'range';
+    const UE_FORM_TEL = 'tel';
+    const UE_FORM_TIME = 'time';
+    const UE_FORM_URL = 'url';
+    const UE_FORM_SWITCH = 'switch';
 
     /**
      * Settings config file
@@ -421,6 +435,10 @@ class UserSettingsManager
         return $settings;
     }
 
+    /**
+     * Get templated settings
+     * @return array
+     */
     public function getSettingsTemplate()
     {
         return $this->settingsTemplate;

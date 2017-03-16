@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Components;
 
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\Field;
 use Clake\Userextended\Models\Settings;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
