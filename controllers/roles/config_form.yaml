@@ -6,7 +6,7 @@
 name: Role
 
 # Model Form Field configuration
-form: $/clake/userextended/models/roles/fields.yaml
+form: $/clake/userextended/models/role/fields.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Role

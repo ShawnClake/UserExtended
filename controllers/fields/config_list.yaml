@@ -3,10 +3,10 @@
 # ===================================
 
 # Model List Column configuration
-list: $/clake/userextended/models/Settings/columns.yaml
+list: $/clake/userextended/models/field/columns.yaml
 
 # Model Class name
-modelClass: Clake\Userextended\Models\Settings
+modelClass: Clake\Userextended\Models\Field
 
 # List Title
-title: Settings
+title: Field

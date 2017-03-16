@@ -22,7 +22,7 @@ use Db;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Controllers
  */
-class Settings extends Controller
+class Fields extends Controller
 {
    public static $queue = [];
 
@@ -43,6 +43,8 @@ class Settings extends Controller
         // Setting this context so that our sidebar menu works
         //BackendMenu::setContext('October.System', 'system', 'settings');
 		//SettingsManager::setContext('clake.userextended', 'settings');
+
+        BackendMenu::setContext('RainLab.User', 'user', 'users');
 		
 		//Add CSS for some backend menus
 		$this->addCss('/plugins/clake/userextended/assets/css/backend.css');
@@ -52,7 +54,7 @@ class Settings extends Controller
 	public function manage()
     {
 		$this->pageTitle = "Manage Fields";
-		$this->vars['settings'] = UserSettingsManager::currentUser()->getSettingsTemplate();
+		$this->vars['fields'] = UserSettingsManager::currentUser()->getSettingsTemplate();
 	}
 
 	/*$table = $this->table;

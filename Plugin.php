@@ -125,9 +125,9 @@ class Plugin extends PluginBase
                     'order' => 100
                 ],
                 'fields' => [
-                    'label' => 'Fields',
-                    'url'   => Backend::url('clake/userextended/settings/manage'),
-                    'icon'  => 'icon-globe',
+                    'label' => 'Field Manager',
+                    'url'   => Backend::url('clake/userextended/fields/manage'),
+                    'icon'  => 'icon-pencil-square-o',
                     'order' => 700
                 ],
             ]);

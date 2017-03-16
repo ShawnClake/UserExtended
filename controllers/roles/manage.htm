@@ -1,57 +1,57 @@
 <?php Block::put('breadcrumb') ?>
-<ul>
-    <li><a href="<?= Backend::url('clake/userextended/roles') ?>">Roles</a></li>
-    <li><?= $this->pageTitle ?></li>
-</ul>
+    <ul>
+        <li><a href="<?= Backend::url('clake/userextended/roles') ?>">Roles</a></li>
+        <li><?= $this->pageTitle ?></li>
+    </ul>
 <?php Block::endPut() ?>
 
 <!-- Primary content -->
 <?php Block::put('body') ?>
 
+    <div class="" style="padding-left:25px;padding-right:25px;">
 
 
-<div class="" style="padding-left:25px;padding-right:25px;">
+        <div class="row" style="margin-top:11px;">
 
+            <div class="col-sm-12 col-md-12 col-lg-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="manage_overall_toolbar"><?= $this->makePartial('manage_overall_toolbar', ['group' => $selectedGroup]) ?> </div>
 
-    <div class="row" style="margin-top:11px;">
+                        <h4>Group Roles</h4>
+                        <div id="list_roles_table"><?= $this->makePartial('list_roles_table', ['roles' => $groupRoles['roles'], 'roleCount' => $groupRoles['roleCount']]) ?></div>
+                    </div>
 
-        <div class="col-sm-12 col-md-12 col-lg-5">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="management_toolbar"><?= $this->makePartial('management_toolbar', ['group' => $selectedGroup]) ?> </div>
+                    <div class="col-sm-12" style="margin-top:33px;">
+                        <div id="manage_role_toolbar"><?php if(isset($role)): ?><?= $this->makePartial('manage_role_toolbar', ['role' => $role]) ?> <?php endif ?></div>
+                        <div id="manage_role_ui"><?php if(isset($role)): ?><?= $this->makePartial('manage_role_ui', ['role' => $role]) ?> <?php endif ?></div>
+                    </div>
 
-                    <h4>Group Roles</h4>
-                    <div id="roles"><?= $this->makePartial('list_roles', ['roles' => $groupRoles['roles'], 'roleCount' => $groupRoles['roleCount']]) ?></div>
-                </div>
-
-                <div class="col-sm-12" style="margin-top:33px;">
-                    <div id="manage_role_toolbar"><?php if(isset($role)): ?><?= $this->makePartial('management_role_toolbar', ['role' => $role]) ?> <?php endif ?></div>
-                    <div id="manage_role"><?php if(isset($role)): ?><?= $this->makePartial('manage_role', ['role' => $role]) ?> <?php endif ?></div>
                 </div>
 
             </div>
 
-        </div>
+            <div class="col-sm-12 col-md-12 col-lg-2 text-center">
 
-        <div class="col-sm-12 col-md-12 col-lg-2 text-center">
+                <span style="font-size:19px;font-style:italic;">Groups</span>
+                <div id="list_group_buttons" style="margin-top:17px;"><?= $this->makePartial('list_group_buttons', ['groups' => $groups, 'selectedGroup' => $selectedGroup]); ?></div>
 
-            <span style="font-size:19px;font-style:italic;">Groups</span>
-            <div id="groups" style="margin-top:17px;"><?= $this->makePartial('list_groups', ['groups' => $groups, 'selectedGroup' => $selectedGroup]); ?></div>
+            </div>
 
-        </div>
+            <div class="col-sm-12 col-md-12 col-lg-5">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="manage_creation_toolbar"><?= $this->makePartial('manage_creation_toolbar', ['group' => $selectedGroup]) ?> </div>
 
-        <div class="col-sm-12 col-md-12 col-lg-5">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="create_toolbar"><?= $this->makePartial('create_toolbar', ['group' => $selectedGroup]) ?> </div>
+                        <h4 class="text-right">Unassigned Roles <!--(Drag onto a group to assign)--></h4>
+                        <div id="list_roles_table_unassigned"><?= $this->makePartial('list_roles_table_unassigned', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount, 'group' => $selectedGroup]) ?></div>
+                    </div>
 
-                    <h4 class="text-right">Unassigned Roles <!--(Drag onto a group to assign)--></h4>
-                    <div id="unassigned_roles"><?= $this->makePartial('list_unassigned_roles', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount, 'group' => $selectedGroup]) ?></div>
-                </div>
+                    <div class="col-sm-12" style="margin-top:33px;">
+                        <div id="manage_group_toolbar"><?= $this->makePartial('manage_group_toolbar', ['group' => $selectedGroup]) ?></div>
+                        <div id="manage_users_ui"><?php if(isset($role)) $currentRole = $role; else $currentRole = ''; ?><?= $this->makePartial('manage_users_ui', ['users' => $unassignedUsers, 'group' => $selectedGroup, 'role' => $currentRole]) ?></div>
+                    </div>
 
-                <div class="col-sm-12" style="margin-top:33px;">
-                    <div id="manage_group_toolbar"><?= $this->makePartial('manage_group_toolbar', ['group' => $selectedGroup]) ?></div>
-                    <div id="unassigned_users"><?php if(isset($role)) $currentRole = $role; else $currentRole = ''; ?><?= $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $selectedGroup, 'role' => $currentRole]) ?></div>
                 </div>
 
             </div>
@@ -59,10 +59,5 @@
         </div>
 
     </div>
-
-</div>
-
-
-
 
 <?php Block::endPut() ?>

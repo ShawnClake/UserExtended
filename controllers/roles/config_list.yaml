@@ -3,7 +3,7 @@
 # ===================================
 
 # Model List Column configuration
-list: $/clake/userextended/models/roles/columns.yaml
+list: $/clake/userextended/models/role/columns.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Role

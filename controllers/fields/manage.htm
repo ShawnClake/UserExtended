@@ -1,6 +1,6 @@
 <?php Block::put('breadcrumb') ?>
 <ul>
-	<li><a href="<?= Backend::url('clake/userextended/settings') ?>">Settings</a></li>
+	<li><a href="<?= Backend::url('clake/userextended/fields') ?>">Fields</a></li>
 	<li><?= $this->pageTitle ?></li>
 </ul>
 <?php Block::endPut() ?>
@@ -25,22 +25,22 @@ Block::put('body')
 		<td>Registerable</td>
 		<td>Encryptable</td>
 	</tr>
-	<?php foreach ($settings as $setting): ?>
+	<?php foreach ($fields as $field): ?>
 	<tr>
-		<td><?= $setting['label'] ?></td>
-		<td><?= $setting['validation'] ?></td>
-		<td><?php if(isset($setting['editable'])): ?> <?= $setting['editable'] ?> <?php endif; ?></td>
-		<td><?= $setting['type'] ?></td>
-		<td><?php if(isset($setting['createable'])): ?> <?= $setting['createable'] ?> <?php endif; ?></td>
-		<td><?php if(isset($setting['registerable'])): ?> <?= $setting['registerable'] ?> <?php endif; ?></td>
-		<td><?php if(isset($setting['encrypt'])): ?> <?= $setting['encrypt'] ?> <?php endif; ?></td>
+		<td><?= $field['label'] ?></td>
+		<td><?= $field['validation'] ?></td>
+		<td><?php if(isset($field['editable'])): ?> <?= $field['editable'] ?> <?php endif; ?></td>
+		<td><?= $field['type'] ?></td>
+		<td><?php if(isset($field['createable'])): ?> <?= $field['createable'] ?> <?php endif; ?></td>
+		<td><?php if(isset($field['registerable'])): ?> <?= $field['registerable'] ?> <?php endif; ?></td>
+		<td><?php if(isset($field['encrypt'])): ?> <?= $field['encrypt'] ?> <?php endif; ?></td>
 		<td>	<a
                     href="javascript:;"
                     class="btn btn-default oc-icon-pencil"
                     data-control="popup"
                     data-handler="onEditField"
                     data-size="huge"
-					data-extra-data="name: '<?=$setting['label'] ?>'"
+					data-extra-data="name: '<?=$field['label'] ?>'"
             >
                 Edit
             </a></td>
@@ -51,7 +51,7 @@ Block::put('body')
                     data-control="popup"
                     data-handler="onConfirmDelete"
                     data-size="huge"
-					data-extra-data="name: '<?=$setting['label'] ?>'"
+					data-extra-data="name: '<?=$field['label'] ?>'"
             >
                 Delete
             </a>

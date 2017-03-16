@@ -3,14 +3,14 @@
 # ===================================
 
 # Record name
-name: Settings
+name: Fields
 
 # Model Form Field configuration
-form: $/clake/userextended/models/Settings/fields.yaml
+form: $/clake/userextended/models/Field/fields.yaml
 
 # Model Class name
-modelClass: Clake\Userextended\Models\Settings
+modelClass: Clake\Userextended\Models\Field
 
 # Default redirect location
-defaultRedirect: clake/userextended/Settings
+defaultRedirect: clake/userextended/fields
 
