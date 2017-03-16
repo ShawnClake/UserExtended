@@ -173,7 +173,7 @@ class UserManager extends StaticFactory
 
         $user->save();
 
-        $settingsManager = UserSettingsManager::init();
+        $settingsManager = UserSettingsManager::currentUser();
 
         Event::fire('clake.ue.settings.update', [&$settingsManager]);
 
