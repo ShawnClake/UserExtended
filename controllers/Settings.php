@@ -52,7 +52,7 @@ class Settings extends Controller
 	public function manage()
     {
 		$this->pageTitle = "Manage Fields";
-		$this->vars['settings'] = UserSettingsManager::init()->getSettingsTemplate();
+		$this->vars['settings'] = UserSettingsManager::currentUser()->getSettingsTemplate();
 	}
 
 	/*$table = $this->table;
