@@ -1,5 +1,6 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Clake\Userextended\Models\Field;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use \October\Rain\Support\Facades\Yaml;
@@ -15,6 +16,9 @@ use \October\Rain\Support\Facades\Yaml;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  *
+ * @method static UserSettingsManager currentUser() UserSettingsManager
+ * @method static UserSettingsManager with($user) UserSettingsManager
+ *
  * Terminology and flow:
  *   A user has many settings.
  *   A setting has many finite options.
@@ -22,7 +26,7 @@ use \October\Rain\Support\Facades\Yaml;
  *   A setting has a value.
  *   An option has a state.
  */
-class UserSettingsManager
+class UserSettingsManager extends StaticFactory
 {
     const UE_FORM_TEXT = 'text';
     const UE_FORM_CHECKBOX = 'checkbox';
@@ -74,9 +78,10 @@ class UserSettingsManager
     /**
      * Creates an instance of the UserSettingsManager
      * @param \Clake\Userextended\Models\UserExtended|null $user
+     * @deprecated
      * @return null|static
      */
-    public static function init(\Clake\Userextended\Models\UserExtended $user = null)
+    /*public static function init(\Clake\Userextended\Models\UserExtended $user = null)
     {
         $instance = new static;
         $path = plugins_path('clake/userextended/config/user_settings.yaml');
@@ -102,6 +107,57 @@ class UserSettingsManager
         $instance->settings = $instance->user->settings;
 
         return $instance;
+    }*/
+
+    /**
+     * Factory function for passing in a custom user
+     * @param \Clake\Userextended\Models\UserExtended $user
+     * @return $this
+     */
+    public function withFactory(\Clake\Userextended\Models\UserExtended $user)
+    {
+        $this->user = $user;
+        $this->load();
+        return $this;
+    }
+
+    /**
+     * Factory function for using the current user
+     * @return $this
+     */
+    public function currentUserFactory()
+    {
+        $this->user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
+        $this->load();
+        return $this;
+    }
+
+    /**
+     * Used as a sort of intermediary function for translating the DB Field Model into something which is backwards compatible
+     * TODO: Utilize sort order
+     */
+    protected function load()
+    {
+        $fields = Field::all();
+        $settings = [];
+
+        foreach($fields as $field)
+        {
+            $type = 'self::' . $field->type;
+            $settings[$field->code] = [
+                'label' => $field->name,
+                'description' => $field->description,
+                'type' => constant($type),
+                'validation' => $field->validation,
+                'data' => $field->data,
+                'editable' => $field->flags['editable'],
+                'registerable' => $field->flags['registerable'],
+                'encrypt' => $field->flags['encrypt'],
+                'createable' => $field->flags['enabled'],
+            ];
+        }
+
+        $this->settingsTemplate = $settings;
     }
 
     /**
@@ -147,7 +203,7 @@ class UserSettingsManager
     /**
      * Gets the setting's options prioritizing config and then defaults
      * @param $setting
-     * @return array|void
+     * @return array|false
      */
     public function getSettingOptions($setting)
     {

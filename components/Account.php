@@ -230,7 +230,7 @@ class Account extends ComponentBase
      */
     public function updateSettings()
     {
-        return UserSettingsManager::init()->getUpdateable();
+        return UserSettingsManager::currentUser()->getUpdateable();
     }
 
     /**
@@ -239,7 +239,7 @@ class Account extends ComponentBase
      */
     public function createSettings()
     {
-        return UserSettingsManager::init()->getRegisterable();
+        return UserSettingsManager::currentUser()->getRegisterable();
     }
 
 }
