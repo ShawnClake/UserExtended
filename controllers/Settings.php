@@ -41,8 +41,8 @@ class Settings extends Controller
         parent::__construct();
 
         // Setting this context so that our sidebar menu works
-        BackendMenu::setContext('October.System', 'system', 'settings');
-		SettingsManager::setContext('clake.userextended', 'settings');
+        //BackendMenu::setContext('October.System', 'system', 'settings');
+		//SettingsManager::setContext('clake.userextended', 'settings');
 		
 		//Add CSS for some backend menus
 		$this->addCss('/plugins/clake/userextended/assets/css/backend.css');
