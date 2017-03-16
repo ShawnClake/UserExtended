@@ -20,22 +20,21 @@ use System\Classes\SettingsManager;
  * @link https://github.com/ShawnClake
  * @link http://shawnclake.com
  *
- *  Major Contributors:
+ * Major Contributors:
  * @link https://github.com/QuinnBast
  *
- * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE
  *
  * Class Plugin
  * @package Clake\UserExtended
  */
 class Plugin extends PluginBase
 {
-
     /**
      * @var array
      */
     public $require = [
-        'RainLab.User',
+        'RainLab.User'
     ];
 
     /**
@@ -45,10 +44,11 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name' => 'UserExtended',
+            'name'        => 'UserExtended',
             'description' => 'Adds roles, friends, profiles, and utility functions to the Rainlab User plugin',
-            'author' => 'clake',
-            'icon' => 'icon-user-plus'
+            'author'      => 'clake',
+            'icon'        => 'icon-user-plus',
+            'homepage'    => 'https://github.com/ShawnClake/UserExtended'
         ];
     }
 
@@ -60,9 +60,15 @@ class Plugin extends PluginBase
     {
         return [
             'filters' => [
-                'timezonify' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigTimezoneAdjustment'],
-                'relative' => ['Clake\Userextended\Classes\TimezoneHandler', 'twigRelativeTimeString'],
-            ],
+                'timezonify' => [
+                    'Clake\Userextended\Classes\TimezoneHandler',
+                    'twigTimezoneAdjustment'
+                ],
+                'relative' => [
+                    'Clake\Userextended\Classes\TimezoneHandler',
+                    'twigRelativeTimeString'
+                ]
+            ]
         ];
     }
 
@@ -97,32 +103,32 @@ class Plugin extends PluginBase
         /*
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
-        Event::listen('backend.menu.extendItems', function ($manager) {
-
+        Event::listen('backend.menu.extendItems', function ($manager)
+        {
             $manager->addSideMenuItems('RainLab.User', 'user', [
                 /*'groups' => [
                     'label' => 'Group Manager',
-                    'url' => Backend::url('clake/userextended/groupsextended'),
-                    'icon' => 'icon-users',
-                    'order' => 500,
+                    'url'   => Backend::url('clake/userextended/groupsextended'),
+                    'icon'  => 'icon-users',
+                    'order' => 500
                 ],*/
                 'roles' => [
                     'label' => 'Role Manager',
-                    'url' => Backend::url('clake/userextended/roles/manage'),
-                    'icon' => 'icon-pencil',
-                    'order' => 600,
+                    'url'   => Backend::url('clake/userextended/roles/manage'),
+                    'icon'  => 'icon-pencil',
+                    'order' => 600
                 ],
                 'users-side' => [
                     'label' => 'Users',
-                    'url' => Backend::url('rainlab/user/users'),
-                    'icon' => 'icon-user',
-                    'order' => 100,
+                    'url'   => Backend::url('rainlab/user/users'),
+                    'icon'  => 'icon-user',
+                    'order' => 100
                 ],
                 'fields' => [
                     'label' => 'Fields',
-                    'url' => Backend::url('clake/userextended/settings/manage'),
-                    'icon' => 'icon-globe',
-                    'order' => 700,
+                    'url'   => Backend::url('clake/userextended/settings/manage'),
+                    'icon'  => 'icon-globe',
+                    'order' => 700
                 ],
             ]);
 
@@ -147,13 +153,13 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-                'label' => 'UserExtended Settings',
+                'label'       => 'UserExtended Settings',
                 'description' => 'Manage user extended settings.',
-                'category' => SettingsManager::CATEGORY_USERS,
-                'icon' => 'icon-cog',
-                'class' => 'Clake\Userextended\Models\Settings',
-                'order' => 100,
-                'keywords' => 'security user extended',
+                'category'    => SettingsManager::CATEGORY_USERS,
+                'icon'        => 'icon-cog',
+                'class'       => 'Clake\Userextended\Models\Settings',
+                'order'       => 100,
+                'keywords'    => 'security user extended',
                 'permissions' => ['']
             ]
         ];
@@ -186,7 +192,7 @@ class Plugin extends PluginBase
      */
     public static function injectAssets($component)
     {
-        //Cant move these out because then the defaults wouldn't have top priority
+        // Cant move these out because then the defaults wouldn't have top priority.
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
 
@@ -195,14 +201,16 @@ class Plugin extends PluginBase
          */
         $assets = UserExtended::getAssets();
 
-        foreach($assets as $asset)
-        {
+        foreach ($assets as $asset) {
             $type = trim(substr($asset, strrpos($asset, '.') + 1));
-            if($type == 'js')
-                $component->addJs($asset);
 
-            if($type == 'css')
+            if ($type == 'js') {
+                $component->addJs($asset);
+            }
+
+            else if ($type == 'css') {
                 $component->addCss($asset);
+            }
         }
     }
 
@@ -210,14 +218,13 @@ class Plugin extends PluginBase
      * Registers mail templates
      * @return array
      */
-	public function registerMailTemplates()
+    public function registerMailTemplates()
     {
         return [
-            'clake.userextended::mail.on_group_role_changed' => 'Notify that the users group was changed',
+            'clake.userextended::mail.on_group_role_changed'    => 'Notify that the users group was changed',
             'clake.userextended::mail.received_friend_request'  => 'Friend request',
-            'clake.userextended::mail.received_profile_comment'  => 'New comment on user profile',
-            'clake.userextended::mail.register'  => 'Registration confirmation email',
+            'clake.userextended::mail.received_profile_comment' => 'New comment on user profile',
+            'clake.userextended::mail.register'                 => 'Registration confirmation email'
         ];
     }
-
 }
