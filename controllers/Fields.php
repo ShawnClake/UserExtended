@@ -23,7 +23,8 @@ use Db;
  * @package Clake\Userextended\Controllers
  */
 class Fields extends Controller
-{
+{	
+
    public static $queue = [];
 
     public $implement = [
@@ -87,6 +88,7 @@ class Fields extends Controller
 	
 	public function getSettings(){
 		//return Db::table($this->table)->select('*')->get();
+		return UserSettingsManager::getSetting();
 	}
 	
 	public function onCreateField(){
@@ -108,7 +110,7 @@ class Fields extends Controller
 	
 	public function onAddField(){
 	    // TODO: You haven't specified where this is drawn to
-		return $this->makePartial('create_new_field');
+		return $this->makePartial('create_field_form');
 	}
 	
 	public function onEditField(){

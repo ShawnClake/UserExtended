@@ -9,30 +9,44 @@
         </div>
 
         <div class="form-group span-right">
-            <label>Required?</label>
-            <input type="text" name="required" value="" id="required" class="form-control"/>
+            <input type="checkbox" name="flags[]" value="required"> Required to Register?<br/>
+			<input type="checkbox" name="flags[]" value="editable"> Editable?<br/>
+			<input type="checkbox" name="flags[]" value="encrypted"> Encrypted?<br/>
+			<input type="checkbox" name="flags[]" value="enabled"> Enabled?<br/>
         </div>
 
         <div class="form-group span-full">
-            <label>Min Length</label>
-            <input style="resize:none;" name="min" id="min" class="form-control"/>
-            <p class="help-block">Default 0</p>
-        </div>
-
-		<div class="form-group span-full">
-            <label>Max Length</label>
-            <input style="resize:none;" name="max" id="max" class="form-control"/>
-            <p class="help-block">Default 255</p>
+            <label>Type</label>
+			<select>
+				  <option value="text">Text</option>
+				  <option value="checkbox">CheckBox</option>
+				  <option value="color">Color</option>
+				  <option value="date">Date</option>
+				  <option value="file">File</option>
+				  <option value="number">Number</option>
+				  <option value="password">Password</option>
+				  <option value="radio">Radio</option>
+				  <option value="range">Range</option>
+				  <option value="tel">Telephone</option>
+				  <option value="time">Time</option>
+				  <option value="url">URL</option>
+				  <option value="switch">Switch</option>
+			</select>			
         </div>
 		
 		<!-- This will eventually be a drop-down once we have a few validation methods -->
 		<div class="form-group span-full">
-            <label>Validation</label>
-            <input style="resize:none;" name="validation" id="validation" class="form-control"/>
+            <label>Description</label>
+            <input style="resize:none;" name="description" id="description" class="form-control"/>
         </div>
 		
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" id="submitButton">Create</button>
-        <span style="margin-left:11px;" id="feedback_group_save"></span>
+		<div class="form-group span-full">
+            <label>Validation</label>
+            <input style="resize:none;" name="description" id="description" class="form-control"/>
+        </div>
+		<div class="form-group span-full">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			<button type="submit" class="btn btn-primary" id="submitButton">Create</button>
+		</div>
     </form>
 </div>
