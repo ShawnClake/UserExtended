@@ -1,6 +1,6 @@
 <?php foreach($groups as $group): ?>
 
-<a href="" style="width:75%;text-align:center;" class="<?php if($selectedGroup->code == $group->code): ?> btn btn-primary <?php else: ?> btn btn-default <?php endif ?>" data-request="onSelectGroup" data-request-data="code: '<?= $group->code ?>'"><?= $group->name ?></a>
+<a href="" style="width:75%;text-align:center;" class="<?php if($currentGroupCode == $group->code): ?> btn btn-primary <?php else: ?> btn btn-default <?php endif ?>" data-request="onSelectGroup" data-request-data="code: '<?= $group->code ?>'"><?= $group->name ?></a>
 
 <br><br>
 

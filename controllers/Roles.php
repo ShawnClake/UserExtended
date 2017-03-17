@@ -80,6 +80,7 @@ class Roles extends Controller
 
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
         $this->vars['selectedGroup'] = GroupManager::allGroups()->getGroups()->first();
+        $this->vars['currentGroupCode'] = GroupManager::allGroups()->getGroups()->first()->code;
         $groupRoles = RoleManager::with($this->vars['selectedGroup']->code);
         $roleModels = $groupRoles->getSortedGroupRoles();
 
@@ -106,22 +107,49 @@ class Roles extends Controller
     public function onSelectGroup()
     {
         $groupCode = post('code');
-        $this->vars['selectedGroup'] = GroupManager::findGroup($groupCode);
+        $group = GroupManager::findGroup($groupCode);
+
+        if(empty($group) || !isset($group))
+            return [];
+
+        $this->setCurrentGroup($group->code);
+
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
+
         if($roles->count() > 0)
         {
-            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
-            $roleCode = $roles[0]->code;
+            $this->setCurrentRole($roles[0]->code);
+            $this->queue([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_LIST_ROLES_TABLE,
+                self::UE_MANAGE_ROLE_TOOLBAR
+            ]);
         }
         else
         {
-            $roleRender = ['#manage_role' => ''];
-            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
-            $roleCode = null;
+            $this->setCurrentRole(null);
+            $this->queueBlank([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_MANAGE_ROLE_TOOLBAR,
+            ]);
+            $this->queue([self::UE_LIST_ROLES_TABLE]);
+
+            //$roleRender = ['#manage_role' => ''];
+            //$roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+            //$roleCode = null;
         }
 
-        return array_merge($this->renderRoles($groupCode),
+        $this->queue([
+            self::UE_MANAGE_OVERALL_TOOLBAR,
+            self::UE_LIST_GROUP_BUTTONS,
+            self::UE_LIST_ROLES_TABLE_UNASSIGNED,
+            self::UE_MANAGE_USERS_UI,
+            self::UE_MANAGE_GROUP_TOOLBAR,
+        ]);
+
+        return $this->render();
+
+        /*return array_merge($this->renderRoles($groupCode),
             $this->renderToolbar($groupCode),
             $this->renderGroups($groupCode),
             $roleRender,
@@ -129,7 +157,7 @@ class Roles extends Controller
             $this->renderUnassignedRoles($groupCode),
             $this->renderUnassignedUsers($groupCode, $roleCode),
             $this->renderManageGroupToolbar($groupCode)
-        );
+        );*/
     }
 
     /**
@@ -701,11 +729,29 @@ class Roles extends Controller
         foreach($to_queue as $queueType)
         {
             $function = $prefix . studly_case($queueType);
-            if(!$function())
+            if(!$this->$function())
                 $success = false;
         }
 
         return $success;
+    }
+
+    /**
+     *
+     * @param array $to_queue
+     * @return bool
+     */
+    protected function queueBlank(array $to_queue)
+    {
+        if(empty($to_queue))
+            return false;
+
+        foreach($to_queue as $queueType)
+        {
+            self::$queue[] = [$queueType, [], 'blank' => true];
+        }
+
+        return true;
     }
 
     /**
@@ -724,21 +770,28 @@ class Roles extends Controller
 
         $renders = [];
 
+        //echo json_encode($to_render);
+
         foreach($to_render as $renderType)
         {
-            $partialName = reset($renderType);
+            $partialName = $renderType[0];
             $divId = '#' . $partialName;
-            $partial = $this->makePartial($partialName, next($renderType));
+            $vars = $renderType[1];
+
+            if(isset($renderType['blank']) && $renderType['blank'] === true)
+            {
+                $renders = array_merge($renders, [$divId => '']);
+                continue;
+            }
+
+            $partial = $this->makePartial($partialName, $vars);
 
             if(isset($renderType['override_key']) && $renderType['override_key'] === true)
             {
-                array_merge($renders, [$partial]);
+                $renders = array_merge($renders, [$partial]);
             } else {
-                array_merge($renders, [$divId => $partial]);
+                $renders = array_merge($renders, [$divId => $partial]);
             }
-
-
-            // '#manage_role' => $this->makePartial('manage_role', ['role' => $role])
         }
 
         $this->flushQueue();
