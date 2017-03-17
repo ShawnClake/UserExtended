@@ -80,16 +80,11 @@ class Roles extends Controller
 
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
 
-        //$this->flushSession();
-
         if($this->getCurrentGroup() === false)
             $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
 
         $this->vars['selectedGroup'] = GroupManager::findGroup($this->getCurrentGroup());
         $this->vars['currentGroupCode'] = $this->getCurrentGroup();
-
-        //$groupRoles = RoleManager::with($this->getCurrentGroup());
-        //$roleModels = $groupRoles->getSortedGroupRoles();
 
         $rolesUnsorted = RoleManager::with($this->getCurrentGroup());
         $roles = $rolesUnsorted->sort()->getRoles();
@@ -101,14 +96,16 @@ class Roles extends Controller
         $unassignedUsers = UsersGroups::byUsersWithoutRole($this->vars['selectedGroup']->code)->get();
         $this->vars['unassignedUsers'] = $unassignedUsers;
 
-
         if(!isset($roles))
             return;
 
         $this->vars['groupRoles'] = ['roles' => $roles];
 
+        if($this->getCurrentRole() === false && count($roles) > 0)
+            $this->setCurrentRole($roles->first()->code);
+
         if(count($roles) > 0)
-            $this->vars['role'] = $roles->first();
+            $this->vars['role'] = RoleManager::findRole($this->getCurrentRole());
     }
 
     /**
@@ -144,12 +141,7 @@ class Roles extends Controller
                 self::UE_MANAGE_ROLE_TOOLBAR,
             ]);
             $this->queue([self::UE_LIST_ROLES_TABLE]);
-
-            //$roleRender = ['#manage_role' => ''];
-            //$roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
-            //$roleCode = null;
         }
-
 
         $this->queue([
             self::UE_MANAGE_OVERALL_TOOLBAR,
@@ -160,21 +152,12 @@ class Roles extends Controller
         ]);
 
         return $this->render();
-
-        /*return array_merge($this->renderRoles($groupCode),
-            $this->renderToolbar($groupCode),
-            $this->renderGroups($groupCode),
-            $roleRender,
-            $roleToolbarRender,
-            $this->renderUnassignedRoles($groupCode),
-            $this->renderUnassignedUsers($groupCode, $roleCode),
-            $this->renderManageGroupToolbar($groupCode)
-        );*/
     }
 
     /**
      * Renders the toolbar for managing a group
      * @param $groupCode
+     * @deprecated New rendering system
      * @return array
      */
     public function renderManageGroupToolbar($groupCode)
@@ -190,6 +173,7 @@ class Roles extends Controller
      * Renders the table of users in a group without a role
      * @param $groupCode
      * @param $roleCode
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderUnassignedUsers($groupCode, $roleCode)
@@ -197,7 +181,6 @@ class Roles extends Controller
         $group = GroupManager::findGroup($groupCode);
         $role = RoleManager::findRole($roleCode);
         $unassignedUsers = UsersGroups::byUsersWithoutRole($groupCode)->get();
-        //echo json_encode($unassignedUsers);
         if(!isset($unassignedUsers))
             return;
         return [
@@ -207,6 +190,7 @@ class Roles extends Controller
 
     /**
      * Returns the unassigned roles list
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderUnassignedRoles($groupCode)
@@ -223,6 +207,7 @@ class Roles extends Controller
     /**
      * Renders the role list
      * @param $groupCode
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderRoles($groupCode)
@@ -239,6 +224,7 @@ class Roles extends Controller
     /**
      * Renders the role management toolbar
      * @param $groupCode
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderToolbar($groupCode)
@@ -254,6 +240,7 @@ class Roles extends Controller
     /**
      * Renders the group list w/ buttons
      * @param $groupCode
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderGroups($groupCode)
@@ -271,11 +258,11 @@ class Roles extends Controller
      * Renders the role management area to the screen
      * @param $roleCode
      * @param $groupCode
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderRole($roleCode, $groupCode)
     {
-
         $role = RoleManager::with($groupCode)->getRole($roleCode);
 
         if(!isset($role))
@@ -290,6 +277,7 @@ class Roles extends Controller
      * Renders the role management area toolbar to the screen
      * @param $roleCode
      * @param $groupCode
+     * @deprecated New rendering system
      * @return array|void
      */
     public function renderManagementToolbar($roleCode, $groupCode)
@@ -306,26 +294,30 @@ class Roles extends Controller
 
     /**
      * AJAX handler called when trying to move a role higher in the heirarchy
-     * @return array|void
+     * @return array
      */
     public function onMoveUp()
     {
         $groupCode = post('groupCode');
         $roleSortOrder = post('order');
         RoleManager::with($groupCode)->sortUp($roleSortOrder);
-        return $this->renderRoles($groupCode);
+
+        $this->queue([self::UE_LIST_ROLES_TABLE]);
+        return $this->render();
     }
 
     /**
      * AJAX handler called when trying to move a role lower in the heirarchy
-     * @return array|void
+     * @return array
      */
     public function onMoveDown()
     {
         $groupCode = post('groupCode');
         $roleSortOrder = post('order');
         RoleManager::with($groupCode)->sortDown($roleSortOrder);
-        return $this->renderRoles($groupCode);
+
+        $this->queue([self::UE_LIST_ROLES_TABLE]);
+        return $this->render();
     }
 
     /**
@@ -334,13 +326,15 @@ class Roles extends Controller
      */
     public function onManageRole()
     {
-        $groupCode = post('groupCode');
         $roleCode = post('roleCode');
-        return array_merge(
-            $this->renderRole($roleCode, $groupCode),
-            $this->renderManagementToolbar($roleCode, $groupCode),
-            $this->renderUnassignedUsers($groupCode, $roleCode)
-        );
+        $this->setCurrentRole($roleCode);
+
+        $this->queue([
+            self::UE_MANAGE_ROLE_UI,
+            self::UE_MANAGE_ROLE_TOOLBAR,
+            self::UE_MANAGE_USERS_UI,
+        ]);
+        return $this->render();
     }
 
     /**
@@ -349,10 +343,12 @@ class Roles extends Controller
      */
     public function onOpenRole()
     {
-        //$groupCode = post('groupCode');
         $roleCode = post('roleCode');
-        $role = RoleManager::findRole($roleCode);
-        return $this->makePartial('update_role_form', ['role' => $role]);
+        $this->setCurrentRole($roleCode);
+        $this->queue([
+            self::UE_UPDATE_ROLE_FORM,
+        ]);
+        return $this->render()[0];
     }
 
     /**
@@ -370,16 +366,6 @@ class Roles extends Controller
         $feedback = RoleManager::updateRole($roleCode, null, $name, $description, $code, null, true);
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
-        if($roles->count() > 0)
-        {
-            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
-        }
-        else
-        {
-            $roleRender = ['#manage_role' => ''];
-            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
-        }
 
         if($feedback === false || $feedback->fails())
         {
@@ -403,15 +389,30 @@ class Roles extends Controller
         } else {
             Flash::success('Role successfully saved!');
             $uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
+            $this->setCurrentRole($code);
+
+            if($roles->count() > 0){
+                $this->queue([
+                    self::UE_MANAGE_ROLE_UI,
+                    self::UE_MANAGE_ROLE_TOOLBAR
+                ]);
+            } else {
+                $this->queueBlank([
+                    self::UE_MANAGE_ROLE_UI,
+                    self::UE_MANAGE_ROLE_TOOLBAR
+                ]);
+            }
+
+            $this->queue([self::UE_LIST_ROLES_TABLE]);
+
         }
 
-        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $uiFeedback);
-
+        return array_merge($this->render(), $uiFeedback);
     }
 
     /**
      * AJAX handler for removing a role
-     * @return array|void
+     * @return array
      */
     public function onRemoveRole()
     {
@@ -428,7 +429,11 @@ class Roles extends Controller
 
             $role->delete();
 
-            return $this->renderUnassignedRoles(post('selectedGroup'));
+            $this->queue([
+                self::UE_LIST_ROLES_TABLE_UNASSIGNED,
+            ]);
+
+            return $this->render();
 
         }  else {
 
@@ -439,22 +444,29 @@ class Roles extends Controller
 
             $role->delete();
 
+            if($roleCode == $this->getCurrentRole())
+                $this->setCurrentRole(RoleManager::with($groupCode)->getRoles()->first()->code);
+
             $roles = RoleManager::with($groupCode)->sort()->getRoles();
             if($roles->count() > 0)
             {
-                $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-                $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+                $this->queue([
+                    self::UE_MANAGE_ROLE_UI,
+                    self::UE_MANAGE_ROLE_TOOLBAR,
+                ]);
             }
             else
             {
-                $roleRender = ['#manage_role' => ''];
-                $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+                $this->queueBlank([
+                    self::UE_MANAGE_ROLE_UI,
+                    self::UE_MANAGE_ROLE_TOOLBAR,
+                ]);
             }
 
-            return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender);
+            $this->queue([self::UE_LIST_ROLES_TABLE]);
 
+            return array_merge($this->render());
         }
-
     }
 
     /**
@@ -463,9 +475,8 @@ class Roles extends Controller
      */
     public function onOpenAddRole()
     {
-        $groupCode = post('groupCode');
-        $group = GroupManager::findGroup($groupCode);
-        return $this->makePartial('create_role_form', ['group' => $group]);
+        $this->queue([self::UE_CREATE_ROLE_FORM]);
+        return $this->render()[0];
     }
 
     /**
@@ -480,13 +491,16 @@ class Roles extends Controller
 
         RoleManager::createRole($name, $description, $code, -1);
 
-        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+        $this->queue([
+            self::UE_LIST_ROLES_TABLE_UNASSIGNED,
+        ]);
+        return $this->render();
     }
 
     /**
      * Removes a user from a role. This does not remove them from the group.
      * It only sets their role_id to 0 in UsersGroups tbl
-     * @return array|void
+     * @return array
      */
     public function onRemoveUserFromRole()
     {
@@ -497,17 +511,17 @@ class Roles extends Controller
         $relation->role_id = 0;
         $relation->save();
 
-        $role = \Clake\Userextended\Models\Role::where('id', $roleId)->first();
+        $this->queue([
+            self::UE_MANAGE_ROLE_UI,
+            self::UE_MANAGE_USERS_UI,
+        ]);
 
-        return array_merge(
-            $this->renderRole($role->code, $role->group->code),
-            $this->renderUnassignedUsers($role->group->code, $role->code)
-        );
+        return $this->render();
     }
 
     /**
      * Promotes a user
-     * @return array|void
+     * @return array
      */
     public function onPromote()
     {
@@ -518,12 +532,15 @@ class Roles extends Controller
 
         UserRoleManager::with(UserUtil::getUser($userId))->allRoles()->promote($role->group->code);
 
-        return $this->renderRole($role->code, $role->group->code);
+        $this->queue([
+            self::UE_MANAGE_ROLE_UI,
+        ]);
+        return $this->render();
     }
 
     /**
      * Demotes a user
-     * @return array|void
+     * @return array
      */
     public function onDemote()
     {
@@ -534,7 +551,10 @@ class Roles extends Controller
 
         UserRoleManager::with(UserUtil::getUser($userId))->allRoles()->demote($role->group->code);
 
-        return $this->renderRole($role->code, $role->group->code);
+        $this->queue([
+            self::UE_MANAGE_ROLE_UI,
+        ]);
+        return $this->render();
     }
 
     /**
@@ -551,19 +571,30 @@ class Roles extends Controller
         RoleManager::updateRole($roleCode, $sortOrder, null, null, null, $groupId, true);
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
+
+        $this->setCurrentRole($roleCode);
+
         if($roles->count() > 0)
         {
-            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+            $this->queue([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_MANAGE_ROLE_TOOLBAR,
+            ]);
         }
         else
         {
-            $roleRender = ['#manage_role' => ''];
-            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+            $this->queueBlank([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_MANAGE_ROLE_TOOLBAR,
+            ]);
         }
 
-        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
+        $this->queue([
+            self::UE_LIST_ROLES_TABLE,
+            self::UE_LIST_ROLES_TABLE_UNASSIGNED,
+        ]);
 
+        return $this->render();
     }
 
     /**
@@ -575,9 +606,6 @@ class Roles extends Controller
         $roleCode = post('roleCode');
         $groupCode = post('groupCode');
 
-        /*
-         * Removes all user from this role
-         */
         $rows = UsersGroups::byRole($roleCode)->get();
         foreach($rows as $relation)
         {
@@ -590,18 +618,31 @@ class Roles extends Controller
         RoleManager::with($groupCode)->fixRoleSort();
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
+
+        if($roleCode == $this->getCurrentRole())
+            $this->setCurrentRole($roles[0]->code);
+
         if($roles->count() > 0)
         {
-            $roleRender = $this->renderRole($roles[0]->code, $groupCode);
-            $roleToolbarRender = $this->renderManagementToolbar($roles[0]->code, $groupCode);
+            $this->queue([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_MANAGE_ROLE_TOOLBAR,
+            ]);
         }
         else
         {
-            $roleRender = ['#manage_role' => ''];
-            $roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
+            $this->queueBlank([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_MANAGE_ROLE_TOOLBAR,
+            ]);
         }
 
-        return array_merge($this->renderRoles($groupCode), $roleRender, $roleToolbarRender, $this->renderUnassignedRoles($groupCode));
+        $this->queue([
+            self::UE_LIST_ROLES_TABLE,
+            self::UE_LIST_ROLES_TABLE_UNASSIGNED,
+        ]);
+
+        return $this->render();
     }
 
     /**
@@ -614,7 +655,16 @@ class Roles extends Controller
 
         GroupManager::deleteGroup($groupCode);
 
-        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+        if($groupCode == $this->getCurrentGroup())
+            $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
+
+        $this->queue([
+            self::UE_LIST_GROUP_BUTTONS,
+            self::UE_MANAGE_USERS_UI,
+            self::UE_LIST_ROLES_TABLE,
+            self::UE_MANAGE_ROLE_UI,
+        ]);
+        return $this->render();
     }
 
     /**
@@ -623,7 +673,8 @@ class Roles extends Controller
      */
     public function onOpenCreateGroup()
     {
-        return $this->makePartial('create_group_form');
+        $this->queue([self::UE_CREATE_GROUP_FORM]);
+        return $this->render()[0];
     }
 
     /**
@@ -638,7 +689,21 @@ class Roles extends Controller
 
         GroupManager::createGroup($name, $description, $code);
 
-        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+        $this->setCurrentGroup($code);
+        $this->setCurrentRole(null);
+
+        $this->queue([
+            self::UE_LIST_GROUP_BUTTONS,
+            self::UE_MANAGE_USERS_UI,
+            self::UE_LIST_ROLES_TABLE,
+        ]);
+
+        $this->queueBlank([
+            self::UE_MANAGE_ROLE_UI,
+            self::UE_MANAGE_ROLE_TOOLBAR,
+        ]);
+
+        return $this->render();
     }
 
     /**
@@ -648,8 +713,11 @@ class Roles extends Controller
     public function onOpenGroup()
     {
         $groupCode = post('groupCode');
-        $group = GroupManager::findGroup($groupCode);
-        return $this->makePartial('update_group_form', ['group' => $group]);
+        $this->setCurrentGroup($groupCode);
+        $this->queue([
+            self::UE_UPDATE_GROUP_FORM,
+        ]);
+        return $this->render()[0];
     }
 
     /**
@@ -665,7 +733,14 @@ class Roles extends Controller
 
         GroupManager::updateGroup($groupCode, $name, $description, $code);
 
-        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+        $this->setCurrentGroup($code);
+
+        $this->queue([
+            self::UE_LIST_GROUP_BUTTONS,
+            self::UE_MANAGE_USERS_UI,
+        ]);
+
+        return $this->render();
     }
 
     /**
@@ -674,16 +749,17 @@ class Roles extends Controller
      */
     public function onAssignUser()
     {
-        $groupCode = post('selectedGroup');
         $roleCode = post('roleCode');
         $userId = post('userId');
 
        UserRoleManager::with(UserUtil::getUser($userId))->addRole($roleCode);
 
-        return array_merge(
-            $this->renderUnassignedUsers($groupCode, $roleCode),
-            $this->renderRole($roleCode, $groupCode)
-        );
+       $this->queue([
+           self::UE_MANAGE_USERS_UI,
+           self::UE_MANAGE_ROLE_UI,
+       ]);
+
+        return $this->render();
     }
 
     /**
@@ -693,14 +769,13 @@ class Roles extends Controller
     public function onRemoveUserFromGroup()
     {
         $groupCode = post('selectedGroup');
-        $roleCode = post('roleCode');
         $userId = post('userId');
 
         UserGroupManager::with(UserUtil::getUser($userId))->removeGroup($groupCode);
 
-        return array_merge(
-            $this->renderUnassignedUsers($groupCode, $roleCode)
-        );
+        $this->queue([self::UE_MANAGE_USERS_UI,]);
+
+        return $this->render();
     }
 
     /**
@@ -710,16 +785,10 @@ class Roles extends Controller
     {
         $userid = post('userId');
         if(!isset($userid))
-            return;
+            return false;
 
         return Redirect::to(Backend::url('rainlab/user/users/preview/' . $userid));
     }
-
-    /**
-     * CODE BELOW THIS POINT IS FOR RELEASE 2.1.00 AND IS HERE IN PREPARATION
-     * THIS IS NOT PRODUCTION CODE AND IS NOT USED OR REFERENCED ELSEWHERE IN THE CODE BASE
-     * DO NOT USE THIS CODE
-     */
 
     /**
      * Queues the partials for render.
@@ -749,7 +818,7 @@ class Roles extends Controller
     }
 
     /**
-     *
+     * Queues a div to be emptied.
      * @param array $to_queue
      * @return bool
      */
@@ -781,8 +850,6 @@ class Roles extends Controller
             return [];
 
         $renders = [];
-
-        //echo json_encode($to_render);
 
         foreach($to_render as $renderType)
         {
@@ -916,7 +983,8 @@ class Roles extends Controller
             $groupCode = $this->getCurrentGroup();
         if($groupCode === false)
             return false;
-        self::$queue[] = [self::UE_UPDATE_GROUP_FORM, ['groupCode' => $groupCode], 'override_key' => true];
+        $group = GroupManager::findGroup($groupCode);
+        self::$queue[] = [self::UE_UPDATE_GROUP_FORM, ['group' => $group], 'override_key' => true];
         return true;
     }
 
@@ -931,7 +999,8 @@ class Roles extends Controller
             $roleCode = $this->getCurrentRole();
         if($roleCode === false)
             return false;
-        self::$queue[] = [self::UE_UPDATE_ROLE_FORM, ['roleCode' => $roleCode], 'override_key' => true];
+        $role = RoleManager::findRole($roleCode);
+        self::$queue[] = [self::UE_UPDATE_ROLE_FORM, ['role' => $role], 'override_key' => true];
         return true;
     }
 
@@ -1055,41 +1124,15 @@ class Roles extends Controller
     protected function queueUeManageUsersUi()
     {
         $currentRoleCode = $this->getCurrentRole();
-        //if($currentRoleCode === false)
-         //   return false;
         $role = RoleManager::findRole($currentRoleCode);
 
         $currentGroupCode = $this->getCurrentGroup();
-        //if($currentGroupCode === false)
-         //   return false;
         $group = GroupManager::findGroup($currentGroupCode);
 
         $unassignedUsers = UsersGroups::byUsersWithoutRole($currentGroupCode)->get();
-        //if(!isset($unassignedUsers))
-         //   return false;
 
         self::$queue[] = [self::UE_MANAGE_USERS_UI, ['role' => $role, 'group' => $group, 'users' => $unassignedUsers]];
         return true;
     }
 
-    /*
-     * These are here for now so I don't have to scroll as much
-     *
-    const UE_CREATE_GROUP_FORM = 'create_group_form'; // _create_group_form
-    const UE_CREATE_ROLE_FORM = 'create_role_form'; // _create_role_form
-
-    const UE_UPDATE_GROUP_FORM = 'update_group_form'; // _update_group_form
-    const UE_UPDATE_ROLE_FORM = 'update_role_form'; // _update_role_form
-
-    const UE_LIST_GROUP_BUTTONS = 'list_group_buttons'; // _list_groups
-    const UE_LIST_ROLES_TABLE = 'list_roles_table'; // _list_roles
-    const UE_LIST_ROLES_TABLE_UNASSIGNED = 'list_roles_table_unassigned'; // _list_unassigned_roles
-
-    const UE_MANAGE_CREATION_TOOLBAR = 'manage_creation_toolbar'; // _create_toolbar
-    const UE_MANAGE_GROUP_TOOLBAR = 'manage_group_toolbar'; // _manage_group_toolbar
-    const UE_MANAGE_ROLE_TOOLBAR = 'manage_role_toolbar'; // _management_role_toolbar
-    const UE_MANAGE_OVERALL_TOOLBAR = 'manage_overall_toolbar'; // _management_toolbar
-    const UE_MANAGE_ROLE_UI = 'manage_role_ui'; // _manage_role
-    const UE_MANAGE_USERS_UI = 'manage_users_ui'; // _list_unassigned_user_in_group
-    */
 }
