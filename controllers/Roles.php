@@ -79,10 +79,20 @@ class Roles extends Controller
         $this->pageTitle = "Manage Roles";
 
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
-        $this->vars['selectedGroup'] = GroupManager::allGroups()->getGroups()->first();
-        $this->vars['currentGroupCode'] = GroupManager::allGroups()->getGroups()->first()->code;
-        $groupRoles = RoleManager::with($this->vars['selectedGroup']->code);
-        $roleModels = $groupRoles->getSortedGroupRoles();
+
+        //$this->flushSession();
+
+        if($this->getCurrentGroup() === false)
+            $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
+
+        $this->vars['selectedGroup'] = GroupManager::findGroup($this->getCurrentGroup());
+        $this->vars['currentGroupCode'] = $this->getCurrentGroup();
+
+        //$groupRoles = RoleManager::with($this->getCurrentGroup());
+        //$roleModels = $groupRoles->getSortedGroupRoles();
+
+        $rolesUnsorted = RoleManager::with($this->getCurrentGroup());
+        $roles = $rolesUnsorted->sort()->getRoles();
 
         $unassignedRoles = RoleManager::getUnassignedRoles();
         $this->vars['unassignedRoles'] = $unassignedRoles;
@@ -92,12 +102,13 @@ class Roles extends Controller
         $this->vars['unassignedUsers'] = $unassignedUsers;
 
 
-        if(!isset($roleModels))
+        if(!isset($roles))
             return;
-        $this->vars['groupRoles'] = ['roles' => $roleModels, 'roleCount' => $groupRoles->countRoles()];
 
-        if(count($roleModels) > 0)
-            $this->vars['role'] = reset($roleModels);
+        $this->vars['groupRoles'] = ['roles' => $roles];
+
+        if(count($roles) > 0)
+            $this->vars['role'] = $roles->first();
     }
 
     /**
@@ -138,6 +149,7 @@ class Roles extends Controller
             //$roleToolbarRender = ['#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => null])];
             //$roleCode = null;
         }
+
 
         $this->queue([
             self::UE_MANAGE_OVERALL_TOOLBAR,
@@ -1043,18 +1055,18 @@ class Roles extends Controller
     protected function queueUeManageUsersUi()
     {
         $currentRoleCode = $this->getCurrentRole();
-        if($currentRoleCode === false)
-            return false;
+        //if($currentRoleCode === false)
+         //   return false;
         $role = RoleManager::findRole($currentRoleCode);
 
         $currentGroupCode = $this->getCurrentGroup();
-        if($currentGroupCode === false)
-            return false;
+        //if($currentGroupCode === false)
+         //   return false;
         $group = GroupManager::findGroup($currentGroupCode);
 
         $unassignedUsers = UsersGroups::byUsersWithoutRole($currentGroupCode)->get();
-        if(!isset($unassignedUsers))
-            return false;
+        //if(!isset($unassignedUsers))
+         //   return false;
 
         self::$queue[] = [self::UE_MANAGE_USERS_UI, ['role' => $role, 'group' => $group, 'users' => $unassignedUsers]];
         return true;

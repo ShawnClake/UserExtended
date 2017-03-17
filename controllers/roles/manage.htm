@@ -19,7 +19,7 @@
                         <div id="manage_overall_toolbar"><?= $this->makePartial('manage_overall_toolbar', ['group' => $selectedGroup]) ?> </div>
 
                         <h4>Group Roles</h4>
-                        <div id="list_roles_table"><?= $this->makePartial('list_roles_table', ['roles' => $groupRoles['roles'], 'roleCount' => $groupRoles['roleCount']]) ?></div>
+                        <div id="list_roles_table"><?= $this->makePartial('list_roles_table', ['roles' => $groupRoles['roles']]) ?></div>
                     </div>
 
                     <div class="col-sm-12" style="margin-top:33px;">
@@ -44,7 +44,7 @@
                         <div id="manage_creation_toolbar"><?= $this->makePartial('manage_creation_toolbar', ['group' => $selectedGroup]) ?> </div>
 
                         <h4 class="text-right">Unassigned Roles <!--(Drag onto a group to assign)--></h4>
-                        <div id="list_roles_table_unassigned"><?= $this->makePartial('list_roles_table_unassigned', ['roles' => $unassignedRoles, 'roleCount' => $unassignedRoleCount, 'group' => $selectedGroup]) ?></div>
+                        <div id="list_roles_table_unassigned"><?= $this->makePartial('list_roles_table_unassigned', ['roles' => $unassignedRoles, 'currentGroupCode' => $selectedGroup]) ?></div>
                     </div>
 
                     <div class="col-sm-12" style="margin-top:33px;">
