@@ -86,9 +86,9 @@ class FieldManager extends StaticFactory
 	 * Deletes a field
 	 * @param $name
 	 */
-	public static function deleteField($name)
+	public static function deleteField($code)
 	{
-		$field = Field::find($name);
+		$field = Field::where('code', $code)->first();
 		$field->delete();
 	}
 

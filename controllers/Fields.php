@@ -130,21 +130,9 @@ class Fields extends Controller
 		
 	}
 	
-	public function onConfirmDelete(){
-
-	    // This isn't needed. A confirmation can easily be brought up via October's data attributes API:
-        // http://octobercms.com/docs/ajax/attributes-api
-        // data-request-confirm
-
-		//$name = post('name');
-		//$selection = Db::table($this->table)->where('name', $name)->get();
-		//return $this->makePartial('confirm_delete', ['selection' => $selection[0]]);
-	}
-	
 	public function onDeleteField(){
-		//TODO
-		//$name = post('name');
-		//DB::table($this->table)->where('name', $name)->delete();
-		//return Redirect::to(Backend::url('clake/userextended/Settings/start'));
+		$name = post('name');
+		FieldManager::deleteField($name);
+		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
 	}
 }

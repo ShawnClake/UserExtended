@@ -51,8 +51,9 @@ Block::put('body')
                     href="javascript:;"
                     class="btn btn-danger"
                     data-control="popup"
-                    data-handler="onConfirmDelete"
+                    data-handler="onDeleteField"
                     data-size="huge"
+					data-request-confirm="Are you sure you want to delete the field '<?=$field['label'] ?>'?"
 					data-extra-data="name: '<?=$field['label'] ?>'"
             >
                 Delete
