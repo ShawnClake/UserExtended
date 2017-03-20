@@ -64,12 +64,12 @@ class FieldManager extends StaticFactory
             'enabled' => $enabled,
             'registerable' => $registerable,
             'editable' => $editable,
-            'encrypt' => $encryptable,
+            'encrypt' => $encryptable
         ];
     }
 	
 	public static function updateField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = []){
-		$field = findField($code);
+		$field = FieldManager::findField($code);
 		$field->name = $name;
 		$field->code = $code;
 		$field->description = $description;
@@ -88,7 +88,7 @@ class FieldManager extends StaticFactory
 	 */
 	public static function deleteField($code)
 	{
-		$field = Field::where('code', $code)->first();
+		$field = FieldManager::findField($code);
 		$field->delete();
 	}
 

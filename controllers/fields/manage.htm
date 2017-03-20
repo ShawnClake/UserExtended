@@ -21,7 +21,7 @@ Block::put('body')
 		<td>Validation:</td>
 		<td>Type:</td>
 		<td>Editable:</td>
-		<td>Createable:</td>
+		<td>Enabled:</td>
 		<td>Registerable:</td>
 		<td>Encryptable:</td>
 	</tr>
@@ -42,7 +42,7 @@ Block::put('body')
                     data-control="popup"
                     data-handler="onEditField"
                     data-size="huge"
-					data-extra-data="code: '<?=$field['label'] ?>'"
+					data-extra-data="code: '<?=$field['code'] ?>'"
             >
                 Edit
             </a></td>
@@ -54,7 +54,7 @@ Block::put('body')
                     data-handler="onDeleteField"
                     data-size="huge"
 					data-request-confirm="Are you sure you want to delete the field '<?=$field['label'] ?>'?"
-					data-extra-data="name: '<?=$field['label'] ?>'"
+					data-extra-data="code: '<?=$field['code'] ?>'"
             >
                 Delete
             </a>

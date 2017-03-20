@@ -66,25 +66,25 @@ class Fields extends Controller
 	public function onCreateField(){
 		//TODO validate input
         $post = post();
-
+		var_dump($post);
         $flags = FieldManager::makeFlags(
-            $post['flags']['enabled'],
-            $post['flags']['registerable'],
-            $post['flags']['editable'],
-            $post['flags']['encrypt']
+            in_array('enabled', $post['flags']),
+            in_array('registerable', $post['flags']),
+            in_array('editable', $post['flags']),
+            in_array('encrypt', $post['flags'])
         );
 
         FieldManager::createField(
             $post['name'],
             $post['code'],
             $post['description'],
-            $post['type'],
             $post['validation'],
+            $post['type'],
             $flags,
             $post['data']
         );
 
-		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
+		return Redirect::to(Backend::url('clake/userextended/fields/manage'));
 	}
 	
 	public function onAddField(){
@@ -103,10 +103,10 @@ class Fields extends Controller
 		$post = post();
 
 		$flags = FieldManager::makeFlags(
-		    $post['flags']['enabled'],
-            $post['flags']['registerable'],
-            $post['flags']['editable'],
-            $post['flags']['encrypt']
+            in_array('enabled', $post['flags']),
+            in_array('registerable', $post['flags']),
+            in_array('editable', $post['flags']),
+            in_array('encrypt', $post['flags'])
         );
 		
 		FieldManager::updateField(
@@ -119,13 +119,13 @@ class Fields extends Controller
             $post['data']
         );
 
-		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
+		return Redirect::to(Backend::url('clake/userextended/fields/manage'));
 		
 	}
 	
 	public function onDeleteField(){
-		$name = post('name');
-		FieldManager::deleteField($name);
-		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
+		$code = post('code');
+		FieldManager::deleteField($code);
+		return Redirect::to(Backend::url('clake/userextended/fields/manage'));
 	}
 }

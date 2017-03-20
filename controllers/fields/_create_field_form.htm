@@ -16,26 +16,26 @@
         <div class="form-group span-left">
             <input type="checkbox" name="flags[]" value="registerable"> Required to Register<br/>
 			<input type="checkbox" name="flags[]" value="editable"> User can Edit<br/>
-			<input type="checkbox" name="flags[]" value="encryptable"> Encrypted<br/>
+			<input type="checkbox" name="flags[]" value="encrypt"> Encrypted<br/>
 			<input type="checkbox" name="flags[]" value="enabled"> Enabled<br/>
         </div>
 
         <div class="form-group span-right">
             <label>Type</label>
 			<select name="type">
-				  <option value="text">Text</option>
-				  <option value="checkbox" disabled>CheckBox</option>
-				  <option value="color" disabled>Color</option>
-				  <option value="date" disabled>Date</option>
-				  <option value="file" disabled>File</option>
-				  <option value="number" disabled>Number</option>
-				  <option value="password" disabled>Password</option>
-				  <option value="radio" disabled>Radio</option>
-				  <option value="range" disabled>Range</option>
-				  <option value="tel" disabled>Telephone</option>
-				  <option value="time" disabled>Time</option>
-				  <option value="url" disabled>URL</option>
-				  <option value="switch" disabled>Switch</option>
+				  <option value="UE_FORM_TEXT">Text</option>
+				  <option value="UE_FORM_CHECKBOX" disabled>CheckBox</option>
+				  <option value="UE_FORM_COLOR" disabled>Color</option>
+				  <option value="UE_FORM_DATE" disabled>Date</option>
+				  <option value="UE_FORM_FILE" disabled>File</option>
+				  <option value="UE_FORM_NUMBER" disabled>Number</option>
+				  <option value="UE_FORM_PASSWORD" disabled>Password</option>
+				  <option value="UE_FORM_RADIO" disabled>Radio</option>
+				  <option value="UE_FORM_RANGE" disabled>Range</option>
+				  <option value="UE_FORM_TEL" disabled>Telephone</option>
+				  <option value="UE_FORM_TIME" disabled>Time</option>
+				  <option value="UE_FORM_URL" disabled>URL</option>
+				  <option value="UE_FORM_SWITCH" disabled>Switch</option>
 			</select>			
         </div>
 		
@@ -49,6 +49,9 @@
             <label>Validation</label>
             <input style="resize:none;" name="validation" id="validation" class="form-control"/>
         </div>
+		
+		<input style="resize:none; display: none;" name="data" id="data" class="form-control"/>
+		
 		<div class="form-group span-full">
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			<button type="submit" class="btn btn-primary" id="submitButton">Create</button>
