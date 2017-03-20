@@ -17,13 +17,13 @@ class FieldManager extends StaticFactory
      * @param $name
      * @param $code
      * @param $description
-     * @param string $type
      * @param string $validation
-     * @param null $flags
-     * @param null $data
+     * @param string $type
+     * @param array $flags
+     * @param array $data
      * @return Field
      */
-	public static function createField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = [])
+	public static function createField($name, $code, $description, $validation = "", $type = UserSettingsManager::UE_FORM_TEXT, $flags = [], $data = [])
 	{
 		//Ensure that we are saving a unique field.
 
@@ -57,6 +57,16 @@ class FieldManager extends StaticFactory
 		$field->save();
 		return $field;	
 	}
+
+	public static function makeFlags($enabled = false, $registerable = true, $editable = true, $encryptable = false)
+    {
+        return [
+            'enabled' => $enabled,
+            'registerable' => $registerable,
+            'editable' => $editable,
+            'encrypt' => $encryptable,
+        ];
+    }
 	
 	public static function updateField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = []){
 		$field = findField($code);

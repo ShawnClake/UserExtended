@@ -139,9 +139,9 @@ class Field extends Model
 
         for($i = 0; $i < $difference; $i++)
         {
-            $role = $fields[$total - $i];
-            $role->sort_order = $total - $i - 1;
-            $role->save();
+            $field = $fields[$total - $i];
+            $field->sort_order = $total - $i - 1;
+            $field->save();
         }
         /*$total = RoleManager::with($this->group->code)->countRoles();
         $myOrder = $this->sort_order;
