@@ -10,6 +10,8 @@ use Clake\Userextended\Models\Field;
 class FieldManager extends StaticFactory
 {
 
+    private $fields;
+
     /**
      * @param $name
      * @param $code
@@ -63,6 +65,12 @@ class FieldManager extends StaticFactory
 		$field = Field::find($name);
 		$field->delete();
 	}
+
+	public function allFactory()
+    {
+        $this->fields = Field::all();
+        return $this;
+    }
 	
 	/**
 	 * Finds and returns a Field and its properties
@@ -91,4 +99,21 @@ class FieldManager extends StaticFactory
 		$selection = Field::where('name', $name)->first();
 		return ($selection->data['required'])? true : false;
 	}*/
+
+    public function getSortedFields()
+    {
+        $fields = [];
+
+        if(empty($this->fields))
+            return [];
+
+        foreach($this->fields as $field)
+        {
+            $fields[$field["sort_order"]] = $field;
+        }
+
+        ksort($fields);
+
+        return $fields;
+    }
 }
