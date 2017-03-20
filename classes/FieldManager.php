@@ -47,6 +47,7 @@ class FieldManager extends StaticFactory
 
 		$field = new Field();
 		$field->name = $name;
+		$field->code = $code;
 		$field->description = $description;
 		$field->type = $type;
 		$field->validation = $validation;
