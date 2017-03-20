@@ -144,16 +144,18 @@ class UserSettingsManager extends StaticFactory
         foreach($fields as $field)
         {
             $type = 'self::' . $field->type;
+            
             $settings[$field->code] = [
-                'label' => $field->name,
-                'description' => $field->description,
-                'type' => constant($type),
-                'validation' => $field->validation,
-                'data' => $field->data,
-                'editable' => $field->flags['editable'],
+                'label'        => $field->name,
+                'description'  => $field->description,
+                'code'         => $field->code,
+                'type'         => constant($type),
+                'validation'   => $field->validation,
+                'data'         => $field->data,
+                'editable'     => $field->flags['editable'],
                 'registerable' => $field->flags['registerable'],
-                'encryptable' => $field->flags['encryptable'],
-                'createable' => $field->flags['enabled'],
+                'encrypt'      => $field->flags['encrypt'],
+                'createable'   => $field->flags['enabled'],
             ];
         }
 
