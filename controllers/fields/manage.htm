@@ -19,28 +19,29 @@ Block::put('body')
 	<tr>
 		<td>Name:</td>
 		<td>Validation:</td>
-		<td>Editable:</td>
 		<td>Type:</td>
+		<td>Editable:</td>
 		<td>Createable:</td>
-		<td>Registerable</td>
-		<td>Encryptable</td>
+		<td>Registerable:</td>
+		<td>Encryptable:</td>
 	</tr>
 	<?php foreach ($fields as $field): ?>
+	<?=var_dump($field);?>
 	<tr>
 		<td><?= $field['label'] ?></td>
 		<td><?= $field['validation'] ?></td>
-		<td><?php if(isset($field['editable'])): ?> <?= $field['editable'] ?> <?php endif; ?></td>
 		<td><?= $field['type'] ?></td>
-		<td><?php if(isset($field['createable'])): ?> <?= $field['createable'] ?> <?php endif; ?></td>
-		<td><?php if(isset($field['registerable'])): ?> <?= $field['registerable'] ?> <?php endif; ?></td>
-		<td><?php if(isset($field['encrypt'])): ?> <?= $field['encrypt'] ?> <?php endif; ?></td>
+		<td><?php if(($field['editable'])): ?> true <?php else: ?>false<?php endif; ?></td>
+		<td><?php if(($field['createable'])): ?> true<?php else: ?>false<?php endif; ?></td>
+		<td><?php if(($field['registerable'])): ?> true<?php else: ?>false<?php endif; ?></td>
+		<td><?php if(($field['encryptable'])): ?>true<?php else: ?>false<?php endif; ?></td>
 		<td>	<a
                     href="javascript:;"
                     class="btn btn-default oc-icon-pencil"
                     data-control="popup"
                     data-handler="onEditField"
                     data-size="huge"
-					data-extra-data="name: '<?=$field['label'] ?>'"
+					data-extra-data="code: '<?=$field['code'] ?>'"
             >
                 Edit
             </a></td>

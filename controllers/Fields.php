@@ -3,6 +3,7 @@
 use BackendMenu;
 use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\UserSettingsManager;
+use Clake\UserExtended\Classes\FieldManager;
 use System\Classes\SettingsManager;
 use October\Rain\Support\Facades\Flash;
 use Redirect;
@@ -57,66 +58,46 @@ class Fields extends Controller
 		$this->pageTitle = "Manage Fields";
 		$this->vars['fields'] = UserSettingsManager::currentUser()->getSettingsTemplate();
 	}
-
-	/*$table = $this->table;
-		Db::table($table)->insert(
-		['name' => 'first_name',
-		'required' => true,
-		'min' => 2,
-		'max' => 255,
-		'validation' => 'letters']);
-		
-		Db::table($table)->insert(
-		['name' => 'last_name',
-		'required' => true,
-		'min' => 2,
-		'max' => 255,
-		'validation' => 'letters']);
-		
-		Db::table($table)->insert(
-		['name' => 'email',
-		'required' => true,
-		'min' => 2,
-		'max' => 255,
-		'validation' => 'email']);
-		
-		Db::table($table)->insert(
-		['name' => 'password',
-		'required' => true,
-		'min' => 8,
-		'max' => 255]);*/
 	
 	public function getSettings(){
-		//return Db::table($this->table)->select('*')->get();
 		return UserSettingsManager::getSetting();
 	}
 	
 	public function onCreateField(){
-		/*$name = post('name') ;
-		$required = post('required');
-		$min = null !== post('min') ? post('min') : 0;
-		$max = null !== post('max') ? post('max') : 255;
+		$name = post('name');
+		$code = post('code');
+		$description = post('description');
+		$type = post('type');
 		$validation = post('validation');
+		$flags = post('flags');	//this is an array
+		$data = post('data');
 		
-		Db::table($this->table)->insert(
-		['name' => $name,
-		'required' => $required,
-		'min' => $min,
-		'max' => $max,
-		'validation' => $validation]);*/
+		$flagArray = ['enabled' => false,
+					  'encryptable' => false,
+					  'registerable' => false,
+					  'editable' => false];
+		if($flags != null){
+			foreach ($flags as $option){
+				foreach($flagArray as $key => $value){
+					if($option == $key){
+						$flagArray[$key] = true;
+					}
+				}
+			}
+		}
 		
-		return Redirect::to(Backend::url('clake/userextended/Settings/start'));
+		FieldManager::createField($name, $code, $description, $type, $validation, $flagArray, $data);
+		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
 	}
 	
 	public function onAddField(){
-	    // TODO: You haven't specified where this is drawn to
 		return $this->makePartial('create_field_form');
 	}
 	
 	public function onEditField(){
-		//$name = post('name');
-		//$selection = Db::table($this->table)->where('name', $name)->get();
-		//return $this->makePartial('edit_field', ['selection' => $selection[0]]);
+		$name = post('code');
+		$selection = FieldManager::findField($name);
+		return $this->makePartial('update_field_form', ['selection' => $selection]);
 	}
 	
 	public function onConfirmDelete(){

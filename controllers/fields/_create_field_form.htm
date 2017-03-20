@@ -7,17 +7,22 @@
             <label>Name</label>
             <input type="text" name="name" value="" id="name" class="form-control" />
         </div>
-
-        <div class="form-group span-right">
-            <input type="checkbox" name="flags[]" value="required"> Required to Register?<br/>
-			<input type="checkbox" name="flags[]" value="editable"> Editable?<br/>
-			<input type="checkbox" name="flags[]" value="encrypted"> Encrypted?<br/>
-			<input type="checkbox" name="flags[]" value="enabled"> Enabled?<br/>
+		
+		<div class="form-group span-right">
+            <label>Code</label>
+            <input type="text" name="code" value="" id="code" class="form-control" />
         </div>
 
-        <div class="form-group span-full">
+        <div class="form-group span-left">
+            <input type="checkbox" name="flags[]" value="registerable"> Required to Register<br/>
+			<input type="checkbox" name="flags[]" value="editable"> User can Edit<br/>
+			<input type="checkbox" name="flags[]" value="encryptable"> Encrypted<br/>
+			<input type="checkbox" name="flags[]" value="enabled"> Enabled<br/>
+        </div>
+
+        <div class="form-group span-right">
             <label>Type</label>
-			<select>
+			<select name="type">
 				  <option value="text">Text</option>
 				  <option value="checkbox" disabled>CheckBox</option>
 				  <option value="color" disabled>Color</option>

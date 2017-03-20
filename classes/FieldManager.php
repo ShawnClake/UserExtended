@@ -69,7 +69,7 @@ class FieldManager extends StaticFactory
 	 * @param $code
 	 * @return array
 	 */
-	private function findField($code)
+	public static function findField($code)
 	{
 		return Field::where('code', $code)->first();
 	}
