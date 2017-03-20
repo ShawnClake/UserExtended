@@ -65,29 +65,25 @@ class Fields extends Controller
 	
 	public function onCreateField(){
 		//TODO validate input
-		$name = post('name');
-		$code = post('code');
-		$description = post('description');
-		$type = post('type');
-		$validation = post('validation');
-		$flags = post('flags');	//this is an array
-		$data = post('data');
-		
-		$flagArray = ['enabled' => false,
-					  'encryptable' => false,
-					  'registerable' => false,
-					  'editable' => false];
-		if($flags != null){
-			foreach ($flags as $option){
-				foreach($flagArray as $key => $value){
-					if($option == $key){
-						$flagArray[$key] = true;
-					}
-				}
-			}
-		}
-		
-		FieldManager::createField($name, $code, $description, $type, $validation, $flagArray, $data);
+        $post = post();
+
+        $flags = FieldManager::makeFlags(
+            $post['flags']['enabled'],
+            $post['flags']['registerable'],
+            $post['flags']['editable'],
+            $post['flags']['encrypt']
+        );
+
+        FieldManager::createField(
+            $post['name'],
+            $post['code'],
+            $post['description'],
+            $post['type'],
+            $post['validation'],
+            $flags,
+            $post['data']
+        );
+
 		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
 	}
 	
@@ -103,29 +99,26 @@ class Fields extends Controller
 	
 	public function onUpdateField(){
 		//TODO Validate input
-		$name = post('name');
-		$code = post('code');
-		$description = post('description');
-		$type = post('type');
-		$validation = post('validation');
-		$flags = post('flags');	//this is an array
-		$data = post('data');
+
+		$post = post();
+
+		$flags = FieldManager::makeFlags(
+		    $post['flags']['enabled'],
+            $post['flags']['registerable'],
+            $post['flags']['editable'],
+            $post['flags']['encrypt']
+        );
 		
-		$flagArray = ['enabled' => false,
-					  'encryptable' => false,
-					  'registerable' => false,
-					  'editable' => false];
-		if($flags != null){
-			foreach ($flags as $option){
-				foreach($flagArray as $key => $value){
-					if($option == $key){
-						$flagArray[$key] = true;
-					}
-				}
-			}
-		}
-		
-		FieldManager::updateField($name, $code, $description, $type, $validation, $flagArray, $data);
+		FieldManager::updateField(
+		    $post['name'],
+            $post['code'],
+            $post['description'],
+            $post['type'],
+            $post['validation'],
+            $flags,
+            $post['data']
+        );
+
 		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
 		
 	}
