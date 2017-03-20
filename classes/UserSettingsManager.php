@@ -144,7 +144,7 @@ class UserSettingsManager extends StaticFactory
         foreach($fields as $field)
         {
             $type = 'self::' . $field->type;
-            
+
             $settings[$field->code] = [
                 'label'        => $field->name,
                 'description'  => $field->description,
