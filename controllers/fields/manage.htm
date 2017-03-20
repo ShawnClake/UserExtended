@@ -13,28 +13,30 @@ Block::put('body')
 
     <div class="row" style="margin-top:11px;">
 	
-	<p>Custom Fields</p>
+	<h3 style="margin-left:25px;margin-bottom:19px;">Manage Fields</h3>
 	
-	<table style="width: 90%; margin-left: 5%;">
+	<table class="table table-striped" style="width: 90%; margin-left: 5%;">
 	<tr>
-		<td>Name:</td>
-		<td>Validation:</td>
-		<td>Type:</td>
-		<td>Editable:</td>
-		<td>Enabled:</td>
-		<td>Registerable:</td>
-		<td>Encryptable:</td>
+		<td class="text-left">Name</td>
+		<td class="text-left">Validation</td>
+		<td class="text-left">Type</td>
+		<td class="text-center">Editable</td>
+		<td class="text-center">Enabled</td>
+		<td class="text-center">Registerable</td>
+		<td class="text-center">Encryptable</td>
+		<td></td>
+		<td></td>
 	</tr>
 	<?php foreach ($fields as $field): ?>
 	<tr>
-		<td><?= $field['label'] ?></td>
-		<td><?= $field['validation'] ?></td>
-		<td><?= $field['type'] ?></td>
-		<td><?php if(($field['editable'])): ?> true <?php else: ?>false<?php endif; ?></td>
-		<td><?php if(($field['createable'])): ?> true<?php else: ?>false<?php endif; ?></td>
-		<td><?php if(($field['registerable'])): ?> true<?php else: ?>false<?php endif; ?></td>
-		<td><?php if(($field['encrypt'])): ?>true<?php else: ?>false<?php endif; ?></td>
-		<td>	<a
+		<td><div style="padding-left:5px;"><?= $field['label'] ?></div></td>
+		<td><div style="padding-left:5px;text-transform:capitalize;"><?= $field['validation'] ?></div></td>
+		<td><div style="padding-left:5px;text-transform:capitalize;"><?= $field['type'] ?></div></td>
+		<td><?php if(($field['editable'])): ?> <div class="text-center" style="padding:9px;"><i class="icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><?php if(($field['createable'])): ?> <div class="text-center" style="padding:9px;"><i class="icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><?php if(($field['registerable'])): ?> <div class="text-center" style="padding:9px;"><i class="icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><?php if(($field['encrypt'])): ?> <div class="text-center" style="padding:9px;"><i class="icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><div class="text-center">	<a
                     href="javascript:;"
                     class="btn btn-default oc-icon-pencil"
                     data-control="popup"
@@ -43,8 +45,8 @@ Block::put('body')
 					data-extra-data="code: '<?=$field['code'] ?>'"
             >
                 Edit
-            </a></td>
-		<td>
+		</a></div></td>
+		<td><div class="text-center">
 			<a
                     href="javascript:;"
                     class="btn btn-danger"
@@ -55,13 +57,13 @@ Block::put('body')
 					data-extra-data="code: '<?=$field['code'] ?>'"
             >
                 Delete
-            </a>
+			</a></div>
 		</td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
 	
-	<div style="margin-top: 20px;">
+	<div style="margin-top: 20px;margin-left:25px;">
 	<a
                     href="javascript:;"
                     class="btn btn-default oc-icon-plus"
