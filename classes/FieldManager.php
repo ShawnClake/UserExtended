@@ -5,6 +5,7 @@ use Clake\Userextended\Models\Field;
 /**
  * TODO: Utilize Static Factory.
  * Class FieldManager
+ * @method static FieldManager all() FieldManager
  * @package Clake\UserExtended\Classes
  */
 class FieldManager extends StaticFactory
@@ -22,7 +23,7 @@ class FieldManager extends StaticFactory
      * @param null $data
      * @return Field
      */
-	public static function createField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = null, $data = null)
+	public static function createField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = [])
 	{
 		//Ensure that we are saving a unique field.
 
@@ -49,10 +50,10 @@ class FieldManager extends StaticFactory
 		$field->description = $description;
 		$field->type = $type;
 		$field->validation = $validation;
-		if(!isset($field->flags)) $field->flags = $flags;
-        if(!isset($field->data)) $field->data = $data;
-		$field->save();
+		if(!empty($flags)) $field->flags = $flags;
+        if(!empty($data)) $field->data = $data;
 
+		$field->save();
 		return $field;	
 	}
 	
