@@ -276,7 +276,6 @@ class RoleManager extends StaticFactory
     public function saveRoles()
     {
         foreach($this->roles as $role)
-
             $role->save();
     }
 

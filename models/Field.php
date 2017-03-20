@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Models;
 
+use Clake\UserExtended\Classes\FieldManager;
 use Model;
 use October\Rain\Support\Collection;
 use Clake\UserExtended\Traits\Timezonable;
@@ -89,7 +90,13 @@ class Field extends Model
     public function beforeCreate()
     {
         $this->checkFlags();
+
+        if(!isset($this->data))
+            $this->data = [];
         //$this->sort_order = RoleManager::with($this->group->code)->countRoles() + 1;
+
+        // TODO: Does this throw an error with 0 entries in the DB?
+        $this->sort_order = Field::all()->count() + 1;
     }
 
     /**
@@ -99,6 +106,12 @@ class Field extends Model
     public function beforeUpdate()
     {
         $this->checkFlags();
+
+        $total = Field::all()->count();
+        if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
+        {
+            return false;
+        }
 
         /*$total = RoleManager::with($this->group->code)->countRoles();
 
@@ -114,6 +127,22 @@ class Field extends Model
      */
     public function beforeDelete()
     {
+        $total = Field::all()->count();
+        $myOrder = $this->sort_order;
+
+        if($myOrder === $total)
+            return true;
+
+        $fields = FieldManager::all()->getSortedFields();
+
+        $difference = $total - $myOrder;
+
+        for($i = 0; $i < $difference; $i++)
+        {
+            $role = $fields[$total - $i];
+            $role->sort_order = $total - $i - 1;
+            $role->save();
+        }
         /*$total = RoleManager::with($this->group->code)->countRoles();
         $myOrder = $this->sort_order;
 
