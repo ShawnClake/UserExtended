@@ -57,6 +57,16 @@ class FieldManager extends StaticFactory
 		$field->save();
 		return $field;	
 	}
+
+	public static function makeFlags($enabled = false, $registerable = true, $editable = true, $encryptable = false)
+    {
+        return [
+            'enabled' => $enabled,
+            'registerable' => $registerable,
+            'editable' => $editable,
+            'encrypt' => $encryptable,
+        ];
+    }
 	
 	/**
 	 * Deletes a field
