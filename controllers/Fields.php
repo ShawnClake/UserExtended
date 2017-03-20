@@ -64,6 +64,7 @@ class Fields extends Controller
 	}
 	
 	public function onCreateField(){
+		//TODO validate input
 		$name = post('name');
 		$code = post('code');
 		$description = post('description');
@@ -98,6 +99,35 @@ class Fields extends Controller
 		$name = post('code');
 		$selection = FieldManager::findField($name);
 		return $this->makePartial('update_field_form', ['selection' => $selection]);
+	}
+	
+	public function onUpdateField(){
+		//TODO Validate input
+		$name = post('name');
+		$code = post('code');
+		$description = post('description');
+		$type = post('type');
+		$validation = post('validation');
+		$flags = post('flags');	//this is an array
+		$data = post('data');
+		
+		$flagArray = ['enabled' => false,
+					  'encryptable' => false,
+					  'registerable' => false,
+					  'editable' => false];
+		if($flags != null){
+			foreach ($flags as $option){
+				foreach($flagArray as $key => $value){
+					if($option == $key){
+						$flagArray[$key] = true;
+					}
+				}
+			}
+		}
+		
+		FieldManager::updateField($name, $code, $description, $type, $validation, $flagArray, $data);
+		return Redirect::to(Backend::url('clake/userextended/Settings/manage'));
+		
 	}
 	
 	public function onConfirmDelete(){

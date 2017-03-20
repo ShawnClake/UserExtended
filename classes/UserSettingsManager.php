@@ -152,7 +152,7 @@ class UserSettingsManager extends StaticFactory
                 'data' => $field->data,
                 'editable' => $field->flags['editable'],
                 'registerable' => $field->flags['registerable'],
-                'encrypt' => $field->flags['encrypt'],
+                'encryptable' => $field->flags['encryptable'],
                 'createable' => $field->flags['enabled'],
             ];
         }

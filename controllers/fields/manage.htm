@@ -27,6 +27,7 @@ Block::put('body')
 	</tr>
 	<?php foreach ($fields as $field): ?>
 	<?=var_dump($field);?>
+	<?php echo "<h1>Var_Dump above. The 'Code' Field is not getting sent to manage.htm</h1>"?>
 	<tr>
 		<td><?= $field['label'] ?></td>
 		<td><?= $field['validation'] ?></td>
@@ -41,7 +42,7 @@ Block::put('body')
                     data-control="popup"
                     data-handler="onEditField"
                     data-size="huge"
-					data-extra-data="code: '<?=$field['code'] ?>'"
+					data-extra-data="code: '<?=$field['label'] ?>'"
             >
                 Edit
             </a></td>

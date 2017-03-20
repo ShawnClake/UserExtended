@@ -58,6 +58,20 @@ class FieldManager extends StaticFactory
 		return $field;	
 	}
 	
+	public static function updateField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = []){
+		$field = findField($code);
+		$field->name = $name;
+		$field->code = $code;
+		$field->description = $description;
+		$field->type = $type;
+		$field->validation = $validation;
+		if(!empty($flags)) $field->flags = $flags;
+        if(!empty($data)) $field->data = $data;
+
+		$field->save();
+		return $field;	
+	}
+	
 	/**
 	 * Deletes a field
 	 * @param $name
