@@ -8,44 +8,40 @@
         <?= $group->updated_at ?><b> :Last Updated</b>  <br>
         <?= $group->getUsersInGroup()->count() ?><b> :Users Count</b>  <br>
         <hr>
-
-        <h4>Unassigned Users <!--(Drag onto a role to assign)--></h4>
     </div>
 
-    <div style="" class="table-responsive">
-        <table class="table table-condensed table-hover table-striped" id="role_table" style="table-layout:fixed; ">
+    <div class="" id="list_unassigned_users_container" style="">
+        <h4 class="text-right">Unassigned Users (Drag onto 'Role Users' to assign)</h4>
+        <?php if(count($users) != 0): ?>
 
-            <?php if(count($users) != 0): ?>
+        <div class="row">
+            <?php if(!empty($role)): ?><div class="col-sm-1"></div><?php endif; ?>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-3">Name</div>
+            <div class="col-sm-3" >Email</div>
+            <div class="col-sm-2" >Created</div>
+            <div class="col-sm-2" >Last Seen</div>
+        </div>
 
-            <tr>
-                <?php if(!empty($role)): ?><th style="width:25px;"></th><?php endif; ?>
-                <th style="width:25px;"></th>
-                <th style="width:150px;">Name</th>
-                <th style="padding-left:25px;">Email</th>
-                <th style="padding-left:25px;">Created</th>
-                <th style="padding-left:25px;">Last Seen</th>
-            </tr>
-
+        <div id="list_unassigned_users_table">
             <?php foreach($users as $user): $user = $user->user; ?>
-            <tr style="">
-                <div style="margin-top:9px;">
-                    <?php if(!empty($role)): ?><td><span><a style="" href="#" data-request-confirm='Are you sure you want to assign this user to the selected role?' data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></td><?php endif; ?>
-                    <?php if(!empty($role)): ?><td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></td>
-                    <?php else: ?><td><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></td><?php endif; ?>
-                    <td style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageUser" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></td>
-                    <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->email ?></span></td>
-                    <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->created_at ?></span></td>
-                    <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $user->last_seen ?></span></td>
+                <div style="padding-top:5px;padding-bottom:5px;z-index:999;position:relative;" class="row draggable-row drag-unassigned-user">
+                    <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm='Are you sure you want to assign this user to the selected role?' data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></div><?php endif; ?>
+                    <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></div>
+                    <?php else: ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></div><?php endif; ?>
+                    <div class="col-sm-3" style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageUser" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></div>
+                    <div class="col-sm-3" style="overflow:hidden;white-space: nowrap;"><span><?= $user->email ?></span></div>
+                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $user->created_at ?></span></div>
+                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $user->last_seen ?></span></div>
                 </div>
-            </tr>
-            <?php endforeach; else: ?>
-            <tr>
-                <td>
-                    <div class="text-right"><span>There are no unassigned users in this group.</span></div>
-                </td>
-            </tr>
-            <?php endif ?>
-
-        </table>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="text-right"><span>There are no unassigned users in this group.</span></div>
+            </div>
+        </div>
+        <?php endif ?>
     </div>
 </div>

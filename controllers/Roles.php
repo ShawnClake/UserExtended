@@ -648,6 +648,7 @@ class Roles extends Controller
         $this->queue([
             self::UE_LIST_ROLES_TABLE,
             self::UE_LIST_ROLES_TABLE_UNASSIGNED,
+            self::UE_MANAGE_USERS_UI
         ]);
 
         return $this->render();
