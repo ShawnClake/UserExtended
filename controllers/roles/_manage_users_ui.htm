@@ -25,7 +25,7 @@
 
         <div id="list_unassigned_users_table">
             <?php foreach($users as $user): $user = $user->user; ?>
-                <div style="padding-top:5px;padding-bottom:5px;z-index:999;position:relative;" class="row draggable-row drag-unassigned-user">
+                <div style="padding-top:5px;padding-bottom:5px;z-index:99;position:relative;" class="row draggable-row drag-unassigned-user">
                     <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm='Are you sure you want to assign this user to the selected role?' data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></div><?php endif; ?>
                     <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></div>
                     <?php else: ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></div><?php endif; ?>

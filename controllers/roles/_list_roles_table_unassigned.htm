@@ -12,7 +12,7 @@
     </div>
     <div id="list_unassigned_roles_table">
         <?php foreach($roles as $index => $role): ?>
-            <div style="padding-top:5px;padding-bottom:5px;z-index:999;position:relative;" class="row draggable-row drag-unassigned-role">
+            <div style="padding-top:5px;padding-bottom:5px;z-index:99;position:relative;" class="row draggable-row drag-unassigned-role">
                 <div class="col-sm-1" style=""><span><a style="" href="#" data-request-confirm="Are you sure you want to assign this role to the selected group?" data-request="onAssignRole" data-request-data="roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></div>
                 <div class="col-sm-1" style=""><span><a style="" href="#" data-request-confirm="Are you sure you want to delete this role? This cannot be undone." data-request="onRemoveRole" data-request-data="roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></div>
                 <div class="col-sm-3" style=""><span><a data-size="huge" href="javascript:;" data-control="popup" data-handler="onOpenRole" data-extra-data="roleCode: '<?= $role->code ?>'" ><?= $role->name ?></a></span></div>

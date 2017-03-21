@@ -26,7 +26,7 @@
 
         <div id="list_users_table">
             <?php foreach($role->getUsersInRole() as $index => $user): ?>
-                <div style="padding-top:5px;padding-bottom:5px;z-index:999;position:relative;" class="row draggable-row drag-user">
+                <div style="padding-top:5px;padding-bottom:5px;z-index:99;position:relative;" class="row draggable-row drag-user">
                     <div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onRemoveUserFromRole" data-request-data="roleId: '<?= $role->id ?>', userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></div>
                     <div class="col-sm-1"><span><a style=" <?php if($role->sort_order == 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request-confirm="Are you sure you want to promote this user to the next role?" data-request="onPromoteUser" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-up"></i></a></span></div>
                     <div class="col-sm-1"><span><a style=" <?php if($role->sort_order == $roleTotal): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request-confirm="Are you sure you want to demote this user down a role?" data-request="onDemoteUser" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-down"></i></a></span></div>
