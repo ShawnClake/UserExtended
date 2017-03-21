@@ -185,11 +185,13 @@ $(window).load(function() {
                 event.relatedTarget.classList.add('can-drop');
                 $(event.relatedTarget).css('background-color', 'rgba(165, 209, 151, 0.8)');
                 $(event.relatedTarget).css('border-radius', '7px');
+                $(event.relatedTarget).css('z-index', '9999');
             },
             ondragleave: function (event) {
                 event.relatedTarget.classList.remove('can-drop');
                 $(event.relatedTarget).css('background-color', '');
                 $(event.relatedTarget).css('border-radius', '');
+                $(event.relatedTarget).css('z-index', '999');
             }
         });
     }
