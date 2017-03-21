@@ -65,10 +65,13 @@ class Roles extends Controller
         BackendMenu::setContext('RainLab.User', 'user', 'users');
 		
 		//Add CSS for some backend menus
+        $this->addJs('/plugins/clake/userextended/assets/js/libs/interact.min.js');
+
 		$this->addCss('/plugins/clake/userextended/assets/css/backend.css');
+		$this->addCss('/plugins/clake/userextended/assets/css/general.css');
 		$this->addJs('/plugins/clake/userextended/assets/js/backend.js');
 
-		$this->addJs('/plugins/clake/userextended/assets/js/libs/interact.min.js');
+
     }
 
     /**
