@@ -160,148 +160,10 @@ class Roles extends Controller
     }
 
     /**
-     * Renders the toolbar for managing a group
-     * @param $groupCode
-     * @deprecated New rendering system
+     * AJAX handler called when trying to move a role higher in the hierarchy
      * @return array
      */
-    public function renderManageGroupToolbar($groupCode)
-    {
-        $group = GroupManager::findGroup($groupCode);
-
-        return [
-            '#manage_group_toolbar' => $this->makePartial('manage_group_toolbar', ['group' => $group]),
-        ];
-    }
-
-    /**
-     * Renders the table of users in a group without a role
-     * @param $groupCode
-     * @param $roleCode
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderUnassignedUsers($groupCode, $roleCode)
-    {
-        $group = GroupManager::findGroup($groupCode);
-        $role = RoleManager::findRole($roleCode);
-        $unassignedUsers = UsersGroups::byUsersWithoutRole($groupCode)->get();
-        if(!isset($unassignedUsers))
-            return;
-        return [
-          '#unassigned_users' => $this->makePartial('list_unassigned_user_in_group', ['users' => $unassignedUsers, 'group' => $group, 'role' => $role]),
-        ];
-    }
-
-    /**
-     * Returns the unassigned roles list
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderUnassignedRoles($groupCode)
-    {
-        $roles = RoleManager::getUnassignedRoles();
-        $group = GroupManager::findGroup($groupCode);
-        if(!isset($roles))
-            return;
-        return [
-            '#unassigned_roles' => $this->makePartial('list_unassigned_roles', ['roles' => $roles, 'roleCount' => $roles->count(), 'group' => $group]),
-        ];
-    }
-
-    /**
-     * Renders the role list
-     * @param $groupCode
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderRoles($groupCode)
-    {
-        $roles = RoleManager::with($groupCode);
-        $roleModels = $roles->sort()->getRoles();
-        if(!isset($roleModels))
-            return;
-        return [
-            '#roles' => $this->makePartial('list_roles', ['roles' => $roleModels, 'roleCount' => $roles->countRoles()]),
-        ];
-    }
-
-    /**
-     * Renders the role management toolbar
-     * @param $groupCode
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderToolbar($groupCode)
-    {
-        $group = GroupManager::findGroup($groupCode);
-        if(!isset($group))
-            return;
-        return [
-            '#management_toolbar' => $this->makePartial('management_toolbar', ['group' => $group]),
-        ];
-    }
-
-    /**
-     * Renders the group list w/ buttons
-     * @param $groupCode
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderGroups($groupCode)
-    {
-        $groups = GroupManager::allGroups()->getGroups();
-        $selectedGroup = GroupManager::findGroup($groupCode);
-        if(!isset($groups))
-            return;
-        return [
-            '#groups' => $this->makePartial('list_groups', ['groups' => $groups, 'selectedGroup' => $selectedGroup]),
-        ];
-    }
-
-    /**
-     * Renders the role management area to the screen
-     * @param $roleCode
-     * @param $groupCode
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderRole($roleCode, $groupCode)
-    {
-        $role = RoleManager::with($groupCode)->getRole($roleCode);
-
-        if(!isset($role))
-            return;
-
-        return [
-            '#manage_role' => $this->makePartial('manage_role', ['role' => $role]),
-        ];
-    }
-
-    /**
-     * Renders the role management area toolbar to the screen
-     * @param $roleCode
-     * @param $groupCode
-     * @deprecated New rendering system
-     * @return array|void
-     */
-    public function renderManagementToolbar($roleCode, $groupCode)
-    {
-        $role = RoleManager::with($groupCode)->getRole($roleCode);
-
-        if(!isset($role))
-            return;
-
-        return [
-            '#manage_role_toolbar' => $this->makePartial('management_role_toolbar', ['role' => $role]),
-        ];
-    }
-
-    /**
-     * AJAX handler called when trying to move a role higher in the heirarchy
-     * @return array
-     */
-    public function onMoveUp()
+    public function onMoveRoleUp()
     {
         $groupCode = post('groupCode');
         $roleSortOrder = post('order');
@@ -312,10 +174,10 @@ class Roles extends Controller
     }
 
     /**
-     * AJAX handler called when trying to move a role lower in the heirarchy
+     * AJAX handler called when trying to move a role lower in the hierarchy
      * @return array
      */
-    public function onMoveDown()
+    public function onMoveRoleDown()
     {
         $groupCode = post('groupCode');
         $roleSortOrder = post('order');
@@ -346,7 +208,7 @@ class Roles extends Controller
      * AJAX handler called when hitting the edit role button in the role manager.. Used to edit the role.
      * @return mixed
      */
-    public function onOpenRole()
+    public function onOpenRoleEditor()
     {
         $roleCode = post('roleCode');
         $this->setCurrentRole($roleCode);
@@ -360,7 +222,7 @@ class Roles extends Controller
      * AJAX handler called to save the role after the user clicks save in the role editor window
      * @return array
      */
-    public function onSaveRole()
+    public function onEditRole()
     {
         $groupCode = post('groupCode');
         $roleCode = post('roleCode');
@@ -426,7 +288,6 @@ class Roles extends Controller
 
         if(!isset($groupCode))
         {
-
             $role = RoleManager::findRole($roleCode);
 
             if(!isset($role))
@@ -478,7 +339,7 @@ class Roles extends Controller
      * AJAX handler for opening a form for creating a new role
      * @return mixed
      */
-    public function onOpenAddRole()
+    public function onOpenRoleCreator()
     {
         $this->queue([self::UE_CREATE_ROLE_FORM]);
         return $this->render()[0];
@@ -507,7 +368,7 @@ class Roles extends Controller
      * It only sets their role_id to 0 in UsersGroups tbl
      * @return array
      */
-    public function onRemoveUserFromRole()
+    public function onUnassignUser()
     {
         $userId = post('userId');
         $roleId = post('roleId');
@@ -528,7 +389,7 @@ class Roles extends Controller
      * Promotes a user
      * @return array
      */
-    public function onPromote()
+    public function onPromoteUser()
     {
         $userId = post('userId');
         $roleCode = post('roleCode');
@@ -547,7 +408,7 @@ class Roles extends Controller
      * Demotes a user
      * @return array
      */
-    public function onDemote()
+    public function onDemoteUser()
     {
         $userId = post('userId');
         $roleCode = post('roleCode');
@@ -681,7 +542,7 @@ class Roles extends Controller
      * AJAX handler for opening the create a group modal
      * @return mixed
      */
-    public function onOpenCreateGroup()
+    public function onOpenGroupCreator()
     {
         $this->queue([self::UE_CREATE_GROUP_FORM]);
         return $this->render()[0];
@@ -720,7 +581,7 @@ class Roles extends Controller
      * AJAX handler to open the update group modal
      * @return mixed
      */
-    public function onOpenGroup()
+    public function onOpenGroupEditor()
     {
         $groupCode = post('groupCode');
         $this->setCurrentGroup($groupCode);
@@ -734,7 +595,7 @@ class Roles extends Controller
      * AJAX handler for saving the update group modal
      * @return mixed
      */
-    public function onSaveGroup()
+    public function onEditGroup()
     {
         $groupCode = post('groupCode');
         $name = post('name');

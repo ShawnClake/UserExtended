@@ -100,6 +100,8 @@ class Timezone extends Model
             $list[$timezone->abbr] = '(' . $timezone->abbr . ') ' . $timezone->name;
         }
 
+        ksort($list);
+
         return $list;
     }
 
