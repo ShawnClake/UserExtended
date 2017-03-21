@@ -114,7 +114,7 @@ class Roles extends Controller
      */
     public function onSelectGroup()
     {
-        $groupCode = post('code');
+        $groupCode = post('groupCode');
         $group = GroupManager::findGroup($groupCode);
 
         if(empty($group) || !isset($group))
@@ -563,7 +563,9 @@ class Roles extends Controller
     public function onAssignRole()
     {
         $roleCode = post('roleCode');
-        $groupCode = post('selectedGroup');
+        $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
 
         $sortOrder = RoleManager::with($groupCode)->countRoles() + 1;
         $groupId = GroupManager::findGroup($groupCode)->id;
@@ -618,9 +620,9 @@ class Roles extends Controller
         RoleManager::with($groupCode)->fixRoleSort();
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
-
-        if($roleCode == $this->getCurrentRole())
+        if($roles->count() > 0 && $roleCode == $this->getCurrentRole())
             $this->setCurrentRole($roles[0]->code);
+
 
         if($roles->count() > 0)
         {
@@ -651,12 +653,13 @@ class Roles extends Controller
      */
     public function onDeleteGroup()
     {
-        $groupCode = post('selectedGroup');
+        $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
 
         GroupManager::deleteGroup($groupCode);
 
-        if($groupCode == $this->getCurrentGroup())
-            $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
+        $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
 
         $this->queue([
             self::UE_LIST_GROUP_BUTTONS,
@@ -764,11 +767,14 @@ class Roles extends Controller
 
     /**
      * AJAX handler for removing a group from a user
-     * @return array
+     * @return array|false
      */
     public function onRemoveUserFromGroup()
     {
-        $groupCode = post('selectedGroup');
+        $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
+
         $userId = post('userId');
 
         UserGroupManager::with(UserUtil::getUser($userId))->removeGroup($groupCode);
@@ -1039,12 +1045,9 @@ class Roles extends Controller
     protected function queueUeListRolesTableUnassigned()
     {
         $roles = RoleManager::getUnassignedRoles();
-        $currentGroupCode = $this->getCurrentGroup();
-        if($currentGroupCode === false)
-            return false;
         if(!isset($roles))
             return false;
-        self::$queue[] = [self::UE_LIST_ROLES_TABLE_UNASSIGNED, ['roles' => $roles, 'currentGroupCode' => $currentGroupCode]];
+        self::$queue[] = [self::UE_LIST_ROLES_TABLE_UNASSIGNED, ['roles' => $roles]];
         return true;
     }
 
@@ -1054,10 +1057,7 @@ class Roles extends Controller
      */
     protected function queueUeManageCreationToolbar()
     {
-        $currentGroupCode = $this->getCurrentGroup();
-        if($currentGroupCode === false)
-            return false;
-        self::$queue[] = [self::UE_MANAGE_CREATION_TOOLBAR, ['currentGroupCode' => $currentGroupCode]];
+        self::$queue[] = [self::UE_MANAGE_CREATION_TOOLBAR, []];
         return true;
     }
 
@@ -1127,6 +1127,9 @@ class Roles extends Controller
         $role = RoleManager::findRole($currentRoleCode);
 
         $currentGroupCode = $this->getCurrentGroup();
+        if($currentGroupCode === false)
+            return false;
+
         $group = GroupManager::findGroup($currentGroupCode);
 
         $unassignedUsers = UsersGroups::byUsersWithoutRole($currentGroupCode)->get();
