@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Components;
 
 use Clake\UserExtended\Classes\UserManager;
+use Clake\Userextended\Models\Timezone;
 use Clake\Userextended\Models\UserExtended;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
@@ -240,6 +241,21 @@ class Account extends ComponentBase
     public function createSettings()
     {
         return UserSettingsManager::currentUser()->getRegisterable();
+    }
+
+    public function timezoneOptions()
+    {
+        return Timezone::getTimezonesList();
+    }
+
+    public function myTimezone()
+    {
+        return UserUtil::getLoggedInUsersTimezone()->abbr;
+    }
+
+    public function timezonesEnabled()
+    {
+        return UserExtendedSettings::get('enable_timezones', true);
     }
 
 }

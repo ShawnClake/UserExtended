@@ -32,8 +32,10 @@ class Settings extends Model
         $this->validation_password = 'required|between:4,255|confirmed';
         $this->enable_profiles = true;
         $this->enable_friends = true;
+        $this->enable_timezones = true;
         $this->enable_groups = true;
         $this->enable_email = true;
+        $this->default_timezone = "UTC";
         $this->default_group = '';
     }
 
@@ -51,6 +53,11 @@ class Settings extends Model
         }
 
         return $options;
+    }
+
+    public function getDefaultTimezoneOptions($values, $formData)
+    {
+        return Timezone::getTimezonesList();
     }
 
 

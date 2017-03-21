@@ -2,7 +2,7 @@
 
 {{ form_ajax('onUpdate', { model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
 
-<div id="signupForm">
+<div id="updateForm">
 
 	<div class="form-group">
 		<label for="accountName">{{ "clake.userextended::lang.components.account.fullname"|trans }}</label>
@@ -10,8 +10,7 @@
 			name="name" 
 			type="text" 
 			class="form-control" 
-			id="accountName" 
-			required="{{attributes.options.validation}}"
+			id="accountName"
 			value="{{ form_value('name') }}">
 	</div>
 	<span data-validate-for="name"></span><br>
@@ -22,11 +21,25 @@
 			name="email" 
 			type="email" 
 			class="form-control" 
-			id="accountEmail" 
-			required="{{attributes.options.validation}}"
+			id="accountEmail"
 			value="{{ form_value('email') }}">
 	</div>
 	<span data-validate-for="email"></span><br>
+
+	{% if account.timezonesEnabled %}
+		<div class="form-group">
+			<label for="accountTimezone">{{ "clake.userextended::lang.components.account.timezone"|trans }}</label>
+			<select
+					name="timezone"
+					class="form-control"
+					id="accountTimezone">
+				{% for abbr,name in account.timezoneOptions %}
+					<option value="{{abbr}}" {% if abbr == account.myTimezone %} selected="selected" {% endif %}>{{name}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<span data-validate-for="timezone"></span><br>
+	{% endif %}
 
 	<div class="form-group">
 		<label for="accountPassword">{{ "clake.userextended::lang.components.account.newpassword"|trans }}</label>

@@ -1,5 +1,6 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Clake\Userextended\Models\Timezone;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 use Flash;
@@ -171,6 +172,12 @@ class UserManager extends StaticFactory
             $user->password_confirmation = $data['password_confirmation'];
         }
 
+        if(isset($data['timezone']))
+        {
+            $timezone = Timezone::where('abbr', $data['timezone'])->first();
+            $user->timezone_id = $timezone->id;
+        }
+
         $user->save();
 
         $settingsManager = UserSettingsManager::currentUser();
@@ -218,7 +225,7 @@ class UserManager extends StaticFactory
      * @return mixed
      * @throws \Exception
      */
-    public static function registerUser(array $data, array $options = ['default' => true])
+    public static function registerUser(array $data, array $options = ['default' => true, 'timezone' => true])
     {
         try {
             if (!Settings::get('allow_registration', true)) {
@@ -269,6 +276,14 @@ class UserManager extends StaticFactory
             if(!empty($defaultGroup) && $options['default'])
             {
                 UserGroupManager::currentUser()->addGroup($defaultGroup);
+            }
+
+            $defaultTimezone = UserExtendedSettings::get('default_timezone', 'UTC');
+            if(!empty($defaultGroup) && $options['timezone'])
+            {
+                $timezone = Timezone::where('abbr', $defaultTimezone)->first();
+                $user->timezone_id = $timezone->id;
+                $user->save();
             }
 
             $settingsManager = UserSettingsManager::init();

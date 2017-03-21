@@ -4,6 +4,44 @@
 
 tabs:
     fields:
+        # Enable Friends Feature
+        enable_friends:
+            span: left
+            label: Enable Friends
+            comment: Enable/Disable friends
+            type: switch
+            tab: Features
+
+        enable_timezones:
+            span: right
+            label: Enable Timezones
+            comment: Enable/Disable Timezones
+            type: switch
+            tab: Features
+
+        # Enable Profile Feature
+        enable_profiles:
+            span: left
+            label: Enable Profiles
+            comment: Enable/Disable user profiles
+            type: switch
+            tab: Features
+
+        # Enable Groups Feature
+        enable_groups:
+            span: right
+            label: Enable Groups
+            comment: Enable/Disable user groups
+            type: switch
+            tab: Features
+
+        # Enable Email Notification
+        enable_email:
+            span: left
+            label: Enable Email Notifications
+            comment: Enable/Disable email notifications
+            type: switch
+            tab: Features
 
         # Username Validation
         validation_username:
@@ -21,41 +59,16 @@ tabs:
             type: text
             tab: Validation
 
-        # Enable Friends Feature
-        enable_friends:
-            span: left
-            label: Enable Friends
-            comment: Enable/Disable friends
-            type: switch
-            tab: Friends
-
-        # Enable Profile Feature
-        enable_profiles:
-            span: left
-            label: Enable Profiles
-            comment: Enable/Disable user profiles
-            type: switch
-            tab: Profile
-
-        # Enable Groups Feature
-        enable_groups:
-            span: left
-            label: Enable Groups
-            comment: Enable/Disable user groups
-            type: switch
-            tab: Groups
-
         default_group:
-            span: right
+            span: left
             label: Default Group
             comment: (Optional) Choose a default group for users to be placed in when they register
             type: dropdown
-            tab: Groups
+            tab: Registration
 
-        # Enable Email Notification
-        enable_email:
-            span: left
-            label: Enable Email Notifications
-            comment: Enable/Disable email notifications
-            type: switch
-            tab: Notifications
+        default_timezone:
+            span: right
+            label: Default Timezone
+            comment: (Optional) Choose a default timezone for users when they register
+            type: dropdown
+            tab: Registration
