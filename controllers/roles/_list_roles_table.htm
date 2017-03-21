@@ -1,38 +1,42 @@
-<div style="" class="table-responsive">
-    <table class="table table-condensed table-hover table-striped" id="role_table" style="table-layout:fixed; ">
+<div style="" class="">
+    <div class="" id="list_roles_container" style="">
 
         <?php if(count($roles) != 0): ?>
 
-            <tr>
-                <th style="width:25px;"></th>
-                <th style="width:25px;"></th>
-                <th style="width:25px;"></th>
-                <th style="width:125px;">Role</th>
-                <th style="padding-left:25px;">Description</th>
-                <th style="padding-left:25px;">Created</th>
-                <th style="padding-left:25px;">Updated</th>
-                <th style="padding-left:10px;width:25px;"></th>
-            </tr>
-
-        <?php foreach($roles as $index => $role): ?>
-        <tr style="">
-            <div style="margin-top:9px;">
-                <td><span><a style="" href="#" data-request-confirm="Are you sure you want to delete this role? This cannot be undone." data-request="onRemoveRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-times"></i></a></span></td>
-                <td><span><a style=" <?php if($index == 0): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveUp" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-up"></i></a></span></td>
-                <td><span><a style=" <?php if($index == $roles->count() - 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveDown" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-down"></i></a></span></td>
-                <td style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><?= $role->name ?></a></span></td>
-                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->description ?></span></td>
-                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->created_at ?></span></td>
-                <td style="padding-left:25px;overflow:hidden;white-space: nowrap;"><span><?= $role->updated_at ?></span></td>
-                <td><span><a style="padding-left:10px;" href="#" data-request-confirm="Are you sure you want to unassign this role form this group? All users with this role will no longer have a role." data-request="onUnassignRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-right"></i></a></span></td>
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">Role</div>
+                <div class="col-sm-2">Description</div>
+                <div class="col-sm-2">Created</div>
+                <div class="col-sm-2">Updated</div>
+                <div class="col-sm-1"></div>
             </div>
-        </tr>
-        <?php endforeach; else: ?>
-        <tr>
-            <td>
+        <div id="list_roles_table">
+            <?php foreach($roles as $index => $role): ?>
+                <div style="padding-top:5px;padding-bottom:5px;z-index:999;position:relative;" data-test="hi" class="row draggable-row drag-role">
+                    <div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to delete this role? This cannot be undone." data-request="onRemoveRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-times"></i></a></span></div>
+                    <div class="col-sm-1"><span><a style=" <?php if($index == 0): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveUp" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-up"></i></a></span></div>
+                    <div class="col-sm-1"><span><a style=" <?php if($index == $roles->count() - 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveDown" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-down"></i></a></span></div>
+                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><?= $role->name ?></a></span></div>
+                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $role->description ?></span></div>
+                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $role->created_at ?></span></div>
+                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $role->updated_at ?></span></div>
+                    <div class="col-sm-1"><span><a style="padding-left:10px;" href="#" data-request-confirm="Are you sure you want to unassign this role form this group? All users with this role will no longer have a role." data-request="onUnassignRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-right"></i></a></span></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="row">
+            <div class="col-sm-12">
                 <span>No roles currently exist in this group</span>
-            </td>
-        </tr>
+            </div>
+        </div>
         <?php endif ?>
-    </table>
+    </div>
 </div>
+
+<script>
+
+</script>

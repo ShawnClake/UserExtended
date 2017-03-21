@@ -83,6 +83,8 @@ class Roles extends Controller
 
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
 
+        //$this->flushSession();
+
         if($this->getCurrentGroup() === false)
             $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
 
@@ -566,6 +568,7 @@ class Roles extends Controller
     public function onAssignRole()
     {
         $roleCode = post('roleCode');
+        //echo json_encode($roleCode) . '<br>';
         $groupCode = $this->getCurrentGroup();
         if($groupCode === false)
             return false;
