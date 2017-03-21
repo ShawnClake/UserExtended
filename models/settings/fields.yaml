@@ -45,6 +45,13 @@ tabs:
             type: switch
             tab: Groups
 
+        default_group:
+            span: right
+            label: Default Group
+            comment: (Optional) Choose a default group for users to be placed in when they register
+            type: dropdown
+            tab: Groups
+
         # Enable Email Notification
         enable_email:
             span: left

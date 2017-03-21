@@ -284,4 +284,14 @@ class UserRoleManager extends StaticFactory
         return Role::addUser($this->user, $group->id, $roleId);
     }
 
+    public function removeRole($roleCode)
+    {
+        if(!$this->isInRole($roleCode))
+            return false;
+
+        $group = RoleManager::findRole($roleCode)->group;
+
+        return Role::removeUser($this->user, $group->id);
+    }
+
 }

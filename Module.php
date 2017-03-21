@@ -1,6 +1,8 @@
 <?php namespace Clake\UserExtended;
 
+use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserManager;
+use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
@@ -25,7 +27,7 @@ class Module extends UserExtended
 
     public $author = "Shawn Clake";
 
-    public $description = "User Extended Core";
+    public $description = "UserExtended Core";
 
     public $version = "2.1.00";
 
@@ -189,5 +191,46 @@ class Module extends UserExtended
     {
         return UserSettingsManager::init()->all();
     }
+
+    /**
+     * @param $groupCode
+     * @param null $user
+     * @return bool
+     */
+    public function addUserToGroup($groupCode, $user = null)
+    {
+        return UserGroupManager::with($user)->addGroup($groupCode);
+    }
+
+    /**
+     * @param $groupCode
+     * @param null $user
+     * @return bool
+     */
+    public function removeUserFromGroup($groupCode, $user = null)
+    {
+        return UserGroupManager::with($user)->removeGroup($groupCode);
+    }
+
+    /**
+     * @param $roleCode
+     * @param null $user
+     * @return bool
+     */
+    public function addUserToRole($roleCode, $user = null)
+    {
+        return UserRoleManager::with($user)->addRole($roleCode);
+    }
+
+    /**
+     * @param $roleCode
+     * @param null $user
+     * @return bool
+     */
+    public function removeUserFromRole($roleCode, $user = null)
+    {
+        return UserRoleManager::with($user)->removeRole($roleCode);
+    }
+
 
 }

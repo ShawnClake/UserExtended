@@ -185,6 +185,11 @@ class Role extends Model
         $row->save();
     }
 
+    public static function removeUser($userObj, $groupId)
+    {
+        return self::addUser($userObj, $groupId);
+    }
+
     /**
      * Returns the role with the passed in parameter code
      * @param $query

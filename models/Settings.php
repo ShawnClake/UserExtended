@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Models;
 
+use Clake\UserExtended\Classes\GroupManager;
 use Lang;
 use Model;
 
@@ -33,6 +34,24 @@ class Settings extends Model
         $this->enable_friends = true;
         $this->enable_groups = true;
         $this->enable_email = true;
+        $this->default_group = '';
     }
+
+    public function getDefaultGroupOptions($values, $formData)
+    {
+        $groups = GroupManager::allGroups()->getGroups();
+
+        $options = [
+            '' => '-- None --',
+        ];
+
+        foreach($groups as $group)
+        {
+            $options[$group->code] = $group->name;
+        }
+
+        return $options;
+    }
+
 
 }

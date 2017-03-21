@@ -214,10 +214,11 @@ class UserManager extends StaticFactory
     /**
      * Programatically registers a user
      * @param array $data
-     * @return bool|mixed
+     * @param array $options
+     * @return mixed
      * @throws \Exception
      */
-    public static function registerUser(array $data)
+    public static function registerUser(array $data, array $options = ['default' => true])
     {
         try {
             if (!Settings::get('allow_registration', true)) {
@@ -264,6 +265,12 @@ class UserManager extends StaticFactory
             /*
              * Preform phase 2 User registration
              */
+            $defaultGroup = UserExtendedSettings::get('default_group', '');
+            if(!empty($defaultGroup) && $options['default'])
+            {
+                UserGroupManager::currentUser()->addGroup($defaultGroup);
+            }
+
             $settingsManager = UserSettingsManager::init();
 
             Event::fire('clake.ue.settings.create', [&$settingsManager]);
