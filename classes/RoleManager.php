@@ -86,7 +86,7 @@ class RoleManager extends StaticFactory
         $role->code = $code;
         $role->group_id = $groupId;
         $role->save();
-        return $role;
+        return $validator;
     }
 
     /**

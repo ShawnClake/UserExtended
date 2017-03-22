@@ -366,12 +366,22 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        RoleManager::createRole($name, $description, $code, -1);
+        $feedback = RoleManager::createRole($name, $description, $code, -1);
+
+        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_role_save', [
+            'success' => 'Role saved successfully!',
+            'error'   => 'Role was not saved!',
+            'false'   => 'Role was not saved!'
+        ], [
+            'success' => '<span class="text-success">Role has been saved.</span>',
+            'false'   => '<span class="text-danger">That code already exists.</span>',
+            'error'   => ''
+        ]);
 
         $this->queue([
             self::UE_LIST_ROLES_TABLE_UNASSIGNED,
         ]);
-        return $this->render();
+        return array_merge($this->render(), $uiFeedback);
     }
 
     /**
@@ -569,7 +579,17 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        GroupManager::createGroup($name, $description, $code);
+        $feedback = GroupManager::createGroup($name, $description, $code);
+
+        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_group_save', [
+            'success' => 'Group saved successfully!',
+            'error'   => 'Group was not saved!',
+            'false'   => 'Group was not saved!'
+        ], [
+            'success' => '<span class="text-success">Group has been saved.</span>',
+            'false'   => '<span class="text-danger">That code already exists.</span>',
+            'error'   => ''
+        ]);
 
         $this->setCurrentGroup($code);
         $this->setCurrentRole(null);
@@ -585,7 +605,7 @@ class Roles extends Controller
             self::UE_MANAGE_ROLE_TOOLBAR,
         ]);
 
-        return $this->render();
+        return array_merge($this->render(), $uiFeedback);
     }
 
     /**
@@ -613,8 +633,18 @@ class Roles extends Controller
         $code = post('code');
         $description = post('description');
 
-        GroupManager::updateGroup($groupCode, $name, $description, $code);
+        $feedback = GroupManager::updateGroup($groupCode, $name, $description, $code);
 
+        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_group_save', [
+            'success' => 'Group saved successfully!',
+            'error'   => 'Group was not saved!',
+            'false'   => 'Group was not saved!'
+        ], [
+            'success' => '<span class="text-success">Group has been saved.</span>',
+            'false'   => '<span class="text-danger">That code already exists.</span>',
+            'error'   => ''
+        ]);
+        
         $this->setCurrentGroup($code);
 
         $this->queue([
@@ -622,7 +652,7 @@ class Roles extends Controller
             self::UE_MANAGE_USERS_UI,
         ]);
 
-        return $this->render();
+        return array_merge($this->render(), $uiFeedback);
     }
 
     /**
@@ -1017,6 +1047,14 @@ class Roles extends Controller
         return true;
     }
 
+    /**
+     * Forms feedback content
+     * @param $validator
+     * @param string $destinationDiv
+     * @param array $flash
+     * @param array $message
+     * @return array
+     */
     protected function feedbackGenerator($validator, $destinationDiv = '#feedback',
                                          array $flash = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''],
                                          array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''])

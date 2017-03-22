@@ -70,7 +70,7 @@ class GroupManager extends StaticFactory
         $group->description = $description;
         $group->code = $code;
         $group->save();
-        return $group;
+        return $validator;
     }
 
     /**
