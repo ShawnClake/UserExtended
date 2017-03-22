@@ -85,7 +85,7 @@ class Roles extends Controller
 
         //$this->flushSession();
 
-        if($this->getCurrentGroup() === false)
+        if($this->getCurrentGroup() === false || $this->getCurrentGroup() === null)
             $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
 
         $this->vars['selectedGroup'] = GroupManager::findGroup($this->getCurrentGroup());
@@ -106,7 +106,7 @@ class Roles extends Controller
 
         $this->vars['groupRoles'] = ['roles' => $roles];
 
-        if($this->getCurrentRole() === false && count($roles) > 0)
+        if(($this->getCurrentRole() === false || $this->getCurrentRole() === null) && count($roles) > 0)
             $this->setCurrentRole($roles->first()->code);
 
         if(count($roles) > 0)

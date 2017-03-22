@@ -45,6 +45,9 @@ class FieldManager extends StaticFactory
 		//}
 		//TODO check $validation
 
+        if(empty($name) || empty($code) || empty($description))
+            return false;
+
 		$field = new Field();
 		$field->name = $name;
 		$field->code = $code;

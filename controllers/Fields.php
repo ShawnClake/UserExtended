@@ -66,7 +66,7 @@ class Fields extends Controller
 	public function onCreateField(){
 		//TODO validate input
         $post = post();
-		var_dump($post);
+		//var_dump($post);
         $flags = FieldManager::makeFlags(
             in_array('enabled', $post['flags']),
             in_array('registerable', $post['flags']),
@@ -74,11 +74,40 @@ class Fields extends Controller
             in_array('encrypt', $post['flags'])
         );
 
+        if(empty($post['validation']))
+            $validation = [];
+        else
+            $validation = explode('|', $post['validation']);
+
+        if(!empty($post['validation_content']))
+            $validation[] = $post['validation_content'];
+
+        if(!empty($post['validation_regex']))
+            $validation[] = 'regex:' . $post['validation_regex'];
+
+        if(!empty($post['validation_min']))
+            $validation[] = 'min:' . $post['validation_min'];
+
+        if(!empty($post['validation_max']))
+            $validation[] = 'max:' . $post['validation_max'];
+
+        if(isset($post['validation_flags']))
+        {
+            foreach($post['validation_flags'] as $vFlag)
+            {
+                $validation[] = $vFlag;
+            }
+        }
+
+        $validation = implode('|', $validation);
+
+        //echo $validation;
+
         FieldManager::createField(
             $post['name'],
             $post['code'],
             $post['description'],
-            $post['validation'],
+            $validation,
             $post['type'],
             $flags,
             $post['data']

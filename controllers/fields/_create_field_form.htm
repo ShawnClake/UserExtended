@@ -4,25 +4,26 @@
     <br>
     <form class="form-elements" role="form" data-request="onCreateField">
         <div class="form-group span-left">
-            <label>Name</label>
+            <label for="name">Name</label>
             <input type="text" name="name" value="" id="name" class="form-control" />
         </div>
 		
 		<div class="form-group span-right">
-            <label>Code</label>
+            <label for="code">Code</label>
             <input type="text" name="code" value="" id="code" class="form-control" />
         </div>
 
         <div class="form-group span-left">
-			<input type="checkbox" name="flags[]" value="enabled"> Enabled<br/>
-			<input type="checkbox" name="flags[]" value="registerable" checked> Appears on registration<br/>
-			<input type="checkbox" name="flags[]" value="editable" checked> User can Edit<br/>
-			<input type="checkbox" name="flags[]" value="encrypt"> Encrypted<br/>
+			<label>Flags</label>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="enabled"> Enabled</div>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="registerable" checked> Appears on registration</div>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="editable" checked> User can Edit</div>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="encrypt"> Encrypted</div>
         </div>
 
         <div class="form-group span-right">
             <label>Type</label>
-			<select name="type">
+			<select class="form-control" name="type">
 				  <option value="UE_FORM_TEXT">Text</option>
 				  <option value="UE_FORM_CHECKBOX" disabled>CheckBox</option>
 				  <option value="UE_FORM_COLOR" disabled>Color</option>
@@ -44,12 +45,59 @@
             <label>Description</label>
             <input style="resize:none;" name="description" id="description" class="form-control"/>
         </div>
-		
+
+
+		<div class="form-group span-full" style="border-bottom-color:lightgrey;border-bottom-style: solid; border-bottom-width:1px;height:35px;margin-bottom: 25px;">
+			<h4>Validation</h4>
+		</div>
+
+		<div class="form-group span-left">
+			<label>Content</label> <br>
+			<select class="form-control" name="validation_content">
+				<option value="" selected="selected">-- Any --</option>
+				<option value="alpha">Alpha (a-z)</option>
+				<option value="alpha_dash">Alpha Dash (a-z|-|_)</option>
+				<option value="alpha_num">Alpha Numeric (a-z|0-9)</option>
+				<option value="numeric">Numeric (0-9)</option>
+				<option value="integer">Integer (0-9)</option>
+				<option value="email">Email (xxx@xxx.xx)</option>
+				<option value="active_url">Active Url (xxx.xx)</option>
+				<option value="url">Any Url (xxx.xx)</option>
+				<option value="date">Date (xx/xx/xx)</option>
+			</select>
+		</div>
+
+		<div class="form-group span-right">
+			<label>Validation Flags</label> <br>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted"> Accepted (Evaluates to true|yes|on)</div>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" checked> Required </div>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean"> Boolean (Evaluates to true|false|1|0)</div>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed"> Confirmed (Useful for Passwords)</div>
+		</div>
+
 		<div class="form-group span-full">
-            <label>Validation</label>
-            <input style="resize:none;" name="validation" id="validation" class="form-control"/>
-        </div>
-		
+			<label>Regex</label>
+			<input style="resize:none;" name="validation_regex" id="validation_regex" value="" class="form-control"/>
+		</div>
+
+		<div class="form-group span-left">
+			<label>Min Length</label>
+			<input style="resize:none;" name="validation_min" id="validation_min" value="" class="form-control"/>
+		</div>
+
+		<div class="form-group span-right">
+			<label>Max Length</label>
+			<input style="resize:none;" name="validation_max" id="validation_max" value="" class="form-control"/>
+		</div>
+
+		<div class="form-group span-full">
+            <label>Additional Validation</label>
+            <input style="resize:none;" name="validation" id="validation" value="" class="form-control"/>
+			<p class="help-block"><a target="_blank" href="http://octobercms.com/docs/services/validation#available-validation-rules">Additional Validation Documentation</a></p>
+
+		</div>
+
+
 		<input style="resize:none; display: none;" name="data" id="data" class="form-control"/>
 		
 		<div class="form-group span-full">
