@@ -201,6 +201,8 @@ $(window).load(function() {
         makeDropzone('#list_unassigned_roles_container', '.drag-role', 'onUnassignRole');
         makeDropzone('#list_users_container', '.drag-unassigned-user', 'onAssignUser');
         makeDropzone('#list_unassigned_users_container', '.drag-user', 'onUnassignUser');
+
+
     });
 
 });

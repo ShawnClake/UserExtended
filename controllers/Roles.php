@@ -234,7 +234,17 @@ class Roles extends Controller
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
 
-        if($feedback === false || $feedback->fails())
+        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_role_save', [
+            'success' => 'Role saved successfully!',
+            'error'   => 'Role was not saved!',
+            'false'   => 'Role was not saved!'
+        ], [
+            'success' => '<span class="text-success">Role has been saved.</span>',
+            'false'   => '<span class="text-danger">That code already exists.</span>',
+            'error'   => ''
+        ]);
+
+        /*if($feedback === false || $feedback->fails())
         {
             Flash::error('Role was not saved!');
 
@@ -253,9 +263,10 @@ class Roles extends Controller
 
                 $uiFeedback = ['#feedback_role_save' => $errorString];
             }
-        } else {
-            Flash::success('Role successfully saved!');
-            $uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
+        } else */
+        if(!($feedback === false || $feedback->fails())) {
+            //Flash::success('Role successfully saved!');
+            //$uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
             $this->setCurrentRole($code);
 
             if($roles->count() > 0){
@@ -1004,6 +1015,33 @@ class Roles extends Controller
 
         self::$queue[] = [self::UE_MANAGE_USERS_UI, ['role' => $role, 'group' => $group, 'users' => $unassignedUsers]];
         return true;
+    }
+
+    protected function feedbackGenerator($validator, $destinationDiv = '#feedback',
+                                         array $flash = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''],
+                                         array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''])
+    {
+        if($validator === false)
+        {
+            Flash::error($flash['false']);
+            return [$destinationDiv => $message['false']];
+        }
+
+        if($validator->fails())
+        {
+            Flash::error($flash['error']);
+            $errorString = $message['error'] . '<span class="text-danger">';
+            $errors = json_decode($validator->messages());
+            foreach($errors as $error)
+            {
+                $errorString .= implode(' ', $error) . ' ';
+            }
+            $errorString .= '</span>';
+            return [$destinationDiv => $errorString];
+        }
+
+        Flash::success($flash['success']);
+        return [$destinationDiv => $message['success']];
     }
 
 }
