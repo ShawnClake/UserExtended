@@ -17,6 +17,8 @@ Block::put('body')
 	
 	<table class="table table-striped" style="width: 90%; margin-left: 5%;">
 	<tr>
+		<td></td>
+		<td></td>
 		<td class="text-left">Name</td>
 		<td class="text-left">Type</td>
 		<td class="text-left">Validation</td>
@@ -24,11 +26,30 @@ Block::put('body')
 		<td class="text-center">Registerable</td>
 		<td class="text-center">Editable</td>
 		<td class="text-center">Encryptable</td>
-		<td></td>
-		<td></td>
 	</tr>
 	<?php foreach ($fields as $field): ?>
 	<tr>
+		<td><div class="text-center">
+			<button
+					href="javascript:;"
+					class="btn-icon oc-icon-trash-o danger"
+					data-request="onDeleteField"
+					data-request-confirm="Are you sure you want to delete the field '<?=$field['label'] ?>'?"
+					data-request-data="code: '<?=$field['code'] ?>'"
+			>
+
+			</button></div>
+		</td>
+		<td><div class="text-center">	<button
+				href="javascript:;"
+				class="btn-icon oc-icon-pencil"
+				data-control="popup"
+				data-handler="onEditField"
+				data-size="huge"
+				data-extra-data="code: '<?=$field['code'] ?>'"
+		>
+
+		</button></div></td>
 		<td><div style="padding-left:5px;"><?= $field['label'] ?></div></td>
 		<td><div style="padding-left:5px;text-transform:capitalize;"><?= $field['type'] ?></div></td>
 		<td><div style="padding-left:5px;text-transform:capitalize;"><?php echo str_replace('|', '  ', $field['validation']) ?></div></td>
@@ -36,27 +57,6 @@ Block::put('body')
 		<td><?php if(($field['registerable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
 		<td><?php if(($field['editable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
 		<td><?php if(($field['encrypt'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
-		<td><div class="text-center">	<a
-                    href="javascript:;"
-                    class="btn btn-default oc-icon-pencil"
-                    data-control="popup"
-                    data-handler="onEditField"
-                    data-size="huge"
-					data-extra-data="code: '<?=$field['code'] ?>'"
-            >
-                Edit
-		</a></div></td>
-		<td><div class="text-center">
-			<a
-                    href="javascript:;"
-                    class="btn btn-danger oc-icon-times"
-                    data-request="onDeleteField"
-					data-request-confirm="Are you sure you want to delete the field '<?=$field['label'] ?>'?"
-					data-request-data="code: '<?=$field['code'] ?>'"
-            >
-                Delete
-			</a></div>
-		</td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
