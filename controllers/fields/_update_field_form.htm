@@ -72,7 +72,7 @@
 
 					<div class="form-group span-left">
 						<label>Content</label> <br>
-						<select class="form-control" name="validation_content" value="<?=$selection['validation']['validation_content']?>">
+						<select class="form-control" name="validation_content">
 							<option value="" <?php if($selection['validation']['content'] == ''):?>selected="selected"<?php endif; ?> >-- Any --</option>
 							<option value="alpha" <?php if($selection['validation']['content'] == 'alpha'):?>selected="selected"<?php endif; ?> >Alpha (a-z)</option>
 							<option value="alpha_dash" <?php if($selection['validation']['content'] == 'alpha_dash'):?>selected="selected"<?php endif; ?> >Alpha Dash (a-z|-|_)</option>
