@@ -321,7 +321,7 @@ class Roles extends Controller
 
             $role->delete();
 
-            if($roleCode == $this->getCurrentRole())
+            if(RoleManager::with($groupCode)->sort()->getRoles()->count() > 0 && $roleCode == $this->getCurrentRole())
                 $this->setCurrentRole(RoleManager::with($groupCode)->getRoles()->first()->code);
 
             $roles = RoleManager::with($groupCode)->sort()->getRoles();
