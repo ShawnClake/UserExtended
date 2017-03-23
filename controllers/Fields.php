@@ -170,34 +170,5 @@ class Fields extends Controller
 
         return $validation;
     }
-
-	protected function makeValidationString($post)
-    {
-        if(empty($post['validation']))
-            $validation = [];
-        else
-            $validation = explode('|', $post['validation']);
-
-        if(!empty($post['validation_content']))
-            $validation[] = $post['validation_content'];
-
-        if(!empty($post['validation_regex']))
-            $validation[] = 'regex:' . $post['validation_regex'];
-
-        if(!empty($post['validation_min']))
-            $validation[] = 'min:' . $post['validation_min'];
-
-        if(!empty($post['validation_max']))
-            $validation[] = 'max:' . $post['validation_max'];
-
-        if(isset($post['validation_flags']))
-        {
-            foreach($post['validation_flags'] as $vFlag)
-            {
-                $validation[] = $vFlag;
-            }
-        }
-
-        return $validation;
-    }
+    
 }
