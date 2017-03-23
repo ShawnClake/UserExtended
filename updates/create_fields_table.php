@@ -30,7 +30,7 @@ class CreateFieldsTable extends Migration
                 'UE_FORM_URL',
                 'UE_FORM_SWITCH'
             ])->default('UE_FORM_TEXT');
-            $table->text('validation')->default('');
+            $table->json('validation');
             $table->json('data');/*->default(json_encode([]));*/
             $table->json('flags');/*->default(json_encode([
                 'enabled' => false,

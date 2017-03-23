@@ -311,7 +311,6 @@ class Roles extends Controller
             ]);
 
             return $this->render();
-
         }  else {
 
             $role = RoleManager::with($groupCode)->getRole($roleCode);

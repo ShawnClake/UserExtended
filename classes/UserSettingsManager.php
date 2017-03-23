@@ -141,6 +141,7 @@ class UserSettingsManager extends StaticFactory
         $fields = Field::all();
         $settings = [];
 
+        /** @var Field $field */
         foreach($fields as $field)
         {
             $type = 'self::' . $field->type;
@@ -150,7 +151,7 @@ class UserSettingsManager extends StaticFactory
                 'description'  => $field->description,
                 'code'         => $field->code,
                 'type'         => constant($type),
-                'validation'   => $field->validation,
+                'validation'   => $field->validationToString(),
                 'data'         => $field->data,
                 'editable'     => $field->flags['editable'],
                 'registerable' => $field->flags['registerable'],

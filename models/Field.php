@@ -56,7 +56,8 @@ class Field extends Model
 
     protected $jsonable = [
         'data',
-        'flags'
+        'flags',
+        'validation'
     ];
 
     /**
@@ -185,6 +186,36 @@ class Field extends Model
         $flags['encrypt'] = isset($this->flags['encrypt']) ? $this->flags['encrypt'] : false;
 
         $this->flags = $flags;
+    }
+
+    public function validationToString($english = false)
+    {
+        if(empty($this->validation['validation_additional']))
+            $validation = [];
+        else
+            $validation = explode('|', $this->validation['validation']);
+
+        if(!empty($this->validation['validation_content']))
+            $validation[] = $this->validation['validation_content'];
+
+        if(!empty($this->validation['validation_regex']))
+            $validation[] = 'regex:' . $this->validation['validation_regex'];
+
+        if(!empty($this->validation['validation_min']))
+            $validation[] = 'min:' . $this->validation['validation_min'];
+
+        if(!empty($this->validation['validation_max']))
+            $validation[] = 'max:' . $this->validation['validation_max'];
+
+        if(isset($this->validation['validation_flags']))
+        {
+            foreach($this->validation['validation_flags'] as $vFlag)
+            {
+                $validation[] = $vFlag;
+            }
+        }
+
+        return implode('|', $validation);
     }
 
 }

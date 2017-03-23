@@ -1,6 +1,6 @@
 <div style="padding:33px;padding-top:23px;">
 
-<?php if($selection):?>
+<?php if($selection): ?>
 
     <h4>Edit Field</h4>
     <br>
@@ -16,28 +16,29 @@
         </div>
 
         <div class="form-group span-left">
-			<input type="checkbox" name="flags[]" value="enabled" <?php if($selection['flags']['enabled']):?>checked<?php endif;?>> Enabled?<br/>
-			<input type="checkbox" name="flags[]" value="registerable" <?php if($selection['flags']['registerable']):?> checked<?php endif;?>> Appears on registration<br/>
-			<input type="checkbox" name="flags[]" value="editable" <?php if($selection['flags']['editable']):?>checked<?php endif;?>> Editable?<br/>
-			<input type="checkbox" name="flags[]" value="encrypt" <?php if($selection['flags']['encrypt']):?>checked<?php endif;?>> Encrypted?<br/>
+			<label>Flags</label>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="enabled" <?php if($selection['flags']['enabled']):?>checked<?php endif;?>> Enabled </div>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="registerable" <?php if($selection['flags']['registerable']):?> checked<?php endif;?>> Shown on registration </div>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="editable" <?php if($selection['flags']['editable']):?>checked<?php endif;?>> User can Edit </div>
+			<div class="checkbox"><input type="checkbox" name="flags[]" value="encrypt" <?php if($selection['flags']['encrypt']):?>checked<?php endif;?>> Encrypted </div>
         </div>
 
         <div class="form-group span-right">
             <label>Type</label>
-			<select name="type" value="<?=$selection['type']?>">
-				  <option value="UE_FORM_TEXT">Text</option>
-				  <option value="UE_FORM_CHECKBOX" disabled>CheckBox</option>
-				  <option value="UE_FORM_COLOR" disabled>Color</option>
-				  <option value="UE_FORM_DATE" disabled>Date</option>
-				  <option value="UE_FORM_FILE" disabled>File</option>
-				  <option value="UE_FORM_NUMBER" disabled>Number</option>
-				  <option value="UE_FORM_PASSWORD" disabled>Password</option>
-				  <option value="UE_FORM_RADIO" disabled>Radio</option>
-				  <option value="UE_FORM_RANGE" disabled>Range</option>
-				  <option value="UE_FORM_TEL" disabled>Telephone</option>
-				  <option value="UE_FORM_TIME" disabled>Time</option>
-				  <option value="UE_FORM_URL" disabled>URL</option>
-				  <option value="UE_FORM_SWITCH" disabled>Switch</option>
+			<select name="type" class="form-control">
+				  <option value="UE_FORM_TEXT" <?php if($selection['type'] == 'UE_FORM_TEXT'):?>selected="selected"<?php endif; ?> >Text</option>
+				  <option value="UE_FORM_CHECKBOX" <?php if($selection['type'] == 'UE_FORM_CHECKBOX'):?>selected="selected"<?php endif; ?> disabled>CheckBox</option>
+				  <option value="UE_FORM_COLOR" <?php if($selection['type'] == 'UE_FORM_COLOR'):?>selected="selected"<?php endif; ?> disabled>Color</option>
+				  <option value="UE_FORM_DATE" <?php if($selection['type'] == 'UE_FORM_DATE'):?>selected="selected"<?php endif; ?> disabled>Date</option>
+				  <option value="UE_FORM_FILE" <?php if($selection['type'] == 'UE_FORM_FILE'):?>selected="selected"<?php endif; ?> disabled>File</option>
+				  <option value="UE_FORM_NUMBER" <?php if($selection['type'] == 'UE_FORM_NUMBER'):?>selected="selected"<?php endif; ?> disabled>Number</option>
+				  <option value="UE_FORM_PASSWORD" <?php if($selection['type'] == 'UE_FORM_PASSWORD'):?>selected="selected"<?php endif; ?> disabled>Password</option>
+				  <option value="UE_FORM_RADIO" <?php if($selection['type'] == 'UE_FORM_RADIO'):?>selected="selected"<?php endif; ?> disabled>Radio</option>
+				  <option value="UE_FORM_RANGE" <?php if($selection['type'] == 'UE_FORM_RANGE'):?>selected="selected"<?php endif; ?> disabled>Range</option>
+				  <option value="UE_FORM_TEL" <?php if($selection['type'] == 'UE_FORM_TEL'):?>selected="selected"<?php endif; ?> disabled>Telephone</option>
+				  <option value="UE_FORM_TIME" <?php if($selection['type'] == 'UE_FORM_TIME'):?>selected="selected"<?php endif; ?> disabled>Time</option>
+				  <option value="UE_FORM_URL" <?php if($selection['type'] == 'UE_FORM_URL'):?>selected="selected"<?php endif; ?> disabled>URL</option>
+				  <option value="UE_FORM_SWITCH" <?php if($selection['type'] == 'UE_FORM_SWITCH'):?>selected="selected"<?php endif; ?> disabled>Switch</option>
 			</select>			
         </div>
 		
@@ -46,11 +47,55 @@
             <label>Description</label>
             <input style="resize:none;" name="description" id="description" class="form-control" value="<?=$selection['description']?>"/>
         </div>
-		
+
+		<div class="form-group span-full" style="border-bottom-color:lightgrey;border-bottom-style: solid; border-bottom-width:1px;height:35px;margin-bottom: 25px;">
+			<h4>Validation</h4>
+		</div>
+
+		<div class="form-group span-left">
+			<label>Content</label> <br>
+			<select class="form-control" name="validation_content" value="<?=$selection['validation']['validation_content']?>">
+				<option value="" <?php if($selection['validation']['validation_content'] == ''):?>selected="selected"<?php endif; ?> >-- Any --</option>
+				<option value="alpha" <?php if($selection['validation']['validation_content'] == 'alpha'):?>selected="selected"<?php endif; ?> >Alpha (a-z)</option>
+				<option value="alpha_dash" <?php if($selection['validation']['validation_content'] == 'alpha_dash'):?>selected="selected"<?php endif; ?> >Alpha Dash (a-z|-|_)</option>
+				<option value="alpha_num" <?php if($selection['validation']['validation_content'] == 'alpha_num'):?>selected="selected"<?php endif; ?> >Alpha Numeric (a-z|0-9)</option>
+				<option value="numeric" <?php if($selection['validation']['validation_content'] == 'numeric'):?>selected="selected"<?php endif; ?> >Numeric (0-9)</option>
+				<option value="integer" <?php if($selection['validation']['validation_content'] == 'integer'):?>selected="selected"<?php endif; ?> >Integer (0-9)</option>
+				<option value="email" <?php if($selection['validation']['validation_content'] == 'email'):?>selected="selected"<?php endif; ?> >Email (xxx@xxx.xx)</option>
+				<option value="active_url" <?php if($selection['validation']['validation_content'] == 'active_url'):?>selected="selected"<?php endif; ?> >Active Url (xxx.xx)</option>
+				<option value="url" <?php if($selection['validation']['validation_content'] == 'url'):?>selected="selected"<?php endif; ?> >Any Url (xxx.xx)</option>
+				<option value="date" <?php if($selection['validation']['validation_content'] == 'date'):?>selected="selected"<?php endif; ?> >Date (xx/xx/xx)</option>
+			</select>
+		</div>
+
+		<div class="form-group span-right">
+			<label>Validation Flags</label> <br>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted" <?php if(in_array('accepted', $selection['validation']['validation_flags'])):?>checked<?php endif;?>> Accepted (Evaluates to true|yes|on)</div>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" <?php if(in_array('required', $selection['validation']['validation_flags'])):?>checked<?php endif;?>> Required </div>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean" <?php if(in_array('boolean', $selection['validation']['validation_flags'])):?>checked<?php endif;?>> Boolean (Evaluates to true|false|1|0)</div>
+			<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed" <?php if(in_array('confirmed', $selection['validation']['validation_flags'])):?>checked<?php endif;?>> Confirmed (Useful for Passwords)</div>
+		</div>
+
 		<div class="form-group span-full">
-            <label>Validation</label>
-            <input style="resize:none;" name="validation" id="validation" class="form-control" value="<?=$selection['validation']?>"/>
-        </div>
+			<label>Regex</label>
+			<input style="resize:none;" name="validation_regex" id="validation_regex" class="form-control" value="<?=$selection['validation']['validation_regex']?>"/>
+		</div>
+
+		<div class="form-group span-left">
+			<label>Min Length</label>
+			<input style="resize:none;" name="validation_min" id="validation_min" class="form-control" value="<?=$selection['validation']['validation_min']?>"/>
+		</div>
+
+		<div class="form-group span-right">
+			<label>Max Length</label>
+			<input style="resize:none;" name="validation_max" id="validation_max" class="form-control" value="<?=$selection['validation']['validation_max']?>"/>
+		</div>
+
+		<div class="form-group span-full">
+            <label>Additional Validation</label>
+            <input style="resize:none;" name="validation" id="validation" class="form-control" value="<?=$selection['validation']['validation_additional']?>"/>
+			<p class="help-block"><a target="_blank" href="http://octobercms.com/docs/services/validation#available-validation-rules">Additional Validation Documentation</a></p>
+		</div>
 		
 		<input style="resize:none; display: none;" name="data" id="data" class="form-control"/>
 		

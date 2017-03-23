@@ -74,34 +74,7 @@ class Fields extends Controller
             in_array('encrypt', $post['flags'])
         );
 
-        if(empty($post['validation']))
-            $validation = [];
-        else
-            $validation = explode('|', $post['validation']);
-
-        if(!empty($post['validation_content']))
-            $validation[] = $post['validation_content'];
-
-        if(!empty($post['validation_regex']))
-            $validation[] = 'regex:' . $post['validation_regex'];
-
-        if(!empty($post['validation_min']))
-            $validation[] = 'min:' . $post['validation_min'];
-
-        if(!empty($post['validation_max']))
-            $validation[] = 'max:' . $post['validation_max'];
-
-        if(isset($post['validation_flags']))
-        {
-            foreach($post['validation_flags'] as $vFlag)
-            {
-                $validation[] = $vFlag;
-            }
-        }
-
-        $validation = implode('|', $validation);
-
-        //echo $validation;
+        $validation = $this->makeValidationArray($post);
 
         FieldManager::createField(
             $post['name'],
@@ -137,13 +110,15 @@ class Fields extends Controller
             in_array('editable', $post['flags']),
             in_array('encrypt', $post['flags'])
         );
-		
+
+        $validation = $this->makeValidationArray($post);
+
 		FieldManager::updateField(
 		    $post['name'],
             $post['code'],
             $post['description'],
             $post['type'],
-            $post['validation'],
+            $validation,
             $flags,
             $post['data']
         );
@@ -157,4 +132,72 @@ class Fields extends Controller
 		FieldManager::deleteField($code);
 		return Redirect::to(Backend::url('clake/userextended/fields/manage'));
 	}
+
+	protected function makeValidationArray($post)
+    {
+        if(empty($post['validation']))
+            $validation['validation_additional'] = '';
+        else
+            $validation['validation_additional'] = $post['validation'];
+
+        if(!empty($post['validation_content']))
+            $validation['validation_content'] = $post['validation_content'];
+        else
+            $validation['validation_content'] = '';
+
+        if(!empty($post['validation_regex']))
+            $validation['validation_regex'] = $post['validation_regex'];
+        else
+            $validation['validation_regex'] = '';
+
+        if(!empty($post['validation_min']))
+            $validation['validation_min'] = $post['validation_min'];
+        else
+            $validation['validation_min'] = '';
+
+        if(!empty($post['validation_max']))
+            $validation['validation_max'] = $post['validation_max'];
+        else
+            $validation['validation_max'] = '';
+
+        if(isset($post['validation_flags']))
+        {
+            foreach($post['validation_flags'] as $vFlag)
+            {
+                $validation['validation_flags'][] = $vFlag;
+            }
+        }
+
+        return $validation;
+    }
+
+	protected function makeValidationString($post)
+    {
+        if(empty($post['validation']))
+            $validation = [];
+        else
+            $validation = explode('|', $post['validation']);
+
+        if(!empty($post['validation_content']))
+            $validation[] = $post['validation_content'];
+
+        if(!empty($post['validation_regex']))
+            $validation[] = 'regex:' . $post['validation_regex'];
+
+        if(!empty($post['validation_min']))
+            $validation[] = 'min:' . $post['validation_min'];
+
+        if(!empty($post['validation_max']))
+            $validation[] = 'max:' . $post['validation_max'];
+
+        if(isset($post['validation_flags']))
+        {
+            foreach($post['validation_flags'] as $vFlag)
+            {
+                $validation[] = $vFlag;
+            }
+        }
+
+        return $validation;
+    }
 }
