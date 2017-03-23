@@ -375,8 +375,8 @@ class UserSettingsManager extends StaticFactory
         if($this->isValidated($setting))
         {
             $validator = Validator::make(
-                ['setting' => $value],
-                ['setting' => $options['validation']]
+                [$options['label'] => $value],
+                [$options['label'] => $options['validation']]
             );
 
             if($validator->fails())

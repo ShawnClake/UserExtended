@@ -50,11 +50,9 @@ Block::put('body')
 			<a
                     href="javascript:;"
                     class="btn btn-danger oc-icon-times"
-                    data-control="popup"
-                    data-handler="onDeleteField"
-                    data-size="huge"
+                    data-request="onDeleteField"
 					data-request-confirm="Are you sure you want to delete the field '<?=$field['label'] ?>'?"
-					data-extra-data="code: '<?=$field['code'] ?>'"
+					data-request-data="code: '<?=$field['code'] ?>'"
             >
                 Delete
 			</a></div>
