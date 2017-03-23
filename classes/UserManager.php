@@ -164,6 +164,49 @@ class UserManager extends StaticFactory
             }
         }
 
+        /*
+         * Validate input
+         */
+        $rules = [
+            'email'    => 'required|email|between:6,255',
+            'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
+        ];
+
+        /*
+         * Better utilization of email vs username
+         */
+        if (Settings::get('login_attribute') == "username") {
+            $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
+        }
+
+        $validation = Validator::make($data, $rules);
+        if ($validation->fails()) {
+            //throw new ValidationException($validation);
+            return $validation;
+        }
+
+        $settingsValidator = UserSettingsManager::validation();
+
+        foreach($data as $key=>$value)
+        {
+            if ($key == "_session_key" || $key == "_token" || $key == "name" || $key == "email" || $key == "username" || $key == "password" || $key == "password_confirmation")
+                continue;
+
+            $result = $settingsValidator->checkValidation($key, $value);
+
+            /* Valid setting & Validates */
+            if($result === true)
+                continue;
+
+            /* Not a valid setting */
+            if($result === false)
+                continue;
+
+            /* Validation Failed */
+            if($result->fails())
+                return $result;
+        }
+
         $user->name = $data['name'];
         $user->email = $data['email'];
 
@@ -255,6 +298,28 @@ class UserManager extends StaticFactory
                 return $validation;
             }
 
+            $settingsValidator = UserSettingsManager::validation();
+
+            foreach($data as $key=>$value)
+            {
+                if ($key == "_session_key" || $key == "_token" || $key == "name" || $key == "email" || $key == "username" || $key == "password" || $key == "password_confirmation")
+                    continue;
+
+                $result = $settingsValidator->checkValidation($key, $value);
+
+                /* Valid setting & Validates */
+                if($result === true)
+                    continue;
+
+                /* Not a valid setting */
+                if($result === false)
+                    continue;
+
+                /* Validation Failed */
+                if($result->fails())
+                    return $result;
+            }
+
             /*
              * Register user
              */
@@ -286,7 +351,7 @@ class UserManager extends StaticFactory
                 $user->save();
             }
 
-            $settingsManager = UserSettingsManager::init();
+            $settingsManager = UserSettingsManager::currentUser();
 
             Event::fire('clake.ue.settings.create', [&$settingsManager]);
 

@@ -18,6 +18,7 @@ use \October\Rain\Support\Facades\Yaml;
  *
  * @method static UserSettingsManager currentUser() UserSettingsManager
  * @method static UserSettingsManager with($user) UserSettingsManager
+ * @method static UserSettingsManager validation() UserSettingsManager
  *
  * Terminology and flow:
  *   A user has many settings.
@@ -134,6 +135,12 @@ class UserSettingsManager extends StaticFactory
     public function currentUserFactory()
     {
         $this->user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
+        $this->load();
+        return $this;
+    }
+
+    public function validationFactory()
+    {
         $this->load();
         return $this;
     }
@@ -531,4 +538,16 @@ class UserSettingsManager extends StaticFactory
         return $this->settingsTemplate;
     }
 
+    public function checkValidation($setting, $value)
+    {
+        if(!$this->isSetting($setting))
+            return false;
+
+        $validator = $this->validate($setting, $value);
+
+        if($validator !== true)
+            return $validator;
+
+        return true;
+    }
 }
