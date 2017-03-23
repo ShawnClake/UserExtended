@@ -24,4 +24,18 @@ class Helpers
             return 18446744073709551610;
         return $limit;
     }
+
+    /**
+     * Returns the value at a key in an array or a default value if that key is empty or doesn't exist
+     * @param array $array
+     * @param $key
+     * @param string $default
+     * @return mixed|string
+     */
+    public static function arrayKeyToVal(array $array, $key, $default = '')
+    {
+        if(key_exists($key, $array) && isset($array[$key]) && !empty($array[$key]))
+            return $array[$key];
+        return $default;
+    }
 }

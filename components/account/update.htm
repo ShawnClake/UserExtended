@@ -63,16 +63,7 @@
 
 	{% for setting,attributes in account.updateSettings %}
 
-	<div class="form-group">
-		<label for="accountSettings{{setting}}">{{attributes.options.label}}</label>
-		<input 
-			name="{{setting}}" 
-			type="{{ attributes.options.type }}" 
-			class="form-control" 
-			id="accountSettings{{setting}}"
-			value="{{ attributes.0 }}"/>
-	</div>
-	<span data-validate-for="{{setting}}"></span>
+	{{attributes.html|raw}} <br>
 
 	{% endfor %}
 

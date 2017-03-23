@@ -76,6 +76,12 @@ class UserSettingsManager extends StaticFactory
     ];
 
     /**
+     * Stores the twig environment
+     * @var \Twig_Environment
+     */
+    protected $twig;
+
+    /**
      * Creates an instance of the UserSettingsManager
      * @param \Clake\Userextended\Models\UserExtended|null $user
      * @deprecated
@@ -138,6 +144,9 @@ class UserSettingsManager extends StaticFactory
      */
     protected function load()
     {
+        $loader = new \Twig_Loader_Filesystem(plugins_path('clake/userextended/partials/form'));
+        $this->twig = new \Twig_Environment($loader, ['auto_reload' => true]);
+
         $fields = Field::all();
         $settings = [];
 
@@ -464,7 +473,7 @@ class UserSettingsManager extends StaticFactory
                     $value = $this->decrypt($key, $value);
             }
 
-            $settings[$key] = [$value, 'options' => $options];
+            $settings[$key] = [$value, 'options' => $options, 'html' => $this->render($key, $options)];
         }
 
         return $settings;
@@ -488,10 +497,29 @@ class UserSettingsManager extends StaticFactory
 
             $options = $this->getSettingOptions($key);
 
-            $settings[$key] = ['options' => $options];
+            $settings[$key] = ['options' => $options, 'html' => $this->render($key, $options)];
         }
 
         return $settings;
+    }
+
+    public function render($settingName, $options)
+    {
+        $class = '';
+        if(isset($options['data']['class']))
+        {
+            $class = $options['data']['class'];
+            unset($options['data']['class']);
+        }
+
+        return $this->twig->render('input_' . $options['type'] . '.htm', [
+            'type'  => $options['type'],
+            'label' => $options['label'],
+            'id'    => 'accountSettings' . $settingName,
+            'name'  => $settingName,
+            'data'  => $options['data'],
+            'class' => $class,
+        ]);
     }
 
     /**

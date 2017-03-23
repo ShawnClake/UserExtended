@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\Helpers;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\FieldManager;
 use System\Classes\SettingsManager;
@@ -144,34 +145,15 @@ class Fields extends Controller
 
     protected function makeValidationArray($post)
     {
-        if (empty($post['validation']))
-            $validation['validation_additional'] = '';
-        else
-            $validation['validation_additional'] = $post['validation'];
-
-        if (!empty($post['validation_content']))
-            $validation['validation_content'] = $post['validation_content'];
-        else
-            $validation['validation_content'] = '';
-
-        if (!empty($post['validation_regex']))
-            $validation['validation_regex'] = $post['validation_regex'];
-        else
-            $validation['validation_regex'] = '';
-
-        if (!empty($post['validation_min']))
-            $validation['validation_min'] = $post['validation_min'];
-        else
-            $validation['validation_min'] = '';
-
-        if (!empty($post['validation_max']))
-            $validation['validation_max'] = $post['validation_max'];
-        else
-            $validation['validation_max'] = '';
+        $validation['additional'] = Helpers::arrayKeyToVal($post, 'validation');
+        $validation['content']    = Helpers::arrayKeyToVal($post, 'validation_content');
+        $validation['regex']      = Helpers::arrayKeyToVal($post, 'validation_regex');
+        $validation['min']        = Helpers::arrayKeyToVal($post, 'validation_min');
+        $validation['max']        = Helpers::arrayKeyToVal($post, 'validation_max');
 
         if (isset($post['validation_flags'])) {
             foreach ($post['validation_flags'] as $vFlag) {
-                $validation['validation_flags'][] = $vFlag;
+                $validation['flags'][] = $vFlag;
             }
         }
 
@@ -180,15 +162,8 @@ class Fields extends Controller
 
     protected function makeDataArray($post)
     {
-        if (!empty($post['data_placeholder']))
-            $data['data_placeholder'] = $post['data_placeholder'];
-        else
-            $data['data_placeholder'] = '';
-
-        if (!empty($post['data_classes']))
-            $data['data_classes'] = $post['data_classes'];
-        else
-            $data['data_classes'] = '';
+        $data['placeholder'] = Helpers::arrayKeyToVal($post, 'data_placeholder');
+        $data['class']       = Helpers::arrayKeyToVal($post, 'data_classes');
 
         return $data;
     }

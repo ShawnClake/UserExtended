@@ -87,16 +87,7 @@
 
     {% for setting,attributes in account.createSettings %}
 
-    <div class="form-group">
-        <label for="accountSettings{{setting}}">{{attributes.options.label}}</label>
-        <input 
-			name="{{setting}}" 
-			type="{{ attributes.options.type }}" 
-			class="form-control" 
-			id="accountSettings{{setting}}"
-			required="{{attributes.options.validation}}">
-    </div>
-    <span data-validate-for="{{setting}}"></span><br>
+    {{attributes.html|raw}} <br>
 
     {% endfor %}
 

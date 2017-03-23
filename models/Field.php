@@ -178,11 +178,8 @@ class Field extends Model
         $flags = [];
 
         $flags['enabled'] = isset($this->flags['enabled']) ? $this->flags['enabled'] : false;
-        
         $flags['registerable'] = isset($this->flags['registerable']) ? $this->flags['registerable'] : true;
-        
         $flags['editable'] = isset($this->flags['editable']) ? $this->flags['editable'] : true;
-        
         $flags['encrypt'] = isset($this->flags['encrypt']) ? $this->flags['encrypt'] : false;
 
         $this->flags = $flags;
@@ -190,26 +187,26 @@ class Field extends Model
 
     public function validationToString($english = false)
     {
-        if(empty($this->validation['validation_additional']))
+        if(empty($this->validation['additional']))
             $validation = [];
         else
             $validation = explode('|', $this->validation['validation']);
 
-        if(!empty($this->validation['validation_content']))
-            $validation[] = $this->validation['validation_content'];
+        if(!empty($this->validation['content']))
+            $validation[] = $this->validation['content'];
 
-        if(!empty($this->validation['validation_regex']))
-            $validation[] = 'regex:' . $this->validation['validation_regex'];
+        if(!empty($this->validation['regex']))
+            $validation[] = 'regex:' . $this->validation['regex'];
 
-        if(!empty($this->validation['validation_min']))
-            $validation[] = 'min:' . $this->validation['validation_min'];
+        if(!empty($this->validation['min']))
+            $validation[] = 'min:' . $this->validation['min'];
 
-        if(!empty($this->validation['validation_max']))
-            $validation[] = 'max:' . $this->validation['validation_max'];
+        if(!empty($this->validation['max']))
+            $validation[] = 'max:' . $this->validation['max'];
 
-        if(isset($this->validation['validation_flags']))
+        if(isset($this->validation['flags']))
         {
-            foreach($this->validation['validation_flags'] as $vFlag)
+            foreach($this->validation['flags'] as $vFlag)
             {
                 $validation[] = $vFlag;
             }

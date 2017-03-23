@@ -1,0 +1,14 @@
+<div class="form-group">
+    <label for="{{id}}">{{label}}</label>
+    <input
+            name="{{name}}"
+            type="{{type}}"
+            class="form-control {{class}}"
+            id="{{id}}"
+            value="{{value}}"
+            {% for key,val in data %}
+                {{key}}="{{val}}"
+            {% endfor %}
+    />
+</div>
+<span data-validate-for="{{id}}"></span>
