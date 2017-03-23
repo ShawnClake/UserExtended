@@ -163,7 +163,7 @@ class Fields extends Controller
     protected function makeDataArray($post)
     {
         $data['placeholder'] = Helpers::arrayKeyToVal($post, 'data_placeholder');
-        $data['class']       = Helpers::arrayKeyToVal($post, 'data_classes');
+        $data['class']       = Helpers::arrayKeyToVal($post, 'data_class');
 
         return $data;
     }
