@@ -83,40 +83,6 @@ class UserSettingsManager extends StaticFactory
     protected $twig;
 
     /**
-     * Creates an instance of the UserSettingsManager
-     * @param \Clake\Userextended\Models\UserExtended|null $user
-     * @deprecated
-     * @return null|static
-     */
-    /*public static function init(\Clake\Userextended\Models\UserExtended $user = null)
-    {
-        $instance = new static;
-        $path = plugins_path('clake/userextended/config/user_settings.yaml');
-        $settingsTemplate = Yaml::parseFile($path);
-
-        if(isset($settingsTemplate['settings']))
-            $instance->settingsTemplate = $settingsTemplate['settings'];
-        else
-            return null;
-
-        if($user == null)
-        {
-            $user = UserUtil::getLoggedInUser();
-
-            if(!$user == null)
-                $user = UserUtil::convertToUserExtendedUser($user);
-            else
-                return $instance;
-        }
-
-        $instance->user = $user;
-
-        $instance->settings = $instance->user->settings;
-
-        return $instance;
-    }*/
-
-    /**
      * Factory function for passing in a custom user
      * @param \Clake\Userextended\Models\UserExtended $user
      * @return $this
@@ -510,6 +476,11 @@ class UserSettingsManager extends StaticFactory
         return $settings;
     }
 
+    /**
+     * @param $settingName
+     * @param $options
+     * @return mixed
+     */
     public function render($settingName, $options)
     {
         $class = '';
@@ -538,6 +509,11 @@ class UserSettingsManager extends StaticFactory
         return $this->settingsTemplate;
     }
 
+    /**
+     * @param $setting
+     * @param $value
+     * @return bool|Validator\
+     */
     public function checkValidation($setting, $value)
     {
         if(!$this->isSetting($setting))

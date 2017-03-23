@@ -61,6 +61,13 @@ class FieldManager extends StaticFactory
 		return $field;	
 	}
 
+    /**
+     * @param bool $enabled
+     * @param bool $registerable
+     * @param bool $editable
+     * @param bool $encryptable
+     * @return array
+     */
 	public static function makeFlags($enabled = false, $registerable = true, $editable = true, $encryptable = false)
     {
         return [
@@ -70,7 +77,17 @@ class FieldManager extends StaticFactory
             'encrypt' => $encryptable
         ];
     }
-	
+
+    /**
+     * @param $name
+     * @param $code
+     * @param $description
+     * @param string $type
+     * @param string $validation
+     * @param array $flags
+     * @param array $data
+     * @return array
+     */
 	public static function updateField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = []){
 		$field = FieldManager::findField($code);
 		$field->name = $name;
@@ -84,17 +101,19 @@ class FieldManager extends StaticFactory
 		$field->save();
 		return $field;	
 	}
-	
-	/**
-	 * Deletes a field
-	 * @param $name
-	 */
+
+    /**
+     * @param $code
+     */
 	public static function deleteField($code)
 	{
 		$field = FieldManager::findField($code);
 		$field->delete();
 	}
 
+    /**
+     * @return $this
+     */
 	public function allFactory()
     {
         $this->fields = Field::all();
@@ -129,6 +148,9 @@ class FieldManager extends StaticFactory
 		return ($selection->data['required'])? true : false;
 	}*/
 
+    /**
+     * @return array
+     */
     public function getSortedFields()
     {
         $fields = [];

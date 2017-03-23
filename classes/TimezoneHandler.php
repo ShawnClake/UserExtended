@@ -17,6 +17,9 @@ use Clake\Userextended\Models\Timezone;
 class TimezoneHandler
 {
 
+    /**
+     * @return mixed
+     */
     public static function getCurrentTime()
     {
         return Carbon::now();

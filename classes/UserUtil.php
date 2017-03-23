@@ -116,7 +116,7 @@ class UserUtil
 
     /**
      * Casts the Rainlab.User model to Clake.UserExtended
-     * @param UserExtended $user
+     * @param \Clake\Userextended\Models\UserExtended $user
      * @return User
      */
     public static function castToRainLabUser(\Clake\Userextended\Models\UserExtended $user)
@@ -155,6 +155,10 @@ class UserUtil
         return \Clake\Userextended\Models\UserExtended::where('id', $id)->first();
     }
 
+    /**
+     * @param $user
+     * @return mixed
+     */
     public static function convertToRainlabUser($user)
     {
         if($user == null)

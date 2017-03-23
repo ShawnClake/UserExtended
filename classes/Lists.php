@@ -14,8 +14,12 @@ use Illuminate\Support\Collection;
  */
 class Lists extends Collection
 {
+    /** @var Collection */
     private $list;
+
+    /** @var int */
     private $limit = 10;
+
     /**
      * Creates a new list object
      * Lists constructor.
