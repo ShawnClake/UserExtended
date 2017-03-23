@@ -50,9 +50,9 @@ Block::put('body')
 		>
 
 		</button></div></td>
-		<td><div style="padding-left:5px;"><?= $field['label'] ?></div></td>
-		<td><div style="padding-left:5px;text-transform:capitalize;"><?= $field['type'] ?></div></td>
-		<td><div style="padding-left:5px;text-transform:capitalize;"><?php echo str_replace('|', '  ', $field['validation']) ?></div></td>
+		<td><div style=""><?= $field['label'] ?></div></td>
+		<td><div style="text-transform:capitalize;"><?= $field['type'] ?></div></td>
+		<td><div style="text-transform:capitalize;"><?php echo str_replace('|', '  ', $field['validation']) ?></div></td>
 		<td><?php if(($field['createable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
 		<td><?php if(($field['registerable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
 		<td><?php if(($field['editable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
