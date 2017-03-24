@@ -43,6 +43,8 @@ class Roles extends Controller
     const UE_MANAGE_ROLE_UI = 'manage_role_ui'; // _manage_role
     const UE_MANAGE_USERS_UI = 'manage_users_ui'; // _list_unassigned_user_in_group
 
+    const RESULT_LIM = 2;
+
     public static $queue = [];
 
     public $implement = [
@@ -104,7 +106,12 @@ class Roles extends Controller
         if(!isset($roles))
             return;
 
-        $this->vars['groupRoles'] = ['roles' => $roles];
+        if($this->getCurrentPage('list_roles') === false || $this->getCurrentPage('list_roles') === null)
+            $this->setCurrentPage('list_roles', 1);
+        $total = ceil((float)$roles->count() / (float)self::RESULT_LIM);
+        //echo $roles->slice($this->getCurrentPage('list_roles') * self::RESULT_LIM, self::RESULT_LIM);
+        //var_dump (array_slice(['test','test1','test2','test3'], ($this->getCurrentPage('list_roles') - 1)* self::RESULT_LIM, self::RESULT_LIM));
+        $this->vars['groupRoles'] = ['roles' => $roles->slice(($this->getCurrentPage('list_roles') - 1) * self::RESULT_LIM, self::RESULT_LIM), 'pagination' => ['page' => $this->getCurrentPage('list_roles'), 'total' => $total]];
 
         if(($this->getCurrentRole() === false || $this->getCurrentRole() === null) && count($roles) > 0)
             $this->setCurrentRole($roles->first()->code);
@@ -126,6 +133,8 @@ class Roles extends Controller
             return [];
 
         $this->setCurrentGroup($group->code);
+
+        $this->flushCurrentPages();
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
 
@@ -704,6 +713,101 @@ class Roles extends Controller
         return Redirect::to(Backend::url('rainlab/user/users/preview/' . $userid));
     }
 
+    public function onPageLeft()
+    {
+        $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
+
+        $tbl = post('table');
+
+        $page = $this->getCurrentPage($tbl);
+
+        if($page === false)
+            $page = 1;
+        else
+            $page--;
+
+        if($page < 1 )
+            $page = 1;
+
+        //echo 'hi' . $this->getCurrentPage($tbl);
+
+        if($this->getCurrentPage($tbl) == $page)
+            return false;
+
+        $this->setCurrentPage($tbl, $page);
+
+        $this->queue([self::UE_LIST_ROLES_TABLE]);
+
+        return $this->render();
+    }
+
+    public function onPageRight()
+    {
+        $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
+
+        $tbl = post('table');
+
+        $page = $this->getCurrentPage($tbl);
+        if($page === false)
+            $page = 2;
+        else
+            $page++;
+
+        $roleCount = RoleManager::with($this->getCurrentGroup())->countRoles();
+        $maxPages = ceil((float)$roleCount / (float)self::RESULT_LIM);
+
+        if($page < 1 )
+            $page = 1;
+
+        if($page > $maxPages)
+            $page = $maxPages;
+
+        //echo $maxPages . 'hi' . $page;
+
+        if($this->getCurrentPage($tbl) == $page)
+            return false;
+
+        $this->setCurrentPage($tbl, $page);
+
+        $this->queue([self::UE_LIST_ROLES_TABLE]);
+
+        return $this->render();
+    }
+
+    public function onPageChoose()
+    {
+        $groupCode = $this->getCurrentGroup();
+        if($groupCode === false)
+            return false;
+
+        $tbl = post('table');
+        $page = post('page');
+
+        $roleCount = RoleManager::with($this->getCurrentGroup())->countRoles();
+        $maxPages = ceil((float)$roleCount / (float)self::RESULT_LIM);
+
+        if($page < 1 )
+            return false;
+
+        if($page > $maxPages)
+            return false;
+
+        if($this->getCurrentPage($tbl) == $page)
+            return false;
+
+        $this->setCurrentPage($tbl, $page);
+
+        $this->queue([self::UE_LIST_ROLES_TABLE]);
+
+        return $this->render();
+    }
+
+
+
     /**
      * Queues the partials for render.
      * This function requires an array of partials const's to signify which partials to render.
@@ -814,6 +918,12 @@ class Roles extends Controller
             Session::forget('ue.backend.role_manager.current_role');
     }
 
+    private function flushCurrentPages()
+    {
+        if(Session::has('ue.backend.role_manager.current_page.list_roles'))
+            Session::forget('ue.backend.role_manager.current_page.list_roles');
+    }
+
     /**
      * Retrieves the current group from the session
      * @return bool|string
@@ -862,6 +972,25 @@ class Roles extends Controller
     private function setCurrentRole($roleCode)
     {
         if(Session::put('ue.backend.role_manager.current_role', $roleCode))
+            return true;
+        return false;
+    }
+    
+    private function getCurrentPage($tbl)
+    {
+        $page = null;
+        if(Session::has('ue.backend.role_manager.current_page.' . $tbl))
+            $page = Session::get('ue.backend.role_manager.current_page.' . $tbl, null);
+        if(!empty($page))
+            return $page;
+        return false;
+    }
+
+    private function setCurrentPage($tbl, $page)
+    {
+        if($page < 1)
+            $page = 1;
+        if(Session::put('ue.backend.role_manager.current_page.' . $tbl, $page))
             return true;
         return false;
     }
@@ -938,11 +1067,16 @@ class Roles extends Controller
      */
     protected function queueUeListRolesTable()
     {
+        $page = $this->getCurrentPage('list_roles');
+        if($page === false)
+            $page = 1;
         $rolesUnsorted = RoleManager::with($this->getCurrentGroup());
-        $roles = $rolesUnsorted->sort()->getRoles();
+        $roles = $rolesUnsorted->sort()->getRoles();//->paginate(self::RESULT_LIM, $page);
+        $total = ceil((float)$roles->count() / (float)self::RESULT_LIM);
+        $roles = $roles->slice(($page - 1)* self::RESULT_LIM, self::RESULT_LIM);
         if(!isset($roles))
             return false;
-        self::$queue[] = [self::UE_LIST_ROLES_TABLE, ['roles' => $roles]];
+        self::$queue[] = [self::UE_LIST_ROLES_TABLE, ['roles' => $roles, 'pagination' => ['page' => $page, 'total' => $total]]];
         return true;
     }
 

@@ -251,7 +251,7 @@ class RoleManager extends StaticFactory
 
     /**
      * Returns all the roles inside of a group
-     * @return mixed
+     * @return Role
      */
     public function getRoles()
     {
