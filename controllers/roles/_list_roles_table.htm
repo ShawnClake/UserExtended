@@ -1,5 +1,5 @@
 <div class="" id="list_roles_container" style="">
-    <h4>Group Roles</h4>
+    <div class="form-inline"><h4 style="display:inline-block;padding-right:9px;">Group Roles</h4> <?php if(count($roles) != 0): ?><input placeholder="Search roles.."  type="text" class="input-sm form-control" title="This is the text of the tooltip" disabled/><?php endif; ?></div>
     <?php if(count($roles) != 0): ?>
 
         <div class="row">
@@ -14,7 +14,7 @@
         </div>
     <div id="list_roles_table">
         <?php foreach($roles as $index => $role): ?>
-            <div style="padding-top:5px;padding-bottom:5px;z-index:99;position:relative;" data-test="hi" class="row draggable-row drag-role">
+            <div style="padding-top:5px;padding-bottom:5px;z-index:99;position:relative;" data-test="hi" data-handler="onUnassignRole" class="row draggable-row drag-role">
                 <div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to delete this role? This cannot be undone." data-request="onRemoveRole" data-request-data="roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-times"></i></a></span></div>
                 <div class="col-sm-1"><span><a style=" <?php if($index == 0 && $pagination['page'] == 1): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveRoleUp" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-up"></i></a></span></div>
                 <div class="col-sm-1"><span><a style=" <?php if($index == $roles->count() - 1 && $pagination['page'] == $pagination['total']): ?> pointer-events: none; cursor: default; color:#BABABA; <?php endif ?> " href="#" data-request="onMoveRoleDown" data-request-data="order: '<?= $role->sort_order ?>', roleCode: '<?= $role->code ?>', groupCode: '<?= $role->group->code ?>'"><i class="icon-caret-down"></i></a></span></div>
