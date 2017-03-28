@@ -1,49 +1,52 @@
-/*
+/**
  * Backend.js
  * Javascript for UE backend pages
  */
 
-/*var UE = UE || {};
+$(function() {
+    if(UE.Config.Debug)
+    {
+        console.log("User Extended BackendJS loading...");
+        console.log("User Extended BackendJS loaded.");
+    }
+});
+
 UE.Utils = UE.Utils || {};
+UE.Interactions = UE.Interactions || {};
 
-(function (Validator, $, undefined) {
+/**
+ * Config and setup
+ */
+UE.Interactions.Config = {
+    'DragDrop': {
+        'Threshold': 0.40,
+        'Inertia': true,
+        'AutoScroll': true
+    }
+};
 
-    Validator.registerEvents = function() {
-        $('#name').on("keyup", function(){
-            if($(this).val() == ""){
-                $('#NameError').show();
-            } else {
-                $('#NameError').hide();
-            }
-            Validator.disableSubmit();
-        });
+UE.Interactions.Dropzones = {
+    'onAssignRole': {
+        'drops': ['#list_roles_container'],
+        'row': '.drag-unassigned-role'
+    },
+    'onUnassignRole': {
+        'drops': ['#list_unassigned_roles_container'],
+        'row': '.drag-role'
+    },
+    'onAssignUser': {
+        'drops': ['#list_users_container'],
+        'row': '.drag-unassigned-user'
+    },
+    'onUnassignUser': {
+        'drops': ['#list_unassigned_users_container'],
+        'row': '.drag-user'
+    }
+};
 
-        $('#code').on("keyup", function(){
-            if($(this).val() == "") {
-                $('#CodeError').show();
-            } else {
-                $('#CodeError').hide();
-            }
-            Validator.disableSubmit();
-        });
-    };
-
-    Validator.disableSubmit = function () {
-        if($('#name').val() == "" || $('#code').val() == "")
-        {
-            $('#ErrorBox').show();
-            $('#submitButton').attr('disabled', true);
-        } else {
-            $('#ErrorBox').hide();
-            $('#submitButton').attr('disabled', false);
-        }
-    };
-
-} (UE.Utils.Validator = UE.Utils.Validator || {}, jQuery));*/
-
-var UE = UE || {};
-UE.Utils = UE.Utils || {};
-
+/**
+ * Validator class
+ */
 var Validator = (function() {
 
     var Validator = function () {
@@ -88,53 +91,32 @@ var Validator = (function() {
 
 UE.Utils.Validator = new Validator();
 
-
-UE.Interactions = UE.Interactions || {};
-UE.Interactions.Dropzones = {
-    'onAssignRole': {
-        'drops': ['#list_roles_container'],
-        'row': '.drag-unassigned-role'
-    },
-    'onUnassignRole': {
-        'drops': ['#list_unassigned_roles_container'],
-        'row': '.drag-role'
-    },
-    'onAssignUser': {
-        'drops': ['#list_users_container'],
-        'row': '.drag-unassigned-user'
-    },
-    'onUnassignUser': {
-        'drops': ['#list_unassigned_users_container'],
-        'row': '.drag-user'
-    }
-};
-
-
-
-
+/**
+ * Interactions
+ */
 $(window).load(function() {
     console.log('test');
     interact('.draggable-row')
         .draggable({
             // enable inertial throwing
-            inertia: true,
+            inertia: UE.Interactions.Config.DragDrop.Inertia,
             // keep the element within the area of it's parent
 
             // enable autoScroll
-            autoScroll: true,
+            autoScroll: UE.Interactions.Config.DragDrop.AutoScroll,
             restrict: {
                 restriction: "drop_container",
                 endOnly: true,
                 elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
             },
             // call this function on every dragmove event
-            onmove: dragMoveListener,
-            onstart: coordSaver,
-            onend: resetPos
+            onmove: moveEventHandler,
+            onstart: startEventHandler,
+            onend: stopEventHandler
             // call this function on every dragend event
         });
 
-    function resetPos (event) {
+    function stopEventHandler (event) {
         var target = $(event.target);
         var hasClass = target.hasClass('can-drop');
         if(!hasClass)
@@ -152,10 +134,11 @@ $(window).load(function() {
         {
             var element = $(drops[i]);
             element.css('background-color', '');
+            element.css('border-radius', '');
         }
     }
 
-    function coordSaver (event) {
+    function startEventHandler (event) {
         var target = event.target;
         var x = (parseFloat(target.getAttribute('data-x')) || 0);
         var y = (parseFloat(target.getAttribute('data-y')) || 0);
@@ -169,10 +152,11 @@ $(window).load(function() {
         {
             var element = $(drops[i]);
             element.css('background-color', 'rgba(165, 209, 151, 0.8)');
+            element.css('border-radius', '7px');
         }
     }
 
-    function dragMoveListener (event) {
+    function moveEventHandler (event) {
         var target = event.target,
             // keep the dragged position in the data-x/data-y attributes
             x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -197,7 +181,7 @@ $(window).load(function() {
             // only accept elements matching this CSS selector
             accept: acceptedClass,
             // Require a 75% element overlap for a drop to be possible
-            overlap: 0.5,
+            overlap: UE.Interactions.Config.DragDrop.Threshold,
             ondrop: function (event) {
                 //console.log("Drop Event");
                 //console.log($(event.relatedTarget).find('[data-request="onAssignRole"]').data('request-data'));
@@ -254,49 +238,6 @@ $(window).load(function() {
             }
         }
 
-        //makeDropzone('#list_roles_container', '.drag-unassigned-role', 'onAssignRole');
-        //makeDropzone('#list_unassigned_roles_container', '.drag-role', 'onUnassignRole');
-        //makeDropzone('#list_users_container', '.drag-unassigned-user', 'onAssignUser');
-        //makeDropzone('#list_unassigned_users_container', '.drag-user', 'onUnassignUser');
-
     });
 
 });
-
-
-
-/*
- function disableSubmit()
- {
- if($('#name').val() == "" || $('#code').val() == "")
- {
- $('#ErrorBox').show();
- $('#submitButton').attr('disabled', true);
- } else {
- $('#ErrorBox').hide();
- $('#submitButton').attr('disabled', false);
- }
- }
-
- $('#name').on("keyup", function(){
- if($(this).val() == ""){
- $('#NameError').show();
- } else {
- $('#NameError').hide();
- }
- disableSubmit();
- });
-
- $('#code').on("keyup", function(){
- if($(this).val() == "") {
- $('#CodeError').show();
- } else {
- $('#CodeError').hide();
- }
- disableSubmit();
- });
-
- $(function(){
- disableSubmit();
- });
-    */

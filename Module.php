@@ -55,8 +55,8 @@ class Module extends UserExtended
     public function injectAssets()
     {
         return [
-            //'ueJS'  => '/plugins/clake/userextended/assets/js/general.js',
-            //'ueCSS' => '/plugins/clake/userextended/assets/css/general.css'
+            'ueJS'  => '/plugins/clake/userextended/assets/js/frontend.js',
+            'ueCSS' => '/plugins/clake/userextended/assets/css/frontend.css'
         ];
     }
 

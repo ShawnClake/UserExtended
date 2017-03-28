@@ -66,14 +66,13 @@ class Roles extends Controller
         // Setting this context so that our sidebar menu works
         BackendMenu::setContext('RainLab.User', 'user', 'users');
 		
-		//Add CSS for some backend menus
         $this->addJs('/plugins/clake/userextended/assets/js/libs/interact.min.js');
+        $this->addJs('/plugins/clake/userextended/assets/js/general.js');
+        $this->addJs('/plugins/clake/userextended/assets/js/backend.js');
 
-		$this->addCss('/plugins/clake/userextended/assets/css/backend.css');
-		$this->addCss('/plugins/clake/userextended/assets/css/general.css');
-		$this->addJs('/plugins/clake/userextended/assets/js/backend.js');
-
-
+        //Add CSS for some backend menus
+        $this->addCss('/plugins/clake/userextended/assets/css/general.css');
+        $this->addCss('/plugins/clake/userextended/assets/css/backend.css');
     }
 
     /**
