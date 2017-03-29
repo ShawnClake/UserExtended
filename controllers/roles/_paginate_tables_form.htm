@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="text-center">
+            <div class="ue-pagination-icon">
+                <button
+                        href="javascript:;"
+                        class="btn-icon oc-icon-caret-left"
+                        data-request="onPageLeft"
+                        data-request-data="roleCode: '<?= $role->code ?>', table: '<?= $table ?>'"
+                ></button>
+            </div>
+
+            <?php for ($i = 1; $i < $pagination['total'] + 1; $i++): ?>
+                <div style="display:inline-block;">
+                    <a style="" href="javascript:;" data-request="onPageChoose" data-request-data="page: '<?= $i ?>', table: '<?= $table ?>'"><?= $i ?></a>
+                </div>
+            <?php endfor; ?>
+            <!--<div style="display:inline-block">
+                <a href="javascript:;">2</a>
+            </div>
+            <div style="display:inline-block">
+                <a href="javascript:;">3</a>
+            </div>-->
+            <div class="ue-pagination-icon">
+                <button
+                        href="javascript:;"
+                        class="btn-icon oc-icon-caret-right"
+                        data-request="onPageRight"
+                        data-request-data="groupCode: '<?= $role->group->code ?>', table: '<?= $table ?>'"
+                ></button>
+            </div>
+            <div>
+                Page <?= $pagination['page'] ?> of <?= $pagination['total'] ?>
+            </div>
+        </div>
+    </div>
+</div>

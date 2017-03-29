@@ -1,4 +1,4 @@
-<div style="font-size:14px;padding-left:9px;">
+<div class="ue-info-section">
 
     <div class="text-right">
 
@@ -10,7 +10,7 @@
         <hr>
     </div>
 
-    <div class="" id="list_unassigned_users_container" style="padding:7px;">
+    <div class="ue-table-container" id="list_unassigned_users_container">
         <h4 class="text-right">Unassigned Users (Draggable)</h4>
         <?php if(count($users) != 0): ?>
 
@@ -25,14 +25,14 @@
 
         <div id="list_unassigned_users_table">
             <?php foreach($users as $user): $user = $user->user; ?>
-                <div style="padding-top:5px;padding-bottom:5px;z-index:99;position:relative;" class="row draggable-row drag-unassigned-user" data-handler="onAssignUser" >
+                <div class="row draggable-row drag-unassigned-user" data-handler="onAssignUser" >
                     <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm='Are you sure you want to assign this user to the selected role?' data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></div><?php endif; ?>
                     <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></div>
                     <?php else: ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></div><?php endif; ?>
-                    <div class="col-sm-3" style="overflow:hidden;white-space: nowrap;"><span><a href="#" data-request="onManageUser" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></div>
-                    <div class="col-sm-3" style="overflow:hidden;white-space: nowrap;"><span><?= $user->email ?></span></div>
-                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $user->created_at ?></span></div>
-                    <div class="col-sm-2" style="overflow:hidden;white-space: nowrap;"><span><?= $user->last_seen ?></span></div>
+                    <div class="col-sm-3 ue-no-wrap"><span><a href="#" data-request="onManageUser" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></div>
+                    <div class="col-sm-3 ue-no-wrap"><span><?= $user->email ?></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->created_at ?></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->last_seen ?></span></div>
                 </div>
             <?php endforeach; ?>
         </div>
