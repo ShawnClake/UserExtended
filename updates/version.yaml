@@ -76,3 +76,8 @@
 2.0.01:
     - Began work on 2.1.00 and creating fields table
     - create_fields_table.php
+2.0.02:
+    - Adding relation column to the Friends model in preparation for a future release
+    - friends_add_bond.php
+2.0.03:
+    - Implemented Fields Manager

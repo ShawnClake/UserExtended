@@ -206,22 +206,16 @@ class SeedTimeZones extends Seeder
         array('abbr'=>'TKT', 'name'=>'Tokelau Time', 'utc'=>'UTC+14', 'offset'=>'14'),
     );
 
-
-
     public function run()
     {
-
         foreach($this->timezones as $timezone)
         {
-
             Timezone::create([
                 'abbr'=>$timezone['abbr'],
                 'name'=>$timezone['name'],
                 'utc'=>$timezone['utc'],
                 'offset'=>$timezone['offset'],
             ]);
-
         }
-
     }
 }
