@@ -9,6 +9,13 @@
 * Handling user profile comments
 * Visiting user profile
 
+### Component Properties
+| === | Profile | Search | Display a User | Random User List |
+|:------------:|-------------|--------|----------------|------------------|
+| Max Items | ✔ | ✔ | N/A | ✔ |
+| URL Param | ✔ >_ :param |  | N/A |  |
+| Profile Page | ✔ | ✔ | N/A | ✔ |
+
 ### Template Data Getters
 * randomUsers(prop maxItems) : UserCollection  Returns a collection of random users who aren't on our friends/block list
 * type() : propType  Returns the type of rendering to do: 'random' users, 'single' user, 'search' users, user 'profile' page
