@@ -11,7 +11,7 @@ class FriendsAddBonds extends Migration
     {
         Schema::table('clake_userextended_friends', function($table)
         {
-            $table->bigInteger('bond');
+            $table->bigInteger('relation');
         });
     }
 
@@ -19,7 +19,7 @@ class FriendsAddBonds extends Migration
     {
         Schema::table('clake_userextended_friends', function($table)
         {
-            $table->dropColumn('bond');
+            $table->dropColumn('relation');
         });
     }
 

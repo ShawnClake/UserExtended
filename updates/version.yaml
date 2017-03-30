@@ -78,7 +78,7 @@
     - create_fields_table.php
 2.0.02:
     - Adding relation column to the Friends model. This is being shipped now in preparation of 2.2.00
-    - friends_add_bond.php
+    - friends_add_relation.php
 2.0.03:
     - Implemented Fields Manager
 2.0.04:
