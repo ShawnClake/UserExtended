@@ -77,7 +77,15 @@
     - Began work on 2.1.00 and creating fields table
     - create_fields_table.php
 2.0.02:
-    - Adding relation column to the Friends model in preparation for a future release
+    - Adding relation column to the Friends model. This is being shipped now in preparation of 2.2.00
     - friends_add_bond.php
 2.0.03:
     - Implemented Fields Manager
+2.0.04:
+    - Created Routes table. This is being shipped now in preparation of 2.2.00
+    - create_routes_table.php
+2.0.05:
+    - Created Route Restriction Table. This is being shipped now in preparation of 2.2.00
+    - create_route_restriction_table.php
+2.0.06:
+    - Completed RoleManager refactor and added drag&drop and pagination
