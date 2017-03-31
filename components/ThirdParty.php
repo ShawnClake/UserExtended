@@ -68,7 +68,7 @@ class ThirdParty extends ComponentBase
     public function onRun()
     {
         Plugin::injectAssets($this);
-        //$this->addJs('/plugins/clake/userextended/assets/js/friends.css');
+        //$this->addJs('/plugins/clake/userextended/assets/js/thirdparty/disqus.js');
     }
 
     public function enableDisqus()
