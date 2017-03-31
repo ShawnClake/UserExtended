@@ -92,3 +92,6 @@
 2.0.07:
     - Added nicknames. This is being shipped now in preparation of 2.2.00
     - seed_fields.php
+2.0.08:
+    - Added integrated users. This is being shipped in preparation for 2.4.00 and 2.5.00
+    - create_integrated_users.php

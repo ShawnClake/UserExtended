@@ -2,8 +2,8 @@
 
     // This is called with the results from from FB.getLoginStatus().
     function statusChangeCallback(response) {
-        console.log('statusChangeCallback');
-        console.log(response);
+        //console.log('statusChangeCallback');
+        //console.log(response);
         // The response object is returned with a status field that lets the
         // app know the current login status of the person.
         // Full docs on the response object can be found in the documentation
@@ -23,6 +23,7 @@
     // code below.
     function checkLoginState() {
         FB.getLoginStatus(function(response) {
+            //console.log('call back');
             statusChangeCallback(response);
         });
     }
@@ -34,13 +35,27 @@
             xfbml      : true,
             version    : 'v2.8'
         });
+        /*FB.login(function(response) {
+            //console.log('Testing Facebook Permissions');
+           // console.log(JSON.stringify(response));
+           // statusChangeCallback(response);
+        }, {scope: 'public_profile,email', return_scopes: true});*/
         FB.getLoginStatus(function(response) {
-            console.log('Testing Facebook');
-            statusChangeCallback(response);
-            console.log(JSON.stringify(response));
+            //console.log('Testing Facebook');
+            //statusChangeCallback(response);
+            //console.log(JSON.stringify(response));
         });
 
     };
+
+    function logout()
+    {
+        FB.logout(function(response) {
+            //console.log('Logging Out');
+            //console.log(JSON.stringify(response));
+            // Person is now logged out
+        });
+    }
 
     (function(d, s, id){
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -51,24 +66,27 @@
     }(document, 'script', 'facebook-jssdk'));
 
     function testAPI() {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', function(response) {
+        //console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', {fields: 'last_name,first_name,email,name,locale,picture,timezone'}, function(response) {
             console.log(JSON.stringify(response));
-            console.log('Successful login for: ' + response.name);
-            document.getElementById('status').innerHTML =
-                'Thanks for logging in, ' + response.name + '!';
-        });
-        FB.logout(function(response) {
-            console.log('Logging Out');
-            console.log(JSON.stringify(response));
-            // Person is now logged out
-        });
-    }
+            $.request('onFacebookAuth', {data: response}, {
+                complete: function() {
+                    console.log('test');
+                    //console.log(data);
+                }
+            })
 
+            //console.log('Successful login for: ' + response.name);
+            //document.getElementById('status').innerHTML =
+           //     'Thanks for logging in, ' + response.name + '!';
+        });
+
+    }
 </script>
 
-<div class="fb-login-button" data-max-rows="1" data-size="icon" data-show-faces="false" data-auto-logout-link="false"></div>
-<div id="fb-root"></div>
+<!--<button onClick="FB.login();">Login with FB</button>-->
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
 
 <div id="status">
 </div>

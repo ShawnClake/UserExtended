@@ -465,4 +465,9 @@ class UserManager extends StaticFactory
         return Redirect::to($url);
     }
 
+    public static function loginUserObj($user)
+    {
+        Auth::login($user);
+    }
+
 }

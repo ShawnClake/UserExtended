@@ -1,7 +1,13 @@
 <?php namespace Clake\Userextended\Components;
 
+use Clake\UserExtended\Classes\IntegrationManager;
+use Clake\UserExtended\Classes\UserManager;
+use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\IntegratedUser;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
+use Illuminate\Contracts\Validation\ValidationException;
+use Illuminate\Support\Facades\Redirect;
 use Page;
 
 /**
@@ -65,7 +71,7 @@ class ThirdParty extends ComponentBase
      */
     public function getTypeOptions()
     {
-        return ['disqus' => 'Disqus'];
+        return ['disqus' => 'Disqus', 'facebook-login' => 'Facebook Login'];
     }
 
     /**
@@ -80,6 +86,54 @@ class ThirdParty extends ComponentBase
     public function disqus()
     {
         return 'userextended';
+    }
+
+    public function onFacebookAuth()
+    {
+        $data = post();
+
+        if(UserUtil::getLoggedInUser() != null)
+            return Redirect::to('update');
+
+        if($user = IntegrationManager::getUser($data['id']))
+        {
+            // If user already exists
+            //echo 'already exists';
+            UserManager::loginUserObj($user);
+
+            return Redirect::to('update');
+        }
+
+        $password = openssl_random_pseudo_bytes(16);
+
+        $registration = [
+            'email' => $data['email'],
+            'username' => $data['email'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'password' => $password,
+            'password_confirmation' => $password
+        ];
+
+        if(!($user = UserManager::registerUser($registration)))
+            return false;
+
+        $reflection = new \ReflectionClass($user);
+
+        if($reflection->getShortName() == 'Validator')
+        {
+            throw new ValidationException($user);
+            //Flash::error($user->messages());
+            //return false;
+        }
+
+        $integration = IntegrationManager::createUser($data['id'], $user->id, IntegrationManager::UE_INTEGRATIONS_FACEBOOK);
+
+        UserManager::loginUserObj($user);
+
+        return Redirect::to('update');
+        //echo 'caught';
+
     }
 
 }
