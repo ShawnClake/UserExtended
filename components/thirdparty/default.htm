@@ -1,0 +1,11 @@
+{% if thirdparty.type == "disqus" %}
+
+{% partial __SELF__~"::disqus" %}
+
+{% endif %}
+
+{% if thirdparty.type == "facebook-login" %}
+
+{% partial __SELF__~"::facebook_login" %}
+
+{% endif %}

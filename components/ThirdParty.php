@@ -41,29 +41,16 @@ class ThirdParty extends ComponentBase
                 'type'        => 'dropdown',
                 'default'     => 'disqus',
                 'placeholder' => 'Select integration type',
-            ],
-            'maxItems' => [
-                'title'             => 'Max items',
-                'description'       => 'Max items to show in a list. 0=unlimited',
-                'default'           => 5,
-                'type'              => 'string',
-                'validationPattern' => '^[0-9]+$',
-                'validationMessage' => 'The Max Items property can contain only numeric symbols'
-            ],
-            'paramCode' => [
-                'title'       => 'User ID URL parameter',
-                'description' => 'Specifies a user ID to generate a list for. blank=logged in user',
-                'type'        => 'string',
-                'default'     => ''
-            ],
-            'profilePage' => [
-                'title'       => 'Profile Page',
-                'description' => 'The page to redirect to for user profiles.',
-                'type'        => 'dropdown',
-                'default'     => 'user/profile'
             ]
-
         ];
+    }
+
+    /**
+     * Returns the integration type
+     */
+    public function type()
+    {
+        return $this->property('type');
     }
 
     /**
