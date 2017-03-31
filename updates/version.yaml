@@ -90,5 +90,5 @@
 2.0.06:
     - Completed RoleManager refactor and added drag&drop and pagination
 2.0.07:
-    - Added nicknames
+    - Added nicknames. This is being shipped now in preparation of 2.2.00
     - seed_fields.php
