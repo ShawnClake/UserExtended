@@ -7,13 +7,32 @@ class SeedFields extends Seeder
 {
     public function run()
     {
-        if (Field::whereCode('phone')->count() == 0) {
-            UserGroup::create([
-                'name' => 'Phone Number',
-                'code' => 'phone',
-                'description' => 'Phone number',
+        if (Field::whereCode('nickname')->count() == 0) {
+            Field::create([
+                'name' => 'Nickname',
+                'code' => 'nickname',
+                'description' => 'A users nickname. These are not unique.',
                 'type' => 'UE_FORM_TEXT',
-
+                'validation' => [
+                    'additional' => '',
+                    'content' => 'alpha_num',
+                    'regex' => '',
+                    'min' => '3',
+                    'max' => '13',
+                    'flags' => [
+                        'required',
+                    ]
+                ],
+                'data' => [
+                    'placeholder' => 'Nickname..',
+                    'class' => ''
+                ],
+                'flags' => [
+                    'enabled' => true,
+                    'registerable' => false,
+                    'editable' => true,
+                    'encrypt' => false,
+                ],
             ]);
         }
 

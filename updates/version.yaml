@@ -89,3 +89,6 @@
     - create_route_restriction_table.php
 2.0.06:
     - Completed RoleManager refactor and added drag&drop and pagination
+2.0.07:
+    - Added nicknames
+    - seed_fields.php
