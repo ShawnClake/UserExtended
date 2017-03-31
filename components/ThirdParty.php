@@ -4,6 +4,7 @@ use Clake\UserExtended\Classes\IntegrationManager;
 use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\IntegratedUser;
+use Clake\Userextended\Models\Settings;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Illuminate\Contracts\Validation\ValidationException;
@@ -83,9 +84,24 @@ class ThirdParty extends ComponentBase
         //$this->addJs('/plugins/clake/userextended/assets/js/friends.css');
     }
 
+    public function enableDisqus()
+    {
+        return Settings::get('enable_disqus');
+    }
+
     public function disqus()
     {
-        return 'userextended';
+        return Settings::get('disqus_shortname');
+    }
+
+    public function enableFacebook()
+    {
+        return Settings::get('enable_facebook');
+    }
+
+    public function facebook()
+    {
+        return Settings::get('facebook_appid');
     }
 
     public function onFacebookAuth()

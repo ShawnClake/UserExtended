@@ -37,6 +37,10 @@ class Settings extends Model
         $this->enable_email = true;
         $this->default_timezone = "UTC";
         $this->default_group = '';
+        $this->enable_disqus = false;
+        $this->enable_facebook = false;
+        $this->disqus_shortname = '';
+        $this->facebook_appid = '';
     }
 
     public function getDefaultGroupOptions($values, $formData)

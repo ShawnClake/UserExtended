@@ -72,3 +72,29 @@ tabs:
             comment: (Optional) Choose a default timezone for users when they register
             type: dropdown
             tab: Registration
+
+        # 3rd Party Integrations
+        enable_disqus:
+            span: left
+            label: Enable Disqus
+            comment: Enable/Disable Disqus
+            type: switch
+            tab: Integrations
+        disqus_shortname:
+            span: right
+            label: Disqus Shortname
+            comment: Enter your Disqus website's shortname. You can find this in your Disqus settings.
+            type: text
+            tab: Integrations
+        enable_facebook:
+            span: left
+            label: Enable Facebook
+            comment: Enable/Disable Facebook
+            type: switch
+            tab: Integrations
+        facebook_appid:
+            span: right
+            label: Facebook AppID
+            comment: Enter your Facebook AppID. If you haven't already created one, visit the Facebook dev area.
+            type: text
+            tab: Integrations
