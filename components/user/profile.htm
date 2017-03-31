@@ -9,7 +9,7 @@
             <div class="col-sm-12 col-md-3"></div>
             <div class="col-sm-12 col-md-6" style=" padding:7px;">
                 <div class="avatar-small center-in-parent">
-                    <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.userAvatar.path %} {{ueuser.userAvatar.path}} {% else %} https://diasp.eu/assets/user/default.png {% endif %})">
+                    <div class="responsive-circle center-in-parent" style="background-image:url({% if ueuser.userAvatar.path %} {{ueuser.userAvatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %})">
                     </div>
                 </div>
 
@@ -61,8 +61,10 @@
 
                     {% for comment in ueuser.comments %}
                     <div class="userblock">
-                        {{comment.content}} <br>
-                        <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="ueuser::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">{{ "clake.userextended::lang.components.user.writtenat"|trans }} {{comment.created_at|relative}} by <a href="{{ueuser.profilePage(comment.author.id)}}">{{comment.author.name}}</a></i>
+                        <a style="display:inline-block;text-decoration:none;height:50px;width:50px;" href="#" data-request-data="id: {{user.id}}" data-request="ueuser::onVisitProfile">
+                            <div style="display:inline-block;" class="avatar-small center-in-parent"><div class="responsive-circle center-in-parent" style="display:inline-block;background-image:url({% if comment.author.avatar.path %} {{comment.author.avatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %})"></div></div> <br>
+                        </a>{{comment.content}} <br>
+                        <span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="ueuser::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> <i style="font-size:11px;">{{ "clake.userextended::lang.components.user.writtenat"|trans }} {{comment.created_at|relative}} by <a href="/users/{{comment.author.id}}">{{comment.author.name}}</a></i>
                         <hr>
                     </div>
                     {% endfor %}
