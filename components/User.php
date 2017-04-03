@@ -62,7 +62,13 @@ class User extends ComponentBase
                 'description' => 'The page to redirect to for user profiles.',
                 'type'        => 'dropdown',
                 'default'     => 'user/profile'
-            ]
+            ],
+			'template' => [
+				'title' 		=> 'Template',
+				'description' 	=> 'The template to use for profile pages',
+				'type'			=> 'dropdown',
+				'default'		=> 'social'
+			]
         ];
     }
 
@@ -88,6 +94,16 @@ class User extends ComponentBase
             'profile' => 'User Profile',
         ];
     }
+	
+	public function getTemplateOptions(){
+		return [
+			'social' 		=> 'Social', 
+			'business' 		=> 'Business',
+			'portfolio' 	=> 'Portfolio',
+			'team' 			=> 'Team', 
+			'custom' 		=> 'Custom'
+			];
+	}
 
     /**
      * Returns a list of user groups to the page in a variable called 'groups'
@@ -328,6 +344,8 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null, $userid = null)
     {
+		$template = $this->property('template');
+
         if(!Settings::get('enable_profiles', true))
             return false;
 

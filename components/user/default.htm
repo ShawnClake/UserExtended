@@ -68,7 +68,7 @@
     <div id="userSearchResults"></div>
 
 {% else %}
-
-    {% partial 'ueuser::profile' %}
+	{% set name %}ueuser::{{__SELF__.property('template')}}_profile{% endset %}
+	{% partial name %}
 
 {% endif %}
