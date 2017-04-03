@@ -9,7 +9,7 @@ columns:
         searchable: true
         relation: users
         select: name
-    content
+    content:
         type: Text
         label: Content
         searchable: true

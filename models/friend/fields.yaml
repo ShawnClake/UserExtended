@@ -8,7 +8,7 @@ fields:
         type: Text
         readOnly: true
         required: true
-    user_that_accepted_request[name]
+    user_that_accepted_request[name]:
         label: Request To
         type: Text
         readOnly: true
