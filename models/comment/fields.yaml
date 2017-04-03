@@ -3,22 +3,22 @@
 # ===================================
 
 fields:
-	user_id[name]:
-		label: User ID
-		description: The user who published the comment.
-		type: Text
-		readOnly: true
-		required: true
-	content:
-		label: Comment
-		description: The comment that the user left.
-		type: Text
-		encrypted: true
-		readOnly: true
-	created_at:
-		label: Posted On
-		descrption: The date the comment was posted.
-		type: datepicker
-		mode: datetime
-		readOnly: true
-		required: true
+    user_id[name]:
+        label: User ID
+        description: The user who published the comment.
+        type: Text
+        readOnly: true
+        required: true
+    content:
+        label: Comment
+        description: The comment that the user left.
+        type: Text
+        encrypted: true
+        readOnly: true
+    created_at:
+        label: Posted On
+        descrption: The date the comment was posted.
+        type: datepicker
+        mode: datetime
+        readOnly: true
+        required: true

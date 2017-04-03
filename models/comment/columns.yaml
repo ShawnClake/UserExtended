@@ -3,22 +3,22 @@
 # ===================================
 
 columns:
-	user_id[name]:
+    user_id[name]:
         label: Username
-		type: Text
+        type: Text
         searchable: true
-		relation: users
-		select: name
-	content
-		type: Text
-		label: Content
-		searchable: true
-	created_at:
-		type: datetime
-		label: Created At
-	updated_at:
-		type: datetime
-		label: Updated At
-	deleted_at:
-		type: datetime
-		label: Deleted At
+        relation: users
+        select: name
+    content
+        type: Text
+        label: Content
+        searchable: true
+    created_at:
+        type: datetime
+        label: Created At
+    updated_at:
+        type: datetime
+        label: Updated At
+    deleted_at:
+        type: datetime
+        label: Deleted At

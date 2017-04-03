@@ -3,27 +3,27 @@
 # ===================================
 
 columns:
-	abbr:
-		label: Abbreviation
-		type: Text
-	name:
-		label: Name
-		type: Text
-	utc:
-		label: UTC
-		type: Text
-	offset:
-		label: Offset
-		type: Number
-	count:
-		label: Count
-		type: Number
-	created_at:
-		label: Created At
-		type: datetime
-	updated_at:
-		label: Updated At
-		type: datetime
-	deleted_at:
-		label: Deleted At
-		type: datetime
+    abbr:
+        label: Abbreviation
+        type: Text
+    name:
+        label: Name
+        type: Text
+    utc:
+        label: UTC
+        type: Text
+    offset:
+        label: Offset
+        type: Number
+    count:
+        label: Count
+        type: Number
+    created_at:
+        label: Created At
+        type: datetime
+    updated_at:
+        label: Updated At
+        type: datetime
+    deleted_at:
+        label: Deleted At
+        type: datetime
