@@ -3,6 +3,27 @@
 # ===================================
 
 columns:
-    id:
-        label: ID
-        searchable: true
+	user_that_sent_request[name]:
+		label: Request From
+		description: The user that sent the request.
+		type: Text
+		relation: users
+		select: name
+	user_that_accepted_request[name]:
+		label: Request To
+		description: The user the request was sent to.
+		type: Text
+		relation: users
+		select: name
+	created_at:
+		label: Sent On
+		description: The day the request was sent.
+		type: datetime
+	updated_at:
+		label: Accepted On
+		description: The day the request was updated.
+		type: datetime
+	accepted:
+		label: Accepted?
+		description: 0 - Pending, 1 - Friends, 2 - Declined
+		type: Number
