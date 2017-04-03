@@ -134,6 +134,32 @@ class Plugin extends PluginBase
 
         });
 
+
+        /*$settings =
+
+        Event::listen('backend.form.extendFields', function($widget) {
+
+            // Only for the User controller
+            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
+                return;
+            }
+
+            // Only for the User model
+            if (!$widget->model instanceof \RainLab\User\Models\User) {
+                return;
+            }
+
+            // Add an extra birthday field
+            $widget->addFields([
+                'birthday' => [
+                    'label'   => 'Birthday',
+                    'comment' => 'Select the users birthday',
+                    'type'    => 'datepicker'
+                ]
+            ]);
+
+        });*/
+
         return [];
     }
 
