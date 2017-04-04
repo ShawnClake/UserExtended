@@ -1,0 +1,76 @@
+<?php Block::put('breadcrumb') ?>
+<ul>
+	<li><a href="<?= Backend::url('clake/userextended/fields') ?>">Fields</a></li>
+	<li><?= $this->pageTitle ?></li>
+</ul>
+<?php Block::endPut() ?>
+
+<?php
+Block::put('body') 
+?>
+
+<div class="" style="padding-left:25px;padding-right:25px;">
+
+    <div class="row" style="margin-top:11px;">
+	
+	<h3 style="margin-left:25px;margin-bottom:19px;">Manage Fields</h3>
+	
+	<table class="table table-striped" style="width: 90%; margin-left: 5%;">
+	<tr>
+		<td></td>
+		<td></td>
+		<td class="text-left">Name</td>
+		<td class="text-left">Type</td>
+		<td class="text-left">Validation</td>
+		<td class="text-center">Enabled</td>
+		<td class="text-center">Registerable</td>
+		<td class="text-center">Editable</td>
+		<td class="text-center">Encryptable</td>
+	</tr>
+	<?php foreach ($fields as $field): ?>
+	<tr>
+		<td><div class="text-center">
+			<button
+					href="javascript:;"
+					class="btn-icon oc-icon-trash-o danger"
+					data-request="onDeleteField"
+					data-request-confirm="Are you sure you want to delete the field '<?=$field['label'] ?>'?"
+					data-request-data="code: '<?=$field['code'] ?>'"
+			></button></div></td>
+		<td><div class="text-center">
+			<button
+				href="javascript:;"
+				class="btn-icon oc-icon-pencil"
+				data-control="popup"
+				data-handler="onEditField"
+				data-size="huge"
+				data-extra-data="code: '<?=$field['code'] ?>'"
+			></button></div></td>
+		<td><div style="padding-top:9px;padding-bottom:9px;"><?= $field['label'] ?></div></td>
+		<td><div style="text-transform:capitalize;padding-top:9px;padding-bottom:9px;"><?= $field['type'] ?></div></td>
+		<td><div style="text-transform:capitalize;padding-top:9px;padding-bottom:9px;"><?php echo str_replace('|', '  ', $field['validation']) ?></div></td>
+		<td><?php if(($field['createable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><?php if(($field['registerable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><?php if(($field['editable'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td><?php if(($field['encrypt'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	
+	<div style="margin-top: 20px;margin-left:25px;">
+	<a
+                    href="javascript:;"
+                    class="btn btn-primary oc-icon-plus"
+                    data-control="popup"
+                    data-handler="onAddField"
+                    data-size="huge"
+            >
+                Add Field
+            </a>
+	</div>
+
+</div>
+	
+</div>
+
+<?php Block::endPut() ?>

@@ -1,10 +1,8 @@
-<?php if(isset($group)): ?>
-
-<div style="padding:33px;padding-top:23px;">
+<div class="ue-form-container">
 
     <h4>Create Role</h4>
     <br>
-    <form class="form-elements" role="form" data-request="onCreateRole" data-request-data="groupCode: '<?= $group->code ?>'">
+    <form class="form-elements" role="form" data-request="onCreateRole">
         <div class="form-group span-left">
             <label>Name</label>
             <input type="text" name="name" id="name" value="" class="form-control"/>
@@ -36,5 +34,3 @@
 </div>
 
 <?= $this->makePartial('validation_group_role_forms') ?>
-
-<?php endif ?>

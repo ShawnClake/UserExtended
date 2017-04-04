@@ -1,0 +1,146 @@
+<div style="padding:33px;padding-top:23px;">
+
+    <h3>Create Field</h3>
+    <br>
+    <form class="form-elements" role="form" data-request="onCreateField">
+
+		<div id="create_tabs_" class="control-tabs primary-tabs layout has-tabs" data-control="tab" data-slideable>
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#tab_overview" data-toggle="tab">Overview</a></li>
+				<li><a href="#tab_validation" data-toggle="tab">Validation</a></li>
+				<li><a href="#tab_extra" data-toggle="tab">Extra</a></li>
+			</ul>
+
+			<div class="tab-content clearfix">
+				<div class="tab-pane active" id="tab_overview">
+
+					<div class="form-group span-full" style="border-bottom-color:lightgrey;border-bottom-style: solid; border-bottom-width:1px;height:35px;margin-bottom: 25px;">
+						<h4>Field Overview</h4>
+					</div>
+
+					<div class="form-group span-left">
+						<label for="name">Name</label>
+						<input type="text" name="name" value="" id="name" class="form-control" />
+					</div>
+
+					<div class="form-group span-right">
+						<label for="code">Code</label>
+						<input type="text" name="code" value="" id="code" class="form-control" />
+					</div>
+
+					<div class="form-group span-left">
+						<label>Flags</label>
+						<div class="checkbox"><input type="checkbox" name="flags[]" value="enabled"> Enabled</div>
+						<div class="checkbox"><input type="checkbox" name="flags[]" value="registerable" checked> Shown on registration</div>
+						<div class="checkbox"><input type="checkbox" name="flags[]" value="editable" checked> User can Edit</div>
+						<div class="checkbox"><input type="checkbox" name="flags[]" value="encrypt"> Encrypted</div>
+					</div>
+
+					<div class="form-group span-right">
+						<label>Type</label>
+						<select class="form-control" name="type">
+							<option value="UE_FORM_TEXT">Text</option>
+							<option value="UE_FORM_CHECKBOX" disabled>CheckBox</option>
+							<option value="UE_FORM_COLOR" disabled>Color</option>
+							<option value="UE_FORM_DATE" disabled>Date</option>
+							<option value="UE_FORM_FILE" disabled>File</option>
+							<option value="UE_FORM_NUMBER" disabled>Number</option>
+							<option value="UE_FORM_PASSWORD" disabled>Password</option>
+							<option value="UE_FORM_RADIO" disabled>Radio</option>
+							<option value="UE_FORM_RANGE" disabled>Range</option>
+							<option value="UE_FORM_TEL" disabled>Telephone</option>
+							<option value="UE_FORM_TIME" disabled>Time</option>
+							<option value="UE_FORM_URL" disabled>URL</option>
+							<option value="UE_FORM_SWITCH" disabled>Switch</option>
+						</select>
+					</div>
+
+					<!-- This will eventually be a drop-down once we have a few validation methods -->
+					<div class="form-group span-full">
+						<label>Description</label>
+						<input style="resize:none;" name="description" id="description" class="form-control"/>
+					</div>
+
+
+				</div>
+				<div class="tab-pane" id="tab_validation">
+
+					<div class="form-group span-full" style="border-bottom-color:lightgrey;border-bottom-style: solid; border-bottom-width:1px;height:35px;margin-bottom: 25px;">
+						<h4>Field Validation</h4>
+					</div>
+
+					<div class="form-group span-left">
+						<label>Content</label> <br>
+						<select class="form-control" name="validation_content">
+							<option value="" selected="selected">-- Any --</option>
+							<option value="alpha">Alpha (a-z)</option>
+							<option value="alpha_dash">Alpha Dash (a-z|-|_)</option>
+							<option value="alpha_num">Alpha Numeric (a-z|0-9)</option>
+							<option value="numeric">Numeric (0-9)</option>
+							<option value="integer">Integer (0-9)</option>
+							<option value="email">Email (xxx@xxx.xx)</option>
+							<option value="active_url">Active Url (xxx.xx)</option>
+							<option value="url">Any Url (xxx.xx)</option>
+							<option value="date">Date (xx/xx/xx)</option>
+						</select>
+					</div>
+
+					<div class="form-group span-right">
+						<label>Validation Flags</label> <br>
+						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted"> Accepted (Evaluates to true|yes|on)</div>
+						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" checked> Required </div>
+						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean"> Boolean (Evaluates to true|false|1|0)</div>
+						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed"> Confirmed (Useful for Passwords)</div>
+					</div>
+
+					<div class="form-group span-full">
+						<label>Regex</label>
+						<input style="resize:none;" name="validation_regex" id="validation_regex" value="" class="form-control"/>
+					</div>
+
+					<div class="form-group span-left">
+						<label>Min Length</label>
+						<input style="resize:none;" name="validation_min" id="validation_min" value="" class="form-control"/>
+					</div>
+
+					<div class="form-group span-right">
+						<label>Max Length</label>
+						<input style="resize:none;" name="validation_max" id="validation_max" value="" class="form-control"/>
+					</div>
+
+					<div class="form-group span-full">
+						<label>Additional Validation</label>
+						<input style="resize:none;" name="validation" id="validation" value="" class="form-control"/>
+						<p class="help-block"><a target="_blank" href="http://octobercms.com/docs/services/validation#available-validation-rules">Additional Validation Documentation</a></p>
+					</div>
+
+				</div>
+				<div class="tab-pane" id="tab_extra">
+
+					<div class="form-group span-full" style="border-bottom-color:lightgrey;border-bottom-style: solid; border-bottom-width:1px;height:35px;margin-bottom: 25px;">
+						<h4>Field Extras</h4>
+					</div>
+
+					<div class="form-group span-left">
+						<label>Placeholder</label>
+						<input style="resize:none;" name="data_placeholder" id="data_placeholder" class="form-control" />
+						<p class="help-block"><a target="_blank" href="https://www.w3schools.com/tags/att_input_placeholder.asp">What is a placeholder</a></p>
+					</div>
+
+					<div class="form-group span-right">
+						<label>Classes</label>
+						<input style="resize:none;" name="data_class" id="data_class" class="form-control" />
+						<p class="help-block"><a target="_blank" href="https://www.w3schools.com/html/html_classes.asp">What is a class</a></p>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group span-full">
+			<button type="submit" class="btn btn-primary" id="submitButton">Create</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+
+    </form>
+</div>

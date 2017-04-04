@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Components;
 
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\Field;
 use Clake\Userextended\Models\Settings;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
@@ -11,6 +12,8 @@ use Page;
  * User Extended by Shawn Clake
  * Class Friends
  * User Extended is licensed under the MIT license.
+ *
+ * TODO: Do we need the paramCode property?
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended

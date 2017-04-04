@@ -62,7 +62,13 @@ class User extends ComponentBase
                 'description' => 'The page to redirect to for user profiles.',
                 'type'        => 'dropdown',
                 'default'     => 'user/profile'
-            ]
+            ],
+			'template' => [
+				'title' 		=> 'Template',
+				'description' 	=> 'The template to use for profile pages',
+				'type'			=> 'dropdown',
+				'default'		=> 'social'
+			]
         ];
     }
 
@@ -83,11 +89,21 @@ class User extends ComponentBase
     {
         return [
             'random'  => 'Random User List',
-            'single'  => 'Display a User',
+            //'single'  => 'Display a User',
             'search'  => 'User Search',
             'profile' => 'User Profile',
         ];
     }
+	
+	public function getTemplateOptions(){
+		return [
+			'social' 		=> 'Social', 
+			'business' 		=> 'Business',
+			'portfolio' 	=> 'Portfolio',
+			'team' 			=> 'Team', 
+			'custom' 		=> 'Custom'
+        ];
+	}
 
     /**
      * Returns a list of user groups to the page in a variable called 'groups'
@@ -181,6 +197,10 @@ class User extends ComponentBase
         return UserUtil::convertToUserExtendedUser(UserUtil::getUser($userid));
     }
 
+    /**
+     * Returns the users avatar model
+     * TODO: This should return the default avatar if the user doesn't have an avatar
+     */
     public function userAvatar()
     {
         $userid = $this->property('paramCode');
@@ -328,6 +348,9 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null, $userid = null)
     {
+        // TODO: Is $template being used anywhere?
+		$template = $this->property('template');
+
         if(!Settings::get('enable_profiles', true))
             return false;
 

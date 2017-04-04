@@ -1,8 +1,8 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Clake\Userextended\Models\Field;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
-use \October\Rain\Support\Facades\Yaml;
 
 /**
  * User Extended by Shawn Clake
@@ -15,6 +15,10 @@ use \October\Rain\Support\Facades\Yaml;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\UserExtended\Classes
  *
+ * @method static UserSettingsManager currentUser() UserSettingsManager
+ * @method static UserSettingsManager with($user) UserSettingsManager
+ * @method static UserSettingsManager validation() UserSettingsManager
+ *
  * Terminology and flow:
  *   A user has many settings.
  *   A setting has many finite options.
@@ -22,8 +26,27 @@ use \October\Rain\Support\Facades\Yaml;
  *   A setting has a value.
  *   An option has a state.
  */
-class UserSettingsManager
+class UserSettingsManager extends StaticFactory
 {
+
+    /**
+     * Field types
+     * TODO: Change the values to be HTML form types if they aren't already.
+     */
+    const UE_FORM_TEXT = 'text';
+    const UE_FORM_CHECKBOX = 'checkbox';
+    const UE_FORM_COLOR = 'color';
+    const UE_FORM_DATE = 'date';
+    const UE_FORM_EMAIL = 'email';
+    const UE_FORM_FILE = 'file';
+    const UE_FORM_NUMBER = 'number';
+    const UE_FORM_PASSWORD = 'password';
+    const UE_FORM_RADIO = 'radio';
+    const UE_FORM_RANGE = 'range';
+    const UE_FORM_TEL = 'tel';
+    const UE_FORM_TIME = 'time';
+    const UE_FORM_URL = 'url';
+    const UE_FORM_SWITCH = 'switch';
 
     /**
      * Settings config file
@@ -58,36 +81,79 @@ class UserSettingsManager
     ];
 
     /**
-     * Creates an instance of the UserSettingsManager
-     * @param \Clake\Userextended\Models\UserExtended|null $user
-     * @return null|static
+     * Stores the twig environment
+     * @var \Twig_Environment
      */
-    public static function init(\Clake\Userextended\Models\UserExtended $user = null)
+    protected $twig;
+
+    /**
+     * Factory function for passing in a custom user
+     * @param \Clake\Userextended\Models\UserExtended $user
+     * @return $this
+     */
+    public function withFactory(\Clake\Userextended\Models\UserExtended $user)
     {
-        $instance = new static;
-        $path = plugins_path('clake/userextended/config/user_settings.yaml');
-        $settingsTemplate = Yaml::parseFile($path);
+        $this->user = $user;
+        $this->load();
+        return $this;
+    }
 
-        if(isset($settingsTemplate['settings']))
-            $instance->settingsTemplate = $settingsTemplate['settings'];
-        else
-            return null;
+    /**
+     * Factory function for using the current user
+     * @return $this
+     */
+    public function currentUserFactory()
+    {
+        $this->user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
+        $this->load();
+        return $this;
+    }
 
-        if($user == null)
+    /**
+     * Loads the settings without getting the current user
+     * This is useful for validation while a user isn't logged in.
+     * Use cases:
+     *   Programatically registering or updating a user
+     * @return $this
+     */
+    public function validationFactory()
+    {
+        $this->load();
+        return $this;
+    }
+
+    /**
+     * Used as a sort of intermediary function for translating the DB Field Model into something which is backwards compatible
+     * TODO: Utilize sort order
+     */
+    protected function load()
+    {
+        $loader = new \Twig_Loader_Filesystem(plugins_path('clake/userextended/partials/form'));
+        $this->twig = new \Twig_Environment($loader, ['auto_reload' => true]);
+
+        $fields = Field::all();
+        $settings = [];
+
+        /** @var Field $field */
+        foreach($fields as $field)
         {
-            $user = UserUtil::getLoggedInUser();
+            $type = 'self::' . $field->type;
 
-            if(!$user == null)
-                $user = UserUtil::convertToUserExtendedUser($user);
-            else
-                return $instance;
+            $settings[$field->code] = [
+                'label'        => $field->name,
+                'description'  => $field->description,
+                'code'         => $field->code,
+                'type'         => constant($type),
+                'validation'   => $field->validationToString(),
+                'data'         => $field->data,
+                'editable'     => $field->flags['editable'],
+                'registerable' => $field->flags['registerable'],
+                'encrypt'      => $field->flags['encrypt'],
+                'createable'   => $field->flags['enabled'],
+            ];
         }
 
-        $instance->user = $user;
-
-        $instance->settings = $instance->user->settings;
-
-        return $instance;
+        $this->settingsTemplate = $settings;
     }
 
     /**
@@ -133,7 +199,7 @@ class UserSettingsManager
     /**
      * Gets the setting's options prioritizing config and then defaults
      * @param $setting
-     * @return array|void
+     * @return array|false
      */
     public function getSettingOptions($setting)
     {
@@ -286,8 +352,8 @@ class UserSettingsManager
         if($this->isValidated($setting))
         {
             $validator = Validator::make(
-                ['setting' => $value],
-                ['setting' => $options['validation']]
+                [$options['label'] => $value],
+                [$options['label'] => $options['validation']]
             );
 
             if($validator->fails())
@@ -391,7 +457,7 @@ class UserSettingsManager
                     $value = $this->decrypt($key, $value);
             }
 
-            $settings[$key] = [$value, 'options' => $options];
+            $settings[$key] = [$value, 'options' => $options, 'html' => $this->render($key, $options)];
         }
 
         return $settings;
@@ -415,10 +481,60 @@ class UserSettingsManager
 
             $options = $this->getSettingOptions($key);
 
-            $settings[$key] = ['options' => $options];
+            $settings[$key] = ['options' => $options, 'html' => $this->render($key, $options)];
         }
 
         return $settings;
     }
 
+    /**
+     * @param $settingName
+     * @param $options
+     * @return mixed
+     */
+    public function render($settingName, $options)
+    {
+        $class = '';
+        if(isset($options['data']['class']))
+        {
+            $class = $options['data']['class'];
+            unset($options['data']['class']);
+        }
+
+        return $this->twig->render('input_' . $options['type'] . '.htm', [
+            'type'  => $options['type'],
+            'label' => $options['label'],
+            'id'    => 'accountSettings' . $settingName,
+            'name'  => $settingName,
+            'data'  => $options['data'],
+            'class' => $class,
+        ]);
+    }
+
+    /**
+     * Get templated settings
+     * @return array
+     */
+    public function getSettingsTemplate()
+    {
+        return $this->settingsTemplate;
+    }
+
+    /**
+     * @param $setting
+     * @param $value
+     * @return bool|Validator\
+     */
+    public function checkValidation($setting, $value)
+    {
+        if(!$this->isSetting($setting))
+            return false;
+
+        $validator = $this->validate($setting, $value);
+
+        if($validator !== true)
+            return $validator;
+
+        return true;
+    }
 }

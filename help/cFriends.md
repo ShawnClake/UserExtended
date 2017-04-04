@@ -10,6 +10,13 @@
 * Display friends list
 * Display friend requests
 
+### Component Properties
+| === | Friend Requests | Friends List |
+|:------------:|-----------------|--------------|
+| Max Items | ✔ | ✔ |
+| URL Param |  |  |
+| Profile Page | ✔ | ✔ |
+
 ### Template Data Getters
 * type() : propType  Returns whether we want to render a friends list or a friend request list
 * friendsList() : UserCollection  Returns a list of a users friends

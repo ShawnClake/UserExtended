@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Illuminate\Support\Collection;
+
 /**
  * User Extended by Shawn Clake
  * Class Lists
@@ -14,8 +15,12 @@ use Illuminate\Support\Collection;
  */
 class Lists extends Collection
 {
+    /** @var Collection */
     private $list;
+
+    /** @var int */
     private $limit = 10;
+
     /**
      * Creates a new list object
      * Lists constructor.

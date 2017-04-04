@@ -3,7 +3,8 @@
  * Styling for UE Backend pages
  */
 
-div.error-box {
+div.error-box
+{
 	padding: 10px;
     background: #ffb3b3;
     border: 2px solid red;
@@ -11,4 +12,61 @@ div.error-box {
     border-radius: 8px;
     width: 50%;
     margin-left: 25%;
+}
+
+div.ue-form-container
+{
+    padding: 23px 33px 33px 33px;
+}
+
+a.ue-lg-buttons
+{
+    width:75%;
+    text-align:center;
+}
+
+div.ue-table-container
+{
+    padding:7px;
+    margin-top:7px;
+}
+
+h4.ue-inline-h
+{
+    display:inline-block;
+    padding-right:9px;
+}
+
+div.draggable-row
+{
+    padding-top:5px;
+    padding-bottom:5px;
+    z-index:99;
+    position:relative;
+}
+
+a.ue-disabled
+{
+    pointer-events: none;
+    cursor: default;
+    color:#BABABA;
+}
+
+div.ue-no-wrap
+{
+    overflow:hidden;
+    white-space: nowrap;
+}
+
+div.ue-pagination-icon
+{
+    display:inline-block;
+    width:20px;
+    height:20px;
+}
+
+div.ue-info-section
+{
+    font-size:14px;
+    padding-left:9px;
 }

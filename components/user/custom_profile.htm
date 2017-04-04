@@ -1,0 +1,65 @@
+
+<!-- This checks if the user is logged in -->
+{% if ueuser.user %}
+
+<!-- This checks if the profile has an avatar. If not it grabs the default avatar -->
+Profile Picture URL: {% if ueuser.userAvatar.path %} {{ueuser.userAvatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %} <br/>
+
+<!-- This is the name of the profile -->
+Name: {{ueuser.user.name}} <br/>
+
+<!-- This checks if the logged in user is friends with the current user -->
+{% if ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id and not ueuser.isFriend(ueuser.user.id) %}
+						
+<!-- If the user is not friends, this checks if there is a friend request pending -->
+{% if ueuser.isRequested(ueuser.user.id) %}
+Already Friends. <br/>
+{% else %}<!-- This button will add the user as a friend if they are not friends and have not sent a request -->
+<button data-request-data="id: {{ueuser.user.id}}" data-request="ueuser::onFriendUser">Add Friend</button> <br/>
+{% endif %}
+{% endif %}
+
+<!-- This checks if the profile is blocked to the loged in user. -->
+{% if ueuser.locked %}
+
+<!-- The profile's email -->
+Email: {{ueuser.user.email}} <br/>
+{% endif %}
+
+<!-- Loops through the comments on this user's profile -->
+{% for comment in ueuser.comments %}
+
+<!-- This gets the avatar of the user who commented -->
+Commenter Profile Picture URL:{% if comment.author.avatar.path %} {{comment.author.avatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %}<br/>
+
+<!-- This is the content of the comment -->
+Content: {{comment.content}}
+
+<!-- This will delete the comment from the profile -->
+<span><a href="#" data-request-data="commentid: {{comment.id}}" data-request="ueuser::onDeleteComment"><span class="glyphicon glyphicon-remove">X</span></a></span> 
+
+<!-- This will show when the comment was posted and who it was posted by -->
+{{ "clake.userextended::lang.components.user.writtenat"|trans }} {{comment.created_at|relative}} by <a href="{{comment.author.id}}">{{comment.author.name}}</a></i>
+                        
+{% endfor %}
+
+<!-- This creates a form for the current logged in user to leave a comment on this profile -->
+<form data-request="ueuser::onComment">
+		<textarea rows="2" name="comment"></textarea> <br>
+        <input type="submit" value="Comment" />
+</form>
+
+<!-- If the user doesn't exist, this will show. -->
+{% else %}
+
+<div class="row container" style="margin-top:10px;">
+    <div class="col-sm-12 ">
+        <div class="row" style="text-align: center;">
+            <div class="col-sm-12 col-md-12">
+                <h3>It appears this user doesn't exist.</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}

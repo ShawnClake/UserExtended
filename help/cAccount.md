@@ -6,6 +6,9 @@
 * Logging out
 * Changing user settings
 
+### Component Properties
+Activation code param is only optionally needed on registration
+
 ### Template Data Getters
 * createSettings()  Returns a list of dynamic settings which are makred as registerable
 * updateSettings()  Returns a list of dynamic settings which are marked as editable

@@ -3,6 +3,19 @@
 # ===================================
 
 fields:
-    id:
-        label: ID
-        disabled: true
+    abbr:
+        label: Abbreviation
+        type: Text
+        required: true
+    name:
+        label: Name
+        type: Text
+        required: true
+    utc:
+        label: UTC
+        type: Text
+        required: true
+    offest:
+        label: Offset
+        type: Number
+        required: true

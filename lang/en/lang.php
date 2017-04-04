@@ -19,6 +19,7 @@ return [
             'newpassword' => 'New Password',
             'confirmnewpassword' => 'Confirm New Password',
             'save' => 'Save',
+            'timezone' => 'Timezone',
         ],
         'friend' => [
             'accept' => 'Accept',

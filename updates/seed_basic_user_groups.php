@@ -1,6 +1,8 @@
 <?php namespace Clake\UserExtended\Updates;
+
 use RainLab\User\Models\UserGroup;
 use October\Rain\Database\Updates\Seeder;
+
 class SeedUserGroupsTable extends Seeder
 {
     public function run()

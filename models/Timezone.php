@@ -90,15 +90,17 @@ class Timezone extends Model
      * Returns a list of timezones setup to populate dropdown menus
      * @return array
      */
-    public function getTimezonesList()
+    public static function getTimezonesList()
     {
         $timezones = Timezone::all();
         $list = [];
 
         foreach($timezones as $timezone)
         {
-            $list[] = [$timezone->abbr => $timezone->name];
+            $list[$timezone->abbr] = '(' . $timezone->abbr . ') ' . $timezone->name;
         }
+
+        ksort($list);
 
         return $list;
     }

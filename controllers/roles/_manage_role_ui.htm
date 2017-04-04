@@ -1,0 +1,49 @@
+<div class="ue-info-section">
+
+    <b>Name:</b> <?= $role->name ?> <br>
+    <b>Description:</b> <?= $role->description ?> <br>
+    <b>Created:</b> <?= $role->created_at ?> <br>
+    <b>Last Updated:</b> <?= $role->updated_at ?> <br>
+    <b>Users Count:</b> <?= $role->getUsersInRole()->count() ?> <br>
+    <hr>
+
+    <?php $roleTotal = Clake\UserExtended\Classes\RoleManager::with($role->group->code)->countRoles(); ?>
+
+    <div id="list_users_container" class="ue-table-container">
+        <h4>Role Users</h4>
+        <?php if(count($role->getUsersInRole()) != 0): ?>
+
+        <div class="row">
+            <div class="col-sm-1" style=""></div>
+            <div class="col-sm-1" style=""></div>
+            <div class="col-sm-1" style=""></div>
+            <div class="col-sm-2" style="">Name</div>
+            <div class="col-sm-2" style="">Email</div>
+            <div class="col-sm-2" style="">Created</div>
+            <div class="col-sm-2" style="">Last Seen</div>
+            <div class="col-sm-1" style=""></div>
+        </div>
+
+        <div id="list_users_table">
+            <?php foreach($role->getUsersInRole() as $index => $user): ?>
+                <div class="row draggable-row drag-user" data-handler="onUnassignUser" >
+                    <div class="col-sm-1"><span><a href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onRemoveUserFromRole" data-request-data="roleId: '<?= $role->id ?>', userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></div>
+                    <div class="col-sm-1"><span><a class=" <?php if($role->sort_order == 1): ?> ue-disabled <?php endif ?> " href="#" data-request-confirm="Are you sure you want to promote this user to the next role?" data-request="onPromoteUser" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-up"></i></a></span></div>
+                    <div class="col-sm-1"><span><a class=" <?php if($role->sort_order == $roleTotal): ?> ue-disabled <?php endif ?> " href="#" data-request-confirm="Are you sure you want to demote this user down a role?" data-request="onDemoteUser" data-request-data="roleCode: '<?= $role->code ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-down"></i></a></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><a href="<?= Backend::url('/rainlab/user/users/preview/'.$user->id) ?>"><?= $user->name ?></a></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->email ?></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->created_at ?></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->last_seen ?></span></div>
+                    <div class="col-sm-1 ue-no-wrap"><span><a href="#" data-request-confirm="Are you sure you want to remove this user from this role?" data-request="onUnassignUser" data-request-data="roleId: '<?= $role->id ?>', userId: '<?= $user->id ?>'"><i class="icon-caret-right"></i></a></span></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="text-left"><span>There are no users in this role.</span></div>
+            </div>
+        </div>
+        <?php endif ?>
+    </div>
+</div>

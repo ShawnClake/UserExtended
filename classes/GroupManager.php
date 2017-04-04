@@ -70,7 +70,7 @@ class GroupManager extends StaticFactory
         $group->description = $description;
         $group->code = $code;
         $group->save();
-        return $group;
+        return $validator;
     }
 
     /**
@@ -80,7 +80,7 @@ class GroupManager extends StaticFactory
     public static function deleteGroup($groupCode)
     {
         $group = GroupManager::findGroup($groupCode);
-        //echo json_encode($groupCode);
+
         if(!isset($group))
             return;
 
@@ -146,16 +146,6 @@ class GroupManager extends StaticFactory
     }
 
     /**
-     * @param $code
-     * @deprecated Renamed to a better name below.
-     * @return mixed
-     */
-    public static function retrieve($code)
-    {
-        return GroupsExtended::where('code', $code)->first();
-    }
-
-    /**
      * Returns a group model where the group code is: code=$code
      * @param $code
      * @return mixed
@@ -163,25 +153,6 @@ class GroupManager extends StaticFactory
     public static function findGroup($code)
     {
         return GroupsExtended::where('code', $code)->first();
-    }
-
-    /**
-     * Creates and fills the class with all of the groups that exist in the applciation
-     * @deprecated Renamed below and adds factory support
-     * @return static
-     */
-    public function all()
-    {
-        $this->groups = new Collection();
-
-        $groups = GroupsExtended::all();
-
-        foreach($groups as $group)
-        {
-            $this->groups->put($group->code, $group);
-        }
-
-        return $this;
     }
 
     /**
@@ -204,32 +175,11 @@ class GroupManager extends StaticFactory
 
     /**
      * Returns a count of how many groups there are
-     * @deprecated Renamed to follow RoleManager format
-     * @return mixed
-     */
-    public function count()
-    {
-        return $this->groups->count();
-    }
-
-    /**
-     * Returns a count of how many groups there are
      * @return mixed
      */
     public function countGroups()
     {
         return $this->groups->count();
-    }
-
-    /**
-     * Returns a count of how many roles there are in a specific group.
-     * @param $groupCode
-     * @deprecated Renamed below and added better error checking
-     * @return mixed
-     */
-    public function roleCount($groupCode)
-    {
-        return $this->groups->get($groupCode)->roles()->count();
     }
 
     /**
@@ -242,16 +192,6 @@ class GroupManager extends StaticFactory
         if(empty($this->groups))
             return false;
         return $this->groups->get($groupCode)->roles()->count();
-    }
-
-    /**
-     * Returns the collection of groups.
-     * @deprecated Renamed below to a better name
-     * @return mixed
-     */
-    public function get()
-    {
-        return $this->groups;
     }
 
     /**

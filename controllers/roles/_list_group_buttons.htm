@@ -1,0 +1,9 @@
+<?php foreach($groups as $group): ?>
+
+    <a href=""
+       class="ue-lg-buttons <?php if($currentGroupCode == $group->code): ?> btn btn-primary <?php else: ?> btn btn-default <?php endif ?>"
+       data-request="onSelectGroup" data-request-data="groupCode: '<?= $group->code ?>'"><?= $group->name ?></a>
+
+    <br><br>
+
+<?php endforeach ?>

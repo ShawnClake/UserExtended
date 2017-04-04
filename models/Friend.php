@@ -37,6 +37,7 @@ class Friend extends Model
 
     use Timezonable;
 
+    // TODO: Remove in 2.2.00 when we use the new relation system
     private $statuses = [
         'requested' => 0,
         'accepted' => 1,

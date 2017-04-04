@@ -1,5 +1,6 @@
 <?php namespace Clake\Userextended\Models;
 
+use Clake\UserExtended\Classes\GroupManager;
 use Lang;
 use Model;
 
@@ -31,8 +32,49 @@ class Settings extends Model
         $this->validation_password = 'required|between:4,255|confirmed';
         $this->enable_profiles = true;
         $this->enable_friends = true;
+        $this->enable_timezones = true;
         $this->enable_groups = true;
         $this->enable_email = true;
+        $this->default_timezone = "UTC";
+        $this->default_group = '';
+        $this->enable_disqus = false;
+        $this->enable_facebook = false;
+        $this->disqus_shortname = '';
+        $this->facebook_appid = '';
     }
+
+    /**
+     * Returns all groups for creating a dropdown list in order to choose the default group
+     * @param $values
+     * @param $formData
+     * @return array
+     */
+    public function getDefaultGroupOptions($values, $formData)
+    {
+        $groups = GroupManager::allGroups()->getGroups();
+
+        $options = [
+            '' => '-- None --',
+        ];
+
+        foreach($groups as $group)
+        {
+            $options[$group->code] = $group->name;
+        }
+
+        return $options;
+    }
+
+    /**
+     * Returns all timezones for creating a dropdown list in order to choose the default group
+     * @param $values
+     * @param $formData
+     * @return array
+     */
+    public function getDefaultTimezoneOptions($values, $formData)
+    {
+        return Timezone::getTimezonesList();
+    }
+
 
 }

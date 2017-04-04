@@ -1,0 +1,47 @@
+<div class="ue-info-section">
+
+    <div class="text-right">
+
+        <?= $group->name ?><b> :Name</b>  <br>
+        <?= $group->description ?><b> :Description</b>  <br>
+        <?= $group->created_at ?><b> :Created</b>  <br>
+        <?= $group->updated_at ?><b> :Last Updated</b>  <br>
+        <?= $group->getUsersInGroup()->count() ?><b> :Users Count</b>  <br>
+        <hr>
+    </div>
+
+    <div class="ue-table-container" id="list_unassigned_users_container">
+        <h4 class="text-right">Unassigned Users (Draggable)</h4>
+        <?php if(count($users) != 0): ?>
+
+        <div class="row">
+            <?php if(!empty($role)): ?><div class="col-sm-1"></div><?php endif; ?>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-3">Name</div>
+            <div class="col-sm-3" >Email</div>
+            <div class="col-sm-2" >Created</div>
+            <div class="col-sm-2" >Last Seen</div>
+        </div>
+
+        <div id="list_unassigned_users_table">
+            <?php foreach($users as $user): $user = $user->user; ?>
+                <div class="row draggable-row drag-unassigned-user" data-handler="onAssignUser" >
+                    <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm='Are you sure you want to assign this user to the selected role?' data-request="onAssignUser" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-caret-left"></i></a></span></div><?php endif; ?>
+                    <?php if(!empty($role)): ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>', roleCode: '<?= $role->code ?>'"><i class="icon-times"></i></a></span></div>
+                    <?php else: ?><div class="col-sm-1"><span><a style="" href="#" data-request-confirm="Are you sure you want to remove this user from this group" data-request="onRemoveUserFromGroup" data-request-data="userId: '<?= $user->id ?>'"><i class="icon-times"></i></a></span></div><?php endif; ?>
+                    <div class="col-sm-3 ue-no-wrap"><span><a href="#" data-request="onManageUser" data-request-data="userId: '<?= $user->id ?>'"><?= $user->name ?></a></span></div>
+                    <div class="col-sm-3 ue-no-wrap"><span><?= $user->email ?></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->created_at ?></span></div>
+                    <div class="col-sm-2 ue-no-wrap"><span><?= $user->last_seen ?></span></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="text-right"><span>There are no unassigned users in this group.</span></div>
+            </div>
+        </div>
+        <?php endif ?>
+    </div>
+</div>

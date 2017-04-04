@@ -1,5 +1,6 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Clake\Userextended\Models\Timezone;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 use Flash;
@@ -16,11 +17,14 @@ use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
 use Cms\Classes\Page;
+use Log;
 
 /**
  * User Extended by Shawn Clake
  * Class UserManager
  * User Extended is licensed under the MIT license.
+ *
+ * TODO: This class needs a complete refactor as its becoming a mess
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended
@@ -40,6 +44,9 @@ class UserManager extends StaticFactory
         $returner = new Collection;
 
         $userCount = User::all()->count();
+
+        if(!isset($userCount) || empty($userCount) || $userCount == 0)
+            return [];
 
 		if($userCount < $limit)
             $limit = $userCount;
@@ -82,73 +89,6 @@ class UserManager extends StaticFactory
     }
 
     /**
-     * Used to search for users by phrase. It will search their name, email, surname, and username
-     * @param $phrase
-     * @deprecated This has been moved to a trait on the UserExtended model
-     * @return Collection
-     */
-    public static function searchUsers($phrase)
-    {
-        /*$results = Lists::create();
-
-        $results->mergeList(self::searchUserByName($phrase));
-
-        $results->mergeList(self::searchUserByEmail($phrase));
-
-        $results->mergeList(self::searchUserBySurname($phrase));
-
-        $results->mergeList(self::searchUserByUsername($phrase));
-
-        return $results->allList();*/
-        return null;
-
-    }
-
-    /**
-     * Searches for user models with a name like phrase
-     * @param $phrase
-     * @deprecated This exists on a trait now
-     * @return mixed
-     */
-    public static function searchUserByName($phrase)
-    {
-        return User::where('name', 'like', '%' . $phrase . '%')->get();
-    }
-
-    /**
-     * Searches for user models with an email like phrase
-     * @param $phrase
-     * @deprecated This exists on a trait now
-     * @return mixed
-     */
-    public static function searchUserByEmail($phrase)
-    {
-        return User::where('email', 'like', '%' . $phrase . '%')->get();
-    }
-
-    /**
-     * Searches for user models with a surname like phrase
-     * @param $phrase
-     * @deprecated This exists on a trait now
-     * @return mixed
-     */
-    public static function searchUserBySurname($phrase)
-    {
-        return User::where('surname', 'like', '%' . $phrase . '%')->get();
-    }
-
-    /**
-     * Searches for user models with a username like phrase
-     * @param $phrase
-     * @deprecated This exists on a trait now
-     * @return mixed
-     */
-    public static function searchUserByUsername($phrase)
-    {
-        return User::where('username', 'like', '%' . $phrase . '%')->get();
-    }
-
-    /**
      * Updates a user
      * @param array $data
      * @param UserExtended|null $user
@@ -163,6 +103,49 @@ class UserManager extends StaticFactory
             }
         }
 
+        /*
+         * Validate input
+         */
+        $rules = [
+            'email'    => 'required|email|between:6,255',
+            'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
+        ];
+
+        /*
+         * Better utilization of email vs username
+         */
+        if (Settings::get('login_attribute') == "username") {
+            $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
+        }
+
+        $validation = Validator::make($data, $rules);
+        if ($validation->fails()) {
+            //throw new ValidationException($validation);
+            return $validation;
+        }
+
+        $settingsValidator = UserSettingsManager::validation();
+
+        foreach($data as $key=>$value)
+        {
+            if ($key == "_session_key" || $key == "_token" || $key == "name" || $key == "email" || $key == "username" || $key == "password" || $key == "password_confirmation")
+                continue;
+
+            $result = $settingsValidator->checkValidation($key, $value);
+
+            /* Valid setting & Validates */
+            if($result === true)
+                continue;
+
+            /* Not a valid setting */
+            if($result === false)
+                continue;
+
+            /* Validation Failed */
+            if($result->fails())
+                return $result;
+        }
+
         $user->name = $data['name'];
         $user->email = $data['email'];
 
@@ -171,9 +154,15 @@ class UserManager extends StaticFactory
             $user->password_confirmation = $data['password_confirmation'];
         }
 
+        if(isset($data['timezone']))
+        {
+            $timezone = Timezone::where('abbr', $data['timezone'])->first();
+            $user->timezone_id = $timezone->id;
+        }
+
         $user->save();
 
-        $settingsManager = UserSettingsManager::init();
+        $settingsManager = UserSettingsManager::currentUser();
 
         Event::fire('clake.ue.settings.update', [&$settingsManager]);
 
@@ -208,16 +197,19 @@ class UserManager extends StaticFactory
         else
             Flash::success(Lang::get('rainlab.user::lang.account.success_saved'));
 
+		Log::info( $data['name'] . " updated their account.");
+
         return $user;
     }
 
     /**
      * Programatically registers a user
      * @param array $data
-     * @return bool|mixed
+     * @param array $options
+     * @return mixed
      * @throws \Exception
      */
-    public static function registerUser(array $data)
+    public static function registerUser(array $data, array $options = ['default' => true, 'timezone' => true])
     {
         try {
             if (!Settings::get('allow_registration', true)) {
@@ -247,6 +239,28 @@ class UserManager extends StaticFactory
                 return $validation;
             }
 
+            $settingsValidator = UserSettingsManager::validation();
+
+            foreach($data as $key=>$value)
+            {
+                if ($key == "_session_key" || $key == "_token" || $key == "name" || $key == "email" || $key == "username" || $key == "password" || $key == "password_confirmation")
+                    continue;
+
+                $result = $settingsValidator->checkValidation($key, $value);
+
+                /* Valid setting & Validates */
+                if($result === true)
+                    continue;
+
+                /* Not a valid setting */
+                if($result === false)
+                    continue;
+
+                /* Validation Failed */
+                if($result->fails())
+                    return $result;
+            }
+
             /*
              * Register user
              */
@@ -264,7 +278,21 @@ class UserManager extends StaticFactory
             /*
              * Preform phase 2 User registration
              */
-            $settingsManager = UserSettingsManager::init();
+            $defaultGroup = UserExtendedSettings::get('default_group', '');
+            if(!empty($defaultGroup) && $options['default'])
+            {
+                UserGroupManager::currentUser()->addGroup($defaultGroup);
+            }
+
+            $defaultTimezone = UserExtendedSettings::get('default_timezone', 'UTC');
+            if(!empty($defaultGroup) && $options['timezone'])
+            {
+                $timezone = Timezone::where('abbr', $defaultTimezone)->first();
+                $user->timezone_id = $timezone->id;
+                $user->save();
+            }
+
+            $settingsManager = UserSettingsManager::currentUser();
 
             Event::fire('clake.ue.settings.create', [&$settingsManager]);
 
@@ -295,6 +323,9 @@ class UserManager extends StaticFactory
              * Modified to swap to logout
              * Automatically activated or not required, log the user in
              */
+			 Log::info( UserUtil::getLoggedInUser()->name . " has created a new account.");
+			 
+
             if (!$automaticActivation || $requireActivation) {
                 $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
                 $user->last_login = null;
@@ -435,6 +466,7 @@ class UserManager extends StaticFactory
             return false;
         }
 
+		Log::info(UserUtil::getLoggedInUser()->name . " successfully logged out.");
         Auth::logout();
         Event::fire('rainlab.user.logout', [$user]);
         Event::fire('clake.ue.logout', [$user]);
@@ -443,6 +475,11 @@ class UserManager extends StaticFactory
         $url = post('redirect', Request::fullUrl());
 
         return Redirect::to($url);
+    }
+
+    public static function loginUserObj($user)
+    {
+        Auth::login($user);
     }
 
 }

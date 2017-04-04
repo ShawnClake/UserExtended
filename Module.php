@@ -1,13 +1,15 @@
 <?php namespace Clake\UserExtended;
 
+use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserManager;
+use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
 
 /**
- * User Extended by Shawn Clake
+ * User Extended Core by Shawn Clake
  * Class Module
  * User Extended is licensed under the MIT license.
  *
@@ -25,18 +27,19 @@ class Module extends UserExtended
 
     public $author = "Shawn Clake";
 
-    public $description = "User Extended Core";
+    public $description = "UserExtended Core";
 
-    public $version = "2.0.00";
+    public $version = "2.1.00";
 
     public function initialize() {}
 
     public function injectComponents()
     {
         return [
-            'Clake\UserExtended\Components\Account' => 'account',
-            'Clake\UserExtended\Components\Friends' => 'friends',
-            'Clake\UserExtended\Components\User'    => 'ueuser',
+            'Clake\UserExtended\Components\Account'    => 'account',
+            'Clake\UserExtended\Components\Friends'    => 'friends',
+            'Clake\UserExtended\Components\User'       => 'ueuser',
+            //'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
         ];
     }
 
@@ -53,8 +56,8 @@ class Module extends UserExtended
     public function injectAssets()
     {
         return [
-            //'ueJS'  => '/plugins/clake/userextended/assets/js/general.js',
-            //'ueCSS' => '/plugins/clake/userextended/assets/css/general.css'
+            'ueJS'  => '/plugins/clake/userextended/assets/js/frontend.js',
+            'ueCSS' => '/plugins/clake/userextended/assets/css/frontend.css'
         ];
     }
 
@@ -189,5 +192,46 @@ class Module extends UserExtended
     {
         return UserSettingsManager::init()->all();
     }
+
+    /**
+     * @param $groupCode
+     * @param null $user
+     * @return bool
+     */
+    public function addUserToGroup($groupCode, $user = null)
+    {
+        return UserGroupManager::with($user)->addGroup($groupCode);
+    }
+
+    /**
+     * @param $groupCode
+     * @param null $user
+     * @return bool
+     */
+    public function removeUserFromGroup($groupCode, $user = null)
+    {
+        return UserGroupManager::with($user)->removeGroup($groupCode);
+    }
+
+    /**
+     * @param $roleCode
+     * @param null $user
+     * @return bool
+     */
+    public function addUserToRole($roleCode, $user = null)
+    {
+        return UserRoleManager::with($user)->addRole($roleCode);
+    }
+
+    /**
+     * @param $roleCode
+     * @param null $user
+     * @return bool
+     */
+    public function removeUserFromRole($roleCode, $user = null)
+    {
+        return UserRoleManager::with($user)->removeRole($roleCode);
+    }
+
 
 }

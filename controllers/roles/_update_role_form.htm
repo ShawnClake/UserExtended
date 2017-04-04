@@ -1,10 +1,10 @@
-<div style="padding:33px;padding-top:23px;">
+<div class="ue-form-container">
 
 <?php if($role): ?>
 
     <h4>Update Role</h4>
     <br>
-    <form class="form-elements" role="form" data-request="onSaveRole" data-request-data="roleCode: '<?= $role->code ?>' <?php if($role->group_id != 0): ?> , groupCode: '<?= $role->group->code ?>' <?php endif ?>">
+    <form class="form-elements" role="form" data-request="onEditRole" data-request-data="roleCode: '<?= $role->code ?>' <?php if($role->group_id != 0): ?> , groupCode: '<?= $role->group->code ?>' <?php endif ?>">
         <div class="form-group span-left">
             <label>Name</label>
             <input type="text" name="name" id="name" value="<?= $role->name ?>" class="form-control" />
