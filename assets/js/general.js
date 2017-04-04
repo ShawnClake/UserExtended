@@ -8,7 +8,7 @@ UE.Logger = UE.Logger || {};
 UE.Performance = UE.Performance || {};
 
 UE.Config = {
-    'Debug': true
+    'Debug': false
 };
 
 $(function() {

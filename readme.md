@@ -1,4 +1,5 @@
 # User Extended
+*** Currently on version v2.1.00 ***
 
 ## Overview
 User Extended provides simple components and User Utility functions for complex interactions with users.
@@ -25,16 +26,17 @@ Install this plugin and run
 * [Quinn Bast](http://www2.cs.uregina.ca/~bast200q/)
 
 ## Feature List
-* Frontend role/group management
+* Backend Role/Group management
 * Advanced page restriction using groups
-* Friends lists. You can send friend requests, and block/delete/accept friends
-* User Utility functions which can be used accross your own plugins
+* Friends lists. You can send friend requests and block/delete/accept friends
+* User Utility functions which can be used across your own plugins
 * User profiles and a profile comment system
 * User search. Search for users by name, email or username
-* Timezone support! Use the '|timezonify' twig filter. Use the '|relative' twig filter to get a textual relative time stamp (5 seconds ago, 2 months ago)
+* Timezone support! Use the '|timezonify' twig filter. 
+* Use the '|relative' twig filter to get a textual relative time stamp (5 seconds ago, 2 months ago)
 * Timezonable trait which can be added to models to automagically convert times
-* Backend user role/group management
 * Extensible modules
+* Fields for users. Now you can easily add fields for phone numbers, addresses, pin codes, invite numbers etc.
 
 ### Please see the help directory for more information
 

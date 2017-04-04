@@ -567,7 +567,7 @@ class Roles extends Controller
         } else {
             $this->setCurrentGroup($groups->first()->code);
             $this->setCurrentRole(null);
-            
+
             $this->queue([
                 self::UE_LIST_GROUP_BUTTONS,
                 self::UE_MANAGE_USERS_UI,
