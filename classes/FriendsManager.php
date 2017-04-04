@@ -7,6 +7,7 @@ use Auth;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 use Mail;
+use Log;
 
 /**
  * User Extended by Shawn Clake
@@ -69,6 +70,7 @@ class FriendsManager
 
         $relation = Friend::friend($friendUserId)->first();
 
+		Log::info(UserUtil::getLoggedInUser()->name . " deleted " . UserUtil::getUserForUserId($friendUserId) . " as a friend.");
         // Soft deletes aren't working for some reason
         $relation->forceDelete();
     }
@@ -107,6 +109,9 @@ class FriendsManager
 				
 		$data = ['user' => UserUtil::getLoggedInUser()->name,
 		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
+		
+		
+		Log::info(UserUtil::getLoggedInUser()->name . " sent " . UserUtil::getUserForUserId($friendUserId) . " a friend request.");
 		
 		Mail::send('clake.userextended::mail.received_friend_request', $data, function($message) use ($friendUserId) {
             $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
@@ -152,7 +157,9 @@ class FriendsManager
         $request = Friend::request($userId1, $userId2)->first();
 
         $request->setStatus(1);
-
+		
+		Log::info(UserUtil::getUserForUserId($userId2) . " accepted " . UserUtil::getUserForUserId($userId1) . "'s friend request.");
+		
         $request->save();
     }
 
@@ -170,6 +177,8 @@ class FriendsManager
 
         $request->setStatus(2);
 
+		Log::info(UserUtil::getUserForUserId($userId2) . " declined " . UserUtil::getUserForUserId($userId1) . "'s friend request.");
+		
         $request->save();
     }
 
@@ -191,6 +200,8 @@ class FriendsManager
 
         $relation->setStatus(3);
 
+		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUserForUserId($friendUserId) . ".");
+		
         $relation->save();
     }
 
