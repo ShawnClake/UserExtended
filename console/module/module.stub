@@ -7,15 +7,13 @@ use Clake\UserExtended\Classes\UserExtended;
  * User Extended by Shawn Clake
  * Class Module
  * User Extended is licensed under the MIT license.
+ * @link https://github.com/ShawnClake/UserExtended
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  *
  * Please add additional comments to this doc block as you feel necessary.
  * However, you must keep the existing comments here.
  *
- * @author Shawn Clake <shawn.clake@gmail.com>
- * @link https://github.com/ShawnClake/UserExtended
- *
- * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
- * @package Clake\UserExtended
+ * @author {{studly_author}}
  */
 class Module extends UserExtended
 {
