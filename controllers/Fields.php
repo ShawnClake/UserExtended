@@ -29,8 +29,6 @@ use Db;
 class Fields extends Controller
 {
 
-    public static $queue = [];
-
     public $implement = [
         'Backend.Behaviors.FormController',
         'Backend.Behaviors.ListController'
