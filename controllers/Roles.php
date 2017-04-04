@@ -547,14 +547,35 @@ class Roles extends Controller
 
         GroupManager::deleteGroup($groupCode);
 
-        $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
+        $groups = GroupManager::allGroups()->getGroups();
 
-        $this->queue([
-            self::UE_LIST_GROUP_BUTTONS,
-            self::UE_MANAGE_USERS_UI,
-            self::UE_LIST_ROLES_TABLE,
-            self::UE_MANAGE_ROLE_UI,
-        ]);
+        if($groups->count() <= 0)
+        {
+            $this->setCurrentRole(null);
+            $this->setCurrentGroup(null);
+
+            $this->queue([
+                self::UE_LIST_GROUP_BUTTONS,
+            ]);
+
+            $this->queueBlank([
+                self::UE_MANAGE_ROLE_UI,
+                self::UE_MANAGE_ROLE_TOOLBAR,
+                self::UE_LIST_ROLES_TABLE,
+                self::UE_MANAGE_USERS_UI,
+            ]);
+        } else {
+            $this->setCurrentGroup($groups->first()->code);
+            $this->setCurrentRole(null);
+            
+            $this->queue([
+                self::UE_LIST_GROUP_BUTTONS,
+                self::UE_MANAGE_USERS_UI,
+                self::UE_LIST_ROLES_TABLE,
+                self::UE_MANAGE_ROLE_UI,
+            ]);
+        }
+
         return $this->render();
     }
 
