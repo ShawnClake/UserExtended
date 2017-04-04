@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Illuminate\Support\Collection;
+
 /**
  * User Extended by Shawn Clake
  * Class Lists

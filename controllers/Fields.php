@@ -15,8 +15,10 @@ use Db;
 
 /**
  * User Extended by Shawn Clake
- * Class Controller
+ * Class Fields
  * User Extended is licensed under the MIT license.
+ *
+ * TODO: Cleanup this class
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended

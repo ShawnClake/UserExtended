@@ -13,6 +13,8 @@ use Page;
  * Class Friends
  * User Extended is licensed under the MIT license.
  *
+ * TODO: Do we need the paramCode property?
+ *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended
  *

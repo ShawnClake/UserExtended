@@ -43,6 +43,12 @@ class Settings extends Model
         $this->facebook_appid = '';
     }
 
+    /**
+     * Returns all groups for creating a dropdown list in order to choose the default group
+     * @param $values
+     * @param $formData
+     * @return array
+     */
     public function getDefaultGroupOptions($values, $formData)
     {
         $groups = GroupManager::allGroups()->getGroups();
@@ -59,6 +65,12 @@ class Settings extends Model
         return $options;
     }
 
+    /**
+     * Returns all timezones for creating a dropdown list in order to choose the default group
+     * @param $values
+     * @param $formData
+     * @return array
+     */
     public function getDefaultTimezoneOptions($values, $formData)
     {
         return Timezone::getTimezonesList();

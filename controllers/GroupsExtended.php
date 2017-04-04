@@ -10,6 +10,8 @@ use RainLab\User\Models\UserGroup;
  * Class GroupsExtended
  * User Extended is licensed under the MIT license.
  *
+ * TODO: Remove this controller in the next release
+ *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended
  *

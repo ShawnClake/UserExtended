@@ -23,6 +23,8 @@ use Cms\Classes\Page;
  * Class UserManager
  * User Extended is licensed under the MIT license.
  *
+ * TODO: This class needs a complete refactor as its becoming a mess
+ *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake/UserExtended
  *

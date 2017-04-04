@@ -91,7 +91,7 @@ class RoleManager extends StaticFactory
 
     /**
      * Deletes a role
-     * TODO: Reset the role_id in UsersGroups associations back to 0 where this role was used.
+     * TODO: Reset the role_id in UsersGroups associations back to 0 where this role was used. I believe this has been done now but should be checked before removing this TODO
      * @param $roleCode
      */
     public static function deleteRole($roleCode)
@@ -115,8 +115,14 @@ class RoleManager extends StaticFactory
      * @param bool $ignoreChecks
      * @return bool|Validator
      */
-    public static function updateRole($roleCode, $sortOrder = null, $name = null, $description = null, $code = null, $groupId = null, $ignoreChecks = false)
-    {
+    public static function updateRole($roleCode,
+                                      $sortOrder = null,
+                                      $name = null,
+                                      $description = null,
+                                      $code = null,
+                                      $groupId = null,
+                                      $ignoreChecks = false
+    ) {
         $role = RoleManager::findRole($roleCode);
 
         if(isset($sortOrder)) $role->sort_order = $sortOrder;
@@ -167,21 +173,6 @@ class RoleManager extends StaticFactory
     }
 
     /**
-     * Creating the class and filling it with the roles for the group specified.
-     * @param $code
-     * @deprecated Renamed and supports factory
-     * @return static
-     */
-    /*public function groupRolesByCode($code)
-    {
-        $this->group = GroupsExtended::where('code', $code)->first();
-        if($this->group != null)
-            $this->roles = $this->group->roles;
-
-        return $this;
-    }*/
-
-    /**
      * Fills the class with a group model and role models for the group code passed in.
      * @param $groupCode
      * @return $this
@@ -194,21 +185,6 @@ class RoleManager extends StaticFactory
 
         return $this;
     }
-
-    /**
-     * @deprecated A renamed version exists below
-     * @param $code
-     * @return bool
-     */
-    /*public function getRoleIfExists($code)
-    {
-        foreach($this->roles as $role)
-        {
-            if ($role->code == $code)
-                return $role;
-        }
-        return false;
-    }*/
 
     /**
      * Returns a role model by passing a role code in.
@@ -241,16 +217,6 @@ class RoleManager extends StaticFactory
 
     /**
      * Returns all the roles inside of a group
-     * @deprecated Renamed
-     * @return array
-     */
-    /*public function get()
-    {
-        return $this->roles;
-    }*/
-
-    /**
-     * Returns all the roles inside of a group
      * @return Role
      */
     public function getRoles()
@@ -260,34 +226,12 @@ class RoleManager extends StaticFactory
 
     /**
      * Goes through the roles attached to this instance and runs ->save() on each
-     * @deprecated Renamed
-     */
-    /*public function save()
-    {
-        foreach($this->roles as $role)
-        {
-            $role->save();
-        }
-    }*/
-
-    /**
-     * Goes through the roles attached to this instance and runs ->save() on each
      */
     public function saveRoles()
     {
         foreach($this->roles as $role)
             $role->save();
     }
-
-    /**
-     * Returns a count of roles in the selected group
-     * @deprecated Renamed
-     * @return mixed
-     */
-    /*public function count()
-    {
-        return $this->roles->count();
-    }*/
 
     /**
      * Returns a count of roles in the selected group
@@ -341,17 +285,6 @@ class RoleManager extends StaticFactory
     }
 
     /**
-     * Sorts the Collection of roles by sort_order and then returns it
-     * @deprecated Remove this entirely. Switch usage to be like Class->sort()->getRoles();
-     * @return mixed
-     */
-    /*public function getSorted()
-    {
-        $this->sort();
-        return $this->roles;
-    }*/
-
-    /**
      * Sorts the Collection of Roles by sort_order
      * @return $this
      */
@@ -370,26 +303,6 @@ class RoleManager extends StaticFactory
 
         return $this;
     }
-
-    /**
-     * Gets a list of roles in a group and sorts it by sort_order
-     * Useful for promoting, demoting, and getting a sense of hierarchy.
-     * @deprecated Renamed
-     * @return array
-     */
-    /*public function getGroupRolesByOrdering()
-    {
-        $groupRoles = [];
-
-        foreach($this->roles as $role)
-        {
-            $groupRoles[$role["sort_order"]] = $role;
-        }
-
-        ksort($groupRoles);
-
-        return $groupRoles;
-    }*/
 
     /**
      * Gets a list of roles in a group and sorts it by sort_order

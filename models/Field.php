@@ -73,18 +73,6 @@ class Field extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-    /*
-     *         $field = new Field();
-        $field->data = ['test' => 'hi', 'new' => ['hi' => 'bye', 'no' => 'yes']];
-        $field->name = 'yoyobob';
-        $field->code = 'yoyo-bobbyorr';
-        $field->description = 'hiya';
-        $field->validation = '';
-        $field->flags = ['enabled' => true];
-        $field->save();
-     *
-     */
-
     /**
      * Handles the automated settings of the sort order for roles.
      */
@@ -94,7 +82,6 @@ class Field extends Model
 
         if(!isset($this->data))
             $this->data = [];
-        //$this->sort_order = RoleManager::with($this->group->code)->countRoles() + 1;
 
         // TODO: Does this throw an error with 0 entries in the DB?
         $this->sort_order = Field::all()->count() + 1;
@@ -114,12 +101,6 @@ class Field extends Model
             return false;
         }
 
-        /*$total = RoleManager::with($this->group->code)->countRoles();
-
-        if(!(($this->sort_order <= $total) && ($this->sort_order > 0)))
-        {
-            return false;
-        }*/
     }
 
     /**
@@ -144,22 +125,7 @@ class Field extends Model
             $field->sort_order = $total - $i - 1;
             $field->save();
         }
-        /*$total = RoleManager::with($this->group->code)->countRoles();
-        $myOrder = $this->sort_order;
 
-        if($myOrder === $total)
-            return true;
-
-        $roles = RoleManager::with($this->group->code)->getSortedGroupRoles();
-
-        $difference = $total - $myOrder;
-
-        for($i = 0; $i < $difference; $i++)
-        {
-            $role = $roles[$total - $i];
-            $role->sort_order = $total - $i - 1;
-            $role->save();
-        }*/
     }
 
     /**

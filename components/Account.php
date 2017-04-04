@@ -33,6 +33,8 @@ use Cms\Classes\Page;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Components
  *
+ * TODO: Refactor this class to reduce some function bulk
+ *
  * Some code in this component has been copied from the RainLab.User plugin.
  * Find the original plugin here: https://github.com/rainlab/user-plugin
  * Copied and modified functions:
@@ -243,16 +245,32 @@ class Account extends ComponentBase
         return UserSettingsManager::currentUser()->getRegisterable();
     }
 
+    /**
+     * Returns a list of timezones
+     * Useful for dropdown menus
+     * TODO: This should be moved to timezone helper
+     * @return array
+     */
     public function timezoneOptions()
     {
         return Timezone::getTimezonesList();
     }
 
+    /**
+     * Returns the current users timezone.
+     * TODO: A new function should be created which returns the current users timezone abbr instead of the model
+     * @return mixed
+     */
     public function myTimezone()
     {
         return UserUtil::getLoggedInUsersTimezone()->abbr;
     }
 
+    /**
+     * Returns whether or not timezones are enabled.
+     * TODO: These checks should be placed in the TimezoneManager
+     * @return mixed
+     */
     public function timezonesEnabled()
     {
         return UserExtendedSettings::get('enable_timezones', true);

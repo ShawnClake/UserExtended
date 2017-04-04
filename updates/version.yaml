@@ -95,3 +95,5 @@
 2.0.08:
     - Added integrated users. This is being shipped in preparation for 2.4.00 and 2.5.00
     - create_integrated_users.php
+2.1.00:
+    - User Extended Core v2.1.00 Release. Deprecated components and functions have been removed.

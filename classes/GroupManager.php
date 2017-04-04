@@ -80,7 +80,7 @@ class GroupManager extends StaticFactory
     public static function deleteGroup($groupCode)
     {
         $group = GroupManager::findGroup($groupCode);
-        //echo json_encode($groupCode);
+
         if(!isset($group))
             return;
 

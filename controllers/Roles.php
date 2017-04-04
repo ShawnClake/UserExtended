@@ -26,6 +26,10 @@ use Session;
  */
 class Roles extends Controller
 {
+
+    /**
+     * RoleManager render types
+     */
     const UE_CREATE_GROUP_FORM = 'create_group_form'; // _create_group_form
     const UE_CREATE_ROLE_FORM = 'create_role_form'; // _create_role_form
 
@@ -43,8 +47,15 @@ class Roles extends Controller
     const UE_MANAGE_ROLE_UI = 'manage_role_ui'; // _manage_role
     const UE_MANAGE_USERS_UI = 'manage_users_ui'; // _list_unassigned_user_in_group
 
-    const RESULT_LIM = 2;
+    /**
+     * How many results can be shown in a table
+     */
+    const RESULT_LIM = 8;
 
+    /**
+     * A queue of all renders that need to be preformed
+     * @var array
+     */
     public static $queue = [];
 
     public $implement = [
@@ -77,7 +88,8 @@ class Roles extends Controller
 
     /**
      * Action used for managing roles such as: their order, some stats, and their properties
-    */
+     * TODO: This needs a major cleanup and refactor
+     */
     public function manage()
     {
         $this->pageTitle = "Manage Roles";
@@ -252,26 +264,7 @@ class Roles extends Controller
             'error'   => ''
         ]);
 
-        /*if($feedback === false || $feedback->fails())
-        {
-            Flash::error('Role was not saved!');
 
-            if($feedback === false)
-                $uiFeedback = ['#feedback_role_save' => '<span class="text-danger">That code already exists.</span>'];
-            else
-            {
-                $errorString = '<span class="text-danger">';
-                $errors = json_decode($feedback->messages());
-                foreach($errors as $error)
-                {
-                    $errorString .= implode(' ', $error) . ' ';
-                }
-
-                $errorString .= '</span>';
-
-                $uiFeedback = ['#feedback_role_save' => $errorString];
-            }
-        } else */
         if(!($feedback === false || $feedback->fails())) {
             //Flash::success('Role successfully saved!');
             //$uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
@@ -457,7 +450,6 @@ class Roles extends Controller
     public function onAssignRole()
     {
         $roleCode = post('roleCode');
-        //echo json_encode($roleCode) . '<br>';
         $groupCode = $this->getCurrentGroup();
         if($groupCode === false)
             return false;
@@ -712,6 +704,10 @@ class Roles extends Controller
         return Redirect::to(Backend::url('rainlab/user/users/preview/' . $userid));
     }
 
+    /**
+     * Page left for table pagination
+     * @return array|bool
+     */
     public function onPageLeft()
     {
         $groupCode = $this->getCurrentGroup();
@@ -730,8 +726,6 @@ class Roles extends Controller
         if($page < 1 )
             $page = 1;
 
-        //echo 'hi' . $this->getCurrentPage($tbl);
-
         if($this->getCurrentPage($tbl) == $page)
             return false;
 
@@ -742,6 +736,10 @@ class Roles extends Controller
         return $this->render();
     }
 
+    /**
+     * Page right for table pagination
+     * @return array|bool
+     */
     public function onPageRight()
     {
         $groupCode = $this->getCurrentGroup();
@@ -765,8 +763,6 @@ class Roles extends Controller
         if($page > $maxPages)
             $page = $maxPages;
 
-        //echo $maxPages . 'hi' . $page;
-
         if($this->getCurrentPage($tbl) == $page)
             return false;
 
@@ -777,6 +773,10 @@ class Roles extends Controller
         return $this->render();
     }
 
+    /**
+     * Choose a page for table pagination
+     * @return array|bool
+     */
     public function onPageChoose()
     {
         $groupCode = $this->getCurrentGroup();
@@ -917,6 +917,9 @@ class Roles extends Controller
             Session::forget('ue.backend.role_manager.current_role');
     }
 
+    /**
+     * Removes the pagination session data
+     */
     private function flushCurrentPages()
     {
         if(Session::has('ue.backend.role_manager.current_page.list_roles'))
@@ -974,7 +977,12 @@ class Roles extends Controller
             return true;
         return false;
     }
-    
+
+    /**
+     * Gets the current page from session for pagination
+     * @param $tbl
+     * @return bool|null
+     */
     private function getCurrentPage($tbl)
     {
         $page = null;
@@ -985,6 +993,12 @@ class Roles extends Controller
         return false;
     }
 
+    /**
+     * Sets the current page for a table into session for pagination
+     * @param $tbl
+     * @param $page
+     * @return bool
+     */
     private function setCurrentPage($tbl, $page)
     {
         if($page < 1)
@@ -1187,10 +1201,11 @@ class Roles extends Controller
      * @param array $message
      * @return array
      */
-    protected function feedbackGenerator($validator, $destinationDiv = '#feedback',
+    protected function feedbackGenerator($validator,
+                                         $destinationDiv = '#feedback',
                                          array $flash = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''],
-                                         array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''])
-    {
+                                         array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => '']
+    ) {
         if($validator === false)
         {
             Flash::error($flash['false']);

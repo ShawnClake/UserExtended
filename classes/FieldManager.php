@@ -3,17 +3,29 @@
 use Clake\Userextended\Models\Field;
 
 /**
- * TODO: Utilize Static Factory.
+ * User Extended by Shawn Clake
  * Class FieldManager
+ * User Extended is licensed under the MIT license.
+ *
+ * @author Shawn Clake <shawn.clake@gmail.com>
+ * @link https://github.com/ShawnClake/UserExtended
+ *
+ * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @method static FieldManager all() FieldManager
  * @package Clake\UserExtended\Classes
  */
 class FieldManager extends StaticFactory
 {
 
+    /**
+     * Contains all of the currently existing fields
+     * @var
+     */
     private $fields;
 
     /**
+     * Creates a field
+     * TODO: There is sub-par validation here and this needs to be fixed in a future release.
      * @param $name
      * @param $code
      * @param $description
@@ -23,8 +35,14 @@ class FieldManager extends StaticFactory
      * @param array $data
      * @return Field
      */
-	public static function createField($name, $code, $description, $validation = "", $type = UserSettingsManager::UE_FORM_TEXT, $flags = [], $data = [])
-	{
+	public static function createField($name,
+                                       $code,
+                                       $description,
+                                       $validation = "",
+                                       $type = UserSettingsManager::UE_FORM_TEXT,
+                                       $flags = [],
+                                       $data = []
+    ) {
 		//Ensure that we are saving a unique field.
 
         // Just return on name not unique, OR, by using the Validator class to specify that it should be unique.
@@ -62,6 +80,7 @@ class FieldManager extends StaticFactory
 	}
 
     /**
+     * Generates a flags array. This is a helper function
      * @param bool $enabled
      * @param bool $registerable
      * @param bool $editable
@@ -79,6 +98,8 @@ class FieldManager extends StaticFactory
     }
 
     /**
+     * Updates a field.
+     * TODO: There is sub-par validation here and this needs to be fixed in a future release.
      * @param $name
      * @param $code
      * @param $description
@@ -88,8 +109,16 @@ class FieldManager extends StaticFactory
      * @param array $data
      * @return array
      */
-	public static function updateField($name, $code, $description, $type = UserSettingsManager::UE_FORM_TEXT, $validation = "", $flags = [], $data = []){
-		$field = FieldManager::findField($code);
+	public static function updateField($name,
+                                       $code,
+                                       $description,
+                                       $type = UserSettingsManager::UE_FORM_TEXT,
+                                       $validation = "",
+                                       $flags = [],
+                                       $data = []
+    ) {
+
+	    $field = FieldManager::findField($code);
 		$field->name = $name;
 		$field->code = $code;
 		$field->description = $description;
@@ -103,6 +132,7 @@ class FieldManager extends StaticFactory
 	}
 
     /**
+     * Deletes a field
      * @param $code
      */
 	public static function deleteField($code)
@@ -112,6 +142,7 @@ class FieldManager extends StaticFactory
 	}
 
     /**
+     * Factory function which fills the field manager with all existing fields
      * @return $this
      */
 	public function allFactory()
@@ -133,7 +164,7 @@ class FieldManager extends StaticFactory
 	/**
      * TODO: I'm not sure this function is needed.
      *
-	 * Determines if the given field is requried to register
+	 * Determines if the given field is required to register
 	 * @param $code
 	 * @return boolean
 	 */
@@ -142,13 +173,9 @@ class FieldManager extends StaticFactory
         $field = Field::where('code', $code)->first();
         return $field->flags['registerable'];
     }
-	/*public static function isRequried($name)
-	{
-		$selection = Field::where('name', $name)->first();
-		return ($selection->data['required'])? true : false;
-	}*/
 
     /**
+     * Returns all of the custom fields in order
      * @return array
      */
     public function getSortedFields()
