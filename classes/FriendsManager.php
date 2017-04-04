@@ -111,7 +111,7 @@ class FriendsManager
 		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
 		
 		
-		Log::info(UserUtil::getLoggedInUser()->name . " sent " . UserUtil::getUserForUserId($friendUserId) . " a friend request.");
+		Log::info(UserUtil::getLoggedInUser()->name . " sent " . UserUtil::getUser($friendUserId)->name . " a friend request.");
 		
 		Mail::send('clake.userextended::mail.received_friend_request', $data, function($message) use ($friendUserId) {
             $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
@@ -158,7 +158,7 @@ class FriendsManager
 
         $request->setStatus(1);
 		
-		Log::info(UserUtil::getUserForUserId($userId2) . " accepted " . UserUtil::getUserForUserId($userId1) . "'s friend request.");
+		Log::info(UserUtil::getUser($userId2)->name . " accepted " . UserUtil::getUser($userId1)->name . "'s friend request.");
 		
         $request->save();
     }
@@ -177,7 +177,7 @@ class FriendsManager
 
         $request->setStatus(2);
 
-		Log::info(UserUtil::getUserForUserId($userId2) . " declined " . UserUtil::getUserForUserId($userId1) . "'s friend request.");
+		Log::info(UserUtil::getUser($userId2)->name . " declined " . UserUtil::getUser($userId1)->name . "'s friend request.");
 		
         $request->save();
     }
@@ -200,7 +200,7 @@ class FriendsManager
 
         $relation->setStatus(3);
 
-		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUserForUserId($friendUserId) . ".");
+		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUser($friendUserId)->name . ".");
 		
         $relation->save();
     }
