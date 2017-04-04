@@ -3,7 +3,6 @@
 use Clake\Userextended\Models\Field;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
-use \October\Rain\Support\Facades\Yaml;
 
 /**
  * User Extended by Shawn Clake
@@ -29,6 +28,11 @@ use \October\Rain\Support\Facades\Yaml;
  */
 class UserSettingsManager extends StaticFactory
 {
+
+    /**
+     * Field types
+     * TODO: Change the values to be HTML form types if they aren't already.
+     */
     const UE_FORM_TEXT = 'text';
     const UE_FORM_CHECKBOX = 'checkbox';
     const UE_FORM_COLOR = 'color';
@@ -105,6 +109,13 @@ class UserSettingsManager extends StaticFactory
         return $this;
     }
 
+    /**
+     * Loads the settings without getting the current user
+     * This is useful for validation while a user isn't logged in.
+     * Use cases:
+     *   Programatically registering or updating a user
+     * @return $this
+     */
     public function validationFactory()
     {
         $this->load();

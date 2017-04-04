@@ -185,6 +185,13 @@ class Role extends Model
         $row->save();
     }
 
+    /**
+     * Removes a user from a role
+     * TODO: Is this code right? Why is it 'adding' a user?
+     * @param $userObj
+     * @param $groupId
+     * @return bool
+     */
     public static function removeUser($userObj, $groupId)
     {
         return self::addUser($userObj, $groupId);

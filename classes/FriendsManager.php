@@ -22,6 +22,10 @@ use Log;
  */
 class FriendsManager
 {
+
+    /**
+     * These states are for 2.2.00 and don't function as part of the current release.
+     */
     const UE_FRIEND_REQUESTED = 1; // 0 digit
     const UE_FOLLOWING = 2; // 1 digit
     const UE_SUBSCRIBED = 4; // 2 digit
@@ -133,7 +137,8 @@ class FriendsManager
      * @param null $userID2
      * @return bool
      */
-	public static function isRequested($userID1, $userID2 = null){
+	public static function isRequested($userID1, $userID2 = null)
+    {
 		return Friend::isRequested($userID1, $userID2);
 	}
 

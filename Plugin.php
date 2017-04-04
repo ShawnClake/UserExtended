@@ -134,7 +134,9 @@ class Plugin extends PluginBase
 
         });
 
-
+        // TODO: Try and see if we can hack in some code for injecting fields into the user controller.
+        // TODO: The reason we can't right now, is although the field would appear the user controller
+        // TODO: Wouldn't know how to save them as they get array'd and saved as JSON.
         /*$settings =
 
         Event::listen('backend.form.extendFields', function($widget) {

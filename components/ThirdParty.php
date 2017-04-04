@@ -13,7 +13,7 @@ use Page;
 
 /**
  * User Extended by Shawn Clake
- * Class Friends
+ * Class ThirdParty
  * User Extended is licensed under the MIT license.
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
