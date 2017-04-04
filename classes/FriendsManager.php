@@ -158,7 +158,7 @@ class FriendsManager
 
         $request->setStatus(1);
 		
-		Log::info(UserUtil::getUser($userId2)->name . " accepted " . UserUtil::getUser($userId1)->name . "'s friend request.");
+		Log::info(UserUtil::getUserForUserId($userId2)->name . " accepted " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
 		
         $request->save();
     }
@@ -177,7 +177,7 @@ class FriendsManager
 
         $request->setStatus(2);
 
-		Log::info(UserUtil::getUser($userId2)->name . " declined " . UserUtil::getUser($userId1)->name . "'s friend request.");
+		Log::info(UserUtil::getUserForUserId($userId2)->name . " declined " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
 		
         $request->save();
     }
@@ -200,7 +200,7 @@ class FriendsManager
 
         $relation->setStatus(3);
 
-		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUser($friendUserId)->name . ".");
+		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUserForUserId($friendUserId)->name . ".");
 		
         $relation->save();
     }
