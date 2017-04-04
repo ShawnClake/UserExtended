@@ -39,7 +39,7 @@ class Module extends UserExtended
             'Clake\UserExtended\Components\Account'    => 'account',
             'Clake\UserExtended\Components\Friends'    => 'friends',
             'Clake\UserExtended\Components\User'       => 'ueuser',
-            'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
+            //'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
         ];
     }
 

@@ -3,7 +3,7 @@
 # ===================================
 
 columns:
-    user_id[name]:
+    user_id:
         label: Username
         type: Text
         searchable: true
