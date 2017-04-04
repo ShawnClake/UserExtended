@@ -17,6 +17,7 @@ use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
 use Cms\Classes\Page;
+use Log;
 
 /**
  * User Extended by Shawn Clake

@@ -7,6 +7,7 @@ use Auth;
 use Illuminate\Support\Collection;
 use RainLab\User\Models\User;
 use Mail;
+use Log;
 
 /**
  * User Extended by Shawn Clake
