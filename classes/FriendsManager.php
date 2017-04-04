@@ -70,7 +70,7 @@ class FriendsManager
 
         $relation = Friend::friend($friendUserId)->first();
 
-		Log::info(UserUtil::getLoggedInUser()->name . " deleted " . UserUtil::getUserForUserId($friendUserId) . " as a friend.");
+		Log::info(UserUtil::getLoggedInUser()->name . " deleted " . UserUtil::getUserForUserId($friendUserId)->name . " as a friend.");
         // Soft deletes aren't working for some reason
         $relation->forceDelete();
     }
