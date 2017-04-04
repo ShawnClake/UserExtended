@@ -191,7 +191,7 @@ class UserManager extends StaticFactory
         else
             Flash::success(Lang::get('rainlab.user::lang.account.success_saved'));
 
-		Log::info( $data['name'] + "updated their account.");
+		Log::info( $data['name'] . "updated their account.");
         return $user;
     }
 
@@ -316,7 +316,7 @@ class UserManager extends StaticFactory
              * Modified to swap to logout
              * Automatically activated or not required, log the user in
              */
-			 Log::info( $data['name'] + " has created a new account.");
+			 Log::info( $data['name'] . " has created a new account.");
 			 
             if (!$automaticActivation || $requireActivation) {
                 $user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
@@ -351,7 +351,7 @@ class UserManager extends StaticFactory
             'code' => $code
         ];
 		
-		Log::info( "Confirmation email sent to " + $user->email);
+		Log::info( "Confirmation email sent to " . $user->email);
 		
         Mail::send('rainlab.user::mail.activate', $data, function($message) use ($user) {
             $message->to($user->email, $user->name);
@@ -440,7 +440,7 @@ class UserManager extends StaticFactory
         /*
          * Redirect to the intended page after successful sign in
          */
-		 Log::info($data['login'] + " successfully logged in.");
+		 Log::info($data['login'] . " successfully logged in.");
 		 
         $redirectUrl = $redirect_link;
 
@@ -468,7 +468,7 @@ class UserManager extends StaticFactory
         Flash::success(Lang::get('rainlab.user::lang.session.logout'));
 
         $url = post('redirect', Request::fullUrl());
-		Log::info($data['login'] + " successfully logged out.");
+		Log::info($data['login'] . " successfully logged out.");
         return Redirect::to($url);
     }
 
