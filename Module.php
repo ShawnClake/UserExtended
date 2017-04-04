@@ -29,7 +29,7 @@ class Module extends UserExtended
 
     public $description = "UserExtended Core";
 
-    public $version = "2.1.00";
+    public $version = "2.2.00";
 
     public function initialize() {}
 

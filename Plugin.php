@@ -14,7 +14,7 @@ use System\Classes\SettingsManager;
  * User Extended is licensed under the MIT license.
  * @link https://github.com/ShawnClake/UserExtended
  *
- * @version 2.1.00 User Extended Core
+ * @version 2.2.00 User Extended Core
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake
