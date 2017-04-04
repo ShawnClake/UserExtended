@@ -44,7 +44,7 @@ class UserManager extends StaticFactory
 
         $userCount = User::all()->count();
 
-        if(!isset($userCount) && empty($userCount) && $userCount == 0)
+        if(!isset($userCount) || empty($userCount) || $userCount == 0)
             return [];
 
 		if($userCount < $limit)
