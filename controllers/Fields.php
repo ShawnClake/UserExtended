@@ -92,8 +92,10 @@ class Fields extends Controller
             $flags,
             $data
         );
-		
-		$uiFeedback = $this->feedbackGenerator($feedback, '#feedback_field_save', [
+
+		// TODO: $feedback is a queryBuilder type, its not of type Validator. The type should be changed in 2.2.00
+        // TODO: See FieldManager::createField() for more details
+		/*$uiFeedback = $this->feedbackGenerator($feedback, '#feedback_field_save', [
             'success' => 'Field saved successfully!',
             'error'   => 'Field was not saved!',
             'false'   => 'Name, code and description are required!'
@@ -101,10 +103,12 @@ class Fields extends Controller
             'success' => '<span class="text-success">Field has been saved.</span>',
             'false'   => '<span class="text-danger">Name, code and description are required!</span>',
             'error'   => ''
-        ]);
+        ]);*/
 
-		return array_merge($this->render(), $uiFeedback);
-        //return Redirect::to(Backend::url('clake/userextended/fields/manage'));
+		// TODO: The FieldManager doesn't utilize the render system that I built into the RoleManager
+        // This cannot be used like this
+		//return array_merge($this->render(), $uiFeedback);
+        return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
     public function onAddField()
@@ -179,85 +183,6 @@ class Fields extends Controller
         $data['class']       = Helpers::arrayKeyToVal($post, 'data_class');
 
         return $data;
-    }
-	
-	    protected function feedbackGenerator($validator, $destinationDiv = '#feedback',
-                                         array $flash = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''],
-                                         array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''])
-    {
-        if($validator === false)
-        {
-            Flash::error($flash['false']);
-            return [$destinationDiv => $message['false']];
-        }
-
-        if($validator->fails())
-        {
-            Flash::error($flash['error']);
-            $errorString = $message['error'] . '<span class="text-danger">';
-            $errors = json_decode($validator->messages());
-            foreach($errors as $error)
-            {
-                $errorString .= implode(' ', $error) . ' ';
-            }
-            $errorString .= '</span>';
-            return [$destinationDiv => $errorString];
-        }
-
-        Flash::success($flash['success']);
-        return [$destinationDiv => $message['success']];
-    }
-	
-	   /**
-     * Renders each of the passed const's and returns a merged array of them
-     * $to_render is an array containing arrays of the following format [UE_CREATE_ROLE_FORM, ['group' => groupCode, 'role' => roleCode]]
-     * @param array $to_render
-     * @return array
-     */
-    protected function render(array $to_render = [])
-    {
-        if(empty($to_render))
-            $to_render = self::$queue;
-
-        if(empty($to_render))
-            return [];
-
-        $renders = [];
-
-        foreach($to_render as $renderType)
-        {
-            $partialName = $renderType[0];
-            $divId = '#' . $partialName;
-            $vars = $renderType[1];
-
-            if(isset($renderType['blank']) && $renderType['blank'] === true)
-            {
-                $renders = array_merge($renders, [$divId => '']);
-                continue;
-            }
-
-            $partial = $this->makePartial($partialName, $vars);
-
-            if(isset($renderType['override_key']) && $renderType['override_key'] === true)
-            {
-                $renders = array_merge($renders, [$partial]);
-            } else {
-                $renders = array_merge($renders, [$divId => $partial]);
-            }
-        }
-
-        $this->flushQueue();
-
-        return $renders;
-    }
-
-    /**
-     * Flushes the queue
-     * Remove all renders in queue
-     */
-    private function flushQueue()
-    {
-        self::$queue = [];
     }
 
 }
