@@ -2,6 +2,7 @@
 
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Field;
+use Clake\Userextended\Models\Friend;
 use Clake\Userextended\Models\Settings;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
@@ -90,6 +91,8 @@ class Friends extends ComponentBase
     public function onRun()
     {
         Plugin::injectAssets($this);
+        echo Friend::getHighestRelation(2);
+        echo Friend::friends(2)->toJson();
         //$this->addCss('/plugins/clake/userextended/assets/css/friends.css');
     }
 

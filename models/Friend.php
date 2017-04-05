@@ -1,5 +1,7 @@
 <?php namespace Clake\Userextended\Models;
 
+use Clake\UserExtended\Classes\FriendsManager;
+use Clake\UserExtended\Classes\Helpers;
 use Clake\UserExtended\Classes\UserUtil;
 use Model;
 use October\Rain\Database\Traits\SoftDelete;
@@ -36,14 +38,6 @@ class Friend extends Model
     use SoftDelete;
 
     use Timezonable;
-
-    // TODO: Remove in 2.2.00 when we use the new relation system
-    private $statuses = [
-        'requested' => 0,
-        'accepted' => 1,
-        'declined' => 2,
-        'blocked' => 3,
-    ];
 
     /**
      * @var string The database table used by the model.
@@ -85,6 +79,50 @@ class Friend extends Model
     public $attachMany = [];
 
     /**
+     * Returns the highest priority set relation, this is useful in cases where we need to utilize overrides
+     * @param $userIdA
+     * @param null $userIdB
+     * @return array|int
+     */
+    public static function getHighestRelation($userIdA, $userIdB = null)
+    {
+        $relation = Friend::relation($userIdA, $userIdB);
+        if($relation->count() == 0)
+            return [];
+
+        $hiBit = Helpers::hiBit($relation->first()->relation);
+        if(key_exists($hiBit, FriendsManager::UE_RELATION_STATES))
+            return $hiBit;
+
+        return 0;
+    }
+
+    /**
+     * Returns a collection of all the relations a user has with another user
+     * @param $userIdA
+     * @param null $userIdB
+     * @return array
+     */
+    public static function getAllRelations($userIdA, $userIdB = null)
+    {
+        $relation = Friend::relation($userIdA, $userIdB);
+        if($relation->count() == 0)
+            return [];
+
+        $bits = $relation->first()->relation;
+
+        $relations = [];
+
+        foreach(FriendsManager::UE_RELATION_STATES as $bit => $state)
+        {
+            if(Helpers::isBitSet($bits, $bit))
+                $relations[] = $bit;
+        }
+
+        return $relations;
+    }
+
+    /**
      * Returns whether or not two users are friends
      * @param $userIdA
      * @param $userIdB
@@ -92,7 +130,7 @@ class Friend extends Model
      */
     public static function isFriends($userIdA, $userIdB = null)
     {
-        return Friend::friend($userIdA, $userIdB)->count() > 0;
+        return key_exists(FriendsManager::UE_FRIENDS, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -103,7 +141,7 @@ class Friend extends Model
      */
     public static function isRequested($userIdA, $userIdB = null)
     {
-        return Friend::request($userIdA, $userIdB)->count() > 0;
+        return key_exists(FriendsManager::UE_FRIEND_REQUESTED, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -114,7 +152,7 @@ class Friend extends Model
      */
     public static function isDeclined($userIdA, $userIdB = null)
     {
-        return Friend::declined($userIdA, $userIdB)->count() > 0;
+        return key_exists(FriendsManager::UE_DECLINED, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -125,7 +163,7 @@ class Friend extends Model
      */
     public static function isBlocked($userIdA, $userIdB = null)
     {
-        return Friend::blocked($userIdA, $userIdB)->count() > 0;
+        return key_exists(FriendsManager::UE_BLOCKED, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -136,7 +174,60 @@ class Friend extends Model
      */
     public static function isRelationExists($userIdA, $userIdB = null)
     {
-        return Friend::relation($userIdA, $userIdB)->count() > 0;
+        return !!(self::getHighestRelation($userIdA, $userIdB));
+    }
+
+    /**
+     * Returns a relation model that has been filtered via a passed in closure function
+     * @param $closure
+     * @param $query
+     * @param $userIdA
+     * @param null $userIdB
+     * @return array|mixed
+     */
+    private function filterRelation($closure, $query, $userIdA, $userIdB = null)
+    {
+        $userIdB = UserUtil::getUsersIdElseLoggedInUsersId($userIdB);
+        if($userIdB == null)
+            return $query;
+
+        $query = $this->scopeRelation($query, $userIdA, $userIdB);
+
+        if($query->count() == 0)
+            return [];
+
+        $relations = $query->get();
+
+        return $relations->reject($closure);
+    }
+
+    /**
+     * Returns a collection of relation models which have been filtered via a passed in closure function
+     * @param $closure
+     * @param $query
+     * @param $userId
+     * @param string $direction
+     * @return array
+     */
+    private function filterRelations($closure, $query, $userId, $direction = '')
+    {
+        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
+        if($userId == null)
+            return $query;
+
+       if($direction == FriendsManager::UE_RELATION_SENDER)
+            $query = $this->scopeSentRelations($query, $userId);
+       else if($direction == FriendsManager::UE_RELATION_RECEIVER)
+           $query = $this->scopeReceivedRelations($query, $userId);
+       else
+           $query = $this->scopeRelations($query, $userId);
+
+        if($query->count() == 0)
+            return [];
+
+        $relations = $query->get();
+
+        return $relations->reject($closure);
     }
 
     /**
@@ -149,21 +240,11 @@ class Friend extends Model
      */
     public function scopeFriend($query, $userIdA, $userIdB = null)
     {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FRIENDS);
+        };
 
-        $userIdB = UserUtil::getUsersIdElseLoggedInUsersId($userIdB);
-        if($userIdB == null)
-            return $query;
-
-        return $query->where(function ($query) use($userIdA, $userIdB){
-            $query->where('user_that_sent_request', $userIdA)
-                ->where('user_that_accepted_request', $userIdB)
-                ->where('accepted', '1');
-        })->orWhere(function ($query) use($userIdA, $userIdB){
-            $query->where('user_that_sent_request', $userIdB)
-                ->where('user_that_accepted_request', $userIdA)
-                ->where('accepted', '1');
-        });
-
+        return $this->filterRelation($closure, $query, $userIdA, $userIdB);
     }
 
     /**
@@ -176,21 +257,11 @@ class Friend extends Model
      */
     public function scopeRequest($query, $userIdA, $userIdB = null)
     {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FRIEND_REQUESTED);
+        };
 
-        $userIdB = UserUtil::getUsersIdElseLoggedInUsersId($userIdB);
-        if($userIdB == null)
-            return $query;
-
-        return $query->where(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdA)
-                ->where('user_that_accepted_request', $userIdB)
-                ->where('accepted', '0');
-        })->orWhere(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdB)
-                ->where('user_that_accepted_request', $userIdA)
-                ->where('accepted', '0');
-        });
-
+        return $this->filterRelation($closure, $query, $userIdA, $userIdB);
     }
 
     /**
@@ -203,20 +274,11 @@ class Friend extends Model
      */
     public function scopeDeclined($query, $userIdA, $userIdB = null)
     {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_DECLINED);
+        };
 
-        $userIdB = UserUtil::getUsersIdElseLoggedInUsersId($userIdB);
-        if($userIdB == null)
-            return $query;
-
-        return $query->where(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdA)
-                ->where('user_that_accepted_request', $userIdB)
-                ->where('accepted', '2');
-        })->orWhere(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdB)
-                ->where('user_that_accepted_request', $userIdA)
-                ->where('accepted', '2');
-        });
+        return $this->filterRelation($closure, $query, $userIdA, $userIdB);
     }
 
     /**
@@ -228,20 +290,77 @@ class Friend extends Model
      */
     public function scopeBlocked($query, $userIdA, $userIdB = null)
     {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_BLOCKED);
+        };
 
-        $userIdB = UserUtil::getUsersIdElseLoggedInUsersId($userIdB);
-        if($userIdB == null)
-            return $query;
+        return $this->filterRelation($closure, $query, $userIdA, $userIdB);
+    }
 
-        return $query->where(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdA)
-                ->where('user_that_accepted_request', $userIdB)
-                ->where('accepted', '3');
-        })->orWhere(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdB)
-                ->where('user_that_accepted_request', $userIdA)
-                ->where('accepted', '3');
-        });
+    /**
+     * Scopes to the relation where a user is following another
+     * @param $query
+     * @param $userIdA
+     * @param null $userIdB
+     * @return array|mixed
+     */
+    public function scopeFollow($query, $userIdA, $userIdB = null)
+    {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FOLLOWING);
+        };
+
+        return $this->filterRelation($closure, $query, $userIdA, $userIdB);
+    }
+
+    /**
+     * Scopes to the relation where a user is subscribed to another
+     * @param $query
+     * @param $userIdA
+     * @param null $userIdB
+     * @return array|mixed
+     */
+    public function scopeSubscription($query, $userIdA, $userIdB = null)
+    {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_SUBSCRIBED);
+        };
+
+        return $this->filterRelation($closure, $query, $userIdA, $userIdB);
+    }
+
+    /**
+     * Scopes to all relations with a user involved
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeRelations($query, $userId)
+    {
+        return $query->where(FriendsManager::UE_RELATION_RECEIVER, $userId)
+            ->orWhere(FriendsManager::UE_RELATION_SENDER, $userId);
+    }
+
+    /**
+     * Scopes to all relations where a user initiated the relation
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeSentRelations($query, $userId)
+    {
+        return $query->where(FriendsManager::UE_RELATION_SENDER, $userId);
+    }
+
+    /**
+     * Scopes to all relaitons where a user received the relation
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeReceivedRelations($query, $userId)
+    {
+        return $query->where(FriendsManager::UE_RELATION_RECEIVER, $userId);
     }
 
     /**
@@ -258,11 +377,11 @@ class Friend extends Model
             return $query;
 
         return $query->where(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdA)
-                ->where('user_that_accepted_request', $userIdB);
+            $query->where(FriendsManager::UE_RELATION_SENDER, $userIdA)
+                ->where(FriendsManager::UE_RELATION_RECEIVER, $userIdB);
         })->orWhere(function ($query) use($userIdA, $userIdB) {
-            $query->where('user_that_sent_request', $userIdB)
-                ->where('user_that_accepted_request', $userIdA);
+            $query->where(FriendsManager::UE_RELATION_SENDER, $userIdB)
+                ->where(FriendsManager::UE_RELATION_RECEIVER, $userIdA);
         });
     }
 
@@ -274,11 +393,11 @@ class Friend extends Model
      */
     public function scopeFriendRequests($query, $userId = null)
     {
-        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
-        if($userId == null)
-            return $query;
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FRIEND_REQUESTED);
+        };
 
-        return $query->where('user_that_accepted_request', $userId)->where('accepted', '0');
+        return $this->filterRelations($closure, $query, $userId, FriendsManager::UE_RELATION_RECEIVER);
     }
 
     /**
@@ -289,11 +408,11 @@ class Friend extends Model
      */
     public function scopeSentRequests($query, $userId = null)
     {
-        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
-        if($userId == null)
-            return $query;
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FRIENDS);
+        };
 
-        return $query->where('user_that_sent_request', $userId)->where('accepted', '0');
+        return $this->filterRelation($closure, $query, $userId, FriendsManager::UE_RELATION_SENDER);
     }
 
     /**
@@ -304,18 +423,11 @@ class Friend extends Model
      */
     public function scopeFriends($query, $userId = null)
     {
-        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
-        if($userId == null)
-            return $query;
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FRIENDS);
+        };
 
-        return $query->where(function ($query) use ($userId){
-            $query->where('user_that_sent_request', $userId)
-                ->where('accepted', '1');
-        })->orWhere(function ($query) use ($userId) {
-                $query->where('user_that_accepted_request', $userId)
-                ->where('accepted', '1');
-        });
-
+        return $this->filterRelations($closure, $query, $userId);
     }
 
     /**
@@ -326,17 +438,71 @@ class Friend extends Model
      */
     public function scopeBlocks($query, $userId = null)
     {
-        $userId = UserUtil::getUsersIdElseLoggedInUsersId($userId);
-        if($userId == null)
-            return $query;
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_BLOCKED);
+        };
 
-        return $query->where(function ($query) use ($userId) {
-            $query->where('user_that_sent_request', $userId)
-                ->where('accepted', '3');
-        })->orWhere(function ($query) use ($userId) {
-            $query->where('user_that_accepted_request', $userId)
-                ->where('accepted', '3');
-        });
+        return $this->filterRelations($closure, $query, $userId);
+    }
+
+    /**
+     * Scopes to a users followers
+     * @param $query
+     * @param null $userId
+     * @return array
+     */
+    public function scopeFollowers($query, $userId = null)
+    {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FOLLOWING);
+        };
+
+        return $this->filterRelations($closure, $query, $userId, FriendsManager::UE_RELATION_RECEIVER);
+    }
+
+    /**
+     * Scopes to a collection of users a user is following
+     * @param $query
+     * @param null $userId
+     * @return array
+     */
+    public function scopeFollowing($query, $userId = null)
+    {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_FOLLOWING);
+        };
+
+        return $this->filterRelations($closure, $query, $userId, FriendsManager::UE_RELATION_SENDER);
+    }
+
+    /**
+     * Scopes to a collection of a users subscribers
+     * @param $query
+     * @param null $userId
+     * @return array
+     */
+    public function scopeSubscribers($query, $userId = null)
+    {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_SUBSCRIBED);
+        };
+
+        return $this->filterRelations($closure, $query, $userId, FriendsManager::UE_RELATION_RECEIVER);
+    }
+
+    /**
+     * Scopes to a collection of a users subscriptions
+     * @param $query
+     * @param null $userId
+     * @return array
+     */
+    public function scopeSubscriptions($query, $userId = null)
+    {
+        $closure = function ($relation) {
+            return !$relation->hasBond(FriendsManager::UE_SUBSCRIBED);
+        };
+
+        return $this->filterRelations($closure, $query, $userId, FriendsManager::UE_RELATION_SENDER);
     }
 
     /**
@@ -346,7 +512,7 @@ class Friend extends Model
      */
     public function scopePluckSender($query)
     {
-        return $query->pluck('user_that_sent_request');
+        return $query->pluck(FriendsManager::UE_RELATION_SENDER);
     }
 
     /**
@@ -356,7 +522,7 @@ class Friend extends Model
      */
     public function scopePluckReceiver($query)
     {
-        return $query->pluck('user_that_accepted_request');
+        return $query->pluck(FriendsManager::UE_RELATION_RECEIVER);
     }
 
     /**
@@ -371,7 +537,7 @@ class Friend extends Model
         if($userId == null)
             return $query;
 
-        return $query->where('user_that_sent_request', $userId);
+        return $query->where(FriendsManager::UE_RELATION_SENDER, $userId);
     }
 
     /**
@@ -386,7 +552,7 @@ class Friend extends Model
         if($userId == null)
             return $query;
 
-        return $query->where('user_that_accepted_request', $userId);
+        return $query->where(FriendsManager::UE_RELATION_RECEIVER, $userId);
     }
 
     /**
@@ -425,6 +591,7 @@ class Friend extends Model
      * 1 => Friend Accepted
      * 2 => Friend Declined
      * 3 => Blocked
+     * @deprecated
      * @param $status
      */
     public function setStatus($status)

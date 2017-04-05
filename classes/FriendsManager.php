@@ -26,10 +26,21 @@ class FriendsManager
     /**
      * These states are for 2.2.00 and don't function as part of the current release.
      */
+    const UE_RELATION_STATES = [
+        '1'       => 'UE_FRIEND_REQUESTED',
+        '2'       => 'UE_FOLLOWING',
+        '4'       => 'UE_SUBSCRIBED',
+        '8'       => 'UE_FRIENDS',
+        '16'      => 'UE_DECLINED',
+        '1048576' => 'UE_BLOCKED',
+        '2097152' => 'UE_DELETED',
+    ];
+
     const UE_FRIEND_REQUESTED = 1; // 0 digit
     const UE_FOLLOWING = 2; // 1 digit
     const UE_SUBSCRIBED = 4; // 2 digit
     const UE_FRIENDS = 8; // 3 digit
+    const UE_DECLINED = 16; // 4 digit
 
     // Additional Bond States should be given here. States 0-9 are reserved for UE official
     // States 10-19 can be used by other modules
@@ -39,6 +50,9 @@ class FriendsManager
 
     // States above 21 will override UE_BLOCKED and UE_DELETED. Be extremely careful with this!!!
 
+
+    const UE_RELATION_SENDER = 'user_that_sent_request';
+    const UE_RELATION_RECEIVER = 'user_that_accepted_request';
     /**
      * Returns a list of friend requests received.
      * @param int $limit

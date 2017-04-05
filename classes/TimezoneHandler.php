@@ -173,6 +173,8 @@ class TimezoneHandler
      */
     public static function twigRelativeTimeString($time, $locale = 'en')
     {
+        if(!isset($time))
+            return '';
         return self::getRelativeTimeString($time, $locale);
     }
 
