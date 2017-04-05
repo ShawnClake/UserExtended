@@ -130,7 +130,7 @@ class Friend extends Model
      */
     public static function isFriends($userIdA, $userIdB = null)
     {
-        return key_exists(FriendsManager::UE_FRIENDS, self::getAllRelations($userIdA, $userIdB));
+        return in_array(FriendsManager::UE_FRIENDS, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -141,7 +141,7 @@ class Friend extends Model
      */
     public static function isRequested($userIdA, $userIdB = null)
     {
-        return key_exists(FriendsManager::UE_FRIEND_REQUESTED, self::getAllRelations($userIdA, $userIdB));
+        return in_array(FriendsManager::UE_FRIEND_REQUESTED, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -152,7 +152,7 @@ class Friend extends Model
      */
     public static function isDeclined($userIdA, $userIdB = null)
     {
-        return key_exists(FriendsManager::UE_DECLINED, self::getAllRelations($userIdA, $userIdB));
+        return in_array(FriendsManager::UE_DECLINED, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -163,7 +163,7 @@ class Friend extends Model
      */
     public static function isBlocked($userIdA, $userIdB = null)
     {
-        return key_exists(FriendsManager::UE_BLOCKED, self::getAllRelations($userIdA, $userIdB));
+        return in_array(FriendsManager::UE_BLOCKED, self::getAllRelations($userIdA, $userIdB));
     }
 
     /**
@@ -639,10 +639,6 @@ class Friend extends Model
     }
 
     /**
-     * ALL CODE BELOW THIS POINT IS FOR 2.2.00
-     */
-
-    /**
      * Sets bonds between two users
      * @param $relation_states
      */
@@ -699,8 +695,8 @@ class Friend extends Model
      */
     public function setExclusiveBond($relation_states)
     {
-        $this->flushRelations();
-        $this->setRelation($relation_states);
+        $this->flushBonds();
+        $this->setBond($relation_states);
     }
 
 }

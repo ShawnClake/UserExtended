@@ -186,6 +186,7 @@ class User extends ComponentBase
         return ['#userSearchResults' => $content];
     }
 
+
     /**
      * Provides user information to the page
      * @return mixed
@@ -193,6 +194,9 @@ class User extends ComponentBase
     public function user()
     {
         $userid = $this->property('paramCode');
+
+        if(!isset($userid) || empty($userid))
+            $userid = UserUtil::getUsersIdElseLoggedInUsersId();
 
         return UserUtil::convertToUserExtendedUser(UserUtil::getUser($userid));
     }
@@ -244,7 +248,7 @@ class User extends ComponentBase
      */
     public function comments()
     {
-        $userid = $this->property('paramCode');
+        $userid = $this->user()->id;
 
         $user = UserUtil::getUser($userid);
 
@@ -260,7 +264,7 @@ class User extends ComponentBase
      */
     public function onComment()
     {
-        $userid = $this->property('paramCode');
+        $userid = $this->user()->id;
         $content = post('comment');
 
         CommentManager::createComment($userid, $content);

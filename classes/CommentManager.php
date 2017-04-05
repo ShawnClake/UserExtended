@@ -31,6 +31,8 @@ class CommentManager
 
         $author = UserUtil::getLoggedInUser();
 
+        //echo(json_encode($user));
+
         if(is_null($author) || is_null($user))
             return false;
 

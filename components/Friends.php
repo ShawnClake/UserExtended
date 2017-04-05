@@ -91,8 +91,8 @@ class Friends extends ComponentBase
     public function onRun()
     {
         Plugin::injectAssets($this);
-        echo Friend::getHighestRelation(2);
-        echo Friend::friends(2)->toJson();
+        //echo Friend::getHighestRelation(2);
+        //echo Friend::friends(2)->toJson();
         //$this->addCss('/plugins/clake/userextended/assets/css/friends.css');
     }
 

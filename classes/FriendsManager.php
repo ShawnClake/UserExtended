@@ -64,7 +64,7 @@ class FriendsManager
 		
 		$limit = Helpers::unlimited($limit);
 		
-        $requests = Friend::friendRequests()->take($limit)->get();
+        $requests = Friend::friendRequests()->take($limit);
 		
         foreach ($requests as $user) {
             $users->push(UserUtil::getRainlabUser($user->user_that_sent_request));
@@ -117,7 +117,7 @@ class FriendsManager
 
         $request->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserId);
 
-        $request->setStatus(0);
+        $request->setExclusiveBond(FriendsManager::UE_FRIEND_REQUESTED);
 
         $request->save();
 				
@@ -168,9 +168,10 @@ class FriendsManager
         if(!Friend::isRequested($userId1, $userId2))
             return;
 
+        /** @var Friend $request */
         $request = Friend::request($userId1, $userId2)->first();
 
-        $request->setStatus(1);
+        $request->setExclusiveBond(FriendsManager::UE_FRIENDS);
 		
 		Log::info(UserUtil::getUserForUserId($userId2)->name . " accepted " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
 		
@@ -187,9 +188,10 @@ class FriendsManager
         if(!Friend::isRequested($userId1, $userId2))
             return;
 
+        /** @var Friend $request */
         $request = Friend::request($userId1, $userId2)->first();
 
-        $request->setStatus(2);
+        $request->setExclusiveBond(FriendsManager::UE_DECLINED);
 
 		Log::info(UserUtil::getUserForUserId($userId2)->name . " declined " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
 		
@@ -212,7 +214,7 @@ class FriendsManager
 
         $relation->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserId);
 
-        $relation->setStatus(3);
+        $relation->setExclusiveBond(FriendsManager::UE_BLOCKED);
 
 		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUserForUserId($friendUserId)->name . ".");
 		
@@ -230,13 +232,13 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friend::friendRequests(null)->take($limit)->get();
+        $requests = Friend::friendRequests(null)->take($limit);
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->id));
         }
 
-        $requests = Friend::sentRequests(null)->take($limit)->get();
+        $requests = Friend::sentRequests(null)->take($limit);
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->id));
@@ -260,9 +262,9 @@ class FriendsManager
         $users = new Collection();
 
         $limit = Helpers::unlimited($limit);
-
-        $requests = Friend::friends($userId)->get();
-
+        //dd(json_encode(Friend::friends($userId)));
+        $requests = Friend::friends($userId);
+        //dd($requests->get());
         if($requests->isEmpty())
         {
             return $users;
