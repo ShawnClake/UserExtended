@@ -1,0 +1,52 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        span: left
+    description:
+        label: Description
+        type: text
+        searchable: true
+        span: right
+    type:
+        label: Restriction Type
+        comment: Whitelist or Blacklist the types
+        span: left
+        preset: UE_WHITELIST
+        type: dropdown
+        options:
+            UE_WHITELIST: Whitelist
+            UE_BLACKLIST: Blacklist
+    ip:
+        label: IP
+        type: text
+        span: right
+    user:
+        label: User
+        type: recordfinder
+        list: $/rainlab/user/models/user/columns.yaml
+        prompt: Click the %s button to find a user
+        nameFrom: name
+        descriptionFrom: email
+        span: left
+    group:
+        label: Group
+        type: recordfinder
+        list: $/clake/userextended/models/groupsextended/columns.yaml
+        prompt: Click the %s button to find a group
+        nameFrom: name
+        descriptionFrom: description
+        span: right
+    role:
+        label: Role
+        type: recordfinder
+        list: $/clake/userextended/models/role/columns.yaml
+        prompt: Click the %s button to find a role
+        nameFrom: name
+        descriptionFrom: description
+        span: left

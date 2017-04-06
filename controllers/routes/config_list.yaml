@@ -11,9 +11,8 @@ modelClass: Clake\Userextended\Models\Route
 # List Title
 title: Route
 
-
 # Link URL for each record
-recordUrl: clake/userextended/routes/preview/:id
+recordUrl: clake/userextended/routes/update/:id
 
 # Message to display if the list is empty
 noRecordsMessage: backend::lang.list.no_records
@@ -22,10 +21,12 @@ noRecordsMessage: backend::lang.list.no_records
 recordsPerPage: 20
 
 # Display checkboxes next to each record
-showCheckboxes: true
+#showCheckboxes: true
 
 # Displays the list column set up button
 showSetup: true
 
+toolbar:
+    buttons: manage_routes_toolbar
 # Filter widget configuration
 # filter: config_filter.yaml

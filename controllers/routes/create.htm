@@ -9,12 +9,12 @@
 
 <?php Block::put('body') ?>
 
-        <div class="layout-row min-size">
-            <?= $this->formRenderOutsideFields() ?>
-        </div>
+    <?= Form::open(['class'=>'layout']) ?>
+
         <div class="layout-row">
-            <?= $this->formRenderPrimaryTabs() ?>
+            <?= $this->formRender() ?>
         </div>
+
 
         <div class="form-buttons">
             <div class="loading-indicator-container">
@@ -36,12 +36,13 @@
                     <?= e(trans('backend::lang.form.create_and_close')) ?>
                 </button>
                 <span class="btn-text">
-                    <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url('clake/userexnteded/routes') ?>"><?= e(trans('backend::lang.form.cancel')) ?></a>
+                    <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url('clake/userextended/routes') ?>"><?= e(trans('backend::lang.form.cancel')) ?></a>
                 </span>
             </div>
         </div>
+    <?= Form::close() ?>
 
-    <?php Block::endPut() ?>
+<?php Block::endPut() ?>
 
 
 <?php else: ?>
@@ -50,6 +51,6 @@
     </div>
     <div class="padded-container">
         <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
-        <p><a href="<?= Backend::url('clake/userexnteded/routes') ?>" class="btn btn-default"><?= e(trans('rainlab.user::lang.users.return_to_list')) ?></a></p>
+        <p><a href="<?= Backend::url('clake/userextended/routes') ?>" class="btn btn-default"><?= e(trans('rainlab.user::lang.users.return_to_list')) ?></a></p>
     </div>
 <?php endif ?>

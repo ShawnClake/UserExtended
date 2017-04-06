@@ -16,10 +16,10 @@ defaultRedirect: clake/userextended/routes
 
 # Create page
 create:
-    redirect: clake/userextended/routes/preview/:id
+    redirect: clake/userextended/routes/update/:id
     redirectClose: clake/userextended/routes
 
 # Update page
 update:
     redirect: clake/userextended/routes/update/:id
-    redirectClose: clake/userextended/routes/preview/:id
+    redirectClose: clake/userextended/routes

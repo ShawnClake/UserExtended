@@ -1,0 +1,13 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+restrictions:
+    label: Restrictions
+    manage:
+        form: $/clake/userextended/models/routerestriction/fields.yaml
+        list: $/clake/userextended/models/routerestriction/columns.yaml
+    view:
+        list: $/clake/userextended/models/routerestriction/columns.yaml
+        toolbarButtons: add|remove|create|delete
+        showCheckboxes: false

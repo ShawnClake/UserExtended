@@ -126,7 +126,7 @@ class Plugin extends PluginBase
                 ],
                 'routes' => [
                     'label' => 'Routes',
-                    'url'   => Backend::url('clake/userextended/routes/manage'),
+                    'url'   => Backend::url('clake/userextended/routes/index'),
                     'icon'  => 'icon-eye-slash',
                     'order' => 300
                 ],

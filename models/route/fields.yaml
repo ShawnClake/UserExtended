@@ -5,11 +5,12 @@
 fields:
     route:
         label: Route
-        #span: left
-
-    type:
-        label: Restriction Type
-        comment: Turn on whitelist, otherwise it's blacklisted
-        #span: right
-        preset: true
+        span: left
+        type: text
+        comment: The route address. IE. /account/login
+    enabled:
+        label: Enabled
+        span: right
         type: switch
+        comment: Enable the Route Restrictions
+        default: true

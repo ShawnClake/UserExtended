@@ -3,22 +3,17 @@
 # ===================================
 
 columns:
-    id:
-        label: rainlab.user::lang.group.id
-        invisible: true
-
     route:
         label: Route
         searchable: true
 
+    enabled:
+        label: Enabled
+        type: switch
+
     attempts:
         label: Times Accessed
         type: number
-
-    type:
-        label: On whitelist, off blacklist
-        type: switch
-        searchable: true
 
     last_accessed:
         label: Last Acessed
