@@ -111,7 +111,6 @@ class User extends ComponentBase
     public function onRun()
     {
         Plugin::injectAssets($this);
-
         $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
 		//$this->addCss('/plugins/clake/userextended/assets/css/user.css');
     }

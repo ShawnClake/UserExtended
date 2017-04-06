@@ -40,6 +40,7 @@ class Module extends UserExtended
             'Clake\UserExtended\Components\Friends'    => 'friends',
             'Clake\UserExtended\Components\User'       => 'ueuser',
             'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
+            'Clake\UserExtended\Components\Routes'     => 'routes',
         ];
     }
 
