@@ -6,8 +6,9 @@ fields:
     route:
         label: Route
         span: left
-        type: text
+        type: dropdown
         comment: The route address. IE. /account/login
+        options: getPossibleRoutes
     enabled:
         label: Enabled
         span: right

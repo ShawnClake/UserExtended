@@ -5,6 +5,7 @@ use Model;
 use October\Rain\Support\Collection;
 use Clake\UserExtended\Traits\Timezonable;
 use October\Rain\Database\Traits\SoftDelete;
+use Cms\Classes\Page;
 
 /**
  * User Extended by Shawn Clake
@@ -71,5 +72,10 @@ class Route extends Model
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    public function getPossibleRoutes()
+    {
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'url' );
+    }
 
 }
