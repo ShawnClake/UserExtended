@@ -106,17 +106,11 @@ class Plugin extends PluginBase
         Event::listen('backend.menu.extendItems', function ($manager)
         {
             $manager->addSideMenuItems('RainLab.User', 'user', [
-                /*'groups' => [
-                    'label' => 'Group Manager',
-                    'url'   => Backend::url('clake/userextended/groupsextended'),
-                    'icon'  => 'icon-users',
-                    'order' => 500
-                ],*/
                 'roles' => [
                     'label' => 'Role Manager',
                     'url'   => Backend::url('clake/userextended/roles/manage'),
                     'icon'  => 'icon-pencil',
-                    'order' => 600
+                    'order' => 700
                 ],
                 'users-side' => [
                     'label' => 'Users',
@@ -128,8 +122,24 @@ class Plugin extends PluginBase
                     'label' => 'Field Manager',
                     'url'   => Backend::url('clake/userextended/fields/manage'),
                     'icon'  => 'icon-pencil-square-o',
-                    'order' => 700
+                    'order' => 600
                 ],
+                'routes' => [
+                    'label' => 'Routes',
+                    'url'   => Backend::url('clake/userextended/routes/manage'),
+                    'icon'  => 'icon-eye-slash',
+                    'order' => 300
+                ],
+            ]);
+
+            $manager->addSideMenuItems('October.Cms', 'cms', [
+                /*'routes' => [
+                    'label' => 'Routes',
+                    'url'   => Backend::url('clake/userextended/routes/preview'),
+                    'icon'  => 'icon-eye-slash',
+                    //'order' => 600
+                ],*/
+
             ]);
 
         });

@@ -75,7 +75,7 @@ class Roles extends Controller
         parent::__construct();
 
         // Setting this context so that our sidebar menu works
-        BackendMenu::setContext('RainLab.User', 'user', 'users');
+        BackendMenu::setContext('RainLab.User', 'user', 'roles');
 		
         $this->addJs('/plugins/clake/userextended/assets/js/libs/interact.min.js');
         $this->addJs('/plugins/clake/userextended/assets/js/general.js');

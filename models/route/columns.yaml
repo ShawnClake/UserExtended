@@ -1,0 +1,29 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: rainlab.user::lang.group.id
+        invisible: true
+
+    route:
+        label: Route
+        searchable: true
+
+    attempts:
+        label: Times Accessed
+        type: number
+
+    type:
+        label: On whitelist, off blacklist
+        type: switch
+        searchable: true
+
+    last_accessed:
+        label: Last Acessed
+        type: datetime
+
+    created_at:
+        label: rainlab.user::lang.group.created_at
+        type: datetime

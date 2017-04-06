@@ -1,0 +1,15 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    route:
+        label: Route
+        #span: left
+
+    type:
+        label: Restriction Type
+        comment: Turn on whitelist, otherwise it's blacklisted
+        #span: right
+        preset: true
+        type: switch

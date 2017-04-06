@@ -97,3 +97,6 @@
     - create_integrated_users.php
 2.1.00:
     - User Extended Core v2.1.00 Release. Deprecated components and functions have been removed.
+2.1.01:
+    - Tweaked route restriction table
+    - route_restriction_add_deletes_attempts.php

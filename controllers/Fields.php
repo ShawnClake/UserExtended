@@ -47,7 +47,7 @@ class Fields extends Controller
         //BackendMenu::setContext('October.System', 'system', 'settings');
         //SettingsManager::setContext('clake.userextended', 'settings');
 
-        BackendMenu::setContext('RainLab.User', 'user', 'users');
+        BackendMenu::setContext('RainLab.User', 'user', 'fields');
 
         //Add CSS for some backend menus
         $this->addCss('/plugins/clake/userextended/assets/css/backend.css');
