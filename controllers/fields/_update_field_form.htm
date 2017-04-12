@@ -89,15 +89,15 @@
 					<div class="form-group span-right">
 						<label>Validation Flags</label> <br>
 						<?php if (isset($selection['validation']['flags'])): ?>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted" > Accepted (Evaluates to true|yes|on)</div>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" > Required </div>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean" > Boolean (Evaluates to true|false|1|0)</div>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed"> Confirmed (Useful for Passwords)</div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted" <?php if(in_array('accepted', $selection['validation']['flags'])):?>checked<?php endif;?>> Accepted (Evaluates to true|yes|on)</div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" <?php if(in_array('required', $selection['validation']['flags'])):?>checked<?php endif;?>> Required </div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean" <?php if(in_array('boolean', $selection['validation']['flags'])):?>checked<?php endif;?>> Boolean (Evaluates to true|false|1|0)</div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed" <?php if(in_array('confirmed', $selection['validation']['flags'])):?>checked<?php endif;?>> Confirmed (Useful for Passwords)</div>
 						<?php else: ?>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted" > Accepted (Evaluates to true|yes|on)</div>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" > Required </div>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean" > Boolean (Evaluates to true|false|1|0)</div>
-						<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed"> Confirmed (Useful for Passwords)</div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="accepted" > Accepted (Evaluates to true|yes|on)</div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="required" > Required </div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="boolean" > Boolean (Evaluates to true|false|1|0)</div>
+							<div class="checkbox"><input type="checkbox" name="validation_flags[]" value="confirmed"> Confirmed (Useful for Passwords)</div>
 						<?php endif; ?>
 					</div>
 
