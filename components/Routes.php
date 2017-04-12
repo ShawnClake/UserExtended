@@ -65,31 +65,96 @@ class Routes extends ComponentBase
         Plugin::injectAssets($this);
         $url = $this->page->url;
 
-        $route = Route::where('route', $url)->where('enabled', true);
-
-        if($route->count() <= 0)
+        // If no restrictions exist, then we are good to go. Return positively.
+        if(!$this->doRestrictionsExist($url))
             return '';
 
+        // If the user isn't logged in, then no chance they can access a restricted page.
         $user = UserUtil::getLoggedInUser();
         if(!$user)
             return Redirect::intended($redirUrl);
 
+        // Now we start checking for whether the user should be allowed to access the page starting at the most parent restrictions
+        $allowed = true;
+
+        $parents = substr_count($url, '/') - 1;
+
+        $offset = 1;
+
+        for($i = 0; $i < $parents; $i++)
+        {
+            $length = strpos($url, '/', $offset);
+            $offset += $length;
+            $subUrl = substr($url, 0, $length);
+
+            $route = Route::where('route', $subUrl)->where('enabled', true)->where('cascade', true);
+
+            if($route->count() > 0)
+            {
+                $state = $this->isRouteAllowed($route, $user);
+                if($state !== null)
+                    $allowed = $state;
+            }
+        }
+
+        $route = Route::where('route', $url)->where('enabled', true);
+
+        if($route->count() > 0)
+        {
+            $state = $this->isRouteAllowed($route, $user);
+            if($state !== null)
+                $allowed = $state;
+        }
+
+        if($allowed)
+            return '';
+
+        return Redirect::intended($redirUrl);
+    }
+
+    protected function doRestrictionsExist($url)
+    {
+        $possibles = substr_count($url, '/');
+
+        $url .= '/';
+
+        for($i = 0; $i < $possibles; $i++)
+        {
+            $url = substr($url, 0, strrpos($url, '/'));
+
+            $query = Route::where('route', $url)->where('enabled', true);
+
+            if($i != 0)
+            {
+                $query->where('cascade', true);
+
+            }
+
+            if($query->count() > 0)
+                return true;
+        }
+
+        return false;
+    }
+
+    protected function isRouteAllowed($route, $user)
+    {
         $restrictions = $route->first()->restrictions;
 
-        $allowed = true;
+        $allowed = null;
 
         foreach($restrictions as $restriction)
         {
             if($restriction->type == RouteManager::UE_WHITELIST)
             {
                 if(isset($restriction->user_id) && $user->id == $restriction->user_id)
-                    return '';
+                    return true;
                 if(isset($restriction->role_id) && UserRoleManager::currentUser()->isInRole($restriction->role->code))
-                    return '';
+                    return true;
                 if(isset($restriction->group_id) && UserGroupManager::currentUser()->isInGroup($restriction->group->code))
-                    return '';
+                    return true;
                 if(isset($restriction->ip) && $_SERVER['REMOTE_ADDR'] == $restriction->ip)
-                    return '';
+                    return true;
             } else {
                 if(isset($restriction->user_id) && $user->id == $restriction->user_id)
                     $allowed = false;
@@ -101,12 +166,8 @@ class Routes extends ComponentBase
                     $allowed = false;
             }
         }
-        //echo json_encode($restrictions);
 
-        if($allowed)
-            return '';
-
-        return Redirect::intended($redirUrl);
+        return $allowed;
     }
 
 }

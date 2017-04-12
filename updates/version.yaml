@@ -109,3 +109,6 @@
 2.1.04:
     - Added a pivot table for route restrictions
     - create_routes_pivot_table.php
+2.1.05:
+    - Added descriptions and cascading to children for route restricitons
+    - routes_add_description_and_child.php

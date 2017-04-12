@@ -7,8 +7,16 @@ columns:
         label: Route
         searchable: true
 
+    description:
+        label: Descrption
+        searchable: true
+
     enabled:
         label: Enabled
+        type: switch
+
+    cascade:
+        label: Cascades
         type: switch
 
     attempts:

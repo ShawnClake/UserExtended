@@ -82,7 +82,7 @@ class Route extends Model
 
     public function getPossibleRoutes()
     {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'url' );
+        return Page::sortBy('url')->lists('url', 'url' );
     }
 
 }
