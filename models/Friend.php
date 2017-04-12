@@ -91,7 +91,7 @@ class Friend extends Model
             return [];
 
         $hiBit = Helpers::hiBit($relation->first()->relation);
-        if(key_exists($hiBit, FriendsManager::UE_RELATION_STATES))
+        if(key_exists($hiBit, FriendsManager::$UE_RELATION_STATES))
             return $hiBit;
 
         return 0;
@@ -113,7 +113,7 @@ class Friend extends Model
 
         $relations = [];
 
-        foreach(FriendsManager::UE_RELATION_STATES as $bit => $state)
+        foreach(FriendsManager::$UE_RELATION_STATES as $bit => $state)
         {
             if(Helpers::isBitSet($bits, $bit))
                 $relations[] = $bit;

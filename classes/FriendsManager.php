@@ -5,7 +5,6 @@ namespace Clake\UserExtended\Classes;
 use Clake\Userextended\Models\Friend;
 use Auth;
 use Illuminate\Support\Collection;
-use RainLab\User\Models\User;
 use Mail;
 use Log;
 
@@ -26,7 +25,7 @@ class FriendsManager
     /**
      * These states are for 2.2.00 and don't function as part of the current release.
      */
-    const UE_RELATION_STATES = [
+    public static $UE_RELATION_STATES = [
         '1'       => 'UE_FRIEND_REQUESTED',
         '2'       => 'UE_FOLLOWING',
         '4'       => 'UE_SUBSCRIBED',
@@ -123,7 +122,6 @@ class FriendsManager
 				
 		$data = ['user' => UserUtil::getLoggedInUser()->name,
 		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
-		
 		
 		Log::info(UserUtil::getLoggedInUser()->name . " sent " . UserUtil::getUser($friendUserId)->name . " a friend request.");
 		
