@@ -130,6 +130,12 @@ class Plugin extends PluginBase
                     'icon'  => 'icon-eye-slash',
                     'order' => 300
                 ],
+                'timezones' => [
+                    'label' => 'Timezones',
+                    'url'   => Backend::url('clake/userextended/timezones/index'),
+                    'icon'  => 'icon-clock-o',
+                    'order' => 200
+                ],
             ]);
 
             $manager->addSideMenuItems('October.Cms', 'cms', [

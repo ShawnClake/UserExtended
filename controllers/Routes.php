@@ -17,7 +17,7 @@ use Db;
 
 /**
  * User Extended by Shawn Clake
- * Class Roues
+ * Class Routes
  * User Extended is licensed under the MIT license.
  *
  * @author Shawn Clake <shawn.clake@gmail.com>

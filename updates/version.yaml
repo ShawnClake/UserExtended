@@ -98,17 +98,19 @@
 2.1.00:
     - User Extended Core v2.1.00 Release. Deprecated components and functions have been removed.
 2.1.01:
+    - Fixed a bug which was preventing autofilling of custom fields. Oops.
+2.1.02:
     - Tweaked route restriction table
     - route_restriction_add_deletes_attempts.php
-2.1.02:
+2.1.03:
     - Removed type from routes and replaced it with an enabled flag
     - routes_switch_type.php
-2.1.03:
+2.1.04:
     - Added additional fields for route resitrctions
     - route_restriction_add_flags.php
-2.1.04:
+2.1.05:
     - Added a pivot table for route restrictions
     - create_routes_pivot_table.php
-2.1.05:
+2.1.06:
     - Added descriptions and cascading to children for route restricitons
     - routes_add_description_and_child.php

@@ -1,0 +1,25 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Timezones
+
+# Model Form Field configuration
+form: $/clake/userextended/models/Timezone/fields.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Timezone
+
+# Default redirect location
+defaultRedirect: clake/userextended/timezones
+
+# Create page
+create:
+    redirect: clake/userextended/timezones/update/:id
+    redirectClose: clake/userextended/timezones
+
+# Update page
+update:
+    redirect: clake/userextended/timezones/update/:id
+    redirectClose: clake/userextended/timezones
