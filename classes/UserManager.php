@@ -99,6 +99,8 @@ class UserManager extends StaticFactory
         if(!isset($user))
         {
             if (!$user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser())) {
+				Log::info("Error updating user.");
+				Log::info(UserUtil::getLoggedInUser());
                 return false;
             }
         }
@@ -198,6 +200,7 @@ class UserManager extends StaticFactory
             Flash::success(Lang::get('rainlab.user::lang.account.success_saved'));
 
 		Log::info( $data['name'] . " updated their account.");
+		Log::info($data);
 
         return $user;
     }
@@ -324,6 +327,7 @@ class UserManager extends StaticFactory
              * Automatically activated or not required, log the user in
              */
 			 Log::info( UserUtil::getLoggedInUser()->name . " has created a new account.");
+			 Log::info(UserUtil::getLoggedInUser());
 			 
 
             if (!$automaticActivation || $requireActivation) {
@@ -467,6 +471,7 @@ class UserManager extends StaticFactory
         }
 
 		Log::info(UserUtil::getLoggedInUser()->name . " successfully logged out.");
+		Log::info(UserUtil::getLoggedInUser());
         Auth::logout();
         Event::fire('rainlab.user.logout', [$user]);
         Event::fire('clake.ue.logout', [$user]);

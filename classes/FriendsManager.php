@@ -99,6 +99,8 @@ class FriendsManager
         $relation = Friend::friend($friendUserId)->first();
 
 		Log::info(UserUtil::getLoggedInUser()->name . " deleted " . UserUtil::getUserForUserId($friendUserId)->name . " as a friend.");
+		Log::info(UserUtil::getLoggedInUser());
+		Log::info(UserUtil::getUserForUserId($friendUserId));
         // Soft deletes aren't working for some reason
         $relation->forceDelete();
     }
@@ -139,6 +141,8 @@ class FriendsManager
 		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
 		
 		Log::info(UserUtil::getLoggedInUser()->name . " sent " . UserUtil::getUser($friendUserId)->name . " a friend request.");
+		Log::info(UserUtil::getLoggedInUser());
+		Log::info(UserUtil::getUser($friendUserId));
 		
 		Mail::send('clake.userextended::mail.received_friend_request', $data, function($message) use ($friendUserId) {
             $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
@@ -187,6 +191,8 @@ class FriendsManager
         $request->setExclusiveBond(FriendsManager::UE_FRIENDS);
 		
 		Log::info(UserUtil::getUserForUserId($userId2)->name . " accepted " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
+		Log::info(UserUtil::getUserForUserId($userId2));
+		Log::info(UserUtil::getUserForUserId($userId1));
 		
         $request->save();
     }
@@ -207,6 +213,9 @@ class FriendsManager
         $request->setExclusiveBond(FriendsManager::UE_DECLINED);
 
 		Log::info(UserUtil::getUserForUserId($userId2)->name . " declined " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
+		Log::info(UserUtil::getUserForUserId($userId2));
+		Log::info(UserUtil::getUserForUserId($userId1));
+		
 		
         $request->save();
     }
@@ -230,6 +239,8 @@ class FriendsManager
         $relation->setExclusiveBond(FriendsManager::UE_BLOCKED);
 
 		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUserForUserId($friendUserId)->name . ".");
+		Log::info(UserUtil::getLoggedInUser());
+		Log::info(UserUtil::getUserForUserId($friendUserId));
 		
         $relation->save();
     }
