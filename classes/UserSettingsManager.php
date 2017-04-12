@@ -94,6 +94,7 @@ class UserSettingsManager extends StaticFactory
     public function withFactory(\Clake\Userextended\Models\UserExtended $user)
     {
         $this->user = $user;
+        $this->settings = $this->user->settings;
         $this->load();
         return $this;
     }
@@ -105,6 +106,7 @@ class UserSettingsManager extends StaticFactory
     public function currentUserFactory()
     {
         $this->user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
+        $this->settings = $this->user->settings;
         $this->load();
         return $this;
     }
@@ -508,6 +510,7 @@ class UserSettingsManager extends StaticFactory
             'name'  => $settingName,
             'data'  => $options['data'],
             'class' => $class,
+            'value' => $this->getSetting($settingName)[0],
         ]);
     }
 
