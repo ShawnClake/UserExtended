@@ -7,8 +7,12 @@ use Clake\UserExtended\Classes\RoleManager;
 use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\GroupsExtended;
+use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
+use Clake\UserExtended\Updates\SeedUserGroupsTable;
 use October\Rain\Support\Facades\Flash;
+use RainLab\User\Models\UserGroup;
 use Redirect;
 use Backend;
 use Session;
@@ -86,6 +90,8 @@ class Roles extends Controller
         $this->addCss('/plugins/clake/userextended/assets/css/backend.css');
     }
 
+
+
     /**
      * Action used for managing roles such as: their order, some stats, and their properties
      * TODO: This needs a major cleanup and refactor
@@ -97,6 +103,16 @@ class Roles extends Controller
         $this->vars['groups'] = GroupManager::allGroups()->getGroups();
 
         //$this->flushSession();
+
+        $this->vars['selectedGroup'] = null;
+        $this->vars['currentGroupCode'] = null;
+        $this->vars['unassignedRoles'] = null;
+        $this->vars['unassignedRoleCount'] = null;
+        $this->vars['unassignedUsers'] = null;
+
+        if(GroupManager::allGroups()->countGroups() <= 0)
+            return;
+
 
         if($this->getCurrentGroup() === false || $this->getCurrentGroup() === null)
             $this->setCurrentGroup(GroupManager::allGroups()->getGroups()->first()->code);
@@ -826,6 +842,21 @@ class Roles extends Controller
         return $this->render();
     }
 
+    /**
+     * Resets the application to default roles and groups
+     */
+    public function onResetToDefault()
+    {
+        $this->flushSession();
+
+        Role::truncate();
+        GroupsExtended::truncate();
+        UsersGroups::truncate();
+
+        GroupManager::seedBasicUserGroups();
+
+        return Redirect::to(Backend::url('clake/userextended/roles/manage'));
+    }
 
 
     /**

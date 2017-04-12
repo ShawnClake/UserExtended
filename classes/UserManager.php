@@ -107,7 +107,7 @@ class UserManager extends StaticFactory
          * Validate input
          */
         $rules = [
-            'email'    => 'required|email|between:6,255',
+            'email'    => 'required|email|between:6,255|unique:users,email',
             'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
         ];
 
@@ -115,7 +115,7 @@ class UserManager extends StaticFactory
          * Better utilization of email vs username
          */
         if (Settings::get('login_attribute') == "username") {
-            $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
+            $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255|unique:users,username');
         }
 
         $validation = Validator::make($data, $rules);
@@ -222,7 +222,7 @@ class UserManager extends StaticFactory
              * Validate input
              */
             $rules = [
-                'email'    => 'required|email|between:6,255',
+                'email'    => 'required|email|between:6,255|unique:users,email',
                 'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
             ];
 
@@ -230,7 +230,7 @@ class UserManager extends StaticFactory
              * Better utilization of email vs username
              */
             if (Settings::get('login_attribute') == "username") {
-                $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
+                $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255|unique:users,username');
             }
 
             $validation = Validator::make($data, $rules);

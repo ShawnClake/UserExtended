@@ -28,7 +28,7 @@ class Settings extends Model
      */
     public function initSettingsData()
     {
-        $this->validation_username = 'required|between:2,255';
+        $this->validation_username = 'required|between:2,255|unique:users,username';
         $this->validation_password = 'required|between:4,255|confirmed';
         $this->enable_profiles = true;
         $this->enable_friends = true;
