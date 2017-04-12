@@ -106,3 +106,6 @@
 2.1.03:
     - Added additional fields for route resitrctions
     - route_restriction_add_flags.php
+2.1.04:
+    - Added a pivot table for route restrictions
+    - create_routes_pivot_table.php

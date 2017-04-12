@@ -60,7 +60,7 @@ class Routes extends ComponentBase
      */
     public function onRun()
     {
-        $redirUrl = '/';
+        $redirUrl = $this->property('redirect');
 
         Plugin::injectAssets($this);
         $url = $this->page->url;
@@ -106,7 +106,7 @@ class Routes extends ComponentBase
         if($allowed)
             return '';
 
-        return Redirect::intended('/');
+        return Redirect::intended($redirUrl);
     }
 
 }

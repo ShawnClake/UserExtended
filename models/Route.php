@@ -63,10 +63,17 @@ class Route extends Model
      */
     public $hasOne = [];
     public $hasMany = [
-        'restrictions' => ['Clake\Userextended\Models\RouteRestriction', 'key' => 'route_id', 'otherKey' => 'id']
+        //'restrictions' => ['Clake\Userextended\Models\RouteRestriction', 'key' => 'route_id', 'otherKey' => 'id']
     ];
     public $belongsTo = [];
-    public $belongsToMany = [];
+    public $belongsToMany = [
+        'restrictions' => [
+            'Clake\Userextended\Models\RouteRestriction',
+            'otherKey' => 'restriction_id',
+            'key' => 'route_Id',
+            'table' => 'clake_userextended_routes_pivot'
+        ],
+    ];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];

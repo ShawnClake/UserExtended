@@ -10,4 +10,6 @@ restrictions:
     view:
         list: $/clake/userextended/models/routerestriction/columns.yaml
         toolbarButtons: add|remove|create|delete
-        showCheckboxes: false
+        showCheckboxes: true
+    pivot:
+        form: $/clake/userextended/models/routerestriction/fields.yaml
