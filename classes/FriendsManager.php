@@ -52,6 +52,21 @@ class FriendsManager
 
     const UE_RELATION_SENDER = 'user_that_sent_request';
     const UE_RELATION_RECEIVER = 'user_that_accepted_request';
+
+    /**
+     * Creates a bond state value for plugins. This is an automated process so they don't have calculate
+     * it themselves
+     * @param $bondNumber
+     * @return bool|number
+     */
+    public static function bondStateCreator($bondNumber)
+    {
+        if($bondNumber < 10 || $bondNumber == 20 || $bondNumber == 21)
+            return false;
+
+        return pow(2, $bondNumber);
+    }
+
     /**
      * Returns a list of friend requests received.
      * @param int $limit

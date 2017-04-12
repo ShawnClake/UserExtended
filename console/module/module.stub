@@ -29,6 +29,12 @@ class Module extends UserExtended
 
     public function initialize() {}
 
+    /*
+     * [Optional] Declare your custom bonds (if you have any) here. Bonds can still be injected without doing this step.
+     * const PLUGIN_BOND_STATE_NAME = 111111;
+     * The function FriendsManager::bondStateCreator() might prove helpful.
+     */
+
     public function injectComponents()
     {
         return [
@@ -60,6 +66,11 @@ class Module extends UserExtended
      * This feature should be supported in a future version of UE
      */
     public function injectLang()
+    {
+        return [];
+    }
+
+    public function injectBonds()
     {
         return [];
     }

@@ -1,10 +1,12 @@
 <?php namespace Clake\UserExtended;
 
+use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
+use Clake\Userextended\Models\Friend;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
 
@@ -60,6 +62,11 @@ class Module extends UserExtended
             'ueJS'  => '/plugins/clake/userextended/assets/js/frontend.js',
             'ueCSS' => '/plugins/clake/userextended/assets/css/frontend.css'
         ];
+    }
+
+    public function injectBonds()
+    {
+        return [];
     }
 
     /**
@@ -195,6 +202,7 @@ class Module extends UserExtended
     }
 
     /**
+     * Programmatically adds a user to a group
      * @param $groupCode
      * @param null $user
      * @return bool
@@ -205,6 +213,7 @@ class Module extends UserExtended
     }
 
     /**
+     * Programmatically removes a user from a group
      * @param $groupCode
      * @param null $user
      * @return bool
@@ -215,6 +224,7 @@ class Module extends UserExtended
     }
 
     /**
+     * Programmatically adds a user to a role
      * @param $roleCode
      * @param null $user
      * @return bool
@@ -225,6 +235,7 @@ class Module extends UserExtended
     }
 
     /**
+     * Programmatically removes a user from a role.
      * @param $roleCode
      * @param null $user
      * @return bool
@@ -232,6 +243,17 @@ class Module extends UserExtended
     public function removeUserFromRole($roleCode, $user = null)
     {
         return UserRoleManager::with($user)->removeRole($roleCode);
+    }
+
+    /**
+     * Checks whether a bond state exists between the logged in user and the user specified by $userId
+     * @param $bond
+     * @param $userId
+     * @return bool
+     */
+    public function bondExists($bond, $userId)
+    {
+        return Friend::isBond($bond, $userId);
     }
 
 

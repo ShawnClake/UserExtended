@@ -68,4 +68,5 @@ class Helpers
     {
         return !!((int)$bits & (int)$bit);
     }
+
 }
