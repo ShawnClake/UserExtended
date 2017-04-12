@@ -1,6 +1,5 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
 /**
  * User Extended by Shawn Clake
  * Class UserExtended
@@ -29,7 +28,7 @@ abstract class UserExtended extends Module
 
     /**
      * The module registry
-     * An array of all the registerd modules. This is populated at runtime.
+     * An array of all the registered modules. This is populated at runtime.
      * @var array
      */
     private static $modules = [];
@@ -57,6 +56,13 @@ abstract class UserExtended extends Module
      * @var array
      */
     private static $assets = [];
+
+    /**
+     * Bonds injection registry
+     * These are for injecting more relation states between users
+     * @var array
+     */
+    private static $bonds = [];
 
     /**
      * Stores an array of settings from the backend module manager page.
@@ -96,6 +102,13 @@ abstract class UserExtended extends Module
     public abstract function injectAssets();
 
     /**
+     * Override with a bonds array to inject bonds into UserExtended
+     * @return mixed
+     */
+    public abstract function injectBonds();
+
+    /**
+     * Returns the injected components
      * @return array
      */
     public static function getComponents()
@@ -104,6 +117,7 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected navigation
      * @return array
      */
     public static function getNavigation()
@@ -112,6 +126,7 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected lang
      * @return array
      */
     public static function getLang()
@@ -120,6 +135,7 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected settings
      * @return array
      */
     public static function getSettings()
@@ -128,11 +144,21 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected assets
      * @return mixed
      */
     public static function getAssets()
     {
         return self::$assets;
+    }
+
+    /**
+     * Returns the injected bonds
+     * @return array
+     */
+    public static function getBonds()
+    {
+        return self::$bonds;
     }
 
     /**
@@ -238,6 +264,8 @@ abstract class UserExtended extends Module
         self::$lang = array_merge(self::$lang, $this->injectLang());
 
         self::$assets = array_merge(self::$assets, $this->injectAssets());
+
+        self::$bonds = array_merge(self::$bonds, $this->injectBonds());
     }
 
     /**
@@ -414,6 +442,7 @@ class Module
     public $visible = true;
 
     /**
+     * Returns the modules name
      * @return null
      */
     public function getName()
@@ -422,6 +451,7 @@ class Module
     }
 
     /**
+     * Returns the modules author
      * @return null
      */
     public function getAuthor()
@@ -430,6 +460,7 @@ class Module
     }
 
     /**
+     * Returns the modules description
      * @return null
      */
     public function getDescription()
@@ -438,6 +469,7 @@ class Module
     }
 
     /**
+     * Returns the modules version
      * @return null
      */
     public function getVersion()
@@ -446,6 +478,7 @@ class Module
     }
 
     /**
+     * Returns the modules visibility state
      * @return bool
      */
     public function getVisible()

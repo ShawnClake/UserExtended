@@ -123,6 +123,18 @@ class Friend extends Model
     }
 
     /**
+     * Returns whether or not two users share a specific bond between them
+     * @param $bondType
+     * @param $userIdA
+     * @param null $userIdB
+     * @return bool
+     */
+    public static function isBond($bondType, $userIdA, $userIdB = null)
+    {
+        return in_array($bondType, self::getAllRelations($userIdA, $userIdB));
+    }
+
+    /**
      * Returns whether or not two users are friends
      * @param $userIdA
      * @param $userIdB
