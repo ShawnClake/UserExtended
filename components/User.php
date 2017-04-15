@@ -414,4 +414,9 @@ class User extends ComponentBase
             $url .= '/' . $param;
         return $url;
     }
+
+    public function isInRole($roleCode)
+    {
+        return UserRoleManager::currentUser()->isInRole($roleCode);
+    }
 }
