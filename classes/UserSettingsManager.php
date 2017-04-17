@@ -252,7 +252,8 @@ class UserSettingsManager extends StaticFactory
 
         $value = $this->getSettingValue($setting);
 
-        $value = $this->decrypt($setting, $value);
+        if(!empty($value))
+            $value = $this->decrypt($setting, $value);
 
         $options = $this->getSettingOptions($setting);
 
@@ -442,7 +443,7 @@ class UserSettingsManager extends StaticFactory
     {
         $settings = [];
 
-        foreach($this->settingsTemplate as $key=>$setting)
+        foreach($this->getSettingsTemplate() as $key=>$setting)
         {
             if(!$this->isCreateable($key))
                 continue;
@@ -462,6 +463,7 @@ class UserSettingsManager extends StaticFactory
             }
 
             $settings[$key] = [$value, 'options' => $options, 'html' => $this->render($key, $options)];
+
         }
 
         return $settings;

@@ -41,6 +41,8 @@ class Settings extends Model
         $this->enable_facebook = false;
         $this->disqus_shortname = '';
         $this->facebook_appid = '';
+
+        $this->closing_deletes = false;
     }
 
     /**

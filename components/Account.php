@@ -185,6 +185,12 @@ class Account extends ComponentBase
 
         $response = UserManager::loginUser($data, $redirectUrl);
 
+        if($response === false)
+        {
+            Flash::error('Your account has been suspended.');
+            return false;
+        }
+
         $reflection = new \ReflectionClass($response);
 
         if($reflection->getShortName() == 'Validator')
@@ -274,6 +280,14 @@ class Account extends ComponentBase
     public function timezonesEnabled()
     {
         return UserExtendedSettings::get('enable_timezones', true);
+    }
+
+    /**
+     * Closes the logged in users account
+     */
+    public function onCloseAccount()
+    {
+        UserManager::closeAccount();
     }
 
 }

@@ -69,4 +69,18 @@ class Helpers
         return !!((int)$bits & (int)$bit);
     }
 
+    /**
+     * Uses the desired delete type. Useful in cases where you need to dynamically
+     * determine whether a model should be hard deleted or soft deleted
+     * @param $model
+     * @param bool $forceDelete
+     */
+    public static function deleteModel($model, $forceDelete = false)
+    {
+        if($forceDelete === false)
+            $model->forceDelete();
+        else
+            $model->delete();
+    }
+
 }

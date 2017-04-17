@@ -98,3 +98,11 @@ tabs:
             comment: Enter your Facebook AppID. If you haven't already created one, visit the Facebook dev area.
             type: text
             tab: Integrations
+
+        # Options
+        closing_deletes:
+            span: left
+            label: Delete Closed Accounts
+            comment: When an account is closed, should it be deleted?
+            type: switch
+            tab: Options
