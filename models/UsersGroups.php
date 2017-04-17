@@ -1,6 +1,7 @@
 <?php namespace Clake\Userextended\Models;
 
 use Model;
+use October\Rain\Database\Traits\SoftDelete;
 
 /**
  * User Extended by Shawn Clake
@@ -21,6 +22,8 @@ use Model;
 class UsersGroups extends Model
 {
 
+    use SoftDelete;
+
     /**
      * @var string The database table used by the model.
      */
@@ -30,6 +33,13 @@ class UsersGroups extends Model
      * @var array Guarded fields
      */
     protected $guarded = ['*'];
+
+    /**
+     * @var array
+     */
+    protected $dates = [
+        'deleted_at',
+    ];
 
     /**
      * @var array Fillable fields

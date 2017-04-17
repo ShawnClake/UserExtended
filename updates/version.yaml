@@ -117,3 +117,6 @@
 2.1.07:
     - Added created_at, deleted_at, updated_at to UsersGroups
     - users_groups_add_timestamps.php
+2.1.08:
+    - Added some core settings fields for handing bans and suspensions
+    - seed_account_settings.php
