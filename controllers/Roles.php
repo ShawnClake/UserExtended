@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\Feedback\RoleFeedback;
 use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
 use Clake\UserExtended\Classes\UserGroupManager;
@@ -270,23 +271,14 @@ class Roles extends Controller
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_role_save', [
-            'success' => 'Role saved successfully!',
-            'error'   => 'Role was not saved!',
-            'false'   => 'Role was not saved!'
-        ], [
-            'success' => '<span class="text-success">Role has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
-
+        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_role_save');
 
         if(!($feedback === false || $feedback->fails())) {
             //Flash::success('Role successfully saved!');
             //$uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
             $this->setCurrentRole($code);
 
-            if($roles->count() > 0){
+            if($roles->count() > 0) {
                 $this->queue([
                     self::UE_MANAGE_ROLE_UI,
                     self::UE_MANAGE_ROLE_TOOLBAR
@@ -299,7 +291,6 @@ class Roles extends Controller
             }
 
             $this->queue([self::UE_LIST_ROLES_TABLE]);
-
         }
 
         return array_merge($this->render(), $uiFeedback);
@@ -384,15 +375,7 @@ class Roles extends Controller
 
         $feedback = RoleManager::createRole($name, $description, $code, -1);
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_role_save', [
-            'success' => 'Role saved successfully!',
-            'error'   => 'Role was not saved!',
-            'false'   => 'Role was not saved!'
-        ], [
-            'success' => '<span class="text-success">Role has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
+        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_role_save');
 
         $this->queue([
             self::UE_LIST_ROLES_TABLE_UNASSIGNED,
@@ -617,15 +600,7 @@ class Roles extends Controller
 
         $feedback = GroupManager::createGroup($name, $description, $code);
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_group_save', [
-            'success' => 'Group saved successfully!',
-            'error'   => 'Group was not saved!',
-            'false'   => 'Group was not saved!'
-        ], [
-            'success' => '<span class="text-success">Group has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
+        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_group_save');
 
         $this->setCurrentGroup($code);
         $this->setCurrentRole(null);
@@ -671,15 +646,7 @@ class Roles extends Controller
 
         $feedback = GroupManager::updateGroup($groupCode, $name, $description, $code);
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_group_save', [
-            'success' => 'Group saved successfully!',
-            'error'   => 'Group was not saved!',
-            'false'   => 'Group was not saved!'
-        ], [
-            'success' => '<span class="text-success">Group has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
+        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_group_save');
         
         $this->setCurrentGroup($code);
 

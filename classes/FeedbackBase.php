@@ -21,7 +21,7 @@ use Illuminate\Validation\Validator;
  * Feedback::with($myValidator)->generate()->display('#myDiv');
  * Feedback::with($myValidator)->generate()->flash();
  *
- * @method static FeedbackBase with(Validator &$validator) FeedbackBase
+ * @method static FeedbackBase with($validator) FeedbackBase
  * @package Clake\Userextended\Controllers
  */
 abstract class FeedbackBase
@@ -81,11 +81,12 @@ abstract class FeedbackBase
 
     /**
      * Factory method for setting up the custom flash and div messages and adding in the validator
-     * @param Validator $validator
+     * @param $validator
      * @param array $flash
      * @param array $div
+     * @return $this
      */
-    public function withFactory(Validator &$validator, $flash = [], $div = [])
+    public function withFactory($validator, $flash = [], $div = [])
     {
         if(empty($flash))
             $this->flash = $this->customFlashMessages();
@@ -98,6 +99,10 @@ abstract class FeedbackBase
             $this->div = $div;
 
         $this->validator = $validator;
+
+        $this->generate();
+
+        return $this;
     }
 
     /**
@@ -142,12 +147,14 @@ abstract class FeedbackBase
      */
     public function flash()
     {
-        if($this->status === 0)
+        if($this->status === 1)
             Flash::success($this->flashOutput);
         else if($this->status === -1)
             Flash::error($this->flashOutput);
         else
             Flash::warning($this->flashOutput);
+
+        return $this;
     }
 
     /**
