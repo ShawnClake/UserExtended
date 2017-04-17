@@ -21,6 +21,7 @@ use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
 use Cms\Classes\Page;
+use Illuminate\Support\Facades\Input;
 
 /**
  * User Extended by Shawn Clake
@@ -288,6 +289,22 @@ class Account extends ComponentBase
     public function onCloseAccount()
     {
         UserManager::closeAccount();
+    }
+
+    public function userAvatar()
+    {
+        return UserUtil::getRainlabUser($this->user()->id)->avatar;
+    }
+
+    public function onChangeAvatar()
+    {
+        if (Input::hasFile('avatar'))
+        {
+            $user = UserUtil::getRainlabUser($this->user()->id);
+            $user->avatar = Input::file('avatar');
+            $user->save();
+        }
+
     }
 
 }

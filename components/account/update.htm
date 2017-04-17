@@ -1,6 +1,6 @@
 {% if user %}
 
-{{ form_ajax('onUpdate', { model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
+{{ form_ajax('onUpdate', { id: 'main_update_form', model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
 
 <div id="updateForm">
 
@@ -63,21 +63,42 @@
 
 	{% for setting,attributes in account.updateSettings %}
 
-	{{attributes.html|raw}} <br>
+		{{attributes.html|raw}} <br>
 
 	{% endfor %}
-
-	<button data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
-
-	<button data-request="account::onCloseAccount" class="btn btn-default" id="closeAccount">Close Account</button><br><br>
-
 </div>
+{{ form_close() }}
+
+
+{{ form_open({ files: true, request: 'onChangeAvatar' }) }}
+	<div class="form-group">
+		<label for="accountAvatar">Avatar</label>
+		<div class="row">
+			<div class="col-sm-12 col-md-3">
+				<div class="avatar-small center-in-parent">
+					<div class="responsive-circle center-in-parent" style="background-image:url({% if account.userAvatar.path %} {{account.userAvatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %})"></div>
+				</div>
+			</div>
+		</div> <br>
+		<input
+				name="avatar"
+				type="file"
+				class="form-control"
+				id="accountAvatar"
+		>
+	</div>
+
+	<button type="submit" class="btn btn-default" id="changeAvatar">Change Avatar</button><br><br>
+
+{{ form_close() }}
+
+<button form="main_update_form" data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
+
+<button form="main_update_form" data-request="account::onCloseAccount" class="btn btn-default" id="closeAccount">Close Account</button><br><br>
 
 <div class="alert alert-danger" data-validate-error>
 	<p data-message></p>
 </div>
-
-{{ form_close() }}
 
 {% else %}
 

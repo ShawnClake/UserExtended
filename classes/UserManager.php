@@ -93,6 +93,7 @@ class UserManager extends StaticFactory
      */
     public static function updateUser(array $data, \Clake\Userextended\Models\UserExtended $user = null)
     {
+
         if(!isset($user))
         {
             if (!$user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser())) {
