@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\Feedback\GroupFeedback;
 use Clake\UserExtended\Classes\Feedback\RoleFeedback;
 use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
@@ -11,7 +12,6 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
-use Clake\UserExtended\Updates\SeedUserGroupsTable;
 use October\Rain\Support\Facades\Flash;
 use RainLab\User\Models\UserGroup;
 use Redirect;
@@ -600,7 +600,7 @@ class Roles extends Controller
 
         $feedback = GroupManager::createGroup($name, $description, $code);
 
-        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_group_save');
+        $uiFeedback = GroupFeedback::with($feedback)->flash()->display('#feedback_group_save');
 
         $this->setCurrentGroup($code);
         $this->setCurrentRole(null);
@@ -646,7 +646,7 @@ class Roles extends Controller
 
         $feedback = GroupManager::updateGroup($groupCode, $name, $description, $code);
 
-        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_group_save');
+        $uiFeedback = GroupFeedback::with($feedback)->flash()->display('#feedback_group_save');
         
         $this->setCurrentGroup($code);
 
@@ -1210,42 +1210,6 @@ class Roles extends Controller
 
         self::$queue[] = [self::UE_MANAGE_USERS_UI, ['role' => $role, 'group' => $group, 'users' => $unassignedUsers]];
         return true;
-    }
-
-    /**
-     * Forms feedback content
-     * @param $validator
-     * @param string $destinationDiv
-     * @param array $flash
-     * @param array $message
-     * @return array
-     */
-    protected function feedbackGenerator($validator,
-                                         $destinationDiv = '#feedback',
-                                         array $flash = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''],
-                                         array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => '']
-    ) {
-        if($validator === false)
-        {
-            Flash::error($flash['false']);
-            return [$destinationDiv => $message['false']];
-        }
-
-        if($validator->fails())
-        {
-            Flash::error($flash['error']);
-            $errorString = $message['error'] . '<span class="text-danger">';
-            $errors = json_decode($validator->messages());
-            foreach($errors as $error)
-            {
-                $errorString .= implode(' ', $error) . ' ';
-            }
-            $errorString .= '</span>';
-            return [$destinationDiv => $errorString];
-        }
-
-        Flash::success($flash['success']);
-        return [$destinationDiv => $message['success']];
     }
 
 }
