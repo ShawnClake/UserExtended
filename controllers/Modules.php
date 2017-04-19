@@ -4,6 +4,7 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\ModuleManager;
 use Clake\UserExtended\Classes\UserExtended;
+use Clake\Userextended\Models\Settings;
 use Redirect;
 use Session;
 use Schema;
@@ -69,6 +70,7 @@ class Modules extends Controller
         }
 
         $this->vars['modules'] = $modules;
+        $this->vars['devMode'] = Settings::get('dev_mode', false);
     }
 
 
