@@ -414,4 +414,28 @@ class User extends ComponentBase
             $url .= '/' . $param;
         return $url;
     }
+
+    /**
+     * Returns true if the user is in the role which is passed in
+     * Useful to use in twig templates such as this:
+     * {% if ueuser.hasRole('sr-dev') %}
+     * @param $roleCode
+     * @return bool
+     */
+    public function hasRole($roleCode)
+    {
+        return UserRoleManager::currentUser()->isInRole($roleCode);
+    }
+
+    /**
+     * Returns true if the user is the group which is passed in
+     * Useful to use in twig templates such as this:
+     * {% if ueuser.hasGroup('admin') %}
+     * @param $groupCode
+     * @return bool
+     */
+    public function hasGroup($groupCode)
+    {
+        return UserGroupManager::currentUser()->isInGroup($groupCode);
+    }
 }
