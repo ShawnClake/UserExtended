@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended;
 
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserExtended;
 use System\Classes\PluginBase;
 use Event;
@@ -72,6 +73,31 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerListColumnTypes()
+    {
+        return [
+            'listdropdown' => [$this, 'getListChoice']
+        ];
+    }
+
+    public function getListChoice($value, $column, $record)
+    {
+        $string = '';
+
+        $class = $column->config['class'];
+        $function = $column->config['function'];
+
+        if(method_exists($class, $function))
+        {
+            $class = new $class();
+            $array = $class->$function();
+            $string = $array[$value];
+        }
+
+        return $string;
+    }
+
+
     /**
      * Register method, called when the plugin is first registered.
      * @return void
@@ -135,6 +161,12 @@ class Plugin extends PluginBase
                     'url'   => Backend::url('clake/userextended/timezones/index'),
                     'icon'  => 'icon-clock-o',
                     'order' => 200
+                ],
+                'friends' => [
+                    'label' => 'Friends',
+                    'url'   => Backend::url('clake/userextended/friends/index'),
+                    'icon'  => 'icon-users',
+                    'order' => 500
                 ],
             ]);
 

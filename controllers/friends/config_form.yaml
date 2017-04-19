@@ -1,0 +1,25 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Friends
+
+# Model Form Field configuration
+form: $/clake/userextended/models/Friend/fields.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Friend
+
+# Default redirect location
+defaultRedirect: clake/userextended/friends
+
+# Create page
+create:
+    #redirect: clake/userextended/friends/update/:id
+    redirectClose: clake/userextended/friends
+
+# Update page
+update:
+    redirect: clake/userextended/friends/update/:id
+    redirectClose: clake/userextended/friends

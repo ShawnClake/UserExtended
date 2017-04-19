@@ -1,0 +1,55 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('clake/userexnteded/friends') ?>">Friends</a></li>
+        <li><?= e(trans($this->pageTitle)) ?></li>
+    </ul>
+<?php Block::endPut() ?>
+
+<?php if (!$this->fatalError): ?>
+
+    <?= Form::open(['class'=>'layout']) ?>
+
+        <div style="padding-left:25px;padding-right:25px;">
+
+            <div class="layout-row">
+                <?= $this->formRender() ?>
+            </div>
+
+            <div class="form-buttons">
+                <div class="loading-indicator-container">
+                    <!--<button
+                        type="submit"
+                        data-request="onSave"
+                        data-hotkey="ctrl+s, cmd+s"
+                        data-load-indicator="Creating Friend"
+                        class="btn btn-primary">
+                        <?= e(trans('backend::lang.form.create')) ?>
+                    </button>-->
+                    <button
+                        type="button"
+                        data-request="onSave"
+                        data-request-data="close:1"
+                        data-hotkey="ctrl+enter, cmd+enter"
+                        data-load-indicator="Creating Friend"
+                        class="btn btn-primary">
+                        <?= e(trans('backend::lang.form.create')) ?>
+                    </button>
+                    <span class="btn-text">
+                        <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url('clake/userextended/friends') ?>"><?= e(trans('backend::lang.form.cancel')) ?></a>
+                    </span>
+                    <hr>
+                    <span class="btn-text text-muted">If a relation between these two users already exists, a new one will not be created.</span>
+                </div>
+            </div>
+        </div>
+    <?= Form::close() ?>
+
+<?php else: ?>
+    <div class="control-breadcrumb">
+        <?= Block::placeholder('breadcrumb') ?>
+    </div>
+    <div class="padded-container">
+        <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
+        <p><a href="<?= Backend::url('clake/userextended/friends') ?>" class="btn btn-default"><?= e(trans('rainlab.user::lang.users.return_to_list')) ?></a></p>
+    </div>
+<?php endif ?>
