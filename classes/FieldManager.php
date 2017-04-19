@@ -66,6 +66,10 @@ class FieldManager extends StaticFactory
         if(empty($name) || empty($code) || empty($description))
             return false;
 
+        // Duplicate code
+        if(Field::where('code', $code)->count() > 0)
+            return false;
+
 		$field = new Field();
 		$field->name = $name;
 		$field->code = $code;
@@ -118,6 +122,8 @@ class FieldManager extends StaticFactory
                                        $data = []
     ) {
 
+
+
 	    $field = FieldManager::findField($code);
 		$field->name = $name;
 		$field->code = $code;
@@ -126,6 +132,9 @@ class FieldManager extends StaticFactory
 		$field->validation = $validation;
 		if(!empty($flags)) $field->flags = $flags;
         if(!empty($data)) $field->data = $data;
+
+        if(Field::code($field->code)->where('id', '<>', $field->id)->count() > 0)
+            return false;
 
 		$field->save();
 		return $field;	
