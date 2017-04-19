@@ -120,3 +120,6 @@
 2.1.08:
     - Added some core settings fields for handing bans and suspensions
     - seed_account_settings.php
+2.1.09:
+    - Started work on the Module Manager. This is being shipped in preparation of 2.3.00
+    - create_modules_table.php
