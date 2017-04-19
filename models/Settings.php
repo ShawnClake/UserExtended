@@ -30,19 +30,23 @@ class Settings extends Model
     {
         $this->validation_username = 'required|between:2,255|unique:users,username';
         $this->validation_password = 'required|between:4,255|confirmed';
+
         $this->enable_profiles = true;
         $this->enable_friends = true;
         $this->enable_timezones = true;
         $this->enable_groups = true;
         $this->enable_email = true;
-        $this->default_timezone = "UTC";
-        $this->default_group = '';
+
         $this->enable_disqus = false;
         $this->enable_facebook = false;
         $this->disqus_shortname = '';
         $this->facebook_appid = '';
 
+        $this->default_timezone = "UTC";
+        $this->default_group = '';
+
         $this->closing_deletes = false;
+        $this->track_route_attempts = true;
     }
 
     /**

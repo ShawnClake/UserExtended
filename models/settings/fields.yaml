@@ -106,3 +106,11 @@ tabs:
             comment: When an account is closed, should it be deleted?
             type: switch
             tab: Options
+
+        track_route_attempts:
+            span: right
+            label: Track Route Attempts
+            comment: Tracks attempt count and last attempt date for Routes. The application will be marginally faster if this is disabled
+            type: switch
+            tab: Options
+            default: true
