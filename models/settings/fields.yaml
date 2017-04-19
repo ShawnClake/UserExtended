@@ -114,3 +114,11 @@ tabs:
             type: switch
             tab: Options
             default: true
+
+        dev_mode:
+            span: left
+            label: Development Mode
+            comment: Development mode enables some features for developing modules.
+            type: switch
+            tab: Options
+            default: false

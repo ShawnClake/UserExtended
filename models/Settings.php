@@ -47,6 +47,8 @@ class Settings extends Model
 
         $this->closing_deletes = false;
         $this->track_route_attempts = true;
+
+        $this->dev_mode = false;
     }
 
     /**

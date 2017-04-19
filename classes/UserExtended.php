@@ -338,7 +338,7 @@ abstract class UserExtended extends Module
      * Useful for grabbing a specific module for debugging by looking at its values.
      * If you want to run operations on the module, use the static call method instead.
      * @param $moduleName
-     * @return bool|mixed
+     * @return bool|UserExtended
      */
     public static function getModule($moduleName)
     {

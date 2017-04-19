@@ -69,6 +69,22 @@ class Module extends UserExtended
         return [];
     }
 
+    public function getUpdateNotes()
+    {
+        return [
+            '2.2.00' => '<ul><li>Added backend controllers for Timezones, Routes, Friends, and Modules</li><li>Added more dynamic field types</li></ul>',
+            '2.1.00' => '<ul><li>Added the Field Manager</li></ul>',
+        ];
+    }
+
+    public function getDocumentation()
+    {
+        return [
+            'home' => 'I am the homepage for documentation',
+            'more' => 'You can get more help by emailing me at shawn.clake@gmail.com',
+        ];
+    }
+
     /**
      * Returns users with $property col = $value
      * @param $value

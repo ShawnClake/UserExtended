@@ -168,6 +168,12 @@ class Plugin extends PluginBase
                     'icon'  => 'icon-users',
                     'order' => 500
                 ],
+                'modules' => [
+                    'label' => 'Modules',
+                    'url'   => Backend::url('clake/userextended/modules/manage'),
+                    'icon'  => 'icon-puzzle-piece',
+                    'order' => 900
+                ],
             ]);
 
             $manager->addSideMenuItems('October.Cms', 'cms', [
