@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\Field;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * User Extended by Shawn Clake
@@ -63,8 +64,31 @@ class FieldManager extends StaticFactory
 		//}
 		//TODO check $validation
 
+        if(empty($code))
+            $code = $name;
+
+        $code = str_slug($code, "-");
+
         if(empty($name) || empty($code) || empty($description))
             return false;
+
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
 
         // Duplicate code
         if(Field::where('code', $code)->count() > 0)
@@ -72,7 +96,7 @@ class FieldManager extends StaticFactory
 
 		$field = new Field();
 		$field->name = $name;
-		$field->code = $code;
+		$field->code = str_slug($code, "-");
 		$field->description = $description;
 		$field->type = $type;
 		$field->validation = $validation;
@@ -126,12 +150,30 @@ class FieldManager extends StaticFactory
 
 	    $field = FieldManager::findField($code);
 		$field->name = $name;
-		$field->code = $code;
+		$field->code = str_slug($code, "-");
 		$field->description = $description;
 		$field->type = $type;
 		$field->validation = $validation;
 		if(!empty($flags)) $field->flags = $flags;
         if(!empty($data)) $field->data = $data;
+
+        $validator = Validator::make(
+            [
+                'name' => $field->name,
+                'description' => $field->description,
+                'code' => $field->code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
 
         if(Field::code($field->code)->where('id', '<>', $field->id)->count() > 0)
             return false;

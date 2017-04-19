@@ -446,11 +446,7 @@ class UserManager extends StaticFactory
 
         $user = Auth::authenticate($credentials, true);
 
-        if(UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user))->getSetting('suspended')[0])
-        {
-            Auth::logout();
-            return false;
-        }
+        self::checkForSuspendedAccount($user);
 
         Event::fire('clake.ue.login', [$user]);
         //self::suspendAccount($user);
@@ -497,6 +493,7 @@ class UserManager extends StaticFactory
     {
         self::checkForReopenAccount($user);
         Auth::login($user);
+        self::checkForSuspendedAccount($user);
     }
 
     /**
@@ -540,6 +537,15 @@ class UserManager extends StaticFactory
             $ueTrashed->first()->restore();
     }
 
+    public static function checkForSuspendedAccount($user)
+    {
+        if(UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user))->getSetting('core-suspended')[0])
+        {
+            Auth::logout();
+            return false;
+        }
+    }
+
     /**
      * Deletes an account. Data is NOT recoverable.
      * @param $user
@@ -556,7 +562,7 @@ class UserManager extends StaticFactory
     public static function suspendAccount($user)
     {
         $settings = UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user));
-        $settings->setSetting('suspended', true);
+        $settings->setSetting('core-suspended', true);
         $settings->save();
     }
 
@@ -567,7 +573,7 @@ class UserManager extends StaticFactory
     public static function unSuspendAccount($user)
     {
         $settings = UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user));
-        $settings->setSetting('suspended', false);
+        $settings->setSetting('core-suspended', false);
         $settings->save();
     }
 
