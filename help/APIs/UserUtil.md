@@ -29,3 +29,5 @@ getUserForUserId($userId = null) : UserExtended  Returns the UserExtended object
 idIsLoggedIn($userId) : bool  Returns whether or not a passed in ID is the ID of the logged in user
 
 getLoggedInUserExtendedUser() : UserExtended  Gets the logged in user object and converts it to an UserExtended user object before returning it
+
+* * *

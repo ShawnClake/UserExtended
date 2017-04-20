@@ -3,3 +3,5 @@ Helpers are used across the application to provide easy access to constants, or 
 
 ## Function API
 unlimited($limit = 0) : int  Returns the max int which SQL can handle. This is useful for returning 'unlimited' results
+
+* * *

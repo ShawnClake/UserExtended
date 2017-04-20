@@ -5,6 +5,8 @@ use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\ModuleManager;
 use Clake\UserExtended\Classes\UserExtended;
 use Clake\Userextended\Models\Settings;
+use Clake\UserExtended\Plugin;
+use October\Rain\Support\Facades\Markdown;
 use Redirect;
 use Session;
 use Schema;
@@ -50,7 +52,7 @@ class Modules extends Controller
         $this->addJs('/plugins/clake/userextended/assets/js/backend.js');
     }
 
-    public function manage()
+    public function index()
     {
         $this->pageTitle = "Manage Modules";
         $modules = ModuleManager::all()->getModules();
@@ -58,13 +60,10 @@ class Modules extends Controller
         {
             $injectionStr = '';
             $flags = $module->flags;
-            foreach($flags as $flag=>$enabled)
+            foreach($flags as $flag)
             {
-                if($enabled)
-                {
-                    $name = substr($flag, 6);
-                    $injectionStr .= $name . ', ';
-                }
+                $name = substr($flag, 6);
+                $injectionStr .= $name . ', ';
             }
             $module->injectionStr = $injectionStr;
         }
@@ -77,13 +76,21 @@ class Modules extends Controller
     public function onRefreshModules()
     {
         ModuleManager::all()->refresh();
-        return Redirect::to(Backend::url('clake/userextended/modules/manage'));
+        return Redirect::to(Backend::url('clake/userextended/modules'));
     }
 
     public function onViewDocumentation()
     {
         $name = post('name');
         $documentation = UserExtended::$name()->getDocumentation();
+        foreach($documentation as $page=>$content)
+        {
+            if(is_array($content) && key_exists('md', $content) && $content['md']) {
+                $documentation[$page] = Markdown::parse($content[0]);
+            } else if(is_array($content)) {
+                $documentation[$page] = $content[0];
+            }
+        }
         return $this->makePartial('view_documentation', ['content' => $documentation]);
     }
 
@@ -91,16 +98,21 @@ class Modules extends Controller
     {
         $name = post('name');
         $updateNotes = UserExtended::$name()->getUpdateNotes();
+
+        $module = ModuleManager::findModule($name);
+        $module->updated = 0;
+        $module->save();
+
+        foreach($updateNotes as $version=>$content)
+        {
+            if(is_array($content) && key_exists('md', $content) && $content['md']) {
+                $updateNotes[$version] = Markdown::parse($content[0]);
+            } else if(is_array($content)) {
+                $updateNotes[$version] = $content[0];
+            }
+        }
+
         return $this->makePartial('view_update_notes', ['content' => $updateNotes]);
     }
-
-    public function onEditModule()
-    {
-        $name = post('name');
-        $module = ModuleManager::findModule($name);
-        return $this->makePartial('update_module_form', ['module' => $module]);
-    }
-
-
 
 }

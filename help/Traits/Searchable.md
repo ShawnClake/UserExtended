@@ -21,3 +21,5 @@
         $results = new Model();
 
         return $results->search($phrase);
+        
+***

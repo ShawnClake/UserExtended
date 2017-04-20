@@ -42,3 +42,5 @@
 ### Usage Examples
 * Add the component to a page and utilize the inspector to choose the output type.
 * You can also use the AJAX handlers directly if you wish.
+
+***

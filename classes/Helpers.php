@@ -1,5 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Illuminate\Support\Facades\File;
+
 /**
  * User Extended by Shawn Clake
  * Class Helpers
@@ -82,5 +84,12 @@ class Helpers
         else
             $model->delete();
     }
+
+    public static function file($path)
+    {
+        return File::get($path);
+    }
+
+
 
 }

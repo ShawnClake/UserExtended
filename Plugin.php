@@ -131,50 +131,12 @@ class Plugin extends PluginBase
          */
         Event::listen('backend.menu.extendItems', function ($manager)
         {
-            $manager->addSideMenuItems('RainLab.User', 'user', [
-                'roles' => [
-                    'label' => 'Role Manager',
-                    'url'   => Backend::url('clake/userextended/roles/manage'),
-                    'icon'  => 'icon-pencil',
-                    'order' => 700
-                ],
-                'users-side' => [
-                    'label' => 'Users',
-                    'url'   => Backend::url('rainlab/user/users'),
-                    'icon'  => 'icon-user',
-                    'order' => 100
-                ],
-                'fields' => [
-                    'label' => 'Field Manager',
-                    'url'   => Backend::url('clake/userextended/fields/manage'),
-                    'icon'  => 'icon-pencil-square-o',
-                    'order' => 600
-                ],
-                'routes' => [
-                    'label' => 'Routes',
-                    'url'   => Backend::url('clake/userextended/routes/index'),
-                    'icon'  => 'icon-eye-slash',
-                    'order' => 300
-                ],
-                'timezones' => [
-                    'label' => 'Timezones',
-                    'url'   => Backend::url('clake/userextended/timezones/index'),
-                    'icon'  => 'icon-clock-o',
-                    'order' => 200
-                ],
-                'friends' => [
-                    'label' => 'Friends',
-                    'url'   => Backend::url('clake/userextended/friends/index'),
-                    'icon'  => 'icon-users',
-                    'order' => 500
-                ],
-                'modules' => [
-                    'label' => 'Modules',
-                    'url'   => Backend::url('clake/userextended/modules/manage'),
-                    'icon'  => 'icon-puzzle-piece',
-                    'order' => 900
-                ],
-            ]);
+            $navigation = array_merge(
+                UserExtended::getNavigation(),
+                []
+            );
+
+            $manager->addSideMenuItems('RainLab.User', 'user', $navigation);
 
             $manager->addSideMenuItems('October.Cms', 'cms', [
                 /*'routes' => [
@@ -262,6 +224,7 @@ class Plugin extends PluginBase
      */
     public function registerNavigation()
     {
+        return [];
         return array_merge(
             UserExtended::getNavigation(),
             []
@@ -278,9 +241,7 @@ class Plugin extends PluginBase
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
 
-        /*
-         * Handles injecting JS and CSS assets
-         */
+        // Handles injecting JS and CSS assets
         $assets = UserExtended::getAssets();
 
         foreach ($assets as $asset) {

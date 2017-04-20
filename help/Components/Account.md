@@ -33,3 +33,5 @@ In the future, this will be integrated into the component inspector.
 {% partial 'account::login' %}   - User Login
 
 {% partial 'account::logout' %}  - User Logout
+
+***

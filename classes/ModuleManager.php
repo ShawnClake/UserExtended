@@ -74,11 +74,11 @@ class ModuleManager extends StaticFactory
             $newModule->locked = false;
             $newModule->updated = true;
             $newModule->flags = [
-                'injectComponents' => true,
-                'injectNavigation' => true,
-                'injectLang' => true,
-                'injectAssets' => true,
-                'injectBonds' => true,
+                'injectComponents',
+                'injectNavigation',
+                'injectLang',
+                'injectAssets',
+                'injectBonds',
             ];
             $newModule->module_updated_at = Carbon::now();
             $newModule->save();
