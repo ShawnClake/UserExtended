@@ -95,26 +95,28 @@ UE.Utils.Validator = new Validator();
  * Interactions
  */
 $(window).load(function() {
-    console.log('test');
-    interact('.draggable-row')
-        .draggable({
-            // enable inertial throwing
-            inertia: UE.Interactions.Config.DragDrop.Inertia,
-            // keep the element within the area of it's parent
+    //console.log('test');
+    if(typeof interact !== "undefined") {
+	interact('.draggable-row')
+	.draggable({
+	    // enable inertial throwing
+	    inertia: UE.Interactions.Config.DragDrop.Inertia,
+	    // keep the element within the area of it's parent
 
-            // enable autoScroll
-            autoScroll: UE.Interactions.Config.DragDrop.AutoScroll,
-            restrict: {
-                restriction: "drop_container",
-                endOnly: true,
-                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-            },
-            // call this function on every dragmove event
-            onmove: moveEventHandler,
-            onstart: startEventHandler,
-            onend: stopEventHandler
-            // call this function on every dragend event
-        });
+	    // enable autoScroll
+	    autoScroll: UE.Interactions.Config.DragDrop.AutoScroll,
+	    restrict: {
+		restriction: "drop_container",
+		endOnly: true,
+		elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+	    },
+	    // call this function on every dragmove event
+	    onmove: moveEventHandler,
+	    onstart: startEventHandler,
+	    onend: stopEventHandler
+	    // call this function on every dragend event
+	});
+    }
 
     function stopEventHandler (event) {
         var target = $(event.target);
@@ -223,21 +225,22 @@ $(window).load(function() {
     }
 
     $(function() {
-        for(var handler in UE.Interactions.Dropzones)
-        {
-            if(!UE.Interactions.Dropzones.hasOwnProperty(handler)) continue;
+	if(typeof interact !== "undefined") {
+		for(var handler in UE.Interactions.Dropzones)
+		{
+		    if(!UE.Interactions.Dropzones.hasOwnProperty(handler)) continue;
 
-            var drops = UE.Interactions.Dropzones[handler]['drops'];
-            var row = UE.Interactions.Dropzones[handler]['row'];
-            console.log(handler);
-            console.log(row);
-            console.log(drops);
-            for(var i = 0; i < drops.length; i++)
-            {
-                makeDropzone(drops[i], row, handler);
-            }
-        }
-
+		    var drops = UE.Interactions.Dropzones[handler]['drops'];
+		    var row = UE.Interactions.Dropzones[handler]['row'];
+		    console.log(handler);
+		    console.log(row);
+		    console.log(drops);
+		    for(var i = 0; i < drops.length; i++)
+		    {
+			makeDropzone(drops[i], row, handler);
+		    }
+		}
+	}
     });
 
 });
