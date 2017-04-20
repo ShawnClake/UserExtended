@@ -101,3 +101,5 @@
     - Fixed a bug which was preventing autofilling of custom fields. Oops.
 2.1.02:
     - Fixed a bug which was causing issues with the Field Manager
+2.1.03:
+    - Fixed a JS bug with UE not defined and interact not defined
