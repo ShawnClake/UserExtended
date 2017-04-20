@@ -44,33 +44,11 @@ class FieldManager extends StaticFactory
                                        $flags = [],
                                        $data = []
     ) {
-		//Ensure that we are saving a unique field.
-
-        // Just return on name not unique, OR, by using the Validator class to specify that it should be unique.
-        // #DontReinventTheWheel
-		/*$desiredName = $name;
-		$instance = 0;
-		while (findField($name) != null){
-			$instance++;
-			$name = $desiredName . $instance;
-		}*/
-	
-	    // This should be done for auto completing the form. We don't want to simply override the code the user wants to use.
-		//$code = str_slug($name, "-");
-
-        // Use the Validator class for this as its easier and more effective/verbose
-		//if (!isset($name) && !isset($type)){
-		//	return false;
-		//}
-		//TODO check $validation
 
         if(empty($code))
             $code = $name;
 
         $code = str_slug($code, "-");
-
-        if(empty($name) || empty($code) || empty($description))
-            return false;
 
         $validator = Validator::make(
             [
@@ -104,7 +82,7 @@ class FieldManager extends StaticFactory
         if(!empty($data)) $field->data = $data;
 
 		$field->save();
-		return $field;	
+		return $validator;
 	}
 
     /**
@@ -179,7 +157,7 @@ class FieldManager extends StaticFactory
             return false;
 
 		$field->save();
-		return $field;	
+		return $validator;
 	}
 
     /**

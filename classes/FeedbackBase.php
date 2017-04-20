@@ -21,7 +21,7 @@ use Illuminate\Validation\Validator;
  * Feedback::with($myValidator)->generate()->display('#myDiv');
  * Feedback::with($myValidator)->generate()->flash();
  *
- * @method static FeedbackBase with($validator) FeedbackBase
+ * @method static FeedbackBase with($validator, $flashErrors = false, $flash = [], $div = []) FeedbackBase
  * @package Clake\Userextended\Controllers
  */
 abstract class FeedbackBase
@@ -86,7 +86,7 @@ abstract class FeedbackBase
      * @param array $div
      * @return $this
      */
-    public function withFactory($validator, $flash = [], $div = [])
+    public function withFactory($validator, $flashErrors = false, $flash = [], $div = [])
     {
         if(empty($flash))
             $this->flash = $this->customFlashMessages();
@@ -100,7 +100,7 @@ abstract class FeedbackBase
 
         $this->validator = $validator;
 
-        $this->generate();
+        $this->generate($flashErrors);
 
         return $this;
     }
@@ -109,7 +109,7 @@ abstract class FeedbackBase
      * Generates the feedback strings for flash and divs
      * Also sets the feedback status
      */
-    public function generate()
+    public function generate($flashErrors)
     {
         if($this->validator === false) {
             $this->status = 0;
@@ -124,13 +124,18 @@ abstract class FeedbackBase
 
             $this->divOutput = '<span class="text-danger">' . $this->div['error'];
             $errors = json_decode($this->validator->messages());
+
+            $errorStr = '';
             foreach($errors as $error)
             {
-                $this->divOutput .= implode(' ', $error) . ' ';
+                $errorStr .= implode(' ', $error) . ' ';
             }
-            $this->divOutput .= '</span>';
+            $this->divOutput .= $errorStr . '</span>';
 
             $this->flashOutput = $this->flash['error'];
+
+            if($flashErrors)
+                $this->flashOutput .= ' ' . $errorStr;
         } else {
             $this->status = 1;
 

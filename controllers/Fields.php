@@ -2,6 +2,7 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\Feedback\FieldFeedback;
 use Clake\UserExtended\Classes\Helpers;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\FieldManager;
@@ -51,6 +52,7 @@ class Fields extends Controller
 
         //Add CSS for some backend menus
         $this->addCss('/plugins/clake/userextended/assets/css/backend.css');
+        $this->addJs('/plugins/clake/userextended/assets/js/general.js');
         $this->addJs('/plugins/clake/userextended/assets/js/backend.js');
     }
 
@@ -91,21 +93,8 @@ class Fields extends Controller
             $data
         );
 
-		// TODO: $feedback is a queryBuilder type, its not of type Validator. The type should be changed in 2.2.00
-        // TODO: See FieldManager::createField() for more details
-		/*$uiFeedback = $this->feedbackGenerator($feedback, '#feedback_field_save', [
-            'success' => 'Field saved successfully!',
-            'error'   => 'Field was not saved!',
-            'false'   => 'Name, code and description are required!'
-        ], [
-            'success' => '<span class="text-success">Field has been saved.</span>',
-            'false'   => '<span class="text-danger">Name, code and description are required!</span>',
-            'error'   => ''
-        ]);*/
+        FieldFeedback::with($feedback, true)->flash();
 
-		// TODO: The FieldManager doesn't utilize the render system that I built into the RoleManager
-        // This cannot be used like this
-		//return array_merge($this->render(), $uiFeedback);
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
@@ -138,7 +127,7 @@ class Fields extends Controller
 
         $data = $this->makeDataArray($post);
 
-        FieldManager::updateField(
+        $feedback = FieldManager::updateField(
             $post['name'],
             $post['code'],
             $post['description'],
@@ -147,6 +136,8 @@ class Fields extends Controller
             $flags,
             $data
         );
+
+        FieldFeedback::with($feedback, true)->flash();
 
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
