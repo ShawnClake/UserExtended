@@ -215,7 +215,80 @@ class Plugin extends PluginBase
      */
     public function registerPermissions()
     {
-        return [];
+        return [
+            'clake.userextended.roles.view' => [
+                'label' => 'View Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.groups.view' => [
+                'label' => 'View Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.role_users.view' => [
+                'label' => 'View Users in Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.group_users.view' => [
+                'label' => 'View Users in Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.roles.manage' => [
+                'label' => 'Manage Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.groups.manage' => [
+                'label' => 'Manage Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.role_users.manage' => [
+                'label' => 'Manage Users in Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.group_users.manage' => [
+                'label' => 'Manage Users in Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.modules.view' => [
+                'label' => 'View Modules',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.modules.manage' => [
+                'label' => 'Manage Modules',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.timezones.view' => [
+                'label' => 'View Timezones',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.timezones.manage' => [
+                'label' => 'Manage Timezones',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.friends.view' => [
+                'label' => 'View Friends',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.friends.manage' => [
+                'label' => 'Manage Friends',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.routes.view' => [
+                'label' => 'View Routes',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.routes.manage' => [
+                'label' => 'Manage Routes',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.fields.view' => [
+                'label' => 'View Fields',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.fields.manage' => [
+                'label' => 'Manage Fields',
+                'tab' => 'User Extended'
+            ],
+        ];
     }
 
     /**
