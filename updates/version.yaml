@@ -99,3 +99,5 @@
     - User Extended Core v2.1.00 Release. Deprecated components and functions have been removed.
 2.1.01:
     - Fixed a bug which was preventing autofilling of custom fields. Oops.
+2.1.02:
+    - Fixed a bug which was causing issues with the Field Manager
