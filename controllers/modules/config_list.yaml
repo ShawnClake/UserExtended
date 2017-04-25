@@ -1,0 +1,12 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Column configuration
+list: $/clake/userextended/models/module/columns.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Module
+
+# List Title
+title: Modules
