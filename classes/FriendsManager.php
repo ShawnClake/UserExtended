@@ -288,7 +288,7 @@ class FriendsManager
         $limit = Helpers::unlimited($limit);
 
         $requests = Friend::friends($userId);
-        
+
         if(empty($requests))
         {dd('bob');
             return $users;

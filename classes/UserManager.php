@@ -286,10 +286,9 @@ class UserManager extends StaticFactory
             }
 
             $defaultTimezone = UserExtendedSettings::get('default_timezone', 'UTC');
-            if(!empty($defaultGroup) && $options['timezone'])
+            if(!empty($defaultTimezone) && $options['timezone'])
             {
-                $timezone = Timezone::where('abbr', $defaultTimezone)->first();
-                $user->timezone_id = $timezone->id;
+                $user->timezone_id = $defaultTimezone;
                 $user->save();
             }
 
