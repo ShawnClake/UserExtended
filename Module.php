@@ -9,6 +9,7 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Friend;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
+use Backend;
 
 /**
  * User Extended Core by Shawn Clake
