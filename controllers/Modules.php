@@ -5,13 +5,11 @@ use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\ModuleManager;
 use Clake\UserExtended\Classes\UserExtended;
 use Clake\Userextended\Models\Settings;
-use Clake\UserExtended\Plugin;
 use October\Rain\Support\Facades\Markdown;
 use Redirect;
 use Session;
 use Schema;
 use Db;
-use Backend;
 
 /**
  * User Extended by Shawn Clake
@@ -35,16 +33,11 @@ class Modules extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    //public $bodyClass = 'compact-container';
-
     public function __construct()
     {
         parent::__construct();
 
         // Setting this context so that our sidebar menu works
-        //BackendMenu::setContext('October.System', 'system', 'settings');
-        //SettingsManager::setContext('clake.userextended', 'settings');
-
         BackendMenu::setContext('RainLab.User', 'user', 'modules');
 
         //Add CSS for some backend menus
@@ -53,6 +46,9 @@ class Modules extends Controller
         $this->addJs('/plugins/clake/userextended/assets/js/backend.js');
     }
 
+    /**
+     * Index page
+     */
     public function index()
     {
         $this->pageTitle = "Manage Modules";
@@ -73,13 +69,20 @@ class Modules extends Controller
         $this->vars['devMode'] = Settings::get('dev_mode', false);
     }
 
-
+    /**
+     * AJAX Handler for refreshing the list of modules
+     * @return mixed
+     */
     public function onRefreshModules()
     {
         ModuleManager::all()->refresh();
         return Redirect::to(Backend::url('clake/userextended/modules'));
     }
 
+    /**
+     * AJAX handler for viewing a modules documentation
+     * @return mixed
+     */
     public function onViewDocumentation()
     {
         $name = post('name');
@@ -95,6 +98,10 @@ class Modules extends Controller
         return $this->makePartial('view_documentation', ['content' => $documentation]);
     }
 
+    /**
+     * AJAX handler for viewing a modules version history
+     * @return mixed
+     */
     public function onViewUpdateNotes()
     {
         $name = post('name');

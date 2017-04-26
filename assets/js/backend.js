@@ -95,7 +95,6 @@ UE.Utils.Validator = new Validator();
  * Interactions
  */
 $(window).load(function() {
-    //console.log('test');
     if(typeof interact !== "undefined") {
         interact('.draggable-row')
             .draggable({
@@ -175,7 +174,6 @@ $(window).load(function() {
     }
 
     // this is used later in the resizing and gesture demos
-    //window.dragMoveListener = dragMoveListener;
 
     function makeDropzone(dropDiv, acceptedClass, ajaxCall)
     {
@@ -185,29 +183,19 @@ $(window).load(function() {
             // Require a 75% element overlap for a drop to be possible
             overlap: UE.Interactions.Config.DragDrop.Threshold,
             ondrop: function (event) {
-                //console.log("Drop Event");
-                //console.log($(event.relatedTarget).find('[data-request="onAssignRole"]').data('request-data'));
                 var requestData = $(event.relatedTarget).find('[data-request="'+ajaxCall+'"]').data('request-data');
-                //console.log(requestData);
                 var requestDataSubArr = requestData.split(',');
-                //console.log(JSON.stringify(requestDataSubArr));
 
                 var request = {};
                 for(var i = 0; i < requestDataSubArr.length; i++)
                 {
-                    //console.log(requestDataSubArr[i].split('\'').join(''));
                     var split = requestDataSubArr[i].split('\'').join('').split(':');
                     request[split[0].trim()] = split[1].trim();
                 }
 
-                //console.log(JSON.stringify(request));
-
                 $.request(ajaxCall, {data: request}, {success: function(data) {
-                    //... do something ...
                     this.success(data);
                 }});
-                //$.request('onAssignRole', {data: {roleCode: }});
-                //event.relatedTarget.textContent = 'Dropped';
             },
             ondragenter: function(event) {
                 event.relatedTarget.classList.add('can-drop');

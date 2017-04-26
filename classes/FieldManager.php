@@ -26,7 +26,6 @@ class FieldManager extends StaticFactory
 
     /**
      * Creates a field
-     * TODO: There is sub-par validation here and this needs to be fixed in a future release.
      * @param $name
      * @param $code
      * @param $description
@@ -105,7 +104,6 @@ class FieldManager extends StaticFactory
 
     /**
      * Updates a field.
-     * TODO: There is sub-par validation here and this needs to be fixed in a future release.
      * @param $name
      * @param $code
      * @param $description
@@ -123,8 +121,6 @@ class FieldManager extends StaticFactory
                                        $flags = [],
                                        $data = []
     ) {
-
-
 
 	    $field = FieldManager::findField($code);
 		$field->name = $name;

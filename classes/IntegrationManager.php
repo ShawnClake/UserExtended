@@ -52,5 +52,4 @@ class IntegrationManager
         return $integration;
     }
 
-
 }

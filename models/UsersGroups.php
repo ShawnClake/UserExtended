@@ -119,6 +119,7 @@ class UsersGroups extends Model
 
     /**
      * Returns a list of roles with users attached to them
+     * TODO
      */
     public static function getAssignedRoles()
     {
@@ -127,6 +128,7 @@ class UsersGroups extends Model
 
     /**
      * Returns a list of groups with users attached to them
+     * TODO
      */
     public static function getAssignedGroups()
     {

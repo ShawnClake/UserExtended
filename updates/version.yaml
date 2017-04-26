@@ -127,3 +127,5 @@
 2.1.11:
     - Started work on the Module Manager. This is being shipped in preparation of 2.3.00
     - create_modules_table.php
+2.2.00:
+    - User Extended Core v2.2.00 Release. 'The Backend Update' adds Route Restrictions, Friend management, comment management, timezone management, and improved field management.

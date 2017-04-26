@@ -9,7 +9,6 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Friend;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
-use Backend;
 
 /**
  * User Extended Core by Shawn Clake
@@ -119,6 +118,10 @@ class Module extends UserExtended
         return [];
     }
 
+    /**
+     * Returns the plugin version notes for display in the Module Manager
+     * @return array
+     */
     public function getUpdateNotes()
     {
         return [
@@ -126,6 +129,10 @@ class Module extends UserExtended
         ];
     }
 
+    /**
+     * Returns the plugin documentation for display in the Module Manager
+     * @return array
+     */
     public function getDocumentation()
     {
         $home = Helpers::file(plugins_path('clake/userextended/readme.md'));

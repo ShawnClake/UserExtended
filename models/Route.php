@@ -1,8 +1,6 @@
 <?php namespace Clake\Userextended\Models;
 
-use Clake\UserExtended\Classes\FieldManager;
 use Model;
-use October\Rain\Support\Collection;
 use Clake\UserExtended\Traits\Timezonable;
 use October\Rain\Database\Traits\SoftDelete;
 use Cms\Classes\Page;
@@ -62,9 +60,7 @@ class Route extends Model
      * @var array Relations
      */
     public $hasOne = [];
-    public $hasMany = [
-        //'restrictions' => ['Clake\Userextended\Models\RouteRestriction', 'key' => 'route_id', 'otherKey' => 'id']
-    ];
+    public $hasMany = [];
     public $belongsTo = [];
     public $belongsToMany = [
         'restrictions' => [

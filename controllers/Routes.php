@@ -2,15 +2,8 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
-use Clake\UserExtended\Classes\Helpers;
-use Clake\UserExtended\Classes\RouteManager;
-use Clake\UserExtended\Classes\UserSettingsManager;
-use Clake\UserExtended\Classes\FieldManager;
 use Clake\Userextended\Models\Route;
-use System\Classes\SettingsManager;
-use October\Rain\Support\Facades\Flash;
 use Redirect;
-use Backend;
 use Session;
 use Schema;
 use Db;
@@ -39,17 +32,11 @@ class Routes extends Controller
     public $listConfig = 'config_list.yaml';
     public $relationConfig = 'config_relation.yaml';
 
-    //public $bodyClass = 'compact-container';
-
     public function __construct()
     {
         parent::__construct();
 
         // Setting this context so that our sidebar menu works
-        //BackendMenu::setContext('October.System', 'system', 'settings');
-        //SettingsManager::setContext('clake.userextended', 'settings');
-
-        //BackendMenu::setContext('October.Cms', 'cms', 'routes');
         BackendMenu::setContext('RainLab.User', 'user', 'routes');
 
         //Add CSS for some backend menus

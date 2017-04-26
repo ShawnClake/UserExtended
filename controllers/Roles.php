@@ -12,10 +12,7 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
-use October\Rain\Support\Facades\Flash;
-use RainLab\User\Models\UserGroup;
 use Redirect;
-use Backend;
 use Session;
 
 /**
@@ -72,8 +69,6 @@ class Roles extends Controller
     public $listConfig = 'config_list.yaml';
 
     public $bodyClass = 'compact-container';
-
-    //public $layout = 'roles';
 
     public function __construct()
     {
@@ -137,8 +132,7 @@ class Roles extends Controller
         if($this->getCurrentPage('list_roles') === false || $this->getCurrentPage('list_roles') === null)
             $this->setCurrentPage('list_roles', 1);
         $total = ceil((float)$roles->count() / (float)self::RESULT_LIM);
-        //echo $roles->slice($this->getCurrentPage('list_roles') * self::RESULT_LIM, self::RESULT_LIM);
-        //var_dump (array_slice(['test','test1','test2','test3'], ($this->getCurrentPage('list_roles') - 1)* self::RESULT_LIM, self::RESULT_LIM));
+
         $this->vars['groupRoles'] = ['roles' => $roles->slice(($this->getCurrentPage('list_roles') - 1) * self::RESULT_LIM, self::RESULT_LIM), 'pagination' => ['page' => $this->getCurrentPage('list_roles'), 'total' => $total]];
 
         if(($this->getCurrentRole() === false || $this->getCurrentRole() === null) && count($roles) > 0)
@@ -274,8 +268,6 @@ class Roles extends Controller
         $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_role_save');
 
         if(!($feedback === false || $feedback->fails())) {
-            //Flash::success('Role successfully saved!');
-            //$uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
             $this->setCurrentRole($code);
 
             if($roles->count() > 0) {

@@ -112,7 +112,6 @@ class User extends ComponentBase
     {
         Plugin::injectAssets($this);
         $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
-		//$this->addCss('/plugins/clake/userextended/assets/css/user.css');
     }
 
     /**
@@ -351,9 +350,6 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null, $userid = null)
     {
-        // TODO: Is $template being used anywhere?
-		$template = $this->property('template');
-
         if(!Settings::get('enable_profiles', true))
             return false;
 

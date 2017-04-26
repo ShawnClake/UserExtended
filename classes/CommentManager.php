@@ -1,6 +1,4 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\Comment;
 use Mail;
@@ -88,7 +86,7 @@ class CommentManager
      */
     public static function canCreateComment()
     {
-		//TODO
+		// TODO
     }
 
     /**

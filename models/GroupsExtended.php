@@ -4,7 +4,6 @@ use Clake\UserExtended\Classes\GroupManager;
 use Model;
 use October\Rain\Support\Collection;
 use RainLab\User\Models\UserGroup;
-use October\Rain\Database\Traits\Sortable;
 use Clake\UserExtended\Traits\Timezonable;
 
 /**

@@ -1,6 +1,4 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;

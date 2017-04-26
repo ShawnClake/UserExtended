@@ -29,7 +29,6 @@ class Friends extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-
     public function __construct()
     {
         parent::__construct();
@@ -46,7 +45,6 @@ class Friends extends Controller
     public function manage()
     {
         $this->pageTitle = "Manage User Relations";
-        //$this->vars['timezones'] = Timezone::all();
     }
 
 }

@@ -85,6 +85,11 @@ class Helpers
             $model->delete();
     }
 
+    /**
+     * Returns a files contents specififed by $path
+     * @param $path
+     * @return mixed
+     */
     public static function file($path)
     {
         return File::get($path);

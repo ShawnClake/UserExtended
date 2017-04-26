@@ -537,6 +537,11 @@ class UserManager extends StaticFactory
             $ueTrashed->first()->restore();
     }
 
+    /**
+     * Checks whether an account is suspended and if it is, logs the user back out again
+     * @param $user
+     * @return bool
+     */
     public static function checkForSuspendedAccount($user)
     {
         if(UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user))->getSetting('core-suspended')[0])

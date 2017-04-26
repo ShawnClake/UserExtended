@@ -2,19 +2,14 @@
 
 use Clake\UserExtended\Classes\UserManager;
 use Clake\Userextended\Models\Timezone;
-use Clake\Userextended\Models\UserExtended;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Flash;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Validator;
 use Lang;
 use Auth;
-use October\Rain\Auth\Manager;
-use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\ValidationException;
 use RainLab\User\Models\Settings;
 use Mail;
@@ -106,8 +101,6 @@ class Account extends ComponentBase
         if($reflection->getShortName() == 'Validator')
         {
             throw new ValidationException($response);
-            //Flash::error($response->messages());
-            //return false;
         } else {
             return $response;
         }
@@ -197,8 +190,6 @@ class Account extends ComponentBase
         if($reflection->getShortName() == 'Validator')
         {
             throw new ValidationException($response);
-            //Flash::error(json_encode($response->messages()));
-            //return false;
         } else {
             Flash::success('Logged in!');
             return $response;
@@ -291,11 +282,18 @@ class Account extends ComponentBase
         UserManager::closeAccount();
     }
 
+    /**
+     * Returns the user's avatar model relation
+     * @return mixed
+     */
     public function userAvatar()
     {
         return UserUtil::getRainlabUser($this->user()->id)->avatar;
     }
 
+    /**
+     * AJAX handler for updating a users avatar
+     */
     public function onChangeAvatar()
     {
         if (Input::hasFile('avatar'))

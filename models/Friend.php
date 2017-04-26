@@ -81,6 +81,10 @@ class Friend extends Model
     public $attachOne = [];
     public $attachMany = [];
 
+    /**
+     * Checks whether a relation exists, if it does, don't create another
+     * @return bool
+     */
     public function beforeCreate()
     {
         if(self::isRelationExists($this->user_that_sent_request, $this->user_that_accepted_request))
@@ -722,6 +726,10 @@ class Friend extends Model
         $this->setBond($relation_states);
     }
 
+    /**
+     * Returns all of the bond states which exist in the project
+     * @return array
+     */
     public function getBondStates()
     {
         return FriendsManager::$UE_RELATION_STATES;

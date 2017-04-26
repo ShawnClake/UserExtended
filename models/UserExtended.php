@@ -61,7 +61,6 @@ class UserExtended extends User
         $belongsToMany = $this->belongsToMany;
         $belongsToMany['roles'] = ['Clake\Userextended\Models\Role', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
         $belongsToMany['groups'] = ['Clake\Userextended\Models\GroupsExtended', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'user_group_id', 'softDelete' => true, 'delete' => true];
-        //$belongsToMany['users_groups'] = ['Clake\Userextended\Models\UsersGroups', 'table' => 'users_groups', 'key' => 'user_id', 'softDelete' => true, 'delete' => true];
         $this->belongsToMany = $belongsToMany;
 
         $json = $this->jsonable;

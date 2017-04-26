@@ -18,6 +18,7 @@ class TimezoneHandler
 {
 
     /**
+     * Returns the current time as a Carbon object
      * @return mixed
      */
     public static function getCurrentTime()

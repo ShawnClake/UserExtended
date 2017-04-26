@@ -17,13 +17,26 @@ use Carbon\Carbon;
 class ModuleManager extends StaticFactory
 {
 
+    /**
+     * Holds all of the loaded modules
+     * @var
+     */
     private $modules;
 
+    /**
+     * Returns the module specified by $name and null if none are found
+     * @param $name
+     * @return mixed
+     */
     public static function findModule($name)
     {
         return \Clake\Userextended\Models\Module::where('name', $name)->first();
     }
 
+    /**
+     * Refreshes the module DB table by querying all of the registered modules in the project
+     * @return $this
+     */
     public function refresh()
     {
         // Start by soft deleting not found modules
@@ -89,12 +102,20 @@ class ModuleManager extends StaticFactory
         return $this;
     }
 
+    /**
+     * Loads all of the modules
+     * @return $this
+     */
     public function allFactory()
     {
         $this->modules = \Clake\Userextended\Models\Module::all();
         return $this;
     }
 
+    /**
+     * Returns a collection of the modules loaded
+     * @return mixed
+     */
     public function getModules()
     {
         return $this->modules;

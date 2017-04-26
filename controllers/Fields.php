@@ -6,10 +6,7 @@ use Clake\UserExtended\Classes\Feedback\FieldFeedback;
 use Clake\UserExtended\Classes\Helpers;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\FieldManager;
-use System\Classes\SettingsManager;
-use October\Rain\Support\Facades\Flash;
 use Redirect;
-use Backend;
 use Session;
 use Schema;
 use Db;
@@ -38,16 +35,11 @@ class Fields extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    //public $bodyClass = 'compact-container';
-
     public function __construct()
     {
         parent::__construct();
 
         // Setting this context so that our sidebar menu works
-        //BackendMenu::setContext('October.System', 'system', 'settings');
-        //SettingsManager::setContext('clake.userextended', 'settings');
-
         BackendMenu::setContext('RainLab.User', 'user', 'fields');
 
         //Add CSS for some backend menus
@@ -67,11 +59,13 @@ class Fields extends Controller
         return UserSettingsManager::getSetting();
     }
 
+    /**
+     * AJAX handler for creating a new field
+     * @return mixed
+     */
     public function onCreateField()
     {
-        //TODO validate input
         $post = post();
-        //var_dump($post);
         $flags = FieldManager::makeFlags(
             in_array('enabled', $post['flags']),
             in_array('registerable', $post['flags']),
@@ -98,11 +92,19 @@ class Fields extends Controller
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
+    /**
+     * AJAX handler for popping up the create field form
+     * @return mixed
+     */
     public function onAddField()
     {
         return $this->makePartial('create_field_form');
     }
 
+    /**
+     * AJAX handler for popping up the edit field form
+     * @return mixed
+     */
     public function onEditField()
     {
         $name = post('code');
@@ -110,6 +112,10 @@ class Fields extends Controller
         return $this->makePartial('update_field_form', ['selection' => $selection]);
     }
 
+    /**
+     * AJAX handler for persisting field edits
+     * @return mixed
+     */
     public function onUpdateField()
     {
         //TODO Validate input
@@ -142,6 +148,10 @@ class Fields extends Controller
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
+    /**
+     * AJAX handler for deleting a field
+     * @return mixed
+     */
     public function onDeleteField()
     {
         $code = post('code');
@@ -149,6 +159,11 @@ class Fields extends Controller
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
+    /**
+     * Creates a validation array. This is an intermediary step which makes it easier to persist
+     * @param $post
+     * @return mixed
+     */
     protected function makeValidationArray($post)
     {
         $validation['additional'] = Helpers::arrayKeyToVal($post, 'validation');
@@ -166,6 +181,11 @@ class Fields extends Controller
         return $validation;
     }
 
+    /**
+     * Creates the data array
+     * @param $post
+     * @return mixed
+     */
     protected function makeDataArray($post)
     {
         $data['placeholder'] = Helpers::arrayKeyToVal($post, 'data_placeholder');
