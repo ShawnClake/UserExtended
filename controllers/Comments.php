@@ -9,7 +9,7 @@ use Db;
 
 /**
  * User Extended by Shawn Clake
- * Class Friends
+ * Class Comments
  * User Extended is licensed under the MIT license.
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
@@ -18,7 +18,7 @@ use Db;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Controllers
  */
-class Friends extends Controller
+class Comments extends Controller
 {
 
     public $implement = [
@@ -34,9 +34,9 @@ class Friends extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('RainLab.User', 'user', 'relations');
+        BackendMenu::setContext('RainLab.User', 'user', 'comments');
 
-        $this->pageTitle = "Manage User Relations";
+        $this->pageTitle = "Manage Comments";
         //Add CSS for some backend menus
         $this->addCss('/plugins/clake/userextended/assets/css/backend.css');
         $this->addJs('/plugins/clake/userextended/assets/js/general.js');
@@ -45,8 +45,7 @@ class Friends extends Controller
 
     public function manage()
     {
-        $this->pageTitle = "Manage User Relations";
-        //$this->vars['timezones'] = Timezone::all();
+        $this->pageTitle = "Manage Comments";
     }
 
 }

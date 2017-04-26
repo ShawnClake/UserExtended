@@ -3,22 +3,25 @@
 # ===================================
 
 fields:
-    user_id[name]:
-        label: User ID
-        description: The user who published the comment.
-        type: Text
-        readOnly: true
-        required: true
+    user:
+        label: Receiver
+        type: recordfinder
+        list: $/rainlab/user/models/user/columns.yaml
+        prompt: Click the %s button to find a user
+        nameFrom: name
+        descriptionFrom: email
+        span: left
+    author:
+        label: Author
+        type: recordfinder
+        list: $/rainlab/user/models/user/columns.yaml
+        prompt: Click the %s button to find a user
+        nameFrom: name
+        descriptionFrom: email
+        span: right
     content:
         label: Comment
         description: The comment that the user left.
-        type: Text
+        type: Textarea
+        size: small
         encrypted: true
-        readOnly: true
-    created_at:
-        label: Posted On
-        descrption: The date the comment was posted.
-        type: datepicker
-        mode: datetime
-        readOnly: true
-        required: true

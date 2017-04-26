@@ -138,15 +138,15 @@ class Plugin extends PluginBase
 
             $manager->addSideMenuItems('RainLab.User', 'user', $navigation);
 
-            $manager->addSideMenuItems('October.Cms', 'cms', [
-                /*'routes' => [
+            /*$manager->addSideMenuItems('October.Cms', 'cms', [
+                'routes' => [
                     'label' => 'Routes',
                     'url'   => Backend::url('clake/userextended/routes/preview'),
                     'icon'  => 'icon-eye-slash',
                     //'order' => 600
-                ],*/
+                ],
 
-            ]);
+            ]);*/
 
         });
 
@@ -298,10 +298,6 @@ class Plugin extends PluginBase
     public function registerNavigation()
     {
         return [];
-        return array_merge(
-            UserExtended::getNavigation(),
-            []
-        );
     }
 
     /**

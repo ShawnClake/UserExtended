@@ -50,23 +50,11 @@ class Module extends UserExtended
     public function injectNavigation()
     {
         return [
-            'roles' => [
-                'label' => 'Role Manager',
-                'url'   => Backend::url('clake/userextended/roles/manage'),
-                'icon'  => 'icon-pencil',
-                'order' => 400
-            ],
             'users-side' => [
                 'label' => 'Users',
                 'url'   => Backend::url('rainlab/user/users'),
                 'icon'  => 'icon-user',
                 'order' => 100
-            ],
-            'fields' => [
-                'label' => 'Field Manager',
-                'url'   => Backend::url('clake/userextended/fields/manage'),
-                'icon'  => 'icon-pencil-square-o',
-                'order' => 300
             ],
             'routes' => [
                 'label' => 'Routes',
@@ -74,11 +62,17 @@ class Module extends UserExtended
                 'icon'  => 'icon-eye-slash',
                 'order' => 200
             ],
-            'timezones' => [
-                'label' => 'Timezones',
-                'url'   => Backend::url('clake/userextended/timezones/index'),
-                'icon'  => 'icon-clock-o',
-                'order' => 600
+            'fields' => [
+                'label' => 'Field Manager',
+                'url'   => Backend::url('clake/userextended/fields/manage'),
+                'icon'  => 'icon-pencil-square-o',
+                'order' => 300
+            ],
+            'roles' => [
+                'label' => 'Role Manager',
+                'url'   => Backend::url('clake/userextended/roles/manage'),
+                'icon'  => 'icon-pencil',
+                'order' => 400
             ],
             'friends' => [
                 'label' => 'Friends',
@@ -86,11 +80,23 @@ class Module extends UserExtended
                 'icon'  => 'icon-users',
                 'order' => 500
             ],
+            'timezones' => [
+                'label' => 'Timezones',
+                'url'   => Backend::url('clake/userextended/timezones/index'),
+                'icon'  => 'icon-clock-o',
+                'order' => 600
+            ],
+            'comments' => [
+                'label' => 'Comments',
+                'url'   => Backend::url('clake/userextended/comments/index'),
+                'icon'  => 'icon-comments-o',
+                'order' => 700
+            ],
             'modules' => [
                 'label' => 'Modules',
                 'url'   => Backend::url('clake/userextended/modules/index'),
                 'icon'  => 'icon-puzzle-piece',
-                'order' => 700
+                'order' => 800
             ],
         ];
     }
