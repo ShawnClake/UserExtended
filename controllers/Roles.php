@@ -14,6 +14,7 @@ use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
 use Redirect;
 use Session;
+use Backend;
 
 /**
  * User Extended by Shawn Clake

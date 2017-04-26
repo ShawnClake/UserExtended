@@ -6,6 +6,7 @@ use Redirect;
 use Session;
 use Schema;
 use Db;
+use Backend;
 
 /**
  * User Extended by Shawn Clake
