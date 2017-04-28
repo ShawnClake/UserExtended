@@ -4,10 +4,16 @@
 
 columns:
     user_id:
-        label: Username
+        label: Receiver
+        description: The user who received the comment.
         type: Text
-        searchable: true
-        relation: users
+        relation: user
+        select: name
+    author_id:
+        label: Sender
+        description: The user who wrote the comment.
+        type: Text
+        relation: author
         select: name
     content:
         type: Text
@@ -19,6 +25,3 @@ columns:
     updated_at:
         type: datetime
         label: Updated At
-    deleted_at:
-        type: datetime
-        label: Deleted At

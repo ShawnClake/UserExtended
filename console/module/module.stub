@@ -35,6 +35,7 @@ class Module extends UserExtended
      * The function FriendsManager::bondStateCreator() might prove helpful.
      */
 
+    // Components
     public function injectComponents()
     {
         return [
@@ -74,5 +75,24 @@ class Module extends UserExtended
     {
         return [];
     }
+
+    /**
+     * Returns the plugin documentation for display in the Module Manager
+     * @return array
+     */
+    /*public function getDocumentation()
+    {
+
+    }*/
+
+    /**
+     * Returns the plugin version notes for display in the Module Manager
+     * @return array
+     */
+    /*public function getUpdateNotes()
+    {
+
+    }*/
+
 
 }

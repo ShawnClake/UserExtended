@@ -1,5 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Illuminate\Support\Facades\File;
+
 /**
  * User Extended by Shawn Clake
  * Class Helpers
@@ -68,5 +70,31 @@ class Helpers
     {
         return !!((int)$bits & (int)$bit);
     }
+
+    /**
+     * Uses the desired delete type. Useful in cases where you need to dynamically
+     * determine whether a model should be hard deleted or soft deleted
+     * @param $model
+     * @param bool $forceDelete
+     */
+    public static function deleteModel($model, $forceDelete = false)
+    {
+        if($forceDelete === false)
+            $model->forceDelete();
+        else
+            $model->delete();
+    }
+
+    /**
+     * Returns a files contents specififed by $path
+     * @param $path
+     * @return mixed
+     */
+    public static function file($path)
+    {
+        return File::get($path);
+    }
+
+
 
 }

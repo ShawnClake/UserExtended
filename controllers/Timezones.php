@@ -2,12 +2,12 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
-use Clake\Userextended\Models\Route;
 use Clake\Userextended\Models\Timezone;
 use Redirect;
 use Session;
 use Schema;
 use Db;
+use Backend;
 
 /**
  * User Extended by Shawn Clake
@@ -30,7 +30,6 @@ class Timezones extends Controller
 
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
-
 
     public function __construct()
     {

@@ -1,0 +1,76 @@
+<?php Block::put('breadcrumb') ?>
+<ul>
+	<li><a href="<?= Backend::url('clake/userextended/modules') ?>">Modules</a></li>
+	<li><?= $this->pageTitle ?></li>
+</ul>
+<?php Block::endPut() ?>
+
+<?php
+Block::put('body') 
+?>
+
+<div class="" style="padding-left:25px;padding-right:25px;">
+
+    <div class="row" style="margin-top:11px;">
+	
+	<h3 style="margin-left:25px;margin-bottom:19px;">Module Manager<span style="font-size: 15px;font-style: italic;" class="text-muted text-warning"> [Beta] - Not everything works. Don't use this for production yet.</span></h3>
+	
+	<table class="table table-striped" style="width: 90%; margin-left: 5%;">
+	<tr>
+		<td></td>
+		<td></td>
+		<td class="text-left">Name</td>
+		<td class="text-left">Author</td>
+		<td class="text-left">Description</td>
+		<td class="text-left">Version</td>
+		<?php if ($devMode): ?> <td class="text-left">Visible</td> <?php endif; ?>
+		<td class="text-center">Enabled</td>
+		<td class="text-center">Version Locked</td>
+		<td class="text-center">Injects</td>
+		<td class="text-right"></td>
+	</tr>
+	<?php foreach ($modules as $module): ?>
+	<tr>
+		<td><div class="text-center">
+			<a href="<?= Backend::url('clake/userextended/modules/update/'.$module->id) ?>">
+			<button
+				class="btn-icon oc-icon-pencil"
+			></button></a></div></td>
+		<td><div class="text-center">
+			<button
+					href="javascript:;"
+					class="btn-icon oc-icon-book"
+					data-control="popup"
+					data-handler="onViewDocumentation"
+					data-size="huge"
+					data-extra-data="name: '<?=$module['name'] ?>'"
+			></button></div></td>
+		<td style="vertical-align:middle;"><div style="padding-top:9px;padding-bottom:9px;"><?php echo preg_replace('/(?<!\ )[A-Z]/', ' $0', studly_case($module['name'])) ?></div></td>
+		<td style="vertical-align:middle;"><div style="text-transform:capitalize;padding-top:9px;padding-bottom:9px;"><?= $module['author'] ?></div></td>
+		<td style="vertical-align:middle;"><div style="text-transform:capitalize;padding-top:9px;padding-bottom:9px;"><?= $module['description'] ?></div></td>
+		<td style="vertical-align:middle;"><div style="padding-top:9px;padding-bottom:9px;"><a href="javascript;" data-control="popup" data-handler="onViewUpdateNotes" data-size="huge" data-extra-data="name: '<?=$module['name'] ?>'"><?= $module['version'] ?></a></div></td>
+		<?php if ($devMode): ?> <td style="vertical-align:middle;"><?php if(($module->attributes['visible'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td> <?php endif; ?>
+		<td style="vertical-align:middle;"><?php if(($module['enabled'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td style="vertical-align:middle;"><?php if(($module['locked'])): ?> <div class="text-center" style="padding:9px;"><i class="oc-icon-check"></i></div> <?php else: ?> <?php endif; ?></td>
+		<td style="vertical-align:middle;"><?php if(($module['flags'])): ?> <div class="text-center" style="padding:9px;"><?= $module['injectionStr'] ?></div> <?php else: ?> <?php endif; ?></td>
+		<td style="vertical-align:middle;"><?php if(($module['updated'])): ?><div class="text-center" style="padding:9px;"><div style="background-color:#f0cd66;padding:5px;border-radius:5px;color:#f0a237 !important;" class="text-warning" ><a href="javascript;" data-control="popup" data-handler="onViewUpdateNotes" data-size="huge" data-extra-data="name: '<?=$module['name'] ?>'"><strong>Heads Up! </strong>This module was updated <br> <?= $module['module_updated_at'] ?></a></div></div><?php endif; ?></td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+	
+	<div style="margin-top: 20px;margin-left:25px;">
+	<a
+                    href="javascript:;"
+                    class="btn btn-primary oc-icon-plus"
+                    data-request="onRefreshModules"
+					data-request-confirm="This will scan for new modules and remove module entries which no longer exist. Do you want to proceed?"
+            >
+                Refresh Modules
+            </a>
+	</div>
+
+</div>
+	
+</div>
+
+<?php Block::endPut() ?>

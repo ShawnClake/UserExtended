@@ -70,13 +70,28 @@ class Friend extends Model
      */
     public $hasOne = [];
     public $hasMany = [];
-    public $belongsTo = [];
+    public $belongsTo = [
+        'sender'   => ['Clake\UserExtended\Models\UserExtended', 'key' => 'user_that_sent_request', 'otherKey' => 'id'],
+        'acceptor' => ['Clake\UserExtended\Models\UserExtended', 'key' => 'user_that_accepted_request', 'otherKey' => 'id'],
+    ];
     public $belongsToMany = [];
     public $morphTo = [];
     public $morphOne = [];
     public $morphMany = [];
     public $attachOne = [];
     public $attachMany = [];
+
+    /**
+     * Checks whether a relation exists, if it does, don't create another
+     * @return bool
+     */
+    public function beforeCreate()
+    {
+        if(self::isRelationExists($this->user_that_sent_request, $this->user_that_accepted_request))
+        {
+            return false;
+        }
+    }
 
     /**
      * Returns the highest priority set relation, this is useful in cases where we need to utilize overrides
@@ -709,6 +724,15 @@ class Friend extends Model
     {
         $this->flushBonds();
         $this->setBond($relation_states);
+    }
+
+    /**
+     * Returns all of the bond states which exist in the project
+     * @return array
+     */
+    public function getBondStates()
+    {
+        return FriendsManager::$UE_RELATION_STATES;
     }
 
 }

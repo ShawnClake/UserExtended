@@ -252,7 +252,8 @@ class UserSettingsManager extends StaticFactory
 
         $value = $this->getSettingValue($setting);
 
-        $value = $this->decrypt($setting, $value);
+        if(!empty($value))
+            $value = $this->decrypt($setting, $value);
 
         $options = $this->getSettingOptions($setting);
 
@@ -442,7 +443,7 @@ class UserSettingsManager extends StaticFactory
     {
         $settings = [];
 
-        foreach($this->settingsTemplate as $key=>$setting)
+        foreach($this->getSettingsTemplate() as $key=>$setting)
         {
             if(!$this->isCreateable($key))
                 continue;
@@ -462,6 +463,7 @@ class UserSettingsManager extends StaticFactory
             }
 
             $settings[$key] = [$value, 'options' => $options, 'html' => $this->render($key, $options)];
+
         }
 
         return $settings;
@@ -498,6 +500,14 @@ class UserSettingsManager extends StaticFactory
      */
     public function render($settingName, $options)
     {
+        /*
+         * Don't render core fields EVER from a users perspective.
+         */
+        if(isset($options['data']['core']) && $options['data']['core'] == true)
+        {
+            return '';
+        }
+
         $class = '';
         if(isset($options['data']['class']))
         {
@@ -518,11 +528,26 @@ class UserSettingsManager extends StaticFactory
 
     /**
      * Get templated settings
+     * @param bool $core
      * @return array
      */
-    public function getSettingsTemplate()
+    public function getSettingsTemplate($core = false)
     {
-        return $this->settingsTemplate;
+        if(!$core)
+        {
+            $settings = [];
+            foreach($this->settingsTemplate as $key => $setting)
+            {
+                if(!(isset($setting['data']['core']) && $setting['data']['core']))
+                {
+                    $settings[$key] = $setting;
+                }
+            }
+        } else {
+            $settings = $this->settingsTemplate;
+        }
+
+        return $settings;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended;
 
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserExtended;
 use System\Classes\PluginBase;
 use Event;
@@ -72,6 +73,31 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function registerListColumnTypes()
+    {
+        return [
+            'listdropdown' => [$this, 'getListChoice']
+        ];
+    }
+
+    public function getListChoice($value, $column, $record)
+    {
+        $string = '';
+
+        $class = $column->config['class'];
+        $function = $column->config['function'];
+
+        if(method_exists($class, $function))
+        {
+            $class = new $class();
+            $array = $class->$function();
+            $string = $array[$value];
+        }
+
+        return $string;
+    }
+
+
     /**
      * Register method, called when the plugin is first registered.
      * @return void
@@ -105,48 +131,22 @@ class Plugin extends PluginBase
          */
         Event::listen('backend.menu.extendItems', function ($manager)
         {
-            $manager->addSideMenuItems('RainLab.User', 'user', [
-                'roles' => [
-                    'label' => 'Role Manager',
-                    'url'   => Backend::url('clake/userextended/roles/manage'),
-                    'icon'  => 'icon-pencil',
-                    'order' => 700
-                ],
-                'users-side' => [
-                    'label' => 'Users',
-                    'url'   => Backend::url('rainlab/user/users'),
-                    'icon'  => 'icon-user',
-                    'order' => 100
-                ],
-                'fields' => [
-                    'label' => 'Field Manager',
-                    'url'   => Backend::url('clake/userextended/fields/manage'),
-                    'icon'  => 'icon-pencil-square-o',
-                    'order' => 600
-                ],
-                'routes' => [
-                    'label' => 'Routes',
-                    'url'   => Backend::url('clake/userextended/routes/index'),
-                    'icon'  => 'icon-eye-slash',
-                    'order' => 300
-                ],
-                'timezones' => [
-                    'label' => 'Timezones',
-                    'url'   => Backend::url('clake/userextended/timezones/index'),
-                    'icon'  => 'icon-clock-o',
-                    'order' => 200
-                ],
-            ]);
+            $navigation = array_merge(
+                UserExtended::getNavigation(),
+                []
+            );
 
-            $manager->addSideMenuItems('October.Cms', 'cms', [
-                /*'routes' => [
+            $manager->addSideMenuItems('RainLab.User', 'user', $navigation);
+
+            /*$manager->addSideMenuItems('October.Cms', 'cms', [
+                'routes' => [
                     'label' => 'Routes',
                     'url'   => Backend::url('clake/userextended/routes/preview'),
                     'icon'  => 'icon-eye-slash',
                     //'order' => 600
-                ],*/
+                ],
 
-            ]);
+            ]);*/
 
         });
 
@@ -215,7 +215,80 @@ class Plugin extends PluginBase
      */
     public function registerPermissions()
     {
-        return [];
+        return [
+            'clake.userextended.roles.view' => [
+                'label' => 'View Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.groups.view' => [
+                'label' => 'View Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.role_users.view' => [
+                'label' => 'View Users in Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.group_users.view' => [
+                'label' => 'View Users in Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.roles.manage' => [
+                'label' => 'Manage Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.groups.manage' => [
+                'label' => 'Manage Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.role_users.manage' => [
+                'label' => 'Manage Users in Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.group_users.manage' => [
+                'label' => 'Manage Users in Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.modules.view' => [
+                'label' => 'View Modules',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.modules.manage' => [
+                'label' => 'Manage Modules',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.timezones.view' => [
+                'label' => 'View Timezones',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.timezones.manage' => [
+                'label' => 'Manage Timezones',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.friends.view' => [
+                'label' => 'View Friends',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.friends.manage' => [
+                'label' => 'Manage Friends',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.routes.view' => [
+                'label' => 'View Routes',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.routes.manage' => [
+                'label' => 'Manage Routes',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.fields.view' => [
+                'label' => 'View Fields',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.fields.manage' => [
+                'label' => 'Manage Fields',
+                'tab' => 'User Extended'
+            ],
+        ];
     }
 
     /**
@@ -224,10 +297,7 @@ class Plugin extends PluginBase
      */
     public function registerNavigation()
     {
-        return array_merge(
-            UserExtended::getNavigation(),
-            []
-        );
+        return [];
     }
 
     /**
@@ -240,9 +310,7 @@ class Plugin extends PluginBase
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
 
-        /*
-         * Handles injecting JS and CSS assets
-         */
+        // Handles injecting JS and CSS assets
         $assets = UserExtended::getAssets();
 
         foreach ($assets as $asset) {

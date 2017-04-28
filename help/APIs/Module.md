@@ -1,4 +1,5 @@
 # Modules
+
 #### How to extend UserExtended
 
 If you are writing a plugin and you would like to use functions from UserExtended or provide your own functions, then this is the right place to come.
@@ -41,3 +42,5 @@ It allows you to add components, lang, navigation and more in the future to User
 UserExtended provides a class called UserUtil which has many common User based functions which you may find useful to use in your own plugins.
 
 The long term goal is to move these functions into the UserExtended core module and deprecate User Utilities.
+
+* * *

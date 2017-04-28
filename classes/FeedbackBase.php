@@ -21,7 +21,7 @@ use Illuminate\Validation\Validator;
  * Feedback::with($myValidator)->generate()->display('#myDiv');
  * Feedback::with($myValidator)->generate()->flash();
  *
- * @method static FeedbackBase with(Validator &$validator) FeedbackBase
+ * @method static FeedbackBase with($validator, $flashErrors = false, $flash = [], $div = []) FeedbackBase
  * @package Clake\Userextended\Controllers
  */
 abstract class FeedbackBase
@@ -81,11 +81,12 @@ abstract class FeedbackBase
 
     /**
      * Factory method for setting up the custom flash and div messages and adding in the validator
-     * @param Validator $validator
+     * @param $validator
      * @param array $flash
      * @param array $div
+     * @return $this
      */
-    public function withFactory(Validator &$validator, $flash = [], $div = [])
+    public function withFactory($validator, $flashErrors = false, $flash = [], $div = [])
     {
         if(empty($flash))
             $this->flash = $this->customFlashMessages();
@@ -98,13 +99,17 @@ abstract class FeedbackBase
             $this->div = $div;
 
         $this->validator = $validator;
+
+        $this->generate($flashErrors);
+
+        return $this;
     }
 
     /**
      * Generates the feedback strings for flash and divs
      * Also sets the feedback status
      */
-    public function generate()
+    public function generate($flashErrors)
     {
         if($this->validator === false) {
             $this->status = 0;
@@ -119,13 +124,18 @@ abstract class FeedbackBase
 
             $this->divOutput = '<span class="text-danger">' . $this->div['error'];
             $errors = json_decode($this->validator->messages());
+
+            $errorStr = '';
             foreach($errors as $error)
             {
-                $this->divOutput .= implode(' ', $error) . ' ';
+                $errorStr .= implode(' ', $error) . ' ';
             }
-            $this->divOutput .= '</span>';
+            $this->divOutput .= $errorStr . '</span>';
 
             $this->flashOutput = $this->flash['error'];
+
+            if($flashErrors)
+                $this->flashOutput .= ' ' . $errorStr;
         } else {
             $this->status = 1;
 
@@ -142,12 +152,14 @@ abstract class FeedbackBase
      */
     public function flash()
     {
-        if($this->status === 0)
+        if($this->status === 1)
             Flash::success($this->flashOutput);
         else if($this->status === -1)
             Flash::error($this->flashOutput);
         else
             Flash::warning($this->flashOutput);
+
+        return $this;
     }
 
     /**

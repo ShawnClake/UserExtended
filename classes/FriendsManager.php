@@ -286,11 +286,11 @@ class FriendsManager
         $users = new Collection();
 
         $limit = Helpers::unlimited($limit);
-        //dd(json_encode(Friend::friends($userId)));
+
         $requests = Friend::friends($userId);
-        //dd($requests->get());
-        if($requests->isEmpty())
-        {
+
+        if(empty($requests))
+        {dd('bob');
             return $users;
         }
 

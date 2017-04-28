@@ -338,7 +338,7 @@ abstract class UserExtended extends Module
      * Useful for grabbing a specific module for debugging by looking at its values.
      * If you want to run operations on the module, use the static call method instead.
      * @param $moduleName
-     * @return bool|mixed
+     * @return bool|UserExtended
      */
     public static function getModule($moduleName)
     {
@@ -436,7 +436,7 @@ class Module
     /**
      * Whether or not other modules are able to access your modules extensible class.
      * Typically this should always be true, the only cases where you would want to override this would be
-     * if your module doesn't provide any extra functions for other modules to use.
+     * if your module does not provide any extra functions for other modules to use.
      * @var bool
      */
     public $visible = true;
@@ -484,6 +484,31 @@ class Module
     public function getVisible()
     {
         return $this->visible;
+    }
+
+    /**
+     * Returns an array of documentation for the module
+     * Returns documentation in MD or html format back to display on the module manager.
+     * The key is the page name in slug form and the value is the documentation content for that page.
+     * @return array
+     */
+    public function getDocumentation()
+    {
+        return [
+            'home' => 'This module has not provided any documentation',
+        ];
+    }
+
+    /**
+     * Returns an array of update notes for the module
+     * Returns an array where the key is the version number and value at that key is the update notes for that version.
+     * @return array
+     */
+    public function getUpdateNotes()
+    {
+        return [
+            $this->version => 'This module has not provided any update notes',
+        ];
     }
 
 }

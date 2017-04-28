@@ -47,8 +47,11 @@ class UserExtended extends User
     public function __construct()
     {
         $hasMany = $this->hasMany;
-        $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'user_id'];
-        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'author_id'];
+        $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'user_id', 'softDelete' => true, 'delete' => true];
+        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'author_id', 'softDelete' => true, 'delete' => true];
+        $hasMany['sent_relations'] = ['Clake\Userextended\Models\Friend', 'key' => 'user_that_sent_request', 'softDelete' => true, 'delete' => true];
+        $hasMany['received_relations'] = ['Clake\Userextended\Models\Friend', 'key' => 'user_that_accepted_request', 'softDelete' => true, 'delete' => true];
+        $hasMany['integrated_user'] = ['Clake\Userextended\Models\IntegratedUser', 'key' => 'user_id', 'softDelete' => true, 'delete' => true];
         $this->hasMany = $hasMany;
 
         $belongsTo = $this->belongsTo;
@@ -57,7 +60,7 @@ class UserExtended extends User
 
         $belongsToMany = $this->belongsToMany;
         $belongsToMany['roles'] = ['Clake\Userextended\Models\Role', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'role_id'];
-        $belongsToMany['groups'] = ['Clake\Userextended\Models\GroupsExtended', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'user_group_id'];
+        $belongsToMany['groups'] = ['Clake\Userextended\Models\GroupsExtended', 'table' => 'users_groups', 'key' => 'user_id', 'otherKey' => 'user_group_id', 'softDelete' => true, 'delete' => true];
         $this->belongsToMany = $belongsToMany;
 
         $json = $this->jsonable;

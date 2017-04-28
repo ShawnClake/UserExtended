@@ -28,3 +28,5 @@ Just load up the FieldManager in the backend and define some fields, and their v
 Simply load up the FieldManager is the backend and start creating custom fields
 
 These fields will automatically display on registration and update pages as you specify. You can also programatically retrieve these values and options, but this is ___not___ officially supported yet.
+
+***

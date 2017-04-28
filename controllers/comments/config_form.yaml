@@ -1,0 +1,25 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Comments
+
+# Model Form Field configuration
+form: $/clake/userextended/models/Comment/fields.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Comment
+
+# Default redirect location
+defaultRedirect: clake/userextended/comments
+
+# Create page
+create:
+    #redirect: clake/userextended/comments/update/:id
+    redirectClose: clake/userextended/comments
+
+# Update page
+update:
+    redirect: clake/userextended/comments/update/:id
+    redirectClose: clake/userextended/comments

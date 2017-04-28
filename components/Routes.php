@@ -1,10 +1,12 @@
 <?php namespace Clake\Userextended\Components;
 
+use Carbon\Carbon;
 use Clake\UserExtended\Classes\RouteManager;
 use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserRoleManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Route;
+use Clake\Userextended\Models\Settings;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
@@ -68,6 +70,15 @@ class Routes extends ComponentBase
         // If no restrictions exist, then we are good to go. Return positively.
         if(!$this->doRestrictionsExist($url))
             return '';
+
+        // A restriction must exist past this point, let's update our attempt trackers
+        if(Settings::get('track_route_attempts', true))
+        {
+            $route = Route::where('route', $url)->where('enabled', true)->first();
+            $route->attempts++;
+            $route->last_accessed_at = Carbon::now();
+            $route->save();
+        }
 
         // If the user isn't logged in, then no chance they can access a restricted page.
         $user = UserUtil::getLoggedInUser();

@@ -2,6 +2,8 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\Feedback\GroupFeedback;
+use Clake\UserExtended\Classes\Feedback\RoleFeedback;
 use Clake\UserExtended\Classes\GroupManager;
 use Clake\UserExtended\Classes\RoleManager;
 use Clake\UserExtended\Classes\UserGroupManager;
@@ -10,12 +12,9 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
-use Clake\UserExtended\Updates\SeedUserGroupsTable;
-use October\Rain\Support\Facades\Flash;
-use RainLab\User\Models\UserGroup;
 use Redirect;
-use Backend;
 use Session;
+use Backend;
 
 /**
  * User Extended by Shawn Clake
@@ -71,8 +70,6 @@ class Roles extends Controller
     public $listConfig = 'config_list.yaml';
 
     public $bodyClass = 'compact-container';
-
-    //public $layout = 'roles';
 
     public function __construct()
     {
@@ -136,8 +133,7 @@ class Roles extends Controller
         if($this->getCurrentPage('list_roles') === false || $this->getCurrentPage('list_roles') === null)
             $this->setCurrentPage('list_roles', 1);
         $total = ceil((float)$roles->count() / (float)self::RESULT_LIM);
-        //echo $roles->slice($this->getCurrentPage('list_roles') * self::RESULT_LIM, self::RESULT_LIM);
-        //var_dump (array_slice(['test','test1','test2','test3'], ($this->getCurrentPage('list_roles') - 1)* self::RESULT_LIM, self::RESULT_LIM));
+
         $this->vars['groupRoles'] = ['roles' => $roles->slice(($this->getCurrentPage('list_roles') - 1) * self::RESULT_LIM, self::RESULT_LIM), 'pagination' => ['page' => $this->getCurrentPage('list_roles'), 'total' => $total]];
 
         if(($this->getCurrentRole() === false || $this->getCurrentRole() === null) && count($roles) > 0)
@@ -270,23 +266,12 @@ class Roles extends Controller
 
         $roles = RoleManager::with($groupCode)->sort()->getRoles();
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_role_save', [
-            'success' => 'Role saved successfully!',
-            'error'   => 'Role was not saved!',
-            'false'   => 'Role was not saved!'
-        ], [
-            'success' => '<span class="text-success">Role has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
-
+        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_role_save');
 
         if(!($feedback === false || $feedback->fails())) {
-            //Flash::success('Role successfully saved!');
-            //$uiFeedback = ['#feedback_role_save' => '<span class="text-success">Role has been saved.</span>'];
             $this->setCurrentRole($code);
 
-            if($roles->count() > 0){
+            if($roles->count() > 0) {
                 $this->queue([
                     self::UE_MANAGE_ROLE_UI,
                     self::UE_MANAGE_ROLE_TOOLBAR
@@ -299,7 +284,6 @@ class Roles extends Controller
             }
 
             $this->queue([self::UE_LIST_ROLES_TABLE]);
-
         }
 
         return array_merge($this->render(), $uiFeedback);
@@ -384,15 +368,7 @@ class Roles extends Controller
 
         $feedback = RoleManager::createRole($name, $description, $code, -1);
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_role_save', [
-            'success' => 'Role saved successfully!',
-            'error'   => 'Role was not saved!',
-            'false'   => 'Role was not saved!'
-        ], [
-            'success' => '<span class="text-success">Role has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
+        $uiFeedback = RoleFeedback::with($feedback)->flash()->display('#feedback_role_save');
 
         $this->queue([
             self::UE_LIST_ROLES_TABLE_UNASSIGNED,
@@ -617,15 +593,7 @@ class Roles extends Controller
 
         $feedback = GroupManager::createGroup($name, $description, $code);
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_group_save', [
-            'success' => 'Group saved successfully!',
-            'error'   => 'Group was not saved!',
-            'false'   => 'Group was not saved!'
-        ], [
-            'success' => '<span class="text-success">Group has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
+        $uiFeedback = GroupFeedback::with($feedback)->flash()->display('#feedback_group_save');
 
         $this->setCurrentGroup($code);
         $this->setCurrentRole(null);
@@ -671,15 +639,7 @@ class Roles extends Controller
 
         $feedback = GroupManager::updateGroup($groupCode, $name, $description, $code);
 
-        $uiFeedback = $this->feedbackGenerator($feedback, '#feedback_group_save', [
-            'success' => 'Group saved successfully!',
-            'error'   => 'Group was not saved!',
-            'false'   => 'Group was not saved!'
-        ], [
-            'success' => '<span class="text-success">Group has been saved.</span>',
-            'false'   => '<span class="text-danger">That code already exists.</span>',
-            'error'   => ''
-        ]);
+        $uiFeedback = GroupFeedback::with($feedback)->flash()->display('#feedback_group_save');
         
         $this->setCurrentGroup($code);
 
@@ -1243,42 +1203,6 @@ class Roles extends Controller
 
         self::$queue[] = [self::UE_MANAGE_USERS_UI, ['role' => $role, 'group' => $group, 'users' => $unassignedUsers]];
         return true;
-    }
-
-    /**
-     * Forms feedback content
-     * @param $validator
-     * @param string $destinationDiv
-     * @param array $flash
-     * @param array $message
-     * @return array
-     */
-    protected function feedbackGenerator($validator,
-                                         $destinationDiv = '#feedback',
-                                         array $flash = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => ''],
-                                         array $message = ['success' => 'Success!', 'error' => 'Something went wrong.', 'false' => '']
-    ) {
-        if($validator === false)
-        {
-            Flash::error($flash['false']);
-            return [$destinationDiv => $message['false']];
-        }
-
-        if($validator->fails())
-        {
-            Flash::error($flash['error']);
-            $errorString = $message['error'] . '<span class="text-danger">';
-            $errors = json_decode($validator->messages());
-            foreach($errors as $error)
-            {
-                $errorString .= implode(' ', $error) . ' ';
-            }
-            $errorString .= '</span>';
-            return [$destinationDiv => $errorString];
-        }
-
-        Flash::success($flash['success']);
-        return [$destinationDiv => $message['success']];
     }
 
 }

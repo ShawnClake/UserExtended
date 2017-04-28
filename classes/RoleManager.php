@@ -126,7 +126,7 @@ class RoleManager extends StaticFactory
         if(isset($sortOrder)) $role->sort_order = $sortOrder;
         if(isset($name)) $role->name = $name;
         if(isset($description)) $role->description = $description;
-        if(isset($code)) $role->code = $code;
+        if(isset($code)) $role->code = str_slug($code, "-");
         if(isset($groupId)) $role->group_id = $groupId;
 
         $validator = Validator::make(

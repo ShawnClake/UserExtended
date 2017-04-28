@@ -1,6 +1,4 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
@@ -174,7 +172,7 @@ class GroupManager extends StaticFactory
 
         if(isset($name)) $group->name = $name;
         if(isset($description)) $group->description = $description;
-        if(isset($code)) $group->code = $code;
+        if(isset($code)) $group->code = str_slug($code, "-");
 
         $validator = Validator::make(
             [

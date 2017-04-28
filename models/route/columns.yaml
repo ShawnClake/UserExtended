@@ -20,11 +20,11 @@ columns:
         type: switch
 
     attempts:
-        label: Times Accessed
+        label: Access Attempts
         type: number
 
-    last_accessed:
-        label: Last Acessed
+    last_accessed_at:
+        label: Last Access Attempt
         type: datetime
 
     created_at:

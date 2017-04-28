@@ -112,7 +112,6 @@ class User extends ComponentBase
     {
         Plugin::injectAssets($this);
         $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
-		//$this->addCss('/plugins/clake/userextended/assets/css/user.css');
     }
 
     /**
@@ -351,9 +350,6 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null, $userid = null)
     {
-        // TODO: Is $template being used anywhere?
-		$template = $this->property('template');
-
         if(!Settings::get('enable_profiles', true))
             return false;
 
@@ -419,4 +415,29 @@ class User extends ComponentBase
     {
         return UserRoleManager::currentUser()->isInRole($roleCode);
     }
+
+    /**
+     * Returns true if the user is in the role which is passed in
+     * Useful to use in twig templates such as this:
+     * {% if ueuser.hasRole('sr-dev') %}
+     * @param $roleCode
+     * @return bool
+     */
+    public function hasRole($roleCode)
+    {
+        return UserRoleManager::currentUser()->isInRole($roleCode);
+    }
+
+    /**
+     * Returns true if the user is the group which is passed in
+     * Useful to use in twig templates such as this:
+     * {% if ueuser.hasGroup('admin') %}
+     * @param $groupCode
+     * @return bool
+     */
+    public function hasGroup($groupCode)
+    {
+        return UserGroupManager::currentUser()->isInGroup($groupCode);
+    }
+
 }

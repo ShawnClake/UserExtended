@@ -227,6 +227,7 @@ class UserRoleManager extends StaticFactory
     }
 
     /**
+     * Removes a role from a user
      * @param $roleCode
      * @return bool
      */

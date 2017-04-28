@@ -1,8 +1,6 @@
 <?php namespace Clake\Userextended\Models;
 
-use Clake\UserExtended\Classes\FieldManager;
 use Model;
-use October\Rain\Support\Collection;
 use Clake\UserExtended\Traits\Timezonable;
 use October\Rain\Database\Traits\SoftDelete;
 

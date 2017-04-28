@@ -98,3 +98,27 @@ tabs:
             comment: Enter your Facebook AppID. If you haven't already created one, visit the Facebook dev area.
             type: text
             tab: Integrations
+
+        # Options
+        closing_deletes:
+            span: left
+            label: Delete Closed Accounts
+            comment: When an account is closed, should it be deleted?
+            type: switch
+            tab: Options
+
+        track_route_attempts:
+            span: right
+            label: Track Route Attempts
+            comment: Tracks attempt count and last attempt date for Routes. The application will be marginally faster if this is disabled
+            type: switch
+            tab: Options
+            default: true
+
+        dev_mode:
+            span: left
+            label: Development Mode
+            comment: Development mode enables some features for developing modules.
+            type: switch
+            tab: Options
+            default: false

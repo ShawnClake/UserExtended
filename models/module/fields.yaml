@@ -1,0 +1,39 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        readOnly: true
+        type: text
+        span: left
+    description:
+        label: Description
+        type: textarea
+        readOnly: true
+        size: small
+        span: right
+    version:
+        label: Version
+        readOnly: true
+        type: text
+        span: left
+    flags:
+        label: Injects
+        type: checkboxlist
+        span: left
+        options:
+            injectComponents: [Components, Allow the module to inject components]
+            injectNavigation: [Navigation, Allow the module to inject navigation]
+            injectLang: [Lang, Allow the module to inject lang]
+            injectAssets: [Assets, Allow the module to inject assets]
+            injectBonds: [Bonds, Allow the module to inject bonds]
+    enabled:
+        label: Enabled
+        type: switch
+        span: right
+    locked:
+        label: Version Locked
+        type: switch
+        span: right

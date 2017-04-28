@@ -1,6 +1,6 @@
 <?php namespace Clake\UserExtended;
 
-use Clake\UserExtended\Classes\FriendsManager;
+use Clake\UserExtended\Classes\Helpers;
 use Clake\UserExtended\Classes\UserGroupManager;
 use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserRoleManager;
@@ -9,6 +9,7 @@ use Clake\UserExtended\Classes\UserUtil;
 use Clake\Userextended\Models\Friend;
 use Clake\UserExtended\Traits\StaticFactoryTrait;
 use Clake\UserExtended\Classes\UserExtended;
+use Backend;
 
 /**
  * User Extended Core by Shawn Clake
@@ -48,7 +49,56 @@ class Module extends UserExtended
 
     public function injectNavigation()
     {
-        return [];
+        return [
+            'users-side' => [
+                'label' => 'Users',
+                'url'   => Backend::url('rainlab/user/users'),
+                'icon'  => 'icon-user',
+                'order' => 100
+            ],
+            'routes' => [
+                'label' => 'Routes',
+                'url'   => Backend::url('clake/userextended/routes/index'),
+                'icon'  => 'icon-eye-slash',
+                'order' => 200
+            ],
+            'fields' => [
+                'label' => 'Field Manager',
+                'url'   => Backend::url('clake/userextended/fields/manage'),
+                'icon'  => 'icon-pencil-square-o',
+                'order' => 300
+            ],
+            'roles' => [
+                'label' => 'Role Manager',
+                'url'   => Backend::url('clake/userextended/roles/manage'),
+                'icon'  => 'icon-pencil',
+                'order' => 400
+            ],
+            'friends' => [
+                'label' => 'Friends',
+                'url'   => Backend::url('clake/userextended/friends/index'),
+                'icon'  => 'icon-users',
+                'order' => 500
+            ],
+            'timezones' => [
+                'label' => 'Timezones',
+                'url'   => Backend::url('clake/userextended/timezones/index'),
+                'icon'  => 'icon-clock-o',
+                'order' => 600
+            ],
+            'comments' => [
+                'label' => 'Comments',
+                'url'   => Backend::url('clake/userextended/comments/index'),
+                'icon'  => 'icon-comments-o',
+                'order' => 700
+            ],
+            'modules' => [
+                'label' => 'Modules',
+                'url'   => Backend::url('clake/userextended/modules/index'),
+                'icon'  => 'icon-puzzle-piece',
+                'order' => 800
+            ],
+        ];
     }
 
     public function injectLang()
@@ -67,6 +117,51 @@ class Module extends UserExtended
     public function injectBonds()
     {
         return [];
+    }
+
+    /**
+     * Returns the plugin version notes for display in the Module Manager
+     * @return array
+     */
+    public function getUpdateNotes()
+    {
+        return [
+            '2.2.00' => [Helpers::file(plugins_path('clake/userextended/help/Updates/2.2.00.md')), 'md' => true],
+        ];
+    }
+
+    /**
+     * Returns the plugin documentation for display in the Module Manager
+     * @return array
+     */
+    public function getDocumentation()
+    {
+        $home = Helpers::file(plugins_path('clake/userextended/readme.md'));
+
+        $apis = Helpers::file(plugins_path('clake/userextended/help/APIs/Helpers.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/APIs/Module.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/APIs/UserUtil.md'));
+
+        $backend = Helpers::file(plugins_path('clake/userextended/help/Backend/FieldManager.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Backend/RoleManager.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Backend/Routes.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Backend/Timezones.md'));
+
+        $components = Helpers::file(plugins_path('clake/userextended/help/Components/3rdParty.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Components/Account.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Components/Friends.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Components/User.md'));
+
+        $traits = Helpers::file(plugins_path('clake/userextended/help/Traits/Searchable.md')) .
+            Helpers::file(plugins_path('clake/userextended/help/Traits/Timezonable.md'));
+
+        return [
+            'home'       => [$home, 'md' => true],
+            'apis'       => [$apis, 'md' => true],
+            'backend'    => [$backend, 'md' => true],
+            'components' => [$components, 'md' => true],
+            'traits'     => [$traits, 'md' => true],
+        ];
     }
 
     /**

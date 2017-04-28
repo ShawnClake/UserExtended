@@ -38,3 +38,4 @@ Current output types:
 * Friends list
 * Friend requests
 
+***

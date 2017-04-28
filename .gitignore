@@ -24,7 +24,6 @@ php-errors.log
 sftp-config.json
 selenium.php
 composer.lock
-modules/
 bootstrap/
 /storage
 /vender
@@ -38,7 +37,7 @@ nbproject
 storage
 vender
 bootstrap
-modules
+/modules
 node_modules
 
 

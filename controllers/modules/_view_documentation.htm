@@ -1,0 +1,35 @@
+<div class="ue-form-container">
+
+    <h3>Documentation:</h3>
+
+    <br>
+
+    <div style="padding-left:11px;">
+
+        <div id="create_tabs_" class="control-tabs primary-tabs layout has-tabs" data-control="tab" data-slideable>
+            <ul class="nav nav-tabs">
+
+            <?php $firstTab=true; foreach($content as $page => $notes): ?>
+                <li <?php if ($firstTab): ?> class="active" <?php $firstTab = false; endif; ?>><a href="#tab_<?=camel_case($page)?>" data-toggle="tab"><?php echo preg_replace('/(?<!\ )[A-Z]/', ' $0', studly_case($page)) ?></a></li>
+            <?php endforeach; ?>
+
+            </ul>
+            <div class="tab-content clearfix">
+                <?php $firstTab=true; foreach($content as $page => $notes): ?>
+                    <div class="tab-pane <?php if ($firstTab): ?> active <?php $firstTab = false; endif; ?>" id="tab_<?=camel_case($page)?>">
+                        <?= $notes ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="form-group span-full">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+
+    <br>
+
+</div>
