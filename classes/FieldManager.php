@@ -1,6 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\Field;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * User Extended by Shawn Clake
@@ -25,7 +26,6 @@ class FieldManager extends StaticFactory
 
     /**
      * Creates a field
-     * TODO: There is sub-par validation here and this needs to be fixed in a future release.
      * @param $name
      * @param $code
      * @param $description
@@ -43,32 +43,37 @@ class FieldManager extends StaticFactory
                                        $flags = [],
                                        $data = []
     ) {
-		//Ensure that we are saving a unique field.
 
-        // Just return on name not unique, OR, by using the Validator class to specify that it should be unique.
-        // #DontReinventTheWheel
-		/*$desiredName = $name;
-		$instance = 0;
-		while (findField($name) != null){
-			$instance++;
-			$name = $desiredName . $instance;
-		}*/
-	
-	    // This should be done for auto completing the form. We don't want to simply override the code the user wants to use.
-		//$code = str_slug($name, "-");
+        if(empty($code))
+            $code = $name;
 
-        // Use the Validator class for this as its easier and more effective/verbose
-		//if (!isset($name) && !isset($type)){
-		//	return false;
-		//}
-		//TODO check $validation
+        $code = str_slug($code, "-");
 
-        if(empty($name) || empty($code) || empty($description))
+        $validator = Validator::make(
+            [
+                'name' => $name,
+                'description' => $description,
+                'code' => $code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
+        // Duplicate code
+        if(Field::where('code', $code)->count() > 0)
             return false;
 
 		$field = new Field();
 		$field->name = $name;
-		$field->code = $code;
+		$field->code = str_slug($code, "-");
 		$field->description = $description;
 		$field->type = $type;
 		$field->validation = $validation;
@@ -76,7 +81,7 @@ class FieldManager extends StaticFactory
         if(!empty($data)) $field->data = $data;
 
 		$field->save();
-		return $field;	
+		return $validator;
 	}
 
     /**
@@ -99,7 +104,6 @@ class FieldManager extends StaticFactory
 
     /**
      * Updates a field.
-     * TODO: There is sub-par validation here and this needs to be fixed in a future release.
      * @param $name
      * @param $code
      * @param $description
@@ -120,15 +124,36 @@ class FieldManager extends StaticFactory
 
 	    $field = FieldManager::findField($code);
 		$field->name = $name;
-		$field->code = $code;
+		$field->code = str_slug($code, "-");
 		$field->description = $description;
 		$field->type = $type;
 		$field->validation = $validation;
 		if(!empty($flags)) $field->flags = $flags;
         if(!empty($data)) $field->data = $data;
 
+        $validator = Validator::make(
+            [
+                'name' => $field->name,
+                'description' => $field->description,
+                'code' => $field->code,
+            ],
+            [
+                'name' => 'required|min:3',
+                'description' => 'required|min:8',
+                'code' => 'required',
+            ]
+        );
+
+        if($validator->fails())
+        {
+            return $validator;
+        }
+
+        if(Field::code($field->code)->where('id', '<>', $field->id)->count() > 0)
+            return false;
+
 		$field->save();
-		return $field;	
+		return $validator;
 	}
 
     /**

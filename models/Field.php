@@ -2,7 +2,6 @@
 
 use Clake\UserExtended\Classes\FieldManager;
 use Model;
-use October\Rain\Support\Collection;
 use Clake\UserExtended\Traits\Timezonable;
 use October\Rain\Database\Traits\SoftDelete;
 
@@ -139,6 +138,9 @@ class Field extends Model
         return $query->where('code', $code);
     }
 
+    /**
+     * Ensures the flags array has all the required keys
+     */
     public function checkFlags()
     {
         $flags = [];
@@ -151,6 +153,11 @@ class Field extends Model
         $this->flags = $flags;
     }
 
+    /**
+     * Converts the validation array on the model to a string with bar (|) seperators and returns it
+     * @param bool $english
+     * @return string
+     */
     public function validationToString($english = false)
     {
         if(empty($this->validation['additional']))

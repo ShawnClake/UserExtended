@@ -1,5 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
+use Illuminate\Support\Facades\File;
+
 /**
  * User Extended by Shawn Clake
  * Class Helpers
@@ -38,4 +40,61 @@ class Helpers
             return $array[$key];
         return $default;
     }
+
+    /**
+     * Returns an int with the highest bit in input as the only bit which is set
+     * Function example taken from Hacker's Delight
+     * @param $n
+     * @return int
+     */
+    public static function hiBit($n)
+    {
+        $n |= ($n >>  1);
+        $n |= ($n >>  2);
+        $n |= ($n >>  4);
+        $n |= ($n >>  8);
+        $n |= ($n >> 16);
+        $n |= ($n >> 32);
+        return $n ^ ($n >> 1);
+    }
+
+    /**
+     * Returns true if $bit is set inside of $bits
+     * Both $bits and $bit are integers
+     * Returns false if the bit is not set
+     * @param $bits
+     * @param $bit
+     * @return bool
+     */
+    public static function isBitSet($bits, $bit)
+    {
+        return !!((int)$bits & (int)$bit);
+    }
+
+    /**
+     * Uses the desired delete type. Useful in cases where you need to dynamically
+     * determine whether a model should be hard deleted or soft deleted
+     * @param $model
+     * @param bool $forceDelete
+     */
+    public static function deleteModel($model, $forceDelete = false)
+    {
+        if($forceDelete === false)
+            $model->forceDelete();
+        else
+            $model->delete();
+    }
+
+    /**
+     * Returns a files contents specififed by $path
+     * @param $path
+     * @return mixed
+     */
+    public static function file($path)
+    {
+        return File::get($path);
+    }
+
+
+
 }

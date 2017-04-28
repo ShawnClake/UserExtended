@@ -111,9 +111,7 @@ class User extends ComponentBase
     public function onRun()
     {
         Plugin::injectAssets($this);
-
         $this->page['groups'] = UserGroupManager::currentUser()->allGroups()->getUsersGroups();
-		//$this->addCss('/plugins/clake/userextended/assets/css/user.css');
     }
 
     /**
@@ -186,6 +184,7 @@ class User extends ComponentBase
         return ['#userSearchResults' => $content];
     }
 
+
     /**
      * Provides user information to the page
      * @return mixed
@@ -193,6 +192,9 @@ class User extends ComponentBase
     public function user()
     {
         $userid = $this->property('paramCode');
+
+        if(!isset($userid) || empty($userid))
+            $userid = UserUtil::getUsersIdElseLoggedInUsersId();
 
         return UserUtil::convertToUserExtendedUser(UserUtil::getUser($userid));
     }
@@ -244,7 +246,7 @@ class User extends ComponentBase
      */
     public function comments()
     {
-        $userid = $this->property('paramCode');
+        $userid = $this->user()->id;
 
         $user = UserUtil::getUser($userid);
 
@@ -260,7 +262,7 @@ class User extends ComponentBase
      */
     public function onComment()
     {
-        $userid = $this->property('paramCode');
+        $userid = $this->user()->id;
         $content = post('comment');
 
         CommentManager::createComment($userid, $content);
@@ -348,9 +350,6 @@ class User extends ComponentBase
      */
     public function onVisitProfile($property = null, $userid = null)
     {
-        // TODO: Is $template being used anywhere?
-		$template = $this->property('template');
-
         if(!Settings::get('enable_profiles', true))
             return false;
 
@@ -411,4 +410,34 @@ class User extends ComponentBase
             $url .= '/' . $param;
         return $url;
     }
+
+    public function isInRole($roleCode)
+    {
+        return UserRoleManager::currentUser()->isInRole($roleCode);
+    }
+
+    /**
+     * Returns true if the user is in the role which is passed in
+     * Useful to use in twig templates such as this:
+     * {% if ueuser.hasRole('sr-dev') %}
+     * @param $roleCode
+     * @return bool
+     */
+    public function hasRole($roleCode)
+    {
+        return UserRoleManager::currentUser()->isInRole($roleCode);
+    }
+
+    /**
+     * Returns true if the user is the group which is passed in
+     * Useful to use in twig templates such as this:
+     * {% if ueuser.hasGroup('admin') %}
+     * @param $groupCode
+     * @return bool
+     */
+    public function hasGroup($groupCode)
+    {
+        return UserGroupManager::currentUser()->isInGroup($groupCode);
+    }
+
 }

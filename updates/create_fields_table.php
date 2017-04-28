@@ -13,7 +13,7 @@ class CreateFieldsTable extends Migration
             $table->increments('id');
             $table->string('name')->default('');
             $table->string('code')->unique();
-            $table->text('description')->default('');
+            $table->text('description');
             $table->enum('type', [
                 'UE_FORM_TEXT',
                 'UE_FORM_CHECKBOX',

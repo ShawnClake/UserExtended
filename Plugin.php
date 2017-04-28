@@ -1,6 +1,5 @@
 <?php namespace Clake\UserExtended;
 
-use Backend\Classes\Controller;
 use Clake\UserExtended\Classes\UserExtended;
 use System\Classes\PluginBase;
 use Event;
@@ -14,7 +13,7 @@ use System\Classes\SettingsManager;
  * User Extended is licensed under the MIT license.
  * @link https://github.com/ShawnClake/UserExtended
  *
- * @version 2.1.00 User Extended Core
+ * @version 2.2.00 User Extended Core
  *
  * @author Shawn Clake <shawn.clake@gmail.com>
  * @link https://github.com/ShawnClake
@@ -31,6 +30,7 @@ use System\Classes\SettingsManager;
 class Plugin extends PluginBase
 {
     /**
+     * An array containing the plugins which UserExtended depnds on
      * @var array
      */
     public $require = [
@@ -45,7 +45,7 @@ class Plugin extends PluginBase
     {
         return [
             'name'        => 'UserExtended',
-            'description' => 'Adds roles, friends, profiles, and utility functions to the Rainlab User plugin',
+            'description' => 'Adds roles, friends, profiles, route tracking, and utility functions to the Rainlab User plugin',
             'author'      => 'clake',
             'icon'        => 'icon-user-plus',
             'homepage'    => 'https://github.com/ShawnClake/UserExtended'
@@ -71,6 +71,44 @@ class Plugin extends PluginBase
             ]
         ];
     }
+
+    /**
+     * Registers column types for a model's columns.yaml to use
+     * @return array
+     */
+    public function registerListColumnTypes()
+    {
+        return [
+            'listdropdown' => [$this, 'getListChoice']
+        ];
+    }
+
+    /**
+     * Generates a string based on the chosen dropdown choice.
+     * The key of the dropdown choice is compared to an array return by a class and function specified in the columns.yaml.
+     * The value at this key in the returned array is what is returned.
+     * @param $value
+     * @param $column
+     * @param $record
+     * @return string
+     */
+    public function getListChoice($value, $column, $record)
+    {
+        $string = '';
+
+        $class = $column->config['class'];
+        $function = $column->config['function'];
+
+        if(method_exists($class, $function))
+        {
+            $class = new $class();
+            $array = $class->$function();
+            $string = $array[$value];
+        }
+
+        return $string;
+    }
+
 
     /**
      * Register method, called when the plugin is first registered.
@@ -105,62 +143,12 @@ class Plugin extends PluginBase
          */
         Event::listen('backend.menu.extendItems', function ($manager)
         {
-            $manager->addSideMenuItems('RainLab.User', 'user', [
-                /*'groups' => [
-                    'label' => 'Group Manager',
-                    'url'   => Backend::url('clake/userextended/groupsextended'),
-                    'icon'  => 'icon-users',
-                    'order' => 500
-                ],*/
-                'roles' => [
-                    'label' => 'Role Manager',
-                    'url'   => Backend::url('clake/userextended/roles/manage'),
-                    'icon'  => 'icon-pencil',
-                    'order' => 600
-                ],
-                'users-side' => [
-                    'label' => 'Users',
-                    'url'   => Backend::url('rainlab/user/users'),
-                    'icon'  => 'icon-user',
-                    'order' => 100
-                ],
-                'fields' => [
-                    'label' => 'Field Manager',
-                    'url'   => Backend::url('clake/userextended/fields/manage'),
-                    'icon'  => 'icon-pencil-square-o',
-                    'order' => 700
-                ],
-            ]);
-
+            $navigation = array_merge(
+                UserExtended::getNavigation(),
+                []
+            );
+            $manager->addSideMenuItems('RainLab.User', 'user', $navigation);
         });
-
-        // TODO: Try and see if we can hack in some code for injecting fields into the user controller.
-        // TODO: The reason we can't right now, is although the field would appear the user controller
-        // TODO: Wouldn't know how to save them as they get array'd and saved as JSON.
-        /*$settings =
-
-        Event::listen('backend.form.extendFields', function($widget) {
-
-            // Only for the User controller
-            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
-                return;
-            }
-
-            // Only for the User model
-            if (!$widget->model instanceof \RainLab\User\Models\User) {
-                return;
-            }
-
-            // Add an extra birthday field
-            $widget->addFields([
-                'birthday' => [
-                    'label'   => 'Birthday',
-                    'comment' => 'Select the users birthday',
-                    'type'    => 'datepicker'
-                ]
-            ]);
-
-        });*/
 
         return [];
     }
@@ -177,11 +165,15 @@ class Plugin extends PluginBase
         );
     }
 
+    /**
+     * Registers the settings model for User Extended
+     * @return array
+     */
     public function registerSettings()
     {
         return [
             'settings' => [
-                'label'       => 'UserExtended Settings',
+                'label'       => 'User Extended',
                 'description' => 'Manage user extended settings.',
                 'category'    => SettingsManager::CATEGORY_USERS,
                 'icon'        => 'icon-cog',
@@ -199,7 +191,80 @@ class Plugin extends PluginBase
      */
     public function registerPermissions()
     {
-        return [];
+        return [
+            'clake.userextended.roles.view' => [
+                'label' => 'View Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.groups.view' => [
+                'label' => 'View Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.role_users.view' => [
+                'label' => 'View Users in Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.group_users.view' => [
+                'label' => 'View Users in Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.roles.manage' => [
+                'label' => 'Manage Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.groups.manage' => [
+                'label' => 'Manage Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.role_users.manage' => [
+                'label' => 'Manage Users in Roles',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.group_users.manage' => [
+                'label' => 'Manage Users in Groups',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.modules.view' => [
+                'label' => 'View Modules',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.modules.manage' => [
+                'label' => 'Manage Modules',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.timezones.view' => [
+                'label' => 'View Timezones',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.timezones.manage' => [
+                'label' => 'Manage Timezones',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.friends.view' => [
+                'label' => 'View Friends',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.friends.manage' => [
+                'label' => 'Manage Friends',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.routes.view' => [
+                'label' => 'View Routes',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.routes.manage' => [
+                'label' => 'Manage Routes',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.fields.view' => [
+                'label' => 'View Fields',
+                'tab' => 'User Extended'
+            ],
+            'clake.userextended.fields.manage' => [
+                'label' => 'Manage Fields',
+                'tab' => 'User Extended'
+            ],
+        ];
     }
 
     /**
@@ -208,10 +273,7 @@ class Plugin extends PluginBase
      */
     public function registerNavigation()
     {
-        return array_merge(
-            UserExtended::getNavigation(),
-            []
-        );
+        return [];
     }
 
     /**
@@ -224,9 +286,7 @@ class Plugin extends PluginBase
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
 
-        /*
-         * Handles injecting JS and CSS assets
-         */
+        // Handles injecting JS and CSS assets
         $assets = UserExtended::getAssets();
 
         foreach ($assets as $asset) {

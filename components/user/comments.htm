@@ -11,3 +11,13 @@
     {% endfor %}
 
 {% endif %}
+
+{% if ueuser.loggedIn %}<h5>Write a comment</h5>{% endif %}
+{% if ueuser.locked or ueuser.loggedIn and ueuser.loggedIn.id == ueuser.user.id%}
+<form data-request="ueuser::onComment">
+    <textarea rows="2" name="comment"></textarea> <br>
+    <input type="submit" value="Comment" />
+</form>
+{% else %}
+Leave a comment by {% if not user %} signing in and {% endif %} friending them.
+{% endif %}

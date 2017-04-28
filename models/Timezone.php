@@ -97,10 +97,10 @@ class Timezone extends Model
 
         foreach($timezones as $timezone)
         {
-            $list[$timezone->abbr] = '(' . $timezone->abbr . ') ' . $timezone->name;
+            $list[$timezone->id] = '(' . $timezone->abbr . ') ' . $timezone->name;
         }
 
-        ksort($list);
+        asort($list);
 
         return $list;
     }

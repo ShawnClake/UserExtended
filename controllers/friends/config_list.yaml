@@ -1,0 +1,36 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Column configuration
+list: $/clake/userextended/models/friend/columns.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Friend
+
+# List Title
+title: Friend
+
+# Link URL for each record
+recordUrl: clake/userextended/friends/update/:id
+
+# Message to display if the list is empty
+noRecordsMessage: backend::lang.list.no_records
+
+# Records to display per page
+recordsPerPage: 20
+
+# Display checkboxes next to each record
+#showCheckboxes: true
+
+# Displays the list column set up button
+showSetup: true
+
+defaultSort:
+    column: name
+    direction: desc
+
+toolbar:
+    buttons: manage_friends_toolbar
+# Filter widget configuration
+# filter: config_filter.yaml

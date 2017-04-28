@@ -1,6 +1,5 @@
-<?php
+<?php namespace Clake\UserExtended\Classes;
 
-namespace Clake\UserExtended\Classes;
 /**
  * User Extended by Shawn Clake
  * Class UserExtended
@@ -29,7 +28,7 @@ abstract class UserExtended extends Module
 
     /**
      * The module registry
-     * An array of all the registerd modules. This is populated at runtime.
+     * An array of all the registered modules. This is populated at runtime.
      * @var array
      */
     private static $modules = [];
@@ -57,6 +56,13 @@ abstract class UserExtended extends Module
      * @var array
      */
     private static $assets = [];
+
+    /**
+     * Bonds injection registry
+     * These are for injecting more relation states between users
+     * @var array
+     */
+    private static $bonds = [];
 
     /**
      * Stores an array of settings from the backend module manager page.
@@ -96,6 +102,13 @@ abstract class UserExtended extends Module
     public abstract function injectAssets();
 
     /**
+     * Override with a bonds array to inject bonds into UserExtended
+     * @return mixed
+     */
+    public abstract function injectBonds();
+
+    /**
+     * Returns the injected components
      * @return array
      */
     public static function getComponents()
@@ -104,6 +117,7 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected navigation
      * @return array
      */
     public static function getNavigation()
@@ -112,6 +126,7 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected lang
      * @return array
      */
     public static function getLang()
@@ -120,6 +135,7 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected settings
      * @return array
      */
     public static function getSettings()
@@ -128,11 +144,21 @@ abstract class UserExtended extends Module
     }
 
     /**
+     * Returns the injected assets
      * @return mixed
      */
     public static function getAssets()
     {
         return self::$assets;
+    }
+
+    /**
+     * Returns the injected bonds
+     * @return array
+     */
+    public static function getBonds()
+    {
+        return self::$bonds;
     }
 
     /**
@@ -238,6 +264,8 @@ abstract class UserExtended extends Module
         self::$lang = array_merge(self::$lang, $this->injectLang());
 
         self::$assets = array_merge(self::$assets, $this->injectAssets());
+
+        self::$bonds = array_merge(self::$bonds, $this->injectBonds());
     }
 
     /**
@@ -310,7 +338,7 @@ abstract class UserExtended extends Module
      * Useful for grabbing a specific module for debugging by looking at its values.
      * If you want to run operations on the module, use the static call method instead.
      * @param $moduleName
-     * @return bool|mixed
+     * @return bool|UserExtended
      */
     public static function getModule($moduleName)
     {
@@ -408,12 +436,13 @@ class Module
     /**
      * Whether or not other modules are able to access your modules extensible class.
      * Typically this should always be true, the only cases where you would want to override this would be
-     * if your module doesn't provide any extra functions for other modules to use.
+     * if your module does not provide any extra functions for other modules to use.
      * @var bool
      */
     public $visible = true;
 
     /**
+     * Returns the modules name
      * @return null
      */
     public function getName()
@@ -422,6 +451,7 @@ class Module
     }
 
     /**
+     * Returns the modules author
      * @return null
      */
     public function getAuthor()
@@ -430,6 +460,7 @@ class Module
     }
 
     /**
+     * Returns the modules description
      * @return null
      */
     public function getDescription()
@@ -438,6 +469,7 @@ class Module
     }
 
     /**
+     * Returns the modules version
      * @return null
      */
     public function getVersion()
@@ -446,11 +478,37 @@ class Module
     }
 
     /**
+     * Returns the modules visibility state
      * @return bool
      */
     public function getVisible()
     {
         return $this->visible;
+    }
+
+    /**
+     * Returns an array of documentation for the module
+     * Returns documentation in MD or html format back to display on the module manager.
+     * The key is the page name in slug form and the value is the documentation content for that page.
+     * @return array
+     */
+    public function getDocumentation()
+    {
+        return [
+            'home' => 'This module has not provided any documentation',
+        ];
+    }
+
+    /**
+     * Returns an array of update notes for the module
+     * Returns an array where the key is the version number and value at that key is the update notes for that version.
+     * @return array
+     */
+    public function getUpdateNotes()
+    {
+        return [
+            $this->version => 'This module has not provided any update notes',
+        ];
     }
 
 }

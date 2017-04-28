@@ -3,29 +3,25 @@
 # ===================================
 
 fields:
-    user_that_sent_request[name]:
-        label: Request From
-        type: Text
-        readOnly: true
+    sender:
+        label: Sender
+        type: recordfinder
+        list: $/rainlab/user/models/user/columns.yaml
+        prompt: Click the %s button to find a user
+        nameFrom: name
+        descriptionFrom: email
+        span: left
+    acceptor:
+        label: Receiver
+        type: recordfinder
+        list: $/rainlab/user/models/user/columns.yaml
+        prompt: Click the %s button to find a user
+        nameFrom: name
+        descriptionFrom: email
+        span: right
+    relation:
+        label: Relation
+        type: dropdown
         required: true
-    user_that_accepted_request[name]:
-        label: Request To
-        type: Text
-        readOnly: true
-        required: true
-    created_at:
-        label: Sent On
-        type: datepicker
-        mode: datetime
-        readOnly: true
-        required: true
-    updated_at:
-        label: Updated On
-        type: datepicker
-        mode: datetime
-        readOnly: true
-        required: true
-    accepted:
-        label: Accepted?
-        type: Number
-        required: true
+        options: getBondStates
+        span: left

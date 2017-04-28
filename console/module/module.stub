@@ -29,6 +29,13 @@ class Module extends UserExtended
 
     public function initialize() {}
 
+    /*
+     * [Optional] Declare your custom bonds (if you have any) here. Bonds can still be injected without doing this step.
+     * const PLUGIN_BOND_STATE_NAME = 111111;
+     * The function FriendsManager::bondStateCreator() might prove helpful.
+     */
+
+    // Components
     public function injectComponents()
     {
         return [
@@ -63,5 +70,29 @@ class Module extends UserExtended
     {
         return [];
     }
+
+    public function injectBonds()
+    {
+        return [];
+    }
+
+    /**
+     * Returns the plugin documentation for display in the Module Manager
+     * @return array
+     */
+    /*public function getDocumentation()
+    {
+
+    }*/
+
+    /**
+     * Returns the plugin version notes for display in the Module Manager
+     * @return array
+     */
+    /*public function getUpdateNotes()
+    {
+
+    }*/
+
 
 }

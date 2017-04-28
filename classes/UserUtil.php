@@ -1,7 +1,6 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Auth;
-use Carbon\Carbon;
 use RainLab\User\Models\User;
 use Redirect;
 
@@ -156,6 +155,7 @@ class UserUtil
     }
 
     /**
+     * Takes a UserExtended.User model and generates a Rainlab.User model instead
      * @param $user
      * @return mixed
      */
@@ -180,6 +180,7 @@ class UserUtil
     }
 
     /**
+     * Returns the passed in $userid unless its null, then it returns the logged in users id. If both are null, it returns null
      * @param null $userId
      * @return null
      */
@@ -215,6 +216,7 @@ class UserUtil
     }
 
     /**
+     * Returns the user id of the logged in user
      * @param $userId
      * @return bool
      */

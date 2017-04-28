@@ -103,3 +103,29 @@
     - Fixed a bug which was causing issues with the Field Manager
 2.1.03:
     - Fixed a JS bug with UE not defined and interact not defined
+2.1.04:
+    - Tweaked route restriction table
+    - route_restriction_add_deletes_attempts.php
+2.1.05:
+    - Removed type from routes and replaced it with an enabled flag
+    - routes_switch_type.php
+2.1.06:
+    - Added additional fields for route resitrctions
+    - route_restriction_add_flags.php
+2.1.07:
+    - Added a pivot table for route restrictions
+    - create_routes_pivot_table.php
+2.1.08:
+    - Added descriptions and cascading to children for route restricitons
+    - routes_add_description_and_child.php
+2.1.09:
+    - Added created_at, deleted_at, updated_at to UsersGroups
+    - users_groups_add_timestamps.php
+2.1.10:
+    - Added some core settings fields for handing bans and suspensions
+    - seed_account_settings.php
+2.1.11:
+    - Started work on the Module Manager. This is being shipped in preparation of 2.3.00
+    - create_modules_table.php
+2.2.00:
+    - User Extended Core v2.2.00 Release. 'The Backend Update' adds Route Restrictions, Friend management, comment management, timezone management, and improved field management.

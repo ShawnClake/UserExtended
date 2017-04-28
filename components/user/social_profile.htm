@@ -25,7 +25,7 @@
 					{% endif %}
                 </div>
 
-                {% if ueuser.locked %}
+                {% if ueuser.locked or ueuser.loggedIn and ueuser.loggedIn.id == ueuser.user.id%}
                     <div style="width:100%;text-align:center;">
                           <span style="font-size:15px;font-style:italic;width:100%;text-align:center;">{{ueuser.user.email}}</span>
                     </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="col-sm-12 col-md-12">
 
-                {% if not ueuser.locked and ueuser.loggedIn %}
+                {% if not ueuser.locked and ueuser.loggedIn and ueuser.loggedIn.id != ueuser.user.id %}
                     <div>See more of this persons profile by adding them as a friend</div>
                 {% endif %}
             </div>
@@ -69,16 +69,18 @@
                     </div>
                     {% endfor %}
 
+                    {% if ueuser.loggedIn %}<h5>Write a comment</h5>{% endif %}
+                    {% if ueuser.locked or ueuser.loggedIn and ueuser.loggedIn.id == ueuser.user.id%}
+                    <form data-request="ueuser::onComment">
+                        <textarea rows="2" name="comment"></textarea> <br>
+                        <input type="submit" value="Comment" />
+                    </form>
+                    {% else %}
+                    Leave a comment by {% if not user %} signing in and {% endif %} friending them.
+                    {% endif %}
+
                 </div>
-                {% if ueuser.loggedIn %}<h5>Write a comment</h5>{% endif %}
-                {% if ueuser.locked %}
-                <form data-request="ueuser::onComment">
-                    <textarea rows="2" name="comment"></textarea> <br>
-                    <input type="submit" value="Comment" />
-                </form>
-                {% else %}
-                Leave a comment by {% if not user %} signing in and {% endif %} friending them.
-                {% endif %}
+
             </div>
         </div>
     </div>

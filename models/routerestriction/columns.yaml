@@ -1,0 +1,29 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+    description:
+        label: Description
+        type: text
+        searchable: true
+    type:
+        label: Whitelist/Blacklist
+        type: text
+        searchable: true
+    user:
+        label: User
+        relation: user
+        select: name
+    group:
+        label: Group
+        relation: group
+        select: name
+    role:
+        label: Role
+        relation: role
+        select: name

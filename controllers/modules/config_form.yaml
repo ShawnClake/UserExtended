@@ -1,0 +1,16 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Modules
+
+# Model Form Field configuration
+form: $/clake/userextended/models/Module/fields.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Module
+
+# Default redirect location
+defaultRedirect: clake/userextended/modules
+

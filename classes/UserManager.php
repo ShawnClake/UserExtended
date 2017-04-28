@@ -9,14 +9,11 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Lang;
 use Auth;
-use October\Rain\Auth\Manager;
 use October\Rain\Exception\ApplicationException;
-use October\Rain\Exception\ValidationException;
 use RainLab\User\Models\Settings;
 use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
-use Cms\Classes\Page;
 use Log;
 
 /**
@@ -94,11 +91,14 @@ class UserManager extends StaticFactory
      * @param UserExtended|null $user
      * @return bool|Validator\
      */
-    public static function updateUser(array $data, UserExtended $user = null)
+    public static function updateUser(array $data, \Clake\Userextended\Models\UserExtended $user = null)
     {
+
         if(!isset($user))
         {
             if (!$user = UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser())) {
+				Log::info("Error updating user.");
+				Log::info(UserUtil::getLoggedInUser());
                 return false;
             }
         }
@@ -108,7 +108,7 @@ class UserManager extends StaticFactory
          */
         $rules = [
             'email'    => 'required|email|between:6,255',
-            'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
+            'password' => UserExtendedSettings::get('validation_password', 'between:4,255|confirmed'),
         ];
 
         /*
@@ -154,10 +154,11 @@ class UserManager extends StaticFactory
             $user->password_confirmation = $data['password_confirmation'];
         }
 
-        if(isset($data['timezone']))
+        if(isset($data['timezone']) && $data['timezone'] != 0)
         {
-            $timezone = Timezone::where('abbr', $data['timezone'])->first();
-            $user->timezone_id = $timezone->id;
+            //$timezone = Timezone::where('abbr', $data['timezone'])->first();
+            //echo $data['timezone'];
+            $user->timezone_id = $data['timezone'];
         }
 
         $user->save();
@@ -198,6 +199,7 @@ class UserManager extends StaticFactory
             Flash::success(Lang::get('rainlab.user::lang.account.success_saved'));
 
 		Log::info( $data['name'] . " updated their account.");
+		Log::info($data);
 
         return $user;
     }
@@ -222,7 +224,7 @@ class UserManager extends StaticFactory
              * Validate input
              */
             $rules = [
-                'email'    => 'required|email|between:6,255',
+                'email'    => 'required|email|between:6,255|unique:users,email',
                 'password' => UserExtendedSettings::get('validation_password', 'required|between:4,255|confirmed'),
             ];
 
@@ -230,7 +232,7 @@ class UserManager extends StaticFactory
              * Better utilization of email vs username
              */
             if (Settings::get('login_attribute') == "username") {
-                $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255');
+                $rules['username'] = UserExtendedSettings::get('validation_username', 'required|between:4,255|unique:users,username');
             }
 
             $validation = Validator::make($data, $rules);
@@ -285,10 +287,9 @@ class UserManager extends StaticFactory
             }
 
             $defaultTimezone = UserExtendedSettings::get('default_timezone', 'UTC');
-            if(!empty($defaultGroup) && $options['timezone'])
+            if(!empty($defaultTimezone) && $options['timezone'])
             {
-                $timezone = Timezone::where('abbr', $defaultTimezone)->first();
-                $user->timezone_id = $timezone->id;
+                $user->timezone_id = $defaultTimezone;
                 $user->save();
             }
 
@@ -323,7 +324,8 @@ class UserManager extends StaticFactory
              * Modified to swap to logout
              * Automatically activated or not required, log the user in
              */
-			 Log::info( UserUtil::getLoggedInUser()->name . " has created a new account.");
+			 Log::info(UserUtil::getLoggedInUser()->name . " has created a new account.");
+			 Log::info(UserUtil::getLoggedInUser());
 			 
 
             if (!$automaticActivation || $requireActivation) {
@@ -405,6 +407,7 @@ class UserManager extends StaticFactory
      */
     public static function loginUser(array $data, $redirect_link = "")
     {
+
         /*
          * Validate input
          */
@@ -429,6 +432,8 @@ class UserManager extends StaticFactory
             //throw new ValidationException($validation);
         }
 
+        self::checkForReopenAccount($data);
+
         /*
          * Authenticate user
          */
@@ -441,8 +446,10 @@ class UserManager extends StaticFactory
 
         $user = Auth::authenticate($credentials, true);
 
-        Event::fire('clake.ue.login', [$user]);
+        self::checkForSuspendedAccount($user);
 
+        Event::fire('clake.ue.login', [$user]);
+        //self::suspendAccount($user);
         /*
          * Redirect to the intended page after successful sign in
          */
@@ -467,6 +474,7 @@ class UserManager extends StaticFactory
         }
 
 		Log::info(UserUtil::getLoggedInUser()->name . " successfully logged out.");
+		Log::info(UserUtil::getLoggedInUser());
         Auth::logout();
         Event::fire('rainlab.user.logout', [$user]);
         Event::fire('clake.ue.logout', [$user]);
@@ -477,9 +485,102 @@ class UserManager extends StaticFactory
         return Redirect::to($url);
     }
 
+    /**
+     * Used by 3rd party integrations to login
+     * @param $user
+     */
     public static function loginUserObj($user)
     {
+        self::checkForReopenAccount($user);
         Auth::login($user);
+        self::checkForSuspendedAccount($user);
     }
+
+    /**
+     * Closes the logged in users account
+     */
+    public static function closeAccount()
+    {
+        $user = UserUtil::getLoggedInUserExtendedUser();
+
+        $delete = UserExtendedSettings::get('closing_deletes', 'false');
+
+        Auth::logout();
+
+        Helpers::deleteModel($user, $delete);
+    }
+
+    /**
+     * Checks for a closed account and reopens it if there is one
+     * @param $data
+     */
+    public static function checkForReopenAccount($data)
+    {
+        $ueTrashed = \Clake\Userextended\Models\UserExtended::onlyTrashed();
+        $ue = \Clake\Userextended\Models\UserExtended::withTrashed();
+        //echo 'hi';
+        //echo(Settings::get('login_attribute', 'email'));
+        if(Settings::get('login_attribute', 'email')  == "email") {
+            $ueTrashed->where('email', $data['email']);
+            $ue->where('email', $data['email']);
+        } else {
+            $ueTrashed->where('username', $data['username']);
+            $ue->where('username', $data['username']);
+        }
+
+        $ueTrashedCount = $ueTrashed->count();
+        $ueCount = $ue->count();
+
+        //echo($ueTrashedCount);
+
+        if($ueTrashedCount == 1 && $ueCount == 0)
+            $ueTrashed->first()->restore();
+    }
+
+    /**
+     * Checks whether an account is suspended and if it is, logs the user back out again
+     * @param $user
+     * @return bool
+     */
+    public static function checkForSuspendedAccount($user)
+    {
+        if(UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user))->getSetting('core-suspended')[0])
+        {
+            Auth::logout();
+            return false;
+        }
+    }
+
+    /**
+     * Deletes an account. Data is NOT recoverable.
+     * @param $user
+     */
+    public static function deleteAccount($user)
+    {
+        Helpers::deleteModel($user, true);
+    }
+
+    /**
+     * Suspends a users account. Denies them from logging in
+     * @param $user
+     */
+    public static function suspendAccount($user)
+    {
+        $settings = UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user));
+        $settings->setSetting('core-suspended', true);
+        $settings->save();
+    }
+
+    /**
+     * Unsuspends a users account. Allows them to login again
+     * @param $user
+     */
+    public static function unSuspendAccount($user)
+    {
+        $settings = UserSettingsManager::with(UserUtil::convertToUserExtendedUser($user));
+        $settings->setSetting('core-suspended', false);
+        $settings->save();
+    }
+
 
 }

@@ -1,9 +1,7 @@
 <?php namespace Clake\UserExtended\Classes;
 
 use Auth;
-use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\UsersGroups;
-use RainLab\User\Models\UserGroup;
 
 /**
  * User Extended by Shawn Clake

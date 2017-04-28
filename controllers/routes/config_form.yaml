@@ -1,0 +1,25 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Routes
+
+# Model Form Field configuration
+form: $/clake/userextended/models/Route/fields.yaml
+
+# Model Class name
+modelClass: Clake\Userextended\Models\Route
+
+# Default redirect location
+defaultRedirect: clake/userextended/routes
+
+# Create page
+create:
+    redirect: clake/userextended/routes/update/:id
+    redirectClose: clake/userextended/routes
+
+# Update page
+update:
+    redirect: clake/userextended/routes/update/:id
+    redirectClose: clake/userextended/routes

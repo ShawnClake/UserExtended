@@ -2,25 +2,21 @@
 
 use Clake\UserExtended\Classes\UserManager;
 use Clake\Userextended\Models\Timezone;
-use Clake\Userextended\Models\UserExtended;
 use Clake\UserExtended\Plugin;
 use Cms\Classes\ComponentBase;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\UserUtil;
 use Flash;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Validator;
 use Lang;
 use Auth;
-use October\Rain\Auth\Manager;
-use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\ValidationException;
 use RainLab\User\Models\Settings;
 use Mail;
 use Event;
 use Clake\Userextended\Models\Settings as UserExtendedSettings;
 use Cms\Classes\Page;
+use Illuminate\Support\Facades\Input;
 
 /**
  * User Extended by Shawn Clake
@@ -98,6 +94,7 @@ class Account extends ComponentBase
     public function onUpdate()
     {
         $data = post();
+        //echo json_encode($data);
         $response = UserManager::updateUser($data);
 
         $reflection = new \ReflectionClass($response);
@@ -105,8 +102,6 @@ class Account extends ComponentBase
         if($reflection->getShortName() == 'Validator')
         {
             throw new ValidationException($response);
-            //Flash::error($response->messages());
-            //return false;
         } else {
             return $response;
         }
@@ -185,13 +180,17 @@ class Account extends ComponentBase
 
         $response = UserManager::loginUser($data, $redirectUrl);
 
+        if($response === false)
+        {
+            Flash::error('Your account has been suspended.');
+            return false;
+        }
+
         $reflection = new \ReflectionClass($response);
 
         if($reflection->getShortName() == 'Validator')
         {
             throw new ValidationException($response);
-            //Flash::error(json_encode($response->messages()));
-            //return false;
         } else {
             Flash::success('Logged in!');
             return $response;
@@ -263,7 +262,7 @@ class Account extends ComponentBase
      */
     public function myTimezone()
     {
-        return UserUtil::getLoggedInUsersTimezone()->abbr;
+        return UserUtil::getLoggedInUsersTimezone()->id;
     }
 
     /**
@@ -274,6 +273,37 @@ class Account extends ComponentBase
     public function timezonesEnabled()
     {
         return UserExtendedSettings::get('enable_timezones', true);
+    }
+
+    /**
+     * Closes the logged in users account
+     */
+    public function onCloseAccount()
+    {
+        UserManager::closeAccount();
+    }
+
+    /**
+     * Returns the user's avatar model relation
+     * @return mixed
+     */
+    public function userAvatar()
+    {
+        return UserUtil::getRainlabUser($this->user()->id)->avatar;
+    }
+
+    /**
+     * AJAX handler for updating a users avatar
+     */
+    public function onChangeAvatar()
+    {
+        if (Input::hasFile('avatar'))
+        {
+            $user = UserUtil::getRainlabUser($this->user()->id);
+            $user->avatar = Input::file('avatar');
+            $user->save();
+        }
+
     }
 
 }

@@ -1,12 +1,11 @@
-<?php
-
-namespace Clake\UserExtended\Classes;
+<?php namespace Clake\UserExtended\Classes;
 
 use Clake\Userextended\Models\GroupsExtended;
 use Clake\Userextended\Models\Role;
 use Clake\Userextended\Models\UsersGroups;
 use October\Rain\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use RainLab\User\Models\UserGroup;
 
 /**
  * User Extended by Shawn Clake
@@ -29,6 +28,62 @@ class GroupManager extends StaticFactory
      * @var
      */
     private $groups;
+
+    /**
+     * Seeds default basic user groups for the application
+     */
+    public static function seedBasicUserGroups()
+    {
+        if (UserGroup::whereCode('admin')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Admin',
+                'code' => 'admin',
+                'description' => 'Administrator group'
+            ]);
+        }
+        if (UserGroup::whereCode('friend')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Friend',
+                'code' => 'friend',
+                'description' => 'Generalized friend group.'
+            ]);
+        }
+        if (UserGroup::whereCode('guest')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Guest',
+                'code' => 'guest',
+                'description' => 'Generalized guest group'
+            ]);
+        }
+        if (UserGroup::whereCode('tester')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Tester',
+                'code' => 'tester',
+                'description' => 'Access bleeding edge features'
+            ]);
+        }
+        if (UserGroup::whereCode('debugger')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Debugger',
+                'code' => 'debugger',
+                'description' => 'Debug text, buttons, and visuals appear on the pages'
+            ]);
+        }
+        if (UserGroup::whereCode('developer')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Developer',
+                'code' => 'developer',
+                'description' => 'Access to the dev tools and options'
+            ]);
+        }
+        if (UserGroup::whereCode('banned')->count() == 0) {
+            UserGroup::create([
+                'name' => 'Banned',
+                'code' => 'banned',
+                'description' => 'Banned from viewing pages'
+            ]);
+        }
+    }
 
     /**
      * Creates a new group and returns it after saved
@@ -117,7 +172,7 @@ class GroupManager extends StaticFactory
 
         if(isset($name)) $group->name = $name;
         if(isset($description)) $group->description = $description;
-        if(isset($code)) $group->code = $code;
+        if(isset($code)) $group->code = str_slug($code, "-");
 
         $validator = Validator::make(
             [

@@ -3,27 +3,29 @@
 # ===================================
 
 columns:
-    user_that_sent_request[name]:
+    user_that_sent_request:
         label: Request From
         description: The user that sent the request.
         type: Text
-        relation: users
+        relation: sender
         select: name
-    user_that_accepted_request[name]:
+    user_that_accepted_request:
         label: Request To
         description: The user the request was sent to.
         type: Text
-        relation: users
+        relation: acceptor
         select: name
-    created_at:
-        label: Sent On
-        description: The day the request was sent.
-        type: datetime
+    relation:
+        label: Relation
+        description: The relation between the two users
+        type: listdropdown
+        class: \Clake\UserExtended\Models\Friend
+        function: getBondStates
     updated_at:
         label: Accepted On
         description: The day the request was updated.
         type: datetime
-    accepted:
-        label: Accepted?
-        description: 0 - Pending, 1 - Friends, 2 - Declined
-        type: Number
+    created_at:
+        label: Sent On
+        description: The day the request was sent.
+        type: datetime

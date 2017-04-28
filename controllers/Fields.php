@@ -2,16 +2,15 @@
 
 use BackendMenu;
 use Backend\Classes\Controller;
+use Clake\UserExtended\Classes\Feedback\FieldFeedback;
 use Clake\UserExtended\Classes\Helpers;
 use Clake\UserExtended\Classes\UserSettingsManager;
 use Clake\UserExtended\Classes\FieldManager;
-use System\Classes\SettingsManager;
-use October\Rain\Support\Facades\Flash;
 use Redirect;
-use Backend;
 use Session;
 use Schema;
 use Db;
+use Backend;
 
 /**
  * User Extended by Shawn Clake
@@ -37,22 +36,17 @@ class Fields extends Controller
     public $formConfig = 'config_form.yaml';
     public $listConfig = 'config_list.yaml';
 
-    //public $bodyClass = 'compact-container';
-
     public function __construct()
     {
         parent::__construct();
 
         // Setting this context so that our sidebar menu works
-        //BackendMenu::setContext('October.System', 'system', 'settings');
-        //SettingsManager::setContext('clake.userextended', 'settings');
-
-        BackendMenu::setContext('RainLab.User', 'user', 'users');
+        BackendMenu::setContext('RainLab.User', 'user', 'fields');
 
         //Add CSS for some backend menus
         $this->addCss('/plugins/clake/userextended/assets/css/backend.css');
         $this->addJs('/plugins/clake/userextended/assets/js/general.js');
-	$this->addJs('/plugins/clake/userextended/assets/js/backend.js');
+        $this->addJs('/plugins/clake/userextended/assets/js/backend.js');
     }
 
     public function manage()
@@ -66,11 +60,13 @@ class Fields extends Controller
         return UserSettingsManager::getSetting();
     }
 
+    /**
+     * AJAX handler for creating a new field
+     * @return mixed
+     */
     public function onCreateField()
     {
-        //TODO validate input
         $post = post();
-        //var_dump($post);
         $flags = FieldManager::makeFlags(
             in_array('enabled', $post['flags']),
             in_array('registerable', $post['flags']),
@@ -92,29 +88,24 @@ class Fields extends Controller
             $data
         );
 
-		// TODO: $feedback is a queryBuilder type, its not of type Validator. The type should be changed in 2.2.00
-        // TODO: See FieldManager::createField() for more details
-		/*$uiFeedback = $this->feedbackGenerator($feedback, '#feedback_field_save', [
-            'success' => 'Field saved successfully!',
-            'error'   => 'Field was not saved!',
-            'false'   => 'Name, code and description are required!'
-        ], [
-            'success' => '<span class="text-success">Field has been saved.</span>',
-            'false'   => '<span class="text-danger">Name, code and description are required!</span>',
-            'error'   => ''
-        ]);*/
+        FieldFeedback::with($feedback, true)->flash();
 
-		// TODO: The FieldManager doesn't utilize the render system that I built into the RoleManager
-        // This cannot be used like this
-		//return array_merge($this->render(), $uiFeedback);
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
+    /**
+     * AJAX handler for popping up the create field form
+     * @return mixed
+     */
     public function onAddField()
     {
         return $this->makePartial('create_field_form');
     }
 
+    /**
+     * AJAX handler for popping up the edit field form
+     * @return mixed
+     */
     public function onEditField()
     {
         $name = post('code');
@@ -122,6 +113,10 @@ class Fields extends Controller
         return $this->makePartial('update_field_form', ['selection' => $selection]);
     }
 
+    /**
+     * AJAX handler for persisting field edits
+     * @return mixed
+     */
     public function onUpdateField()
     {
         //TODO Validate input
@@ -139,7 +134,7 @@ class Fields extends Controller
 
         $data = $this->makeDataArray($post);
 
-        FieldManager::updateField(
+        $feedback = FieldManager::updateField(
             $post['name'],
             $post['code'],
             $post['description'],
@@ -149,9 +144,15 @@ class Fields extends Controller
             $data
         );
 
+        FieldFeedback::with($feedback, true)->flash();
+
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
+    /**
+     * AJAX handler for deleting a field
+     * @return mixed
+     */
     public function onDeleteField()
     {
         $code = post('code');
@@ -159,6 +160,11 @@ class Fields extends Controller
         return Redirect::to(Backend::url('clake/userextended/fields/manage'));
     }
 
+    /**
+     * Creates a validation array. This is an intermediary step which makes it easier to persist
+     * @param $post
+     * @return mixed
+     */
     protected function makeValidationArray($post)
     {
         $validation['additional'] = Helpers::arrayKeyToVal($post, 'validation');
@@ -176,6 +182,11 @@ class Fields extends Controller
         return $validation;
     }
 
+    /**
+     * Creates the data array
+     * @param $post
+     * @return mixed
+     */
     protected function makeDataArray($post)
     {
         $data['placeholder'] = Helpers::arrayKeyToVal($post, 'data_placeholder');

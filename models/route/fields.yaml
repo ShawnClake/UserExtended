@@ -1,0 +1,31 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    route:
+        label: Route
+        span: left
+        type: dropdown
+        comment: The route address. IE. /account/login
+        options: getPossibleRoutes
+
+    description:
+        label: Description
+        span: right
+        type: text
+        comment: A descrption of the route
+
+    enabled:
+        label: Enabled
+        span: left
+        type: switch
+        comment: Enable the Route Restrictions
+        default: true
+
+    cascade:
+        label: Cascades
+        span: right
+        type: switch
+        comment: Child routes inherit these routes, but child routes take higher priority
+        default: false

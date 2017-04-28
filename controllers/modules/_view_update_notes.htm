@@ -1,0 +1,29 @@
+<div class="ue-form-container">
+
+    <h3>Update Notes:</h3>
+
+    <br>
+
+    <div style="padding-left:11px;">
+        <?php foreach($content as $version => $notes): ?>
+
+            <strong><?= $version ?>:</strong>
+
+            <br>
+
+            <div style="">
+                <?= $notes ?>
+            </div>
+
+        <?php endforeach; ?>
+    </div>
+
+    <hr>
+
+    <div class="form-group span-full">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+
+    <br>
+
+</div>

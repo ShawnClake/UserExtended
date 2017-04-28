@@ -18,6 +18,7 @@ class TimezoneHandler
 {
 
     /**
+     * Returns the current time as a Carbon object
      * @return mixed
      */
     public static function getCurrentTime()
@@ -173,6 +174,8 @@ class TimezoneHandler
      */
     public static function twigRelativeTimeString($time, $locale = 'en')
     {
+        if(!isset($time))
+            return '';
         return self::getRelativeTimeString($time, $locale);
     }
 

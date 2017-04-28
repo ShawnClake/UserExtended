@@ -5,7 +5,6 @@ namespace Clake\UserExtended\Classes;
 use Clake\Userextended\Models\Friend;
 use Auth;
 use Illuminate\Support\Collection;
-use RainLab\User\Models\User;
 use Mail;
 use Log;
 
@@ -26,10 +25,21 @@ class FriendsManager
     /**
      * These states are for 2.2.00 and don't function as part of the current release.
      */
+    public static $UE_RELATION_STATES = [
+        '1'       => 'UE_FRIEND_REQUESTED',
+        '2'       => 'UE_FOLLOWING',
+        '4'       => 'UE_SUBSCRIBED',
+        '8'       => 'UE_FRIENDS',
+        '16'      => 'UE_DECLINED',
+        '1048576' => 'UE_BLOCKED',
+        '2097152' => 'UE_DELETED',
+    ];
+
     const UE_FRIEND_REQUESTED = 1; // 0 digit
     const UE_FOLLOWING = 2; // 1 digit
     const UE_SUBSCRIBED = 4; // 2 digit
     const UE_FRIENDS = 8; // 3 digit
+    const UE_DECLINED = 16; // 4 digit
 
     // Additional Bond States should be given here. States 0-9 are reserved for UE official
     // States 10-19 can be used by other modules
@@ -38,6 +48,24 @@ class FriendsManager
     const UE_DELETED = 2097152; // 21 digit
 
     // States above 21 will override UE_BLOCKED and UE_DELETED. Be extremely careful with this!!!
+
+
+    const UE_RELATION_SENDER = 'user_that_sent_request';
+    const UE_RELATION_RECEIVER = 'user_that_accepted_request';
+
+    /**
+     * Creates a bond state value for plugins. This is an automated process so they don't have calculate
+     * it themselves
+     * @param $bondNumber
+     * @return bool|number
+     */
+    public static function bondStateCreator($bondNumber)
+    {
+        if($bondNumber < 10 || $bondNumber == 20 || $bondNumber == 21)
+            return false;
+
+        return pow(2, $bondNumber);
+    }
 
     /**
      * Returns a list of friend requests received.
@@ -50,7 +78,7 @@ class FriendsManager
 		
 		$limit = Helpers::unlimited($limit);
 		
-        $requests = Friend::friendRequests()->take($limit)->get();
+        $requests = Friend::friendRequests()->take($limit);
 		
         foreach ($requests as $user) {
             $users->push(UserUtil::getRainlabUser($user->user_that_sent_request));
@@ -71,6 +99,8 @@ class FriendsManager
         $relation = Friend::friend($friendUserId)->first();
 
 		Log::info(UserUtil::getLoggedInUser()->name . " deleted " . UserUtil::getUserForUserId($friendUserId)->name . " as a friend.");
+		Log::info(UserUtil::getLoggedInUser());
+		Log::info(UserUtil::getUserForUserId($friendUserId));
         // Soft deletes aren't working for some reason
         $relation->forceDelete();
     }
@@ -103,15 +133,16 @@ class FriendsManager
 
         $request->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserId);
 
-        $request->setStatus(0);
+        $request->setExclusiveBond(FriendsManager::UE_FRIEND_REQUESTED);
 
         $request->save();
 				
 		$data = ['user' => UserUtil::getLoggedInUser()->name,
 		         'friend' => UserUtil::getUserForUserId($friendUserId)->name];
 		
-		
 		Log::info(UserUtil::getLoggedInUser()->name . " sent " . UserUtil::getUser($friendUserId)->name . " a friend request.");
+		Log::info(UserUtil::getLoggedInUser());
+		Log::info(UserUtil::getUser($friendUserId));
 		
 		Mail::send('clake.userextended::mail.received_friend_request', $data, function($message) use ($friendUserId) {
             $message->to(UserUtil::getUserForUserId($friendUserId)->email, UserUtil::getUser($friendUserId)->name);
@@ -154,11 +185,14 @@ class FriendsManager
         if(!Friend::isRequested($userId1, $userId2))
             return;
 
+        /** @var Friend $request */
         $request = Friend::request($userId1, $userId2)->first();
 
-        $request->setStatus(1);
+        $request->setExclusiveBond(FriendsManager::UE_FRIENDS);
 		
 		Log::info(UserUtil::getUserForUserId($userId2)->name . " accepted " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
+		Log::info(UserUtil::getUserForUserId($userId2));
+		Log::info(UserUtil::getUserForUserId($userId1));
 		
         $request->save();
     }
@@ -173,11 +207,15 @@ class FriendsManager
         if(!Friend::isRequested($userId1, $userId2))
             return;
 
+        /** @var Friend $request */
         $request = Friend::request($userId1, $userId2)->first();
 
-        $request->setStatus(2);
+        $request->setExclusiveBond(FriendsManager::UE_DECLINED);
 
 		Log::info(UserUtil::getUserForUserId($userId2)->name . " declined " . UserUtil::getUserForUserId($userId1)->name . "'s friend request.");
+		Log::info(UserUtil::getUserForUserId($userId2));
+		Log::info(UserUtil::getUserForUserId($userId1));
+		
 		
         $request->save();
     }
@@ -198,9 +236,11 @@ class FriendsManager
 
         $relation->addUsers(UserUtil::getUsersIdElseLoggedInUsersId(), $friendUserId);
 
-        $relation->setStatus(3);
+        $relation->setExclusiveBond(FriendsManager::UE_BLOCKED);
 
 		Log::info(UserUtil::getLoggedInUser() . " blocked " . UserUtil::getUserForUserId($friendUserId)->name . ".");
+		Log::info(UserUtil::getLoggedInUser());
+		Log::info(UserUtil::getUserForUserId($friendUserId));
 		
         $relation->save();
     }
@@ -216,13 +256,13 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friend::friendRequests(null)->take($limit)->get();
+        $requests = Friend::friendRequests(null)->take($limit);
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->id));
         }
 
-        $requests = Friend::sentRequests(null)->take($limit)->get();
+        $requests = Friend::sentRequests(null)->take($limit);
 
         foreach ($requests as $user) {
             $users->push(UserUtil::getUser($user->id));
@@ -247,10 +287,10 @@ class FriendsManager
 
         $limit = Helpers::unlimited($limit);
 
-        $requests = Friend::friends($userId)->get();
+        $requests = Friend::friends($userId);
 
-        if($requests->isEmpty())
-        {
+        if(empty($requests))
+        {dd('bob');
             return $users;
         }
 
