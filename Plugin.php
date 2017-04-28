@@ -1,7 +1,5 @@
 <?php namespace Clake\UserExtended;
 
-use Backend\Classes\Controller;
-use Clake\UserExtended\Classes\FriendsManager;
 use Clake\UserExtended\Classes\UserExtended;
 use System\Classes\PluginBase;
 use Event;
@@ -46,7 +44,7 @@ class Plugin extends PluginBase
     {
         return [
             'name'        => 'UserExtended',
-            'description' => 'Adds roles, friends, profiles, and utility functions to the Rainlab User plugin',
+            'description' => 'Adds roles, friends, profiles, route tracking, and utility functions to the Rainlab User plugin',
             'author'      => 'clake',
             'icon'        => 'icon-user-plus',
             'homepage'    => 'https://github.com/ShawnClake/UserExtended'

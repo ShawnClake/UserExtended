@@ -1,5 +1,18 @@
 # User Extended
-*** Currently on version v2.1.00 ***
+***Currently on version v2.2.00***
+#### New in v2.2.00
+        * Avatar picker on update page. {% partial 'account::update' %}
+        * Closing, Reopening, Suspending, Deleting accounts. (Currently not accessible in the frontend by default)
+        * Reset Roles and Groups back to default from the Role Manager
+        * Usernames are now unique, and nicknames have been added
+        * Friend states now use a bin 2^n storage pattern. This may change to use a DB table in the future.
+        * Route restrictions and access tracking
+        * Added more field types including, but not limited to: number, color, date, email, password, file, url
+        * Now possible to add, change, remove timezones from the application
+        * You can now override the relation between two users.
+        * The addition of the [Beta] Module Manager. Currently changing settings for a module has no effect.
+        * Improved error/success feedback system for Backend and Frontend validation
+*Please see the Module manager in the backend to view a detailed changelog*
 
 ## Overview
 User Extended provides simple components and User Utility functions for complex interactions with users.
@@ -27,7 +40,8 @@ Install this plugin and run
 
 ## Feature List
 * Backend Role/Group management
-* Advanced page restriction using groups
+* Advanced page restriction using groups, roles, users, and IP addresses.
+* Modules can be used to inject user code or develop an user API for your plugin
 * Friends lists. You can send friend requests and block/delete/accept friends
 * User Utility functions which can be used across your own plugins
 * User profiles and a profile comment system
@@ -35,7 +49,6 @@ Install this plugin and run
 * Timezone support! Use the '|timezonify' twig filter. 
 * Use the '|relative' twig filter to get a textual relative time stamp (5 seconds ago, 2 months ago)
 * Timezonable trait which can be added to models to automagically convert times
-* Extensible modules
 * Fields for users. Now you can easily add fields for phone numbers, addresses, pin codes, invite numbers etc.
 
 ### Please see the help directory for more information
@@ -52,8 +65,8 @@ User Extended is not trying to be a social network plugin. We are providing func
 Websites specializing in online games, forums, blogs, news etc. can all benefit from User Extended.
 
 ## Event List
-* clake.ue.preregistration(post &$data) : halted. $data contains registration form data. Returning false will cancel registration.
-* clake.ue.postregistration(UserExtended &$user). $user contains the final user object before saving it and logging out the user to finalize registration.
+* [Disabled] clake.ue.preregistration(post &$data) : halted. $data contains registration form data. Returning false will cancel registration.
+* [Disabled] clake.ue.postregistration(UserExtended &$user). $user contains the final user object before saving it and logging out the user to finalize registration.
 * clake.ue.login(User $user). $user contains the user object after authenticating.
 * clake.ue.logout(User $user). $user contains the user object after logging out.
 * clake.ue.settings.create(UserSettingsManager &$instance). After the user settings instance object has been created
