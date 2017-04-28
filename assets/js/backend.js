@@ -116,7 +116,6 @@ $(window).load(function() {
                 // call this function on every dragend event
             });
     }
-
     function stopEventHandler (event) {
         var target = $(event.target);
         var hasClass = target.hasClass('can-drop');
