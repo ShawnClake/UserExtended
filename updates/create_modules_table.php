@@ -13,7 +13,7 @@ class CreateModulesTable extends Migration
             $table->increments('id');
             $table->string('name')->default('')->unique();
             $table->string('author')->default('');
-            $table->text('description')->default('');
+            $table->text('description');
             $table->string('version')->default('');
             $table->boolean('visible')->default(true);
             $table->boolean('enabled')->default(true);
