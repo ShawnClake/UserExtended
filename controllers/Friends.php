@@ -34,7 +34,7 @@ class Friends extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('RainLab.User', 'user', 'relations');
+        BackendMenu::setContext('RainLab.User', 'user', 'friends');
 
         $this->pageTitle = "Manage User Relations";
         //Add CSS for some backend menus

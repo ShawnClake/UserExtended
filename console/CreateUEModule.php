@@ -53,9 +53,7 @@ class CreateUEModule extends GeneratorCommand
      */
     protected function prepareVars()
     {
-        /*
-         * Extract the author and name from the plugin code
-         */
+        // Extract the author and plugin from the plugin code
         $pluginCode = $this->argument('plugin');
         $parts = explode('.', $pluginCode);
         if (count($parts) != 2) {

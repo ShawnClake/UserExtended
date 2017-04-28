@@ -30,6 +30,7 @@ use System\Classes\SettingsManager;
 class Plugin extends PluginBase
 {
     /**
+     * An array containing the plugins which UserExtended depnds on
      * @var array
      */
     public $require = [
@@ -71,6 +72,10 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * Registers column types for a model's columns.yaml to use
+     * @return array
+     */
     public function registerListColumnTypes()
     {
         return [
@@ -78,6 +83,15 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * Generates a string based on the chosen dropdown choice.
+     * The key of the dropdown choice is compared to an array return by a class and function specified in the columns.yaml.
+     * The value at this key in the returned array is what is returned.
+     * @param $value
+     * @param $column
+     * @param $record
+     * @return string
+     */
     public function getListChoice($value, $column, $record)
     {
         $string = '';
@@ -133,48 +147,8 @@ class Plugin extends PluginBase
                 UserExtended::getNavigation(),
                 []
             );
-
             $manager->addSideMenuItems('RainLab.User', 'user', $navigation);
-
-            /*$manager->addSideMenuItems('October.Cms', 'cms', [
-                'routes' => [
-                    'label' => 'Routes',
-                    'url'   => Backend::url('clake/userextended/routes/preview'),
-                    'icon'  => 'icon-eye-slash',
-                    //'order' => 600
-                ],
-
-            ]);*/
-
         });
-
-        // TODO: Try and see if we can hack in some code for injecting fields into the user controller.
-        // TODO: The reason we can't right now, is although the field would appear the user controller
-        // TODO: Wouldn't know how to save them as they get array'd and saved as JSON.
-        /*$settings =
-
-        Event::listen('backend.form.extendFields', function($widget) {
-
-            // Only for the User controller
-            if (!$widget->getController() instanceof \RainLab\User\Controllers\Users) {
-                return;
-            }
-
-            // Only for the User model
-            if (!$widget->model instanceof \RainLab\User\Models\User) {
-                return;
-            }
-
-            // Add an extra birthday field
-            $widget->addFields([
-                'birthday' => [
-                    'label'   => 'Birthday',
-                    'comment' => 'Select the users birthday',
-                    'type'    => 'datepicker'
-                ]
-            ]);
-
-        });*/
 
         return [];
     }
@@ -191,11 +165,15 @@ class Plugin extends PluginBase
         );
     }
 
+    /**
+     * Registers the settings model for User Extended
+     * @return array
+     */
     public function registerSettings()
     {
         return [
             'settings' => [
-                'label'       => 'UserExtended Settings',
+                'label'       => 'User Extended',
                 'description' => 'Manage user extended settings.',
                 'category'    => SettingsManager::CATEGORY_USERS,
                 'icon'        => 'icon-cog',

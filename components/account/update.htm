@@ -33,8 +33,8 @@
 					name="timezone"
 					class="form-control"
 					id="accountTimezone">
-				{% for abbr,name in account.timezoneOptions %}
-					<option value="{{abbr}}" {% if abbr == account.myTimezone %} selected="selected" {% endif %}>{{name}}</option>
+				{% for id,name in account.timezoneOptions %}
+					<option value="{{id}}" {% if id == account.myTimezone %} selected="selected" {% endif %}>{{name}}</option>
 				{% endfor %}
 			</select>
 		</div>
@@ -67,6 +67,14 @@
 
 	{% endfor %}
 </div>
+
+<button data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
+
+<button data-request="account::onCloseAccount" class="btn btn-default" id="closeAccount">Close Account</button><br><br>
+
+<div class="alert alert-danger" data-validate-error>
+	<p data-message></p>
+</div>
 {{ form_close() }}
 
 
@@ -91,14 +99,6 @@
 	<button type="submit" class="btn btn-default" id="changeAvatar">Change Avatar</button><br><br>
 
 {{ form_close() }}
-
-<button form="main_update_form" data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
-
-<button form="main_update_form" data-request="account::onCloseAccount" class="btn btn-default" id="closeAccount">Close Account</button><br><br>
-
-<div class="alert alert-danger" data-validate-error>
-	<p data-message></p>
-</div>
 
 {% else %}
 

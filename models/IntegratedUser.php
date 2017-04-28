@@ -70,5 +70,4 @@ class IntegratedUser extends Model
     public $attachOne = [];
     public $attachMany = [];
 
-
 }

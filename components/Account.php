@@ -94,6 +94,7 @@ class Account extends ComponentBase
     public function onUpdate()
     {
         $data = post();
+        //echo json_encode($data);
         $response = UserManager::updateUser($data);
 
         $reflection = new \ReflectionClass($response);
@@ -261,7 +262,7 @@ class Account extends ComponentBase
      */
     public function myTimezone()
     {
-        return UserUtil::getLoggedInUsersTimezone()->abbr;
+        return UserUtil::getLoggedInUsersTimezone()->id;
     }
 
     /**

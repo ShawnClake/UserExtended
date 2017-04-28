@@ -1,6 +1,5 @@
 <?php namespace Clake\UserExtended\Traits;
 
-use Clake\UserExtended\Classes\Lists;
 use Exception;
 
 /**
@@ -35,20 +34,9 @@ trait Searchable
             {
                 $results[$result->id] = $result;
             }
-            //echo json_encode($results);
         }
 
         return $results;
-
-        /*$results = Lists::create();
-
-        foreach($searchable as $field)
-        {
-            $results->mergeList(self::searchUserByAttribute($field, $phrase));
-            //echo json_encode($results);
-        }
-
-        return $results->allList();*/
     }
 
     /**

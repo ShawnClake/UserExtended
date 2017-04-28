@@ -154,10 +154,11 @@ class UserManager extends StaticFactory
             $user->password_confirmation = $data['password_confirmation'];
         }
 
-        if(isset($data['timezone']))
+        if(isset($data['timezone']) && $data['timezone'] != 0)
         {
-            $timezone = Timezone::where('abbr', $data['timezone'])->first();
-            $user->timezone_id = $timezone->id;
+            //$timezone = Timezone::where('abbr', $data['timezone'])->first();
+            //echo $data['timezone'];
+            $user->timezone_id = $data['timezone'];
         }
 
         $user->save();

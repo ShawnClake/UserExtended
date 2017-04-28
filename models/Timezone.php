@@ -100,7 +100,7 @@ class Timezone extends Model
             $list[$timezone->id] = '(' . $timezone->abbr . ') ' . $timezone->name;
         }
 
-        sort($list);
+        asort($list);
 
         return $list;
     }
