@@ -275,7 +275,17 @@ class UserManager extends StaticFactory
              */
             $user = self::register($data, $automaticActivation);
 
+            if (!$automaticActivation)
+	    {
+                $user->is_activated = true;
+            }
+
             Auth::login($user);
+
+            if (!$automaticActivation)
+	    {
+                $user->is_activated = false;
+            }
 
             /*
              * Preform phase 2 User registration
