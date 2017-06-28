@@ -173,18 +173,15 @@ abstract class UserExtended extends Module
      */
     public function __construct()
     {
-        if(empty(self::$settings))
-            $this->setup();
-
         if(empty($this->name) || empty($this->author) || empty($this->description) || empty($this->version))
             return false;
 
-        if(!in_array($this->name, self::$settings['enabled']) && false) // Remove && false tag when we are ready to use settings.
-            return false;
+        //echo json_encode(self::$settings);
+
+       // if(!in_array($this->name, self::$settings['enabled']) && false) // Remove && false tag when we are ready to use settings.
+         //   return false;
 
         $this->registerModule();
-
-        $this->inject();
     }
 
     /**
@@ -194,7 +191,12 @@ abstract class UserExtended extends Module
      */
     public static function boot()
     {
+        if(empty(self::$settings))
+            self::setup();
+
         self::fixDuplicates();
+
+        self::inject();
 
         self::initializeModules();
     }
@@ -202,15 +204,37 @@ abstract class UserExtended extends Module
     /**
      * Sets up the class via getting settings
      */
-    private function setup()
+    private static function setup()
     {
         // TODO: DB Query goes here once we have the backend module manager page setup. Query for settings.
 
         //$settings = ModuleSettings::all();
-        $modules = [
+        /*$modules = [
             ['id'=>1,'name'=>'shawnPickler','version'=>'0.0.1','enabled'=>true,'inject_components'=>true],
             ['id'=>2,'name'=>'Cheese','version'=>'0.1.2','enabled'=>true,'inject_components'=>true]
-        ];
+        ];*/
+
+        $settings = ModuleManager::all()->getModules();
+
+        foreach(self::$settings as $setting)
+        {
+            if(!key_exists($setting->name, self::$modules))
+                continue;
+
+            $module = self::$modules[$setting->name];
+
+            if($setting->locked && $module->versiom != $setting->version)
+            {
+                $module->enabled = false;
+                $setting->enabled = false;
+            }
+
+            if(!$setting->enabled)
+                unset(self::$modules[$setting-name]);
+
+            $setting->save();
+
+        }
 
         /*$settings = [];
         foreach($modules as $module)
@@ -222,14 +246,14 @@ abstract class UserExtended extends Module
         self::$settings = $settings;
         die(self::$settings);*/
 
-        $settings = [];
-        foreach($modules as $module)
+        //$settings = [];
+        /*foreach($modules as $module)
         {
             if($module['enabled'])
                 $settings['enabled'][] = $module['name'];
             if($module['inject_components'])
                 $settings['inject']['components'][] = $module['inject_components'];
-        }
+        }*/
 
         self::$settings = $settings;
         //die(json_encode(self::$settings));
@@ -255,17 +279,23 @@ abstract class UserExtended extends Module
     /**
      * Preforms the module injection
      */
-    private function inject()
+    private static function inject()
     {
-        self::$components = array_merge(self::$components, $this->injectComponents());
 
-        self::$navigation = array_merge(self::$navigation, $this->injectNavigation());
+        foreach(self::$modules as $module)
+        {
+            //dd(self::$modules);
+            self::$components = array_merge(self::$components, $module->instance->injectComponents());
 
-        self::$lang = array_merge(self::$lang, $this->injectLang());
+            self::$navigation = array_merge(self::$navigation, $module->instance->injectNavigation());
 
-        self::$assets = array_merge(self::$assets, $this->injectAssets());
+            self::$lang = array_merge(self::$lang, $module->instance->injectLang());
 
-        self::$bonds = array_merge(self::$bonds, $this->injectBonds());
+            self::$assets = array_merge(self::$assets, $module->instance->injectAssets());
+
+            self::$bonds = array_merge(self::$bonds, $module->instance->injectBonds());
+        }
+
     }
 
     /**

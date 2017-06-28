@@ -6,17 +6,20 @@ fields:
     name:
         label: Name
         readOnly: true
+        disabled: true
         type: text
         span: left
     description:
         label: Description
         type: textarea
         readOnly: true
+        disabled: true
         size: small
         span: right
     version:
         label: Version
         readOnly: true
+        disabled: true
         type: text
         span: left
     flags:
