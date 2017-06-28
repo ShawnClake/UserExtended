@@ -66,7 +66,7 @@ class Route extends Model
         'restrictions' => [
             'Clake\Userextended\Models\RouteRestriction',
             'otherKey' => 'restriction_id',
-            'key' => 'route_Id',
+            'key' => 'route_id',
             'table' => 'clake_userextended_routes_pivot'
         ],
     ];
