@@ -1,9 +1,7 @@
 # User Extended
 
 ## Project Status
-* These days, I have very little time to allocate to development on this project. If anyone would like to take charge of UserExtended please send me an email at shawn.clake@gmail.com
-* I don't want this project to die as I think it serves a useful purpose, but I have other, higher priority projects and I don't see the priority of this project shifting much higher any time soon.
-* Thanks
+* This project has been taken over and is being maintained by Joshua Webb
 
 ***Currently on version v2.2.00***
 #### New in v2.2.00
