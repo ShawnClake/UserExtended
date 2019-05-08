@@ -6,7 +6,7 @@
 name: Routes
 
 # Model Form Field configuration
-form: $/clake/userextended/models/Route/fields.yaml
+form: $/clake/userextended/models/route/fields.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Route

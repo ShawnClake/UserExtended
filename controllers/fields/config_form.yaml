@@ -6,7 +6,7 @@
 name: Fields
 
 # Model Form Field configuration
-form: $/clake/userextended/models/Field/fields.yaml
+form: $/clake/userextended/models/field/fields.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Field

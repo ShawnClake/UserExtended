@@ -129,3 +129,5 @@
     - create_modules_table.php
 2.2.00:
     - User Extended Core v2.2.00 Release. 'The Backend Update' adds Route Restrictions, Friend management, comment management, timezone management, and improved field management.
+2.2.01:
+    - Fixed some of the backend forms that were giving erros not being able to find the fields.yaml.    

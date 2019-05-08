@@ -6,7 +6,7 @@
 name: Comments
 
 # Model Form Field configuration
-form: $/clake/userextended/models/Comment/fields.yaml
+form: $/clake/userextended/models/comment/fields.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Comment

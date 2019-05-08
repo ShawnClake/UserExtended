@@ -6,7 +6,7 @@
 name: Friends
 
 # Model Form Field configuration
-form: $/clake/userextended/models/Friend/fields.yaml
+form: $/clake/userextended/models/friend/fields.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Friend

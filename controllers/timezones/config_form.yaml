@@ -6,7 +6,7 @@
 name: Timezones
 
 # Model Form Field configuration
-form: $/clake/userextended/models/Timezone/fields.yaml
+form: $/clake/userextended/models/timezone/fields.yaml
 
 # Model Class name
 modelClass: Clake\Userextended\Models\Timezone
