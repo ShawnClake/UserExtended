@@ -1,0 +1,5 @@
+{% if thirdparty.enableSSO and not user %}
+
+{% for name, link in social_connect_links %} <a href="{{ link }}">{{ name }}</a> {% endfor %}
+
+{% endif %}

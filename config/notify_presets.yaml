@@ -1,0 +1,11 @@
+# ===================================
+#  Event Presets
+# ===================================
+
+welcome_email:
+    name: Send welcome email to user
+    event: RainLab\User\NotifyRules\UserRegisteredEvent
+    items:
+        - action: RainLab\Notify\NotifyRules\SendMailTemplateAction
+          mail_template: rainlab.user::welcome
+          send_to_mode: user

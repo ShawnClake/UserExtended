@@ -1,10 +1,19 @@
-<?php namespace Clake\UserExtended;
+<?php
 
+namespace Clake\UserExtended;
+
+use Yaml;
+use File;
 use Clake\UserExtended\Classes\UserExtended;
 use System\Classes\PluginBase;
 use Event;
 use Backend;
 use System\Classes\SettingsManager;
+use RainLab\User\Models\User as UserModel;
+use RainLab\Notify\Models\Notification as NotificationModel;
+use RainLab\User\Controllers\Users as UsersController;
+use RainLab\Notify\NotifyRules\SaveDatabaseAction;
+use RainLab\User\Classes\UserEventBase;
 
 /**
  * User Extended Core by Shawn Clake
@@ -27,28 +36,31 @@ use System\Classes\SettingsManager;
  * Class Plugin
  * @package Clake\UserExtended
  */
-class Plugin extends PluginBase
-{
+class Plugin extends PluginBase {
+
     /**
      * An array containing the plugins which UserExtended depnds on
      * @var array
      */
     public $require = [
-        'RainLab.User'
+        'RainLab.User',
+        'RainLab.Location',
+        'RainLab.Notify',
+        'KurtJensen.Passage',
+        'Tohur.SocialConnect'
     ];
 
     /**
      * Returns information about this plugin.
      * @return array
      */
-    public function pluginDetails()
-    {
+    public function pluginDetails() {
         return [
-            'name'        => 'UserExtended',
+            'name' => 'UserExtended',
             'description' => 'Adds roles, friends, profiles, route tracking, and utility functions to the Rainlab User plugin',
-            'author'      => 'clake',
-            'icon'        => 'icon-user-plus',
-            'homepage'    => 'https://github.com/ShawnClake/UserExtended'
+            'author' => 'clake',
+            'icon' => 'icon-user-plus',
+            'homepage' => 'https://github.com/ShawnClake/UserExtended'
         ];
     }
 
@@ -56,8 +68,7 @@ class Plugin extends PluginBase
      * Adds twig filters and functions
      * @return array
      */
-    public function registerMarkupTags()
-    {
+    public function registerMarkupTags() {
         return [
             'filters' => [
                 'timezonify' => [
@@ -76,8 +87,7 @@ class Plugin extends PluginBase
      * Registers column types for a model's columns.yaml to use
      * @return array
      */
-    public function registerListColumnTypes()
-    {
+    public function registerListColumnTypes() {
         return [
             'listdropdown' => [$this, 'getListChoice']
         ];
@@ -92,15 +102,13 @@ class Plugin extends PluginBase
      * @param $record
      * @return string
      */
-    public function getListChoice($value, $column, $record)
-    {
+    public function getListChoice($value, $column, $record) {
         $string = '';
 
         $class = $column->config['class'];
         $function = $column->config['function'];
 
-        if(method_exists($class, $function))
-        {
+        if (method_exists($class, $function)) {
             $class = new $class();
             $array = $class->$function();
             $string = $array[$value];
@@ -109,13 +117,11 @@ class Plugin extends PluginBase
         return $string;
     }
 
-
     /**
      * Register method, called when the plugin is first registered.
      * @return void
      */
-    public function register()
-    {
+    public function register() {
         /*
          * Registers the UE scaffolding command for creating modules
          */
@@ -131,21 +137,22 @@ class Plugin extends PluginBase
      * Boot method, called right before the request route.
      * @return array
      */
-    public function boot()
-    {
+    public function boot() {
         /*
          * Boots the modules which were registered with UserExtended
          */
         UserExtended::boot();
+        $this->extendUserModel();
+        $this->extendUsersController();
+        $this->extendUserEventBase();
 
         /*
          * Event listener adds the Group Manager button to the side bar of the User backend UI.
          */
-        Event::listen('backend.menu.extendItems', function ($manager)
-        {
+        Event::listen('backend.menu.extendItems', function ($manager) {
             $navigation = array_merge(
-                UserExtended::getNavigation(),
-                []
+                    UserExtended::getNavigation(),
+                    []
             );
             $manager->addSideMenuItems('RainLab.User', 'user', $navigation);
         });
@@ -153,15 +160,60 @@ class Plugin extends PluginBase
         return [];
     }
 
+    protected function extendUserModel() {
+        UserModel::extend(function($model) {
+
+            $model->implement[] = 'RainLab.Location.Behaviors.LocationModel';
+
+            $model->morphMany['notifications'] = [
+                NotificationModel::class,
+                'name' => 'notifiable',
+                'order' => 'created_at desc'
+            ];
+        });
+    }
+
+    protected function extendUsersController() {
+        UsersController::extendFormFields(function($widget) {
+            // Prevent extending of related form instead of the intended User form
+            if (!$widget->model instanceof UserModel) {
+                return;
+            }
+            $configFile = plugins_path('clake/userextended/config/location_fields.yaml');
+            $config = Yaml::parse(File::get($configFile));
+            $widget->addTabFields($config);
+        });
+    }
+
+    public function registerNotificationRules() {
+        return [
+            'events' => [],
+            'actions' => [],
+            'conditions' => [
+                \Clake\UserExtended\NotifyRules\UserLocationAttributeCondition::class
+            ],
+            'presets' => '$/clake/userextended/config/notify_presets.yaml',
+        ];
+    }
+
+    protected function extendUserEventBase() {
+        if (!class_exists(UserEventBase::class)) {
+            return;
+        }
+
+        UserEventBase::extend(function($event) {
+            $event->conditions[] = \Clake\UserExtended\NotifyRules\UserLocationAttributeCondition::class;
+        });
+    }
+
     /**
      * Registers any front-end components implemented in this plugin.
      * @return array
      */
-    public function registerComponents()
-    {
+    public function registerComponents() {
         return array_merge(
-            UserExtended::getComponents(),
-            []
+                UserExtended::getComponents(),
+                []
         );
     }
 
@@ -169,17 +221,16 @@ class Plugin extends PluginBase
      * Registers the settings model for User Extended
      * @return array
      */
-    public function registerSettings()
-    {
+    public function registerSettings() {
         return [
             'settings' => [
-                'label'       => 'User Extended',
+                'label' => 'User Extended',
                 'description' => 'Manage user extended settings.',
-                'category'    => SettingsManager::CATEGORY_USERS,
-                'icon'        => 'icon-cog',
-                'class'       => 'Clake\Userextended\Models\Settings',
-                'order'       => 100,
-                'keywords'    => 'security user extended',
+                'category' => SettingsManager::CATEGORY_USERS,
+                'icon' => 'icon-cog',
+                'class' => 'Clake\Userextended\Models\Settings',
+                'order' => 100,
+                'keywords' => 'security user extended',
                 'permissions' => ['']
             ]
         ];
@@ -189,8 +240,7 @@ class Plugin extends PluginBase
      * Registers any back-end permissions used by this plugin.
      * @return array
      */
-    public function registerPermissions()
-    {
+    public function registerPermissions() {
         return [
             'clake.userextended.roles.view' => [
                 'label' => 'View Roles',
@@ -271,8 +321,7 @@ class Plugin extends PluginBase
      * Registers back-end navigation items for this plugin.
      * @return array
      */
-    public function registerNavigation()
-    {
+    public function registerNavigation() {
         return [];
     }
 
@@ -280,8 +329,7 @@ class Plugin extends PluginBase
      * Injects assets from modules. Also overrides the defaults presented in general.js and general.css
      * @param $component
      */
-    public static function injectAssets($component)
-    {
+    public static function injectAssets($component) {
         // Cant move these out because then the defaults wouldn't have top priority.
         $component->addJs('/plugins/clake/userextended/assets/js/general.js');
         $component->addCss('/plugins/clake/userextended/assets/css/general.css');
@@ -294,9 +342,7 @@ class Plugin extends PluginBase
 
             if ($type == 'js') {
                 $component->addJs($asset);
-            }
-
-            else if ($type == 'css') {
+            } else if ($type == 'css') {
                 $component->addCss($asset);
             }
         }
@@ -306,13 +352,13 @@ class Plugin extends PluginBase
      * Registers mail templates
      * @return array
      */
-    public function registerMailTemplates()
-    {
+    public function registerMailTemplates() {
         return [
-            'clake.userextended::mail.on_group_role_changed'    => 'Notify that the users group was changed',
-            'clake.userextended::mail.received_friend_request'  => 'Friend request',
+            'clake.userextended::mail.on_group_role_changed' => 'Notify that the users group was changed',
+            'clake.userextended::mail.received_friend_request' => 'Friend request',
             'clake.userextended::mail.received_profile_comment' => 'New comment on user profile',
-            'clake.userextended::mail.register'                 => 'Registration confirmation email'
+            'clake.userextended::mail.register' => 'Registration confirmation email'
         ];
     }
+
 }

@@ -1,0 +1,28 @@
+<form class="clake-userextended">
+    <button
+        type="button"
+        class="btn btn-default"
+        onclick="toggleNotificationsPopover(this)">
+        View notifications
+    </button>
+
+    <div class="notifications-popover">
+        <div class="notifications-header">
+            <h4>Notifications</h4>
+            <button
+                type="button"
+                class="close"
+                onclick="toggleNotificationsPopover(this)">×</button>
+
+            <a href="javascript:;" onclick="markNotificationsAsRead(this)" class="mark-all-read">
+                Mark all as read
+            </a>
+        </div>
+
+        <div class="notifications-content" id="notificationsContent">
+            <div class="notifications-loading">
+                <span class="oc-loading"></span>
+            </div>
+        </div>
+    </div>
+</form>

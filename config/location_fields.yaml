@@ -2,19 +2,18 @@
 #  Form Field Definitions
 # ===================================
 
-fields:
-    id:
-        label: ID
-        disabled: true
+
 country:
     label: rainlab.location::lang.country.label
-    type: dropdown
-    span: left
     placeholder: rainlab.location::lang.country.select
+    type: dropdown
+    tab: Profile
+    span: left
 
 state:
     label: rainlab.location::lang.state.label
+    placeholder: rainlab.location::lang.state.select
     type: dropdown
+    tab: Profile
     span: right
     dependsOn: country
-    placeholder: rainlab.location::lang.state.select

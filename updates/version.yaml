@@ -130,4 +130,7 @@
 2.2.00:
     - User Extended Core v2.2.00 Release. 'The Backend Update' adds Route Restrictions, Friend management, comment management, timezone management, and improved field management.
 2.2.01:
-    - Fixed some of the backend forms that were giving erros not being able to find the fields.yaml.    
+    - Fixed some of the backend forms that were giving erros not being able to find the fields.yaml.
+2.3.00:
+    - Added notifications, location intergration, and third party sign in via Social Connect plugin.
+    - user_add_loction.php

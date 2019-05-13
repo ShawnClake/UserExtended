@@ -25,12 +25,12 @@ return [
             'accept' => 'Accept',
             'lastonline' => 'Last Online',
         ],
+        'tab' => [
+            'location' => 'Location',
+        ],
         'user' => [
             'writtenat' => 'Written',
             'search' => 'Search',
         ]
-
     ]
-
-
 ];

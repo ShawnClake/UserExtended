@@ -1,0 +1,70 @@
+.clake-userextended {
+  position: relative;
+}
+.clake-userextended .notifications-popover {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  position: absolute;
+  width: 480px;
+  z-index: 2;
+  right: 0;
+  display: none;
+}
+.clake-userextended.active .notifications-popover {
+  display: block;
+}
+.clake-userextended .notifications-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 15px;
+}
+.clake-userextended .notifications-header h4 {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+.clake-userextended .notifications-header .close,
+.clake-userextended .notifications-header .mark-all-read {
+  float: right;
+  margin: 0 5px;
+}
+.clake-userextended .notifications-content .notifications-loading {
+  padding: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+.clake-userextended .notifications-content .no-notifications {
+  text-align: center;
+  padding: 25px;
+  margin: 0;
+}
+.clake-userextended .notifications-content > ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: auto;
+  max-height: 400px;
+}
+.clake-userextended .notifications-content > ul > li {
+  position: relative;
+  padding: 10px 25px 10px 60px;
+  border-bottom: 1px solid #f9f9f9;
+}
+.clake-userextended .notifications-content > ul > li > i {
+  position: absolute;
+  left: 25px;
+  top: 12px;
+  font-size: 18px;
+  opacity: .5;
+}
+.clake-userextended .notifications-content > ul > li .parsed-body > *:last-child {
+  margin-bottom: 0;
+}
+.clake-userextended .notifications-content > ul > li .date {
+  white-space: nowrap;
+  opacity: .75;
+}
+.clake-userextended .notifications-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 15px;
+  text-align: center;
+}

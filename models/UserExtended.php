@@ -1,4 +1,6 @@
-<?php namespace Clake\Userextended\Models;
+<?php
+
+namespace Clake\Userextended\Models;
 
 use Model;
 use RainLab\User\Models\User;
@@ -16,8 +18,8 @@ use Clake\UserExtended\Traits\Searchable;
  * @license https://github.com/ShawnClake/UserExtended/blob/master/LICENSE MIT
  * @package Clake\Userextended\Models
  */
-class UserExtended extends User
-{
+class UserExtended extends User {
+
     use Timezonable;
 
     use Searchable;
@@ -44,11 +46,10 @@ class UserExtended extends User
      * Used to manually add relations for the user table
      * UserExtended constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $hasMany = $this->hasMany;
-        $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'user_id', 'softDelete' => true, 'delete' => true];
-        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key'=>'author_id', 'softDelete' => true, 'delete' => true];
+        $hasMany['comments'] = ['Clake\Userextended\Models\Comment', 'key' => 'user_id', 'softDelete' => true, 'delete' => true];
+        $hasMany['authored_comments'] = ['Clake\Userextended\Models\Comment', 'key' => 'author_id', 'softDelete' => true, 'delete' => true];
         $hasMany['sent_relations'] = ['Clake\Userextended\Models\Friend', 'key' => 'user_that_sent_request', 'softDelete' => true, 'delete' => true];
         $hasMany['received_relations'] = ['Clake\Userextended\Models\Friend', 'key' => 'user_that_accepted_request', 'softDelete' => true, 'delete' => true];
         $hasMany['integrated_user'] = ['Clake\Userextended\Models\IntegratedUser', 'key' => 'user_id', 'softDelete' => true, 'delete' => true];

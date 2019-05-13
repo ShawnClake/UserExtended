@@ -1,0 +1,23 @@
+# ===================================
+#  Condition Attribute Definitions
+# ===================================
+
+attributes:
+
+    country:
+        label: Country
+        type: relation
+        relation:
+            model: RainLab\Location\Models\Country
+            label: Name
+            nameFrom: name
+            keyFrom: id
+
+    state:
+        label: State
+        type: relation
+        relation:
+            model: RainLab\Location\Models\State
+            label: Name
+            nameFrom: name
+            keyFrom: id

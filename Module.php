@@ -32,7 +32,7 @@ class Module extends UserExtended
 
     public $description = "User Extended Core contains all of the components, navigation, assets, utility functions, and documentation which User Extended depends on.";
 
-    public $version = "2.2.00";
+    public $version = "2.2.01";
 
     public function initialize() {}
 
@@ -42,20 +42,21 @@ class Module extends UserExtended
             'Clake\UserExtended\Components\Account'    => 'account',
             'Clake\UserExtended\Components\Friends'    => 'friends',
             'Clake\UserExtended\Components\User'       => 'ueuser',
-            //'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
+            'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
             'Clake\UserExtended\Components\Routes'     => 'routes',
+            'Clake\UserExtended\Components\Notifications' => 'notifications',
         ];
     }
 
     public function injectNavigation()
     {
         return [
-            'users-side' => [
-                'label' => 'Users',
-                'url'   => Backend::url('rainlab/user/users'),
-                'icon'  => 'icon-user',
-                'order' => 100
-            ],
+//            'users-side' => [
+//                'label' => 'Users',
+//                'url'   => Backend::url('rainlab/user/users'),
+//                'icon'  => 'icon-user',
+//                'order' => 100
+//            ],
             'routes' => [
                 'label' => 'Routes',
                 'url'   => Backend::url('clake/userextended/routes/index'),

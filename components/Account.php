@@ -55,6 +55,12 @@ class Account extends ComponentBase
     public function defineProperties()
     {
         return [
+            'type' => [
+                'title'       => 'Type',
+                'type'        => 'dropdown',
+                'default'     => 'random',
+                'placeholder' => 'Select type',
+            ],            
             'redirect' => [
                 'title'       => 'rainlab.user::lang.account.redirect_to',
                 'description' => 'rainlab.user::lang.account.redirect_to_desc',
