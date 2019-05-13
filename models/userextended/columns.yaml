@@ -6,17 +6,3 @@ columns:
     id:
         label: ID
         searchable: true
-        
-country:
-     label: rainlab.location::lang.country.label
-     searchable: true
-     relation: country
-     select: name
-     sortable: false
-
-state:
-     label: rainlab.location::lang.state.label
-     searchable: true
-     relation: state
-     select: name
-     sortable: false       

@@ -38,10 +38,8 @@ class Settings extends Model
         $this->enable_email = true;
 
         $this->enable_disqus = false;
-        $this->enable_facebook = false;
         $this->enable_sso = false;
         $this->disqus_shortname = '';
-        $this->facebook_appid = '';
 
         $this->default_timezone = "UTC";
         $this->default_group = '';
