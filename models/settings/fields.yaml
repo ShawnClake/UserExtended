@@ -26,6 +26,16 @@ tabs:
             comment: Enable/Disable user profiles
             type: switch
             tab: Features
+            
+        url_type:
+            span: right
+            label: Profile Url Param type
+            comment: Profile url type
+            type: dropdown
+            tab: Features
+            options:
+               id: User Id
+               username: Username
 
         # Enable Groups Feature
         enable_groups:

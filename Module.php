@@ -32,7 +32,7 @@ class Module extends UserExtended
 
     public $description = "User Extended Core contains all of the components, navigation, assets, utility functions, and documentation which User Extended depends on.";
 
-    public $version = "2.3.00";
+    public $version = "2.2.01";
 
     public function initialize() {}
 
@@ -42,7 +42,7 @@ class Module extends UserExtended
             'Clake\UserExtended\Components\Account'    => 'account',
             'Clake\UserExtended\Components\Friends'    => 'friends',
             'Clake\UserExtended\Components\User'       => 'ueuser',
-            'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
+        //    'Clake\UserExtended\Components\ThirdParty' => 'thirdparty',
             'Clake\UserExtended\Components\Routes'     => 'routes',
             'Clake\UserExtended\Components\Notifications' => 'notifications',
         ];

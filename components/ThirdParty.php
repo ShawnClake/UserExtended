@@ -4,6 +4,7 @@ namespace Clake\Userextended\Components;
 
 use Session;
 use URL;
+use ViewErrorBag;
 use Clake\UserExtended\Classes\IntegrationManager;
 use Clake\UserExtended\Classes\UserManager;
 use Clake\UserExtended\Classes\UserUtil;

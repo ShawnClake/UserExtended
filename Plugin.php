@@ -46,6 +46,7 @@ class Plugin extends PluginBase {
         'RainLab.User',
         'RainLab.Location',
         'RainLab.Notify',
+        'KurtJensen.Passage',
         'Tohur.SocialConnect'
     ];
 

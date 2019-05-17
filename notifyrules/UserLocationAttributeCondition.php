@@ -5,7 +5,7 @@ use ApplicationException;
 
 class UserLocationAttributeCondition extends ModelAttributesConditionBase
 {
-    protected $modelClass = \RainLab\User\Models\User::class;
+    protected $modelClass = \Clake\Userextended\Models\UserExtended::class;
 
     public function getGroupingTitle()
     {
