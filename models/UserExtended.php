@@ -28,6 +28,8 @@ class UserExtended extends User {
      * @var array
      */
     protected $timezonable = [
+        'created_at',
+        'updated_at'
     ];
 
     /**
