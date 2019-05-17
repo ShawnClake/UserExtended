@@ -139,7 +139,9 @@ class User extends ComponentBase {
      * @return mixed
      */
     public function singleUser() {
-        $code = $this->param('user');
+        $urlType = Settings::get('url_type');
+        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $code = $user->id;
 
         if ($code != '')
             $user = UserUtil::getUser($this->param($code));
