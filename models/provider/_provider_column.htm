@@ -1,0 +1,5 @@
+<?php if ( $record->clake_userextended_providers->count() ): ?>
+<?php foreach ( $record->clake_userextended_providers as $provider ): ?>
+<i class="fab fa-2x fa-<?= strtolower($provider->provider_id) ?>" data-toggle='tooltip' title="<?= $provider->provider_id ?>"></i>
+<?php endforeach; ?>
+<?php endif;

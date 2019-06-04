@@ -1,0 +1,9 @@
+<?php if ( !$this->model->clake_userextended_providers->count() ): ?>
+<p>This user hasn't logged in with any social providers yet.</p>
+<?php else: ?>
+<p>
+    <?php foreach ( $this->model->clake_userextended_providers as $provider ): ?>
+    <i class="fab fa-2x fa-<?= strtolower($provider->provider_id) ?>" data-toggle='tooltip' title="<?= $provider->provider_id ?>"></i>
+    <?php endforeach; ?>
+</p>
+<?php endif;

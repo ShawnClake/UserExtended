@@ -52,12 +52,12 @@ class User extends ComponentBase {
                 'validationPattern' => '^[0-9]+$',
                 'validationMessage' => 'The Max Items property can contain only numeric symbols'
             ],
-            'paramCode' => [
-                'title' => 'User ID URL parameter',
-                'description' => 'Specifies a user ID to generate a list for. blank=logged in user',
-                'type' => 'string',
-                'default' => 'user'
-            ],
+//            'paramCode' => [
+//                'title' => 'User ID URL parameter',
+//                'description' => 'Specifies a user ID to generate a list for. blank=logged in user',
+//                'type' => 'string',
+//                'default' => 'user'
+//            ],
             'profilePage' => [
                 'title' => 'Profile Page',
                 'description' => 'The page to redirect to for user profiles.',
@@ -140,7 +140,8 @@ class User extends ComponentBase {
      */
     public function singleUser() {
         $urlType = Settings::get('url_type');
-        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
         $code = $user->id;
 
         if ($code != '')
@@ -183,7 +184,8 @@ class User extends ComponentBase {
      */
     public function user() {
         $urlType = Settings::get('url_type');
-        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
         $userid = $user->id;
 
         if (!isset($userid) || empty($userid))
@@ -198,7 +200,8 @@ class User extends ComponentBase {
      */
     public function userAvatar() {
         $urlType = Settings::get('url_type');
-        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
         $userid = $user->id;
 
         if (!$user = UserUtil::getRainlabUser($userid))
@@ -214,7 +217,8 @@ class User extends ComponentBase {
      */
     public function locked() {
         $urlType = Settings::get('url_type');
-        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
         $userid = $user->id;
 
         if (!UserUtil::getLoggedInUser())
@@ -229,7 +233,10 @@ class User extends ComponentBase {
         $userid = post('id');
 
         if (empty($userid))
-            $userid = $this->property('paramCode');
+        $urlType = Settings::get('url_type');
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
+        $userid = $user->id;
 
         FriendsManager::sendFriendRequest($userid);
     }
@@ -306,7 +313,8 @@ class User extends ComponentBase {
      */
     public function usersRoles() {
         $urlType = Settings::get('url_type');
-        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
         $code = $user->id;
         if ($code != '')
             $user = UserUtil::getUser($this->param($code));
@@ -322,7 +330,8 @@ class User extends ComponentBase {
      */
     public function usersGroups() {
         $urlType = Settings::get('url_type');
-        $user = CoreUser::where($urlType, $this->param('user'))->first();
+        $urlParam = Settings::get('url_param');
+        $user = CoreUser::where($urlType, $this->param($urlParam))->first();
         $code = $user->id;
 
         if ($code != '')

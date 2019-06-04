@@ -32,7 +32,7 @@ class Module extends UserExtended
 
     public $description = "User Extended Core contains all of the components, navigation, assets, utility functions, and documentation which User Extended depends on.";
 
-    public $version = "2.3.00";
+    public $version = "2.2.01";
 
     public function initialize() {}
 

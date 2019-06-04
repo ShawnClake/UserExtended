@@ -1,4 +1,6 @@
-<?php namespace Clake\Userextended\Components;
+<?php
+
+namespace Clake\Userextended\Components;
 
 use Clake\UserExtended\Classes\UserManager;
 use Clake\Userextended\Models\Timezone;
@@ -41,37 +43,34 @@ use Illuminate\Support\Facades\Input;
  *  * onLogin
  *  * onLogout
  */
-class Account extends ComponentBase
-{
+class Account extends ComponentBase {
 
-    public function componentDetails()
-    {
+    public function componentDetails() {
         return [
-            'name'        => 'Account',
+            'name' => 'Account',
             'description' => 'Register, login, logout, settings, update'
         ];
     }
 
-    public function defineProperties()
-    {
+    public function defineProperties() {
         return [
             'type' => [
-                'title'       => 'Type',
-                'type'        => 'dropdown',
-                'default'     => 'random',
+                'title' => 'Type',
+                'type' => 'dropdown',
+                'default' => 'random',
                 'placeholder' => 'Select type',
-            ],            
+            ],
             'redirect' => [
-                'title'       => 'rainlab.user::lang.account.redirect_to',
+                'title' => 'rainlab.user::lang.account.redirect_to',
                 'description' => 'rainlab.user::lang.account.redirect_to_desc',
-                'type'        => 'dropdown',
-                'default'     => ''
+                'type' => 'dropdown',
+                'default' => ''
             ],
             'paramCode' => [
-                'title'       => 'rainlab.user::lang.account.code_param',
+                'title' => 'rainlab.user::lang.account.code_param',
                 'description' => 'rainlab.user::lang.account.code_param_desc',
-                'type'        => 'string',
-                'default'     => 'code'
+                'type' => 'string',
+                'default' => 'code'
             ]
         ];
     }
@@ -80,16 +79,14 @@ class Account extends ComponentBase
      * Used for properties dropdown menu
      * @return mixed
      */
-    public function getRedirectOptions()
-    {
-        return [''=>'- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    public function getRedirectOptions() {
+        return ['' => '- none -'] + Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
     /**
      * Injects assets
      */
-    public function onRun()
-    {
+    public function onRun() {
         Plugin::injectAssets($this);
     }
 
@@ -97,16 +94,32 @@ class Account extends ComponentBase
      * Copied from the RainLab.Users Account component
      * Altered by Shawn Clake
      */
-    public function onUpdate()
-    {
+    public function onUpdate() {
         $data = post();
         //echo json_encode($data);
         $response = UserManager::updateUser($data);
 
         $reflection = new \ReflectionClass($response);
 
-        if($reflection->getShortName() == 'Validator')
-        {
+        if ($reflection->getShortName() == 'Validator') {
+            throw new ValidationException($response);
+        } else {
+            return $response;
+        }
+    }
+
+    /**
+     * Copied from the RainLab.Users Account component
+     * Altered by Shawn Clake
+     */
+    public function onUpdatePassword() {
+        $data = post();
+        //echo json_encode($data);
+        $response = UserManager::updateUserPassword($data);
+
+        $reflection = new \ReflectionClass($response);
+
+        if ($reflection->getShortName() == 'Validator') {
             throw new ValidationException($response);
         } else {
             return $response;
@@ -120,14 +133,13 @@ class Account extends ComponentBase
      * @return mixed
      * @throws \Exception
      */
-    public function onRegister()
-    {
+    public function onRegister() {
         $data = post();
 
         /*
          * Preforms user registration
          */
-        if(!($user = UserManager::registerUser($data)))
+        if (!($user = UserManager::registerUser($data)))
             return false;
 
         /*
@@ -135,8 +147,7 @@ class Account extends ComponentBase
          */
         $reflection = new \ReflectionClass($user);
 
-        if($reflection->getShortName() == 'Validator')
-        {
+        if ($reflection->getShortName() == 'Validator') {
             throw new ValidationException($user);
             //Flash::error($user->messages());
             //return false;
@@ -147,8 +158,7 @@ class Account extends ComponentBase
          */
         $userActivation = Settings::get('activate_mode') == Settings::ACTIVATE_USER;
 
-        if ($userActivation)
-        {
+        if ($userActivation) {
             $code = implode('!', [$user->id, $user->getActivationCode()]);
             $link = $this->currentPageUrl([
                 $this->property('paramCode') => $code
@@ -162,13 +172,11 @@ class Account extends ComponentBase
         /*
          * Redirect to the intended page after successful sign in
          */
-        $redirectUrl = $this->pageUrl($this->property('redirect'))
-            ?: $this->property('redirect');
+        $redirectUrl = $this->pageUrl($this->property('redirect')) ?: $this->property('redirect');
 
         if ($redirectUrl = post('redirect', $redirectUrl)) {
             return Redirect::intended($redirectUrl);
         }
-
     }
 
     /**
@@ -178,24 +186,20 @@ class Account extends ComponentBase
      * @return mixed
      * @throws ValidationException
      */
-    public function onLogin()
-    {
+    public function onLogin() {
         $data = post();
-        $redirectUrl = $this->pageUrl($this->property('redirect'))
-            ?: $this->property('redirect');
+        $redirectUrl = $this->pageUrl($this->property('redirect')) ?: $this->property('redirect');
 
         $response = UserManager::loginUser($data, $redirectUrl);
 
-        if($response === false)
-        {
+        if ($response === false) {
             Flash::error('Your account has been suspended.');
             return false;
         }
 
         $reflection = new \ReflectionClass($response);
 
-        if($reflection->getShortName() == 'Validator')
-        {
+        if ($reflection->getShortName() == 'Validator') {
             throw new ValidationException($response);
         } else {
             Flash::success('Logged in!');
@@ -209,8 +213,7 @@ class Account extends ComponentBase
      * Altered by Shawn Clake
      * @return mixed
      */
-    public function onLogout()
-    {
+    public function onLogout() {
         return UserManager::logoutUser();
     }
 
@@ -218,8 +221,7 @@ class Account extends ComponentBase
      * Returns whether or not we are logging in using email or username
      * @return mixed
      */
-    public function signUp()
-    {
+    public function signUp() {
         return Settings::get('login_attribute', 'email');
     }
 
@@ -227,8 +229,7 @@ class Account extends ComponentBase
      * Returns the logged in UserExtended object
      * @return mixed
      */
-    public function user()
-    {
+    public function user() {
         return UserUtil::convertToUserExtendedUser(UserUtil::getLoggedInUser());
     }
 
@@ -236,8 +237,7 @@ class Account extends ComponentBase
      * Returns an object of user settings
      * @return array
      */
-    public function updateSettings()
-    {
+    public function updateSettings() {
         return UserSettingsManager::currentUser()->getUpdateable();
     }
 
@@ -245,8 +245,7 @@ class Account extends ComponentBase
      * Returns an object of user settings
      * @return array
      */
-    public function createSettings()
-    {
+    public function createSettings() {
         return UserSettingsManager::currentUser()->getRegisterable();
     }
 
@@ -256,8 +255,7 @@ class Account extends ComponentBase
      * TODO: This should be moved to timezone helper
      * @return array
      */
-    public function timezoneOptions()
-    {
+    public function timezoneOptions() {
         return Timezone::getTimezonesList();
     }
 
@@ -266,8 +264,7 @@ class Account extends ComponentBase
      * TODO: A new function should be created which returns the current users timezone abbr instead of the model
      * @return mixed
      */
-    public function myTimezone()
-    {
+    public function myTimezone() {
         return UserUtil::getLoggedInUsersTimezone()->id;
     }
 
@@ -276,16 +273,14 @@ class Account extends ComponentBase
      * TODO: These checks should be placed in the TimezoneManager
      * @return mixed
      */
-    public function timezonesEnabled()
-    {
+    public function timezonesEnabled() {
         return UserExtendedSettings::get('enable_timezones', true);
     }
 
     /**
      * Closes the logged in users account
      */
-    public function onCloseAccount()
-    {
+    public function onCloseAccount() {
         UserManager::closeAccount();
     }
 
@@ -293,23 +288,19 @@ class Account extends ComponentBase
      * Returns the user's avatar model relation
      * @return mixed
      */
-    public function userAvatar()
-    {
+    public function userAvatar() {
         return UserUtil::getRainlabUser($this->user()->id)->avatar;
     }
 
     /**
      * AJAX handler for updating a users avatar
      */
-    public function onChangeAvatar()
-    {
-        if (Input::hasFile('avatar'))
-        {
+    public function onChangeAvatar() {
+        if (Input::hasFile('avatar')) {
             $user = UserUtil::getRainlabUser($this->user()->id);
             $user->avatar = Input::file('avatar');
             $user->save();
         }
-
     }
 
 }

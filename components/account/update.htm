@@ -1,107 +1,139 @@
-{% if user %}
+<div class="card">
+        {% if user %}
+        <div class="card-header">
+            <ul class="nav nav-pills" id="UserTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="home" aria-selected="true">Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="profile" aria-selected="false">Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="avatar-tab" data-toggle="pill" href="#avatar" role="tab" aria-controls="contact" aria-selected="false">Avatar</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+        <div class="tab-content mt-2" id="UserTabsContent">
+            <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+                {{ form_ajax('onUpdate', { id: 'main_update_form', model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
 
-{{ form_ajax('onUpdate', { id: 'main_update_form', model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
+                <div id="updateForm">
+                    <div class="alert alert-danger" data-validate-error>
+                        <p data-message></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountName">{{ "clake.userextended::lang.components.account.username"|trans }}</label>
+                        <input 
+                            name="username" 
+                            type="text" 
+                            class="form-control" 
+                            id="accountUsername"
+                            value="{{ form_value('username') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountName">{{ "clake.userextended::lang.components.account.displayname"|trans }}</label>
+                        <input 
+                            name="name" 
+                            type="text" 
+                            class="form-control" 
+                            id="accountName"
+                            value="{{ form_value('name') }}">
+                    </div>
+                    <span data-validate-for="name"></span><br>
 
-<div id="updateForm">
+                    <div class="form-group">
+                        <label for="accountEmail">{{ "clake.userextended::lang.components.account.email"|trans }}</label>
+                        <input 
+                            name="email" 
+                            type="email" 
+                            class="form-control" 
+                            id="accountEmail"
+                            value="{{ form_value('email') }}">
+                    </div>
+                    <span data-validate-for="email"></span><br>
 
-	<div class="form-group">
-		<label for="accountName">{{ "clake.userextended::lang.components.account.fullname"|trans }}</label>
-		<input 
-			name="name" 
-			type="text" 
-			class="form-control" 
-			id="accountName"
-			value="{{ form_value('name') }}">
-	</div>
-	<span data-validate-for="name"></span><br>
+                    {% if account.timezonesEnabled %}
+                    <div class="form-group">
+                        <label for="accountTimezone">{{ "clake.userextended::lang.components.account.timezone"|trans }}</label>
+                        <select
+                            name="timezone"
+                            class="form-control"
+                            id="accountTimezone">
+                            {% for id,name in account.timezoneOptions %}
+                            <option value="{{id}}" {% if id == account.myTimezone %} selected="selected" {% endif %}>{{name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <span data-validate-for="timezone"></span><br>
+                    {% endif %}
 
-	<div class="form-group">
-		<label for="accountEmail">{{ "clake.userextended::lang.components.account.email"|trans }}</label>
-		<input 
-			name="email" 
-			type="email" 
-			class="form-control" 
-			id="accountEmail"
-			value="{{ form_value('email') }}">
-	</div>
-	<span data-validate-for="email"></span><br>
+                    {% for setting,attributes in account.updateSettings %}
 
-	{% if account.timezonesEnabled %}
-		<div class="form-group">
-			<label for="accountTimezone">{{ "clake.userextended::lang.components.account.timezone"|trans }}</label>
-			<select
-					name="timezone"
-					class="form-control"
-					id="accountTimezone">
-				{% for id,name in account.timezoneOptions %}
-					<option value="{{id}}" {% if id == account.myTimezone %} selected="selected" {% endif %}>{{name}}</option>
-				{% endfor %}
-			</select>
-		</div>
-		<span data-validate-for="timezone"></span><br>
-	{% endif %}
+                    {{attributes.html|raw}} <br>
 
-	<div class="form-group">
-		<label for="accountPassword">{{ "clake.userextended::lang.components.account.newpassword"|trans }}</label>
-		<input 
-			name="password" 
-			type="password" 
-			class="form-control" 
-			id="accountPassword">
-	</div>
-	<span data-validate-for="password"></span><br>
+                    {% endfor %}
+                </div>
 
-	<div class="form-group">
-		<label for="accountPasswordConfirm">{{ "clake.userextended::lang.components.account.confirmnewpassword"|trans }}</label>
-		<input 
-			name="password_confirmation" 
-			type="password" 
-			class="form-control" 
-			id="accountPasswordConfirm">
-	</div>
-	<span data-validate-for="password_confirmation"></span><br>
+                <button data-attach-loading="" type="submit" class="btn btn-primary" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
 
-	{% for setting,attributes in account.updateSettings %}
 
-		{{attributes.html|raw}} <br>
+                {{ form_close() }}
+            </div>
+            <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+                {{ form_ajax('onUpdatePassword', { id: 'main_password_update_form', model: user, 'data-request-validate': '', 'data-request-flash': '' }) }}
+                <div class="form-group">
+                    <label for="accountPassword">{{ "clake.userextended::lang.components.account.newpassword"|trans }}</label>
+                    <input 
+                        name="password" 
+                        type="password" 
+                        class="form-control" 
+                        id="accountPassword">
+                </div>
+                <span data-validate-for="password"></span><br>
 
-	{% endfor %}
+                <div class="form-group">
+                    <label for="accountPasswordConfirm">{{ "clake.userextended::lang.components.account.confirmnewpassword"|trans }}</label>
+                    <input 
+                        name="password_confirmation" 
+                        type="password" 
+                        class="form-control" 
+                        id="accountPasswordConfirm">
+                </div>
+                <span data-validate-for="password_confirmation"></span><br>
+
+                <button data-attach-loading="" type="submit" class="btn btn-primary" id="submitButton">{{ "clake.userextended::lang.components.account.changepassword"|trans }}</button><br><br>
+                {{ form_close() }}
+            </div>
+            <div class="tab-pane fade" id="avatar" role="tabpanel" aria-labelledby="avatar-tab">
+                {{ form_open({ files: true, request: 'onChangeAvatar' }) }}
+                <div class="form-group">
+                    <label for="accountAvatar">Avatar</label>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="avatar-small center-in-parent">
+                                <div class="responsive-circle center-in-parent" style="background-image:url({% if user.avatar.path %} {{user.avatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %})"></div>
+                            </div>
+                        </div>
+                    </div> <br>
+                    <input
+                        name="avatar"
+                        type="file"
+                        class="form-control"
+                        id="accountAvatar"
+                        >
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="changeAvatar">{{ "clake.userextended::lang.components.account.changeavatar"|trans }}</button><br><br>
+
+                {{ form_close() }}
+            </div>
+        </div>
+
+        {% else %}
+
+        <div class="message-box">You are not logged in.</div>
+
+        {% endif %}
+    </div>
 </div>
-
-<button data-attach-loading="" type="submit" class="btn btn-default" id="submitButton">{{ "clake.userextended::lang.components.account.save"|trans }}</button><br><br>
-
-<button data-request="account::onCloseAccount" class="btn btn-default" id="closeAccount">Close Account</button><br><br>
-
-<div class="alert alert-danger" data-validate-error>
-	<p data-message></p>
-</div>
-{{ form_close() }}
-
-
-{{ form_open({ files: true, request: 'onChangeAvatar' }) }}
-	<div class="form-group">
-		<label for="accountAvatar">Avatar</label>
-		<div class="row">
-			<div class="col-sm-12 col-md-3">
-				<div class="avatar-small center-in-parent">
-					<div class="responsive-circle center-in-parent" style="background-image:url({% if account.userAvatar.path %} {{account.userAvatar.path}} {% else %} {{'plugins/clake/userextended/assets/img/default_user.png'|app}} {% endif %})"></div>
-				</div>
-			</div>
-		</div> <br>
-		<input
-				name="avatar"
-				type="file"
-				class="form-control"
-				id="accountAvatar"
-		>
-	</div>
-
-	<button type="submit" class="btn btn-default" id="changeAvatar">Change Avatar</button><br><br>
-
-{{ form_close() }}
-
-{% else %}
-
-<div class="message-box">You are not logged in.</div>
-
-{% endif %}

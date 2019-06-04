@@ -1,0 +1,17 @@
+<div class="callout callout-info no-subheader">
+    <div class="header">
+        <i class="icon-info"></i>
+        <h3>How to retrieve your credentials</h3>
+    </div>
+    <div class="content">
+        <ol>
+            <li>Go to <a target="_blanck" href="https://console.developers.google.com/project">https://console.developers.google.com/project</a> and create a new project. Name it something like <strong>October Social Login</strong>.</li>
+            <li>Under <strong>Social APIs</strong> enable <strong>Google+ API</strong> and <strong>Google+ Domains API</strong>.</li>
+            <li>Go to <strong>Credentials</strong> on the left and then the <strong>OAuth consent screen</strong> tab at the top</li>
+            <li>Enter a product name - this will be visible to the end user so perhaps something like <strong>&lt;Your Site Name&gt; Login</strong>. All other details are optional.</li>
+            <li>Go to <strong>Credentials</strong> on the left and click <strong>Create credentials - OAuth client ID</strong> then <strong>Web application</strong>. A screen titled <strong>Create Client ID</strong> will appear.</li>
+            <li>Name the Web application the same as your product name entered above. Set <strong>Authorized JavaScript Origins</strong> to <span style="color:green"><?= URL::to('') ?></span> and <b>Authorized Redirect URI</b> to <span style="color:green"><?= URL::route('tohur_socialconnect_provider_callback', ['Google']) ?></span></li>
+            <li>Click <strong>Create</strong>.</li>
+        </ol>
+    </div>
+</div>

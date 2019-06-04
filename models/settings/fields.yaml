@@ -32,10 +32,19 @@ tabs:
             label: Profile Url Param type
             comment: Profile url type
             type: dropdown
-            tab: Features
+            tab: Advanced
             options:
                id: User Id
                username: Username
+               
+        url_param:
+            span: left
+            label: Profile Url Param
+            comment: Profile url param
+            type: text
+            tab: Advanced
+            default: user
+              
 
         # Enable Groups Feature
         enable_groups:

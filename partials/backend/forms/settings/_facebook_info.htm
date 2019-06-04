@@ -1,0 +1,14 @@
+<div class="callout callout-info no-subheader">
+    <div class="header">
+        <i class="icon-info"></i>
+        <h3>How to retrieve your credentials</h3>
+    </div>
+    <div class="content">
+        <ol>
+            <li>Go to <a target="_blanck" href="https://developers.facebook.com/">https://developers.facebook.com/</a> and click <b>Create a New App</b> in the <b>Apps</b> drop down.</li>
+            <li>Enter your <b>Display Name</b> (usually your site name) along with any other required fields and click <b>Create App</b></li>
+            <li>Copy your <b>App ID</b> and <b>App Secret</b> into the fields below.</li>
+            <li>On the <b>Settings</b> tab set the <b>Valid OAuth redirect URIs</b> to <span style="color:green"><?= URL::route('tohur_socialconnect_provider_callback', ['Facebook']) ?></span></li>
+        </ol>
+    </div>
+</div>

@@ -13,7 +13,18 @@
             "name": "Quinn Bast",
             "homepage": "http://www2.cs.uregina.ca/~bast200q/",
             "role": "Developer"
+        },
+        {
+            "name": "Joshua Webb",
+            "homepage": "http://feared.xyz",
+            "role": "Developer"
         }
     ],
-    "require": {}
+    "require": {
+        "laravel/socialite": "3.1.*",
+        "socialiteproviders/discord": "2.0.*",
+        "socialiteproviders/twitch": "5.0.*",
+        "socialiteproviders/mixer": "1.0.*",
+        "socialiteproviders/microsoft-live": "3.0.*"
+    }
 }

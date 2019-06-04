@@ -134,3 +134,4 @@
 2.3.00:
     - Added Notificatons, Loction intergration, and third party logging in via Social Connect plugin.
     - user_add_loction.php
+    - create_social_providers.php
